@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "XucreWallet",
+    "slug": "xucre-mobile",
+    "owner": "the18thwarrior",
+    "icon" : "./icon.png",
+    "version": "1.0.0",
+    "sdkVersion": "45.0.0",
+    "scheme": "xucre",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "android": {
+      "package": "xucre.expo.client",
+      "icon" : "./icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b662b29e-7b5f-41fd-ba54-d4961a40fdb9"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "xucre.expo.client",
+      "icon" : "./icon.png"
+    }
+  }
+}
