@@ -33,6 +33,7 @@ import LandingPage from './pages/Landing';
 import SplashPage from './pages/Splash';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
+import ViewNetwork from './pages/network/ViewNetwork';
 import CreateWallet from './pages/wallet/CreateWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
@@ -106,6 +107,9 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>

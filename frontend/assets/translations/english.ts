@@ -1,4 +1,12 @@
 const values = {
+  CreateNetwork: {
+    chainId_placeholder: 'Enter Chain ID',
+    explorer_placeholder: 'Enter Block Explorer Url (optional)',
+    name_placeholder: 'Enter Name',
+    rpcUrl_placeholder: 'Enter RPC Url',
+    submit_button: 'Save Network',
+    symbol_placeholder: 'Enter Chain Symbol',
+  },
   CreateWallet: {
     instructions : 'When creating a new wallet you will receive a sequence of mnemonics which represent your "personal password". Anyone with this sequence may be able to reconfigure your wallet in any new device. Keep it stored as secure as possible. Only you should have access to this information.',
     instructions_button: 'Generate',

@@ -42,3 +42,14 @@ export const activeNetwork = atom({
   },
   key: 'activeNetwork'
 })
+
+export const selectedNetwork = atom({
+  default: {
+    blockExplorer: '',
+    chainId: 0,
+    name: '',
+    rpcUrl: '',
+    symbol: '',
+  },
+  key: 'selectedNetwork'
+})

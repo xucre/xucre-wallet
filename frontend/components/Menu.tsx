@@ -53,6 +53,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   useEffect(() => {
     const runAsync = async () => {
       const _networks = await getNetworks();
+      //await storeNetworks([])
       if (!Array.isArray(_networks) || _networks.length === 0) {
         const _newNetworks = constructDefaultNetworks();
         setNetworkList(_newNetworks);

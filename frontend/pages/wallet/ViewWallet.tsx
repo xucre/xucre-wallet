@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
+import * as Clipboard from 'expo-clipboard';
 import {
   Alert,
   AlertDialog,
@@ -36,7 +37,7 @@ import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { activeNetwork, activeWallet, language as stateLanguage, } from "../../service/state";
+import { activeNetwork, activeWallet, networkList, language as stateLanguage, } from "../../service/state";
 import { truncateString } from "../../service/utility";
 
 function TabItem({
@@ -86,17 +87,23 @@ export default function ViewWallet ({navigation, route}) {
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
-  const [network, ] = useRecoilState(activeNetwork);
+  const [network, setNetwork] = useRecoilState(activeNetwork);
+  const [networks, setAllNetworks] = useRecoilState(networkList);
   const [holdings, setHoldings] = useState([]);
   const tabList = translations[language].ViewWallet.tab_list;
+
+  // Transitions
+  const [displayTooltip, setDisplayTooltip] = useState(false);
+
 
   useEffect(() => {
     if (_wallet.name === '') {
       navigation.navigate('SelectWallet');
     }
-
+    setHoldings([]);
+    console.log('wallet:',_wallet.name,'network', network)
     if (_wallet.name != '' && network) {
-      const _provider = getDefaultProvider('wss://matic-mumbai.chainstacklabs.com');
+      const _provider = getDefaultProvider(network.rpcUrl);
       setProvider(_provider);
       const newWallet = _wallet.wallet.connect(_provider);
       //console.log(newWallet);
@@ -107,28 +114,44 @@ export default function ViewWallet ({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       try {
-        if (provider.getBlockNumber()) {
+        console.log('testing provider')
+        if (provider.getBlockNumber) {
           const currentBlock = await provider.getBlockNumber();
-          console.log(currentBlock);
-          //
+          
+          //console.log('currentBlock',currentBlock);
+          if (wallet.address && currentBlock > 0) {
+            const walletBalance = await wallet.getBalance();
+            //console.log('balance',walletBalance);
+            const coinToken = {
+              amount : ethers.utils.formatEther( walletBalance ),
+              name: network.symbol,
+            };
+            setHoldings([...holdings, coinToken]);
+          }
         }        
       } catch (e) {
         console.log(e);
       }
         
-      /*if (wallet.address && currentBlock > 0) {
-        const walletBalance = await wallet.getBalance();
-        console.log(walletBalance);
-        const coinToken = {
-          amount : walletBalance.toNumber(),
-          name: network.symbol,
-        };
-        setHoldings([...holdings, coinToken]);
-      }*/
+      
     }
 
     runAsync();
   }, [wallet, provider])
+
+  const copyToClipboard = () => {
+    console.log('copyToClipboard', wallet.address);
+    Clipboard.setStringAsync(String(wallet.address));
+    setDisplayTooltip(true);
+    setTimeout(() => {
+      setDisplayTooltip(false);
+    }, 1000)
+  };
+
+  useEffect(() => {
+    //setNetwork(null)
+    //setAllNetworks([])
+  }, [])
 
   const handleTabChange = (newTab) => {
     setCurrentTab(newTab);
@@ -162,9 +185,14 @@ export default function ViewWallet ({navigation, route}) {
         _dark={{ backgroundColor: '#1b1e24' }}
         height={'100%'}
       >
-        <VStack space={4}>
-          <Text>{_wallet.name}</Text>
-          <Text>{_wallet.wallet.address}</Text>
+        <VStack space={4} p={3}>
+          <Text fontSize={'lg'}>{_wallet.name}</Text>
+          
+            <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
+              color: "#fff"
+            }}>
+              <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
+            </Tooltip>
         </VStack>
         <HStack
           mt={5}

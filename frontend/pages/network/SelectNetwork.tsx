@@ -39,6 +39,7 @@ import GuestLayout from '../../layouts/GuestLayout';
 import { 
   activeNetwork, 
   networkList,
+  selectedNetwork,
   language as stateLanguage,
 } from "../../service/state";
 import { truncateString } from "../../service/utility";
@@ -46,6 +47,7 @@ import { getNetworks, storeActiveNetwork } from "../../store/network";
 
 export default function SelectNetwork ({navigation, route}) {
   const [language,] = useRecoilState(stateLanguage);
+  const [, setSelectedNetwork] = useRecoilState(selectedNetwork);
   const [networks, setNetworks] = useRecoilState(networkList);
   const [, setActiveNetwork] = useRecoilState(activeNetwork);
   useEffect(() => {
@@ -74,10 +76,15 @@ export default function SelectNetwork ({navigation, route}) {
       storeActiveNetwork(metadata);
       //viewNetwork();
     }
+
+    const openNetwork = () => {
+      setSelectedNetwork(metadata);
+      viewNetwork();
+    }
     return (
       <HStack alignItems="center" justifyContent="space-between">
         
-        <Pressable onPress={selectNetwork}>
+        <Pressable onPress={openNetwork}>
           <HStack alignItems="center" space={{ base: 3, md: 6 }}>
             <VStack space={1}>
                 <Text fontSize="md" bold>
