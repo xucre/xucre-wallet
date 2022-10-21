@@ -1,5 +1,4 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import arrayShuffle from 'array-shuffle';
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 import {
@@ -11,12 +10,13 @@ import {
   Button,
   Center,
   CloseIcon,
+  ColorMode,
   Divider,
   Drawer,
   Hidden,
   HStack,
-  Icon,
   IconButton,
+  Icon as IconElement,
   Image,
   Input,
   Menu,
@@ -82,6 +82,10 @@ function TabItem({
 }
 
 export default function ViewWallet ({navigation, route}) {
+  const {
+    colorMode
+  } = useColorMode();
+
   const [language,] = useRecoilState(stateLanguage);
   const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
@@ -101,7 +105,7 @@ export default function ViewWallet ({navigation, route}) {
       navigation.navigate('SelectWallet');
     }
     setHoldings([]);
-    console.log('wallet:',_wallet.name,'network', network)
+    //console.log('wallet:',_wallet.name,'network', network)
     if (_wallet.name != '' && network) {
       const _provider = getDefaultProvider(network.rpcUrl);
       setProvider(_provider);
@@ -114,7 +118,7 @@ export default function ViewWallet ({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       try {
-        console.log('testing provider')
+        //console.log('testing provider')
         if (provider.getBlockNumber) {
           const currentBlock = await provider.getBlockNumber();
           
@@ -157,6 +161,15 @@ export default function ViewWallet ({navigation, route}) {
     setCurrentTab(newTab);
   }
 
+  const TokenIcon = ({iname}) => {
+    console.log(iname);
+    const icon_color = colorMode ==='dark'? 'white':'black';
+    return (
+      <></>
+      //<Icon name="poly" style={{ alignSelf: 'center', color: icon_color, fontSize: 25, justifyContent: 'center',marginBottom:0, marginTop:-100,  }}/>
+    )
+  }
+
   const HoldingItem = ({token}) => {
     const selectNetwork= () => {
       //
@@ -164,17 +177,38 @@ export default function ViewWallet ({navigation, route}) {
       //viewNetwork();
     }
     return (
-      <HStack alignItems="center" justifyContent="space-between">        
-        <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-          <VStack space={1}>
-            <Text fontSize="md" bold>
-              {token.name}
-            </Text>
-          </VStack>
-          
-          <Text color="coolGray.500">{token.amount}</Text>     
-        </HStack>
-      </HStack>
+      <HStack alignItems="center" justifyContent="space-between">
+       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
+        <TokenIcon iname={iconNames[network.chainId]}/>
+         
+         <VStack>
+           <Pressable>
+             <Text fontSize="md" bold>
+               {token.name}
+             </Text>
+           </Pressable>
+         </VStack>
+       </HStack>
+       <HStack alignItems="center" space={{ base: 2 }}>
+         <Text 
+             _light={{ color: 'coolGray.500' }}
+             _dark={{ color: 'coolGray.400' }}
+             fontWeight="normal">{token.amount}</Text>
+         <Tooltip label="More Options" openDelay={500}>
+           <IconButton
+             p={0}
+             icon={
+               <IconElement
+                 as={MaterialIcons}
+                 name="more-vert"
+                 size="6"
+                 color="coolGray.500"
+               />
+             }
+           />
+         </Tooltip>
+       </HStack>
+     </HStack>
     )
   }
 

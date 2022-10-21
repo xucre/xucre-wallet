@@ -40,3 +40,9 @@ export const getNetworks = async () => {
   const networks = await EncryptedStorage.getItem('network_list');
   return JSON.parse(networks);
 }
+
+export const iconNames = {
+  1: 'eth',
+  137: 'polygon',
+  80001: 'polygon'
+}
