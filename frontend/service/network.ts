@@ -5,7 +5,7 @@ const network = (process.env.NODE_ENV === 'production') ? 'mainnet' : 'rinkeby';
 const PROVIDER = providers.getDefaultProvider(network);
 
 export type Network = {
-  readonly blockExplorer: string;
+  readonly blockExplorer?: string;
   readonly chainId: number;
   readonly name: string;
   readonly rpcUrl: string;

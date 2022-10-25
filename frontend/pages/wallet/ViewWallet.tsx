@@ -5,6 +5,7 @@ import {
   Alert,
   AlertDialog,
   ArrowBackIcon,
+  Avatar,
   Badge,
   Box,
   Button,
@@ -30,15 +31,18 @@ import {
   useColorModeValue,
   VStack,
 } from "native-base";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
+import { RefreshControl } from "react-native";
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
+import TokenItem from '../../components/token/TokenItem';
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { activeNetwork, activeWallet, networkList, language as stateLanguage, } from "../../service/state";
+import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
 import { truncateString } from "../../service/utility";
+import { iconNames } from '../../store/network';
+import { getTokenByChain } from '../../store/token';
 
 function TabItem({
   tabName,
@@ -82,11 +86,10 @@ function TabItem({
 }
 
 export default function ViewWallet ({navigation, route}) {
-  const {
-    colorMode
-  } = useColorMode();
+  const { colorMode } = useColorMode();
 
   const [language,] = useRecoilState(stateLanguage);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
@@ -98,50 +101,31 @@ export default function ViewWallet ({navigation, route}) {
 
   // Transitions
   const [displayTooltip, setDisplayTooltip] = useState(false);
-
+  
+  const syncTokens = async () => {
+    const _tokens = await getTokenByChain(network.chainId);
+    const coinToken = {
+      address : '',
+      amount : ethers.utils.formatEther( 0 ),
+      chainId : network.chainId,
+      name: network.symbol,
+      type: 'coin',
+    };
+    setHoldings([coinToken, ..._tokens]);
+  }
 
   useEffect(() => {
     if (_wallet.name === '') {
       navigation.navigate('SelectWallet');
     }
-    setHoldings([]);
-    //console.log('wallet:',_wallet.name,'network', network)
-    if (_wallet.name != '' && network) {
-      const _provider = getDefaultProvider(network.rpcUrl);
-      setProvider(_provider);
-      const newWallet = _wallet.wallet.connect(_provider);
-      //console.log(newWallet);
-      setWallet(newWallet);
-    }
   }, [_wallet, network]);
 
-  useEffect(() => {
-    const runAsync = async () => {
-      try {
-        //console.log('testing provider')
-        if (provider.getBlockNumber) {
-          const currentBlock = await provider.getBlockNumber();
-          
-          //console.log('currentBlock',currentBlock);
-          if (wallet.address && currentBlock > 0) {
-            const walletBalance = await wallet.getBalance();
-            //console.log('balance',walletBalance);
-            const coinToken = {
-              amount : ethers.utils.formatEther( walletBalance ),
-              name: network.symbol,
-            };
-            setHoldings([...holdings, coinToken]);
-          }
-        }        
-      } catch (e) {
-        console.log(e);
-      }
-        
-      
-    }
-
-    runAsync();
-  }, [wallet, provider])
+  useEffect(() => {    
+    //setHoldings([]);
+    setTimeout(() => {
+      syncTokens();
+    }, 1000)
+  }, [])
 
   const copyToClipboard = () => {
     console.log('copyToClipboard', wallet.address);
@@ -152,6 +136,22 @@ export default function ViewWallet ({navigation, route}) {
     }, 1000)
   };
 
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await syncTokens();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000)
+  }, []);
+  
+  const addToken = () => {
+    navigation.navigate('AddToken');
+  }
+
+  const receiveFunds = () => {
+    navigation.navigate('QRWallet');
+  }
+
   useEffect(() => {
     //setNetwork(null)
     //setAllNetworks([])
@@ -161,63 +161,13 @@ export default function ViewWallet ({navigation, route}) {
     setCurrentTab(newTab);
   }
 
-  const TokenIcon = ({iname}) => {
-    console.log(iname);
-    const icon_color = colorMode ==='dark'? 'white':'black';
-    return (
-      <></>
-      //<Icon name="poly" style={{ alignSelf: 'center', color: icon_color, fontSize: 25, justifyContent: 'center',marginBottom:0, marginTop:-100,  }}/>
-    )
-  }
-
-  const HoldingItem = ({token}) => {
-    const selectNetwork= () => {
-      //
-      //console.log(metadata);
-      //viewNetwork();
-    }
-    return (
-      <HStack alignItems="center" justifyContent="space-between">
-       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-        <TokenIcon iname={iconNames[network.chainId]}/>
-         
-         <VStack>
-           <Pressable>
-             <Text fontSize="md" bold>
-               {token.name}
-             </Text>
-           </Pressable>
-         </VStack>
-       </HStack>
-       <HStack alignItems="center" space={{ base: 2 }}>
-         <Text 
-             _light={{ color: 'coolGray.500' }}
-             _dark={{ color: 'coolGray.400' }}
-             fontWeight="normal">{token.amount}</Text>
-         <Tooltip label="More Options" openDelay={500}>
-           <IconButton
-             p={0}
-             icon={
-               <IconElement
-                 as={MaterialIcons}
-                 name="more-vert"
-                 size="6"
-                 color="coolGray.500"
-               />
-             }
-           />
-         </Tooltip>
-       </HStack>
-     </HStack>
-    )
-  }
-
   return (
     <DashboardLayout title={_wallet.name}>
       <Box         
         _light={{ backgroundColor: 'white' }}
         _dark={{ backgroundColor: '#1b1e24' }}
         height={'100%'}
+        safeAreaBottom
       >
         <VStack space={4} p={3}>
           <Text fontSize={'lg'}>{_wallet.name}</Text>
@@ -228,6 +178,12 @@ export default function ViewWallet ({navigation, route}) {
               <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
             </Tooltip>
         </VStack>
+        <HStack my={2}>
+          <Button.Group isAttached colorScheme="muted" size="full">
+            <Button onPress={receiveFunds} width={'1/2'} py={3}><Text>Recieve</Text></Button>
+            <Button disabled width={'1/2'} py={3} variant={'outline'}><Text>Send</Text></Button>
+          </Button.Group>
+        </HStack>
         <HStack
           mt={5}
           _light={{
@@ -248,30 +204,42 @@ export default function ViewWallet ({navigation, route}) {
             })
           }
         </HStack>
-        
-        <VStack space="5" px={2}>
-          {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
-            <Box m={6}>
-              <VStack space={2}>
-                {
-                  holdings.map((val, i) => {
-
-                    return (
-                      <HoldingItem key={val.name+i} token={val} />
-                    )
-                  })
-                }
-              </VStack>
-            </Box>
+        <ScrollView 
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
           }
+        >
+          <VStack space="5" px={2} mb={10}>
+            {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
+              <Box m={6} >
+                <VStack space={2} >
+                  {
+                    holdings.map((val, i) => {
+                      return (                        
+                        <TokenItem key={val.name+i} token={val} navigation={navigation}/>                        
+                      )
+                    })
+                  }
+                </VStack>
+                
+                
+                
+              </Box>
+            }
 
-          {currentTab == translations[language].ViewWallet.tab_list[1] &&
-            <Center m={6}>
-              <Text>{translations[language].ViewWallet.transactions_placeholder}</Text>
-            </Center>
-          }
-        </VStack>
-        
+            {currentTab == translations[language].ViewWallet.tab_list[1] &&
+              <Center m={6}>
+                <Text>{translations[language].ViewWallet.transactions_placeholder}</Text>
+              </Center>
+            }
+          </VStack>
+        </ScrollView>
+        {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
+          <Button onPress={addToken} mt={4} width={'full'} position={'absolute'} bottom={0}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
+        }
       </Box>
     </DashboardLayout>
   )

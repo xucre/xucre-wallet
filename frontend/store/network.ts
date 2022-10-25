@@ -17,6 +17,29 @@ export const storeNetwork = async (network) => {
   }
 };
 
+export const updateNetwork = async (network) => {
+  const _networks = await EncryptedStorage.getItem("network_list");
+  const networks = JSON.parse(_networks);
+  if (Array.isArray(networks)) {
+    const newNetworkList = networks.map((_network) => {
+      if (_network.chainId === network.chainId) {
+        return network;
+      } else {
+        return _network;
+      }
+    });
+    await EncryptedStorage.setItem(
+      "network_list",
+      JSON.stringify(newNetworkList)
+    );
+  } else {
+    await EncryptedStorage.setItem(
+      "network_list",
+      JSON.stringify([network])
+    );
+  }
+};
+
 export const storeNetworks = async (networks) => {
   await EncryptedStorage.setItem(
     "network_list",
@@ -42,7 +65,7 @@ export const getNetworks = async () => {
 }
 
 export const iconNames = {
-  1: 'eth',
-  137: 'polygon',
-  80001: 'polygon'
+  1: 'ETH',
+  137: 'PLY',
+  80001: 'PLY'
 }

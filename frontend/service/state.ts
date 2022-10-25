@@ -53,3 +53,8 @@ export const selectedNetwork = atom({
   },
   key: 'selectedNetwork'
 })
+
+export const tokenList = atom({
+  default: [],
+  key: 'tokenList'
+});

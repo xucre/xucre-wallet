@@ -36,16 +36,75 @@ import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { activeWallet, selectedNetwork, language as stateLanguage, } from "../../service/state";
+import { Network } from "../../service/network";
+import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../../service/state";
 import { truncateString } from "../../service/utility";
+import { storeActiveNetwork, updateNetwork } from "../../store/network";
 
 export default function ViewNetwork ({navigation, route}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [network, ] = useRecoilState(selectedNetwork);
+  const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
+  const [name, setName] = useState('');
+  const [chainId, setChainId] = useState('');
+  const [rpcUrl, setRpcUrl] = useState('');
+  const [symbol, setSymbol] = useState('');
+  const [blockExplorer, setExplorer] = useState('');
+
+  const handleNameChange = (event) => {
+    setName(event.nativeEvent.text)
+  }
+  const handleChainIdChange = (event) => {
+    setChainId(event.nativeEvent.text)
+  }
+  const handleRpcUrlChange = (event) => {
+    setRpcUrl(event.nativeEvent.text)
+  }
+  const handleSymbolChange = (event) => {
+    setSymbol(event.nativeEvent.text)
+  }
+  const handleExplorerChange = (event) => {
+    setExplorer(event.nativeEvent.text)
+  }
 
   useEffect(() => {
-    //
-  }, [activeWallet]);
+    setName(network.name);
+    setChainId(String(network.chainId));
+    setRpcUrl(network.rpcUrl);
+    setSymbol(network.symbol);
+    setExplorer(network.blockExplorer);
+  }, [network]);
+
+  const _setActiveNetwork = async () => {
+    setActiveNetwork(network);
+    await updateNetwork(network);
+  }
+
+  const saveNetwork = () => {
+    const runAsync = async () => {
+      if (name.length > 0 && chainId !== '0' && rpcUrl.length > 0 && symbol.length > 0) {
+        const _network = {
+          blockExplorer,
+          chainId: parseInt(chainId),
+          name, 
+          rpcUrl,
+          symbol,
+        };
+        setActiveNetwork(_network);
+        await updateNetwork(_network);
+        
+      } else {
+        setLoading(false);
+      }
+    }
+
+    setLoading(true);
+    setTimeout(() => {
+      runAsync();
+    }, 100);
+  }
 
   return (
     <DashboardLayout title={network.name}>
@@ -64,14 +123,14 @@ export default function ViewNetwork ({navigation, route}) {
               <Text fontSize={16}>RPC Url: {truncateString(network.rpcUrl, 30)}</Text>
             </VStack>        
             
-            {activeNetwork.chainId === network.chainId ?             
+            {_activeNetwork.chainId === network.chainId ?             
               <Alert maxW="400" status="info" colorScheme="info">
                 <Center>
                   <Text color={'black'} fontWeight={'bold'}>Network Active</Text>
                 </Center>              
               </Alert>
               : 
-              <Button onPress={() => {setActiveNetwork(network);}}><Text>{'Use Network'}</Text></Button>
+              <Button onPress={() => {_setActiveNetwork();}}><Text>{'Use Network'}</Text></Button>
             } 
             
           </>

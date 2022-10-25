@@ -1,4 +1,10 @@
 const values = {
+  AddToken: {
+    address_placeholder: 'Enter Token Address',
+    chain_placeholder: 'Select Chain',
+    name_placeholder: 'Enter Token Name', 
+    submit_button: 'Save Token',
+  },
   CreateNetwork: {
     chainId_placeholder: 'Enter Chain ID',
     explorer_placeholder: 'Enter Block Explorer Url (optional)',
@@ -22,6 +28,9 @@ const values = {
     network_button: 'NETWORKS',
     wallet_button: 'WALLETS',
   },
+  QRWallet: {
+    instructions: 'Share to receive funds'
+  },
   SelectLanguage : {
     en: 'English',
     es: 'Spanish',
@@ -36,10 +45,16 @@ const values = {
     select_button: 'Select Wallet',
     select_button_tooltip: 'More Options'
   },
+  SendToken: {
+    address_placeholder: 'Enter Receiver Address',
+    submit_button: 'Send',
+    title: 'Send Token:',
+  },
   ViewWallet: {
     holdings_placeholder: 'Insert Coin Holdings',
+    new_button: 'Add Token',
     tab_list: ['Holdings', 'Transactions'],
-    transactions_placeholder: 'Insert Transaction History'
+    transactions_placeholder: 'Insert Transaction History',
   }
 };
 

@@ -30,11 +30,13 @@ import { v4 as uuidv4 } from 'uuid';
 //import MobileFooter from './components/Footer';
 import Menu from './components/Menu';
 import LandingPage from './pages/Landing';
-import SplashPage from './pages/Splash';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
+import AddToken from './pages/token/AddToken';
+import SendToken from './pages/token/SendToken';
 import CreateWallet from './pages/wallet/CreateWallet';
+import QRWallet from './pages/wallet/QRWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
 import { navigationRef } from './service/RootNavigation';
@@ -110,6 +112,15 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="AddToken" component={AddToken} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>                  
+                  <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>      
+                  <Stack.Screen name="SendToken" component={SendToken} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>
