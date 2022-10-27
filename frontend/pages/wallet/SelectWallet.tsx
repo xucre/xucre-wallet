@@ -46,7 +46,7 @@ export default function SelectWallet ({navigation, route}) {
   const [, setActiveWallet] = useRecoilState(activeWallet);
   
   const createWallet = () => {
-    navigation.navigate('CreateWallet');
+    navigation.navigate('NewWallet');
   }
 
   const viewWallet = () => {
@@ -55,8 +55,6 @@ export default function SelectWallet ({navigation, route}) {
 
   const WalletItem = ({metadata}) => {
     const selectWallet = () => {
-      //
-      //console.log(metadata);
       setActiveWallet(metadata);   
       storeActiveWallet(metadata);   
     }

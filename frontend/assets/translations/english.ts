@@ -28,8 +28,22 @@ const values = {
     network_button: 'NETWORKS',
     wallet_button: 'WALLETS',
   },
+  NewWallet: {
+    create_button: 'Create Wallet',
+    instructions: "Create new or retrieve from mnenomic",
+    recover_button: 'Recover Wallet',
+  },
   QRWallet: {
     instructions: 'Share to receive funds'
+  },
+  RecoverWallet: {
+    instructions: 'Please input the sequence of mnemonics from your original wallet creation process.',
+    instructions_button: 'Recover',
+    mnemonic_entry_input_placeholder: 'Enter mnemonic phrase separated by single spaces',
+    mnemonic_not_complete: 'Mnemonic not the appropriate length',
+    name_entry_input_placeholder: 'Set Wallet Name',
+    save_button: 'Save',
+    save_button_loadingtext: 'Submitting'
   },
   SelectLanguage : {
     en: 'English',

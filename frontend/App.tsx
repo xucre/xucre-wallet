@@ -36,7 +36,9 @@ import ViewNetwork from './pages/network/ViewNetwork';
 import AddToken from './pages/token/AddToken';
 import SendToken from './pages/token/SendToken';
 import CreateWallet from './pages/wallet/CreateWallet';
+import NewWallet from './pages/wallet/NewWallet';
 import QRWallet from './pages/wallet/QRWallet';
+import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
 import { navigationRef } from './service/RootNavigation';
@@ -96,7 +98,13 @@ export default function App(): JSX.Element {
                   <Stack.Screen name="Home" component={LandingPage} options={{ 
                     headerTitle : ""
                   }} ></Stack.Screen>
+                  <Stack.Screen name="NewWallet" component={NewWallet} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen> 
                   <Stack.Screen name="CreateWallet" component={CreateWallet} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen> 
+                  <Stack.Screen name="RecoverWallet" component={RecoverWallet} options={{ 
                     title: '', 
                   }} ></Stack.Screen>                  
                   <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
