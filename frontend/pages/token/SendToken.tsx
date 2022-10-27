@@ -40,13 +40,15 @@ import translations from "../../assets/translations";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, walletList } from "../../service/state";
 import { Token } from "../../service/token";
 import { getNetworks } from "../../store/network";
-import { addToken, getTokens, updateToken } from "../../store/token";
+import { addToken, getTokenByChain, updateToken } from "../../store/token";
 
 
 export default function SendToken ({navigation, route, storage}) {
   const [language, ] = useRecoilState(stateLanguage);
-  const {token} = route.params;
-  const [network, setNetwork] = useRecoilState(activeNetwork);
+  const token = route.params?.token;
+  const [selectedToken, setSelectedToken] = useState({} as Token);
+  const [tokens, setTokens] = useState([] as readonly Token[]);
+  const [network, ] = useRecoilState(activeNetwork);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState('0');
   const [address, setAddress] = useState('');
@@ -58,9 +60,27 @@ export default function SendToken ({navigation, route, storage}) {
     }
   }, []);
   
-  const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
+  const [_wallet, ] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
+
+  useEffect(() => {
+    const runAsync = async () => {
+      const _tokens = await getTokenByChain(network.chainId);
+      //console.log(_tokens);
+      setTokens(_tokens);
+    }
+
+    if (network) {
+      runAsync()
+    }
+  }, [network])
+
+  useEffect(() => {
+    if (token) {
+      setSelectedToken(token);
+    }
+  }, [token]);
 
   useEffect(() => {
     if (_wallet.name != '' && network) {
@@ -85,19 +105,26 @@ export default function SendToken ({navigation, route, storage}) {
     setAmount(event.nativeEvent.text);
   }
 
+  const handleTokenChange = (tokenAddress) => {
+    const _selectedToken = tokens.find((_token) => {
+      return _token.address === tokenAddress;
+    });
+    setSelectedToken(_selectedToken);
+  }
+
   const send = () => {
-    console.log(address, token, amount);
+    console.log(address, selectedToken, amount);
     const runAsync = async () => {
       try {
-        if (address.length > 0 && type.length > 0 ) {
+        if (address.length > 0) {
           //console.log(_wallet.privateKey, name);
           /*const _token : Token = {
             address,
             chainId : Number.parseInt(chainId),
             type,
           };*/
-          if (token.type === 'token' && wallet.address) {
-            const _contract = new ethers.Contract(token.address, erc20Abi, provider);    
+          if (selectedToken.type === 'token' && wallet.address) {
+            const _contract = new ethers.Contract(selectedToken.address, erc20Abi, provider);    
             const contract = _contract.connect(wallet);
             const success = await contract.transfer(ethers.utils.getAddress(address) , ethers.utils.parseEther(amount));
             if (success) {
@@ -128,7 +155,21 @@ export default function SendToken ({navigation, route, storage}) {
     <ScrollView w={'full'} h={'full'} marginTop={5}>
       <>
         <Box alignItems="center" marginBottom={3}>
-          <Text variant={'2xl'}>{translations[language].SendToken.title} {token.name}</Text>
+          <Text fontSize="2xl" bold mb={'5'}>{translations[language].SendToken.title}</Text>        
+        
+          <Select selectedValue={selectedToken.address} w="100%" accessibilityLabel={translations[language].SendToken.token_placeholder} placeholder={translations[language].SendToken.token_placeholder} _selectedItem={{
+            bg: "teal.600",
+            endIcon: <CheckIcon size="5" />
+          }} mt={1} onValueChange={itemValue => handleTokenChange(itemValue)} mb={'2'}>
+            {
+              tokens.map((_token) => {
+                return (
+                  <Select.Item key={_token.address} label={_token.name} value={_token.address} />
+                )
+              }) 
+            }              
+          </Select>
+          
           <Input keyboardType="numeric" w="100%" mb={2} value={amount} onChange={handleAmountChange}  />
           <Input w="100%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].SendToken.address_placeholder}  />
         </Box>

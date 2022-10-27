@@ -38,7 +38,7 @@ import translations from "../../assets/translations";
 import GuestLayout from '../../layouts/GuestLayout';
 import { activeWallet, language as stateLanguage, walletList } from "../../service/state";
 import { truncateString } from "../../service/utility";
-import { getWallets } from "../../store/wallet";
+import { getWallets, storeActiveWallet } from "../../store/wallet";
 
 export default function SelectWallet ({navigation, route}) {
   const [language,] = useRecoilState(stateLanguage);
@@ -57,13 +57,19 @@ export default function SelectWallet ({navigation, route}) {
     const selectWallet = () => {
       //
       //console.log(metadata);
-      setActiveWallet(metadata);
+      setActiveWallet(metadata);   
+      storeActiveWallet(metadata);   
+    }
+
+    const openWallet = () => {      
+      setActiveWallet(metadata);   
+      storeActiveWallet(metadata);
       viewWallet();
     }
     return (
       <HStack alignItems="center" justifyContent="space-between">
         
-        <Pressable onPress={selectWallet}>
+        <Pressable onPress={openWallet}>
           <HStack alignItems="center" space={{ base: 3, md: 6 }}>
             <VStack space={1}>
                 <Text fontSize="md" bold>

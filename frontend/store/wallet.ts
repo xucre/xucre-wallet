@@ -22,3 +22,14 @@ export const getWallets = async () => {
   return JSON.parse(_wallets);
 }
 
+export const getActiveWallet = async () => {  
+  const _wallet = await EncryptedStorage.getItem('active_wallet')
+  return JSON.parse(_wallet);
+}
+
+export const storeActiveWallet = async (wallet) => {
+  await EncryptedStorage.setItem(
+    "active_wallet",
+    JSON.stringify([wallet])
+  );
+}

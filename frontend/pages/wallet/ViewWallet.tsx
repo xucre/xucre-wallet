@@ -97,6 +97,12 @@ export default function ViewWallet ({navigation, route}) {
   const [network, setNetwork] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
   const [holdings, setHoldings] = useState([]);
+  const [isComponentMounted, setIsComponentMounted] = useState(true);
+  useEffect(() => {
+    return () => {
+      setIsComponentMounted(false);
+    }
+  }, []);
   const tabList = translations[language].ViewWallet.tab_list;
 
   // Transitions
@@ -111,12 +117,18 @@ export default function ViewWallet ({navigation, route}) {
       name: network.symbol,
       type: 'coin',
     };
-    setHoldings([coinToken, ..._tokens]);
+    if (isComponentMounted) {
+      setHoldings([coinToken, ..._tokens]);
+      setRefreshing(false);
+    }
+    
   }
 
   useEffect(() => {
     if (_wallet.name === '') {
       navigation.navigate('SelectWallet');
+    } else {
+      setWallet(_wallet.wallet);
     }
   }, [_wallet, network]);
 
@@ -138,10 +150,11 @@ export default function ViewWallet ({navigation, route}) {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    await syncTokens();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000)
+    setHoldings([]);
+    
+    setTimeout(async() => {
+      await syncTokens();
+    }, 100)
   }, []);
   
   const addToken = () => {
@@ -150,6 +163,10 @@ export default function ViewWallet ({navigation, route}) {
 
   const receiveFunds = () => {
     navigation.navigate('QRWallet');
+  }
+  
+  const sendFunds = () => {
+    navigation.navigate('SendToken');
   }
 
   useEffect(() => {
@@ -181,7 +198,7 @@ export default function ViewWallet ({navigation, route}) {
         <HStack my={2}>
           <Button.Group isAttached colorScheme="muted" size="full">
             <Button onPress={receiveFunds} width={'1/2'} py={3}><Text>Recieve</Text></Button>
-            <Button disabled width={'1/2'} py={3} variant={'outline'}><Text>Send</Text></Button>
+            <Button width={'1/2'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
           </Button.Group>
         </HStack>
         <HStack

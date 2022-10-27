@@ -71,7 +71,14 @@ export const getTokens = async () => {
 export const getTokenByChain = async (chainId) => {
   const tokens = await EncryptedStorage.getItem('token_list');
   const _tokens = JSON.parse(tokens) as readonly Token[];
-  return _tokens.filter((token: Token) => {
-    return token.chainId === chainId;
-  })
+  if (_tokens && Array.isArray(_tokens)) {
+    return _tokens.filter((token: Token) => {
+      return token.chainId === chainId;
+    })
+  } else {
+    const placeholder = [] as readonly Token[];
+    return placeholder;
+  }
+  
+  
 }

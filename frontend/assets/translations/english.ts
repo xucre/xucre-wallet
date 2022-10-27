@@ -48,7 +48,8 @@ const values = {
   SendToken: {
     address_placeholder: 'Enter Receiver Address',
     submit_button: 'Send',
-    title: 'Send Token:',
+    title: 'Send Token',
+    token_placeholder: 'Select Token',
   },
   ViewWallet: {
     holdings_placeholder: 'Insert Coin Holdings',
