@@ -29,6 +29,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 //import MobileFooter from './components/Footer';
 import Menu from './components/Menu';
+import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
@@ -133,6 +134,7 @@ export default function App(): JSX.Element {
                   }} ></Stack.Screen>
                 </Stack.Navigator>
             </NavigationContainer>
+            <Listener />
         </SafeAreaProvider>
       </NativeBaseProvider>
     </RecoilRoot>

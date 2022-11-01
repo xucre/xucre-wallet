@@ -34,13 +34,13 @@ import React, {createRef, useEffect, useState} from "react";
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
-
 import erc20Abi from '../../../contracts/erc20.json';
 import translations from "../../assets/translations";
-import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, walletList } from "../../service/state";
+import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../service/state";
 import { Token } from "../../service/token";
-import { getNetworks } from "../../store/network";
+import { Transaction } from "../../service/transaction";
 import { addToken, getTokenByChain, updateToken } from "../../store/token";
+import { addTransaction } from "../../store/transaction";
 
 
 export default function SendToken ({navigation, route, storage}) {
@@ -49,6 +49,7 @@ export default function SendToken ({navigation, route, storage}) {
   const [selectedToken, setSelectedToken] = useState({} as Token);
   const [tokens, setTokens] = useState([] as readonly Token[]);
   const [network, ] = useRecoilState(activeNetwork);
+  const [pendingTransactions, setTransactionList] = useRecoilState(transactionList);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState('0');
   const [address, setAddress] = useState('');
@@ -113,22 +114,30 @@ export default function SendToken ({navigation, route, storage}) {
   }
 
   const send = () => {
-    console.log(address, selectedToken, amount);
+    //console.log(address, selectedToken, amount);
     const runAsync = async () => {
       try {
         if (address.length > 0) {
-          //console.log(_wallet.privateKey, name);
-          /*const _token : Token = {
-            address,
-            chainId : Number.parseInt(chainId),
-            type,
-          };*/
           if (selectedToken.type === 'token' && wallet.address) {
             const _contract = new ethers.Contract(selectedToken.address, erc20Abi, provider);    
             const contract = _contract.connect(wallet);
-            const success = await contract.transfer(ethers.utils.getAddress(address) , ethers.utils.parseEther(amount));
-            if (success) {
-              console.log('successful transfer');
+            const _submitted = await contract.transfer(ethers.utils.getAddress(address) , ethers.utils.parseEther(amount));
+            //console.log('submitted',_submitted);
+            const _transaction = {
+              chainId: _submitted.chainId,
+              data: _submitted.data,
+              from: _submitted.from,
+              hash: _submitted.hash,
+              nonce: _submitted.noonce,
+              status: 'pending',
+              submitDate: new Date(),
+              to: _submitted.to,
+              value: _submitted.value,
+            } as Transaction;
+            await addTransaction(_transaction);
+            setTransactionList([...pendingTransactions, _submitted]);
+            if (_transaction) {
+              console.log('transaction submitted', _submitted.hash);
               navigation.navigate('ViewWallet');
             }
             setLoading(false); 

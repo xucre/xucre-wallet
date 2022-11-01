@@ -38,11 +38,14 @@ import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
 import TokenItem from '../../components/token/TokenItem';
+import TransactionItem from "../../components/transaction/TransactionItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
+import { Transaction } from "../../service/transaction";
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
 import { getTokenByChain } from '../../store/token';
+import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
 
 function TabItem({
   tabName,
@@ -87,7 +90,7 @@ function TabItem({
 
 export default function ViewWallet ({navigation, route}) {
   const { colorMode } = useColorMode();
-
+  const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
   const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
@@ -97,6 +100,7 @@ export default function ViewWallet ({navigation, route}) {
   const [network, setNetwork] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
   const [holdings, setHoldings] = useState([]);
+  const [transactions, setTransactions] = useState([] as readonly Transaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -119,9 +123,27 @@ export default function ViewWallet ({navigation, route}) {
     };
     if (isComponentMounted) {
       setHoldings([coinToken, ..._tokens]);
-      setRefreshing(false);
     }
-    
+  }
+  
+  const syncTransactions = async () => {
+    //console.log(network.chainId, _wallet.wallet.address);
+    const _transactions = await getTransactionsByChainAndWallet(network.chainId, _wallet.wallet.address);
+    //console.log(_transactions);
+    if (isComponentMounted) {
+      setTransactions(_transactions);
+      
+    }
+  }
+
+  const clearTransactions = () => {
+    const runAsync = async () => {
+      await storeTransactions([] as readonly Transaction[]);
+      await syncTransactions();
+      setLoading(false);
+    }
+    setLoading(true);
+    runAsync();    
   }
 
   useEffect(() => {
@@ -136,6 +158,7 @@ export default function ViewWallet ({navigation, route}) {
     //setHoldings([]);
     setTimeout(() => {
       syncTokens();
+      syncTransactions();
     }, 1000)
   }, [])
 
@@ -151,9 +174,12 @@ export default function ViewWallet ({navigation, route}) {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     setHoldings([]);
+    setTransactions([]);
     
     setTimeout(async() => {
       await syncTokens();
+      await syncTransactions();
+      setRefreshing(false);
     }, 100)
   }, []);
   
@@ -248,14 +274,26 @@ export default function ViewWallet ({navigation, route}) {
             }
 
             {currentTab == translations[language].ViewWallet.tab_list[1] &&
-              <Center m={6}>
-                <Text>{translations[language].ViewWallet.transactions_placeholder}</Text>
-              </Center>
+              <Box m={6} >
+                <VStack space={2} >
+                  {
+                    transactions.map((val, i) => {
+                      return (                        
+                        <TransactionItem key={val.hash+iconNames} transaction={val} navigation={navigation}/>                        
+                      )
+                    })
+                  }
+                </VStack>
+              </Box>
             }
           </VStack>
         </ScrollView>
         {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
           <Button onPress={addToken} mt={4} width={'full'} position={'absolute'} bottom={0}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
+        }
+        
+        {currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
+          <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language].ViewWallet.clear_button}</Text></Button>
         }
       </Box>
     </DashboardLayout>

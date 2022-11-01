@@ -66,6 +66,7 @@ const values = {
     token_placeholder: 'Select Token',
   },
   ViewWallet: {
+    clear_button: 'Clear Transactions',
     holdings_placeholder: 'Insert Coin Holdings',
     new_button: 'Add Token',
     tab_list: ['Holdings', 'Transactions'],

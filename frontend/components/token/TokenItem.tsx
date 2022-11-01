@@ -10,20 +10,30 @@ import { Token } from "../../service/token";
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
 
-export default function HoldingItem ({navigation, token}) {
+export default function TokenItem ({navigation, token}) {
   const { colorMode } = useColorMode();
   const [network, setNetwork] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
   const [amount, setAmount] = useState(BigNumber.from(0))
+  const [isComponentMounted, setIsComponentMounted] = useState(true);
+  useEffect(() => {
+    return () => {
+      setIsComponentMounted(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (_wallet.name != '' && network) {
       const _provider = getDefaultProvider(network.rpcUrl);
-      setProvider(_provider);
+      if (isComponentMounted) {
+        setProvider(_provider);
+      }      
       const newWallet = _wallet.wallet.connect(_provider);
-      setWallet(newWallet);
+      if (isComponentMounted) {
+        setWallet(newWallet);
+      }
     }
   }, [_wallet, network]);
 
@@ -35,12 +45,16 @@ export default function HoldingItem ({navigation, token}) {
           if (wallet.address && currentBlock > 0) {
             const walletBalance = await wallet.getBalance();
             //console.log('balance',walletBalance);
-            setAmount(walletBalance);
+            if (isComponentMounted) {
+              setAmount(walletBalance);
+            }
           }//
         } else if (token.type === 'token' && wallet.address) {
           const contract = new ethers.Contract(token.address, erc20Abi, provider);
           const balance = await contract.balanceOf((wallet.address));
-          setAmount(balance);
+          if (isComponentMounted) {
+            setAmount(balance);
+          }
         }        
       } catch (e) {
         console.log(e);

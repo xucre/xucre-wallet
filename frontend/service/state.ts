@@ -4,6 +4,9 @@ import {
   atom,
 } from 'recoil';
 
+import { Network } from './network';
+
+
 export type AppWallet = {
   name: string,
   wallet: Wallet
@@ -39,7 +42,7 @@ export const activeNetwork = atom({
     name: '',
     rpcUrl: '',
     symbol: '',
-  },
+  } as Network,
   key: 'activeNetwork'
 })
 
@@ -58,3 +61,16 @@ export const tokenList = atom({
   default: [],
   key: 'tokenList'
 });
+
+export const transactionList = atom({
+  default: [],
+  key: 'transactionList'
+});
+
+export const activeTransaction = atom({
+  default: {
+    chainId: 0,
+    transactionHash: ''
+  },
+  key: 'activeTransaction'
+})
