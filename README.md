@@ -34,3 +34,10 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 ## 📝 Notes
 
 - [Expo TypeScript guide](https://docs.expo.dev/versions/latest/guides/typescript/)
+
+
+## How to Build - Local
+- yarn android
+
+## How to Build - Deploy
+- eas build -p android

@@ -275,7 +275,7 @@ export default function ViewWallet ({navigation, route}) {
 
             {currentTab == translations[language].ViewWallet.tab_list[1] &&
               <Box m={6} >
-                <VStack space={2} >
+                <VStack space={2} direction={'column-reverse'}>
                   {
                     transactions.map((val, i) => {
                       return (                        
