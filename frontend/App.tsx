@@ -36,6 +36,7 @@ import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
 import AddToken from './pages/token/AddToken';
 import SendToken from './pages/token/SendToken';
+import SwapToken from './pages/token/SwapToken';
 import CreateWallet from './pages/wallet/CreateWallet';
 import NewWallet from './pages/wallet/NewWallet';
 import QRWallet from './pages/wallet/QRWallet';
@@ -130,6 +131,9 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>      
                   <Stack.Screen name="SendToken" component={SendToken} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>

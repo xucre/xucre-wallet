@@ -195,6 +195,10 @@ export default function ViewWallet ({navigation, route}) {
     navigation.navigate('SendToken');
   }
 
+  const swapTokens = () => {
+    navigation.navigate('SwapToken');
+  }
+
   useEffect(() => {
     //setNetwork(null)
     //setAllNetworks([])
@@ -223,8 +227,9 @@ export default function ViewWallet ({navigation, route}) {
         </VStack>
         <HStack my={2}>
           <Button.Group isAttached colorScheme="muted" size="full">
-            <Button onPress={receiveFunds} width={'1/2'} py={3}><Text>Recieve</Text></Button>
-            <Button width={'1/2'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
+            <Button onPress={receiveFunds} width={'1/3'} py={3}><Text>Recieve</Text></Button>
+            <Button width={'1/3'} py={3} colorScheme={'darkBlue'} onPress={swapTokens} ><Text>Swap</Text></Button>
+            <Button width={'1/3'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
           </Button.Group>
         </HStack>
         <HStack
