@@ -2,11 +2,14 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.2",
     "@expo-google-fonts/montserrat": "^0.2.2",
+    "@lifi/sdk": "^1.6.3",
+    "@lifi/types": "^1.15.0",
     "@lifi/widget": "^1.22.0",
     "@react-native-async-storage/async-storage": "1.13.4",
     "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
+    "@uniswap/widgets": "^2.18.0",
     "@usedapp/core": "^1.1.4",
     "@walletconnect/react-native-dapp": "1.6.1",
     "@walletconnect/web3-provider": "^1.8.0",
@@ -43,9 +46,9 @@
     "react-native-svg": "9.6.4",
     "react-native-switch-with-icons": "^2.0.1",
     "react-native-theming": "^1.0.21",
-    "react-native-track-player": "^3.1.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "0.17.7",
+    "react-native-webview": "11.22.7",
     "react-qr-code": "^2.0.8",
     "react-redux": "^8.0.4",
     "recoil": "^0.7.6",
@@ -102,7 +105,7 @@
     "ios": "expo run:ios",
     "web": "node_modules/.bin/ts-node scripts/web",
     "audit": "npx yarn-audit-fix",
-    "postinstall": "node_modules/.bin/ts-node scripts/postinstall",
+    "postinstall_nomore": "node_modules/.bin/ts-node scripts/postinstall",
     "test": "npx hardhat test && jest",
     "web:deploy": "expo build:web && gh-pages -d web-build"
   },
@@ -145,5 +148,8 @@
   "husky": {},
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --fix --ext '.ts,.tsx,.js,.jsx' -c .eslintrc.json"
+  },
+  "resolutions": {
+    "@types/react": "17.0.2"
   }
 }

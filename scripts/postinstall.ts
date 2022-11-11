@@ -14,7 +14,7 @@ import * as child_process from 'child_process';
 //  {stdio: 'inherit'}
 //);
 
-child_process.execSync('npx patch-package', { stdio: 'inherit' });
+//child_process.execSync('npx patch-package', { stdio: 'inherit' });
 
 // Uncomment to reinstall pods on postinstall.
 // import {macos} from 'platform-detect';

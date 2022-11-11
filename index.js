@@ -37,9 +37,4 @@ const { default: App } = require('./frontend/App');
 console.log(Platform.OS);
 registerRootComponent(App);
 
-// Background playback
-//import { PlaybackService } from './scripts/playbackService';
-//import TrackPlayer from 'react-native-track-player';
-
-//TrackPlayer.registerPlaybackService(() => PlaybackService);
 /* dapp-end */

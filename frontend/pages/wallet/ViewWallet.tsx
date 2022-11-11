@@ -97,7 +97,7 @@ export default function ViewWallet ({navigation, route}) {
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
-  const [network, setNetwork] = useRecoilState(activeNetwork);
+  const [network, ] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
   const [holdings, setHoldings] = useState([]);
   const [transactions, setTransactions] = useState([] as readonly Transaction[]);
@@ -152,6 +152,8 @@ export default function ViewWallet ({navigation, route}) {
     } else {
       setWallet(_wallet.wallet);
     }
+
+    console.log('ViewWallet', network.chainId);
   }, [_wallet, network]);
 
   useEffect(() => {    
