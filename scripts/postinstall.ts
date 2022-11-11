@@ -9,10 +9,10 @@ import * as child_process from 'child_process';
 //);
 
 // Uncommment to regenerate the application icon on postinstall.
-//child_process.execSync(
-//  'npx app-icon generate -i assets/image/app-icon.png --platforms=android,ios',
-//  {stdio: 'inherit'}
-//);
+child_process.execSync(
+  'npx app-icon generate -i assets/image/icon.png --platforms=android,ios',
+  {stdio: 'inherit'}
+);
 
 //child_process.execSync('npx patch-package', { stdio: 'inherit' });
 

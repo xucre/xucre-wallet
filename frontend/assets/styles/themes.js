@@ -1,5 +1,8 @@
-import { createTheme, createStyle } from 'react-native-theming';
-import { StyleSheet, Dimensions} from 'react-native';
+import { Dimensions, StyleSheet} from 'react-native';
+import { createStyle, createTheme } from 'react-native-theming';
+
+import IconBlack from '../images/icon-black.png';
+import IconWhite from '../images/icon-white.png';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -10,7 +13,7 @@ const themes = [
     buttonColor: 'blue',
     buttonText: 'white',
     headerBackground: 'white',
-    icon: require('../images/icon-black.png'),
+    icon: IconBlack,
     statusBar: 'dark-content',
     textColor: 'black',
   }, 'light'),
@@ -19,7 +22,7 @@ const themes = [
     buttonColor: 'yellow',
     buttonText: 'black',
     headerBackground: 'black',
-    icon: require('../images/icon-white.png'),
+    icon: IconWhite,
     statusBar: 'light-content',
     textColor: 'white',
   }, 'dark'),
@@ -27,46 +30,46 @@ const themes = [
 
 const styles = createStyle({
   container: {
-    flex: 1,
-    backgroundColor: '@backgroundColor',
     alignItems: 'center',
+    backgroundColor: '@backgroundColor',
+    flex: 1,
     justifyContent: 'center',
   },
+  landing_bottomText: {
+    color: '@textColor',
+    fontSize: (windowWidth/100)*50,
+    paddingHorizontal: 10,
+    textTransform: 'uppercase',
+  },
   landing_container: {
-    flex: 1,
     backgroundColor: '@backgroundColor',
+    color: '@textColor',
+    flex: 1,
     justifyContent: 'flex-end',
-    color: '@textColor'
   },
   landing_footerContainer: {
     alignItems: 'flex-start',
     color: '@textColor'
   },
-  landing_textFamily: {
-    fontWeight: 'bold', 
-    textTransform: 'uppercase', 
-    flexDirection: 'row'
-  },
-  landing_topText: {
-    fontSize: (windowWidth/10),
-    paddingHorizontal: 10,
-    color: '@textColor'
+  landing_footerText: {
+    color: '@textColor',
+    fontSize: (windowWidth/100)*4,
+    textAlign: 'center',
   },
   landing_middleText: {
+    color: '@textColor',
     fontSize:  (windowWidth/100)*4.1,
     paddingHorizontal: 10,
-    color: '@textColor'
   },
-  landing_bottomText: {
-    fontSize: (windowWidth/100)*50,
-    paddingHorizontal: 10,
-    textTransform: 'uppercase',
-    color: '@textColor'
+  landing_textFamily: {
+    flexDirection: 'row',
+    fontWeight: 'bold', 
+    textTransform: 'uppercase', 
   },
-  landing_footerText: {
-    fontSize: (windowWidth/100)*4,
+  landing_topText: {
     color: '@textColor',
-    textAlign: 'center'
+    fontSize: (windowWidth/10),
+    paddingHorizontal: 10,
   }
 });
 

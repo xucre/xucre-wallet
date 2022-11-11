@@ -258,7 +258,7 @@ export default function ViewWallet ({navigation, route}) {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={onRefresh}
+              onRefresh={onRefresh}              
             />
           }
         >

@@ -1,4 +1,8 @@
 import React from 'react';
+
+import IconBlack from '../images/icon-black.png';
+import IconWhite from '../images/icon-white.png';
+
 export const themes = {
   
   dark: {
@@ -6,7 +10,7 @@ export const themes = {
     buttonColor: 'yellow',
     buttonText: 'black',
     headerBackground: 'black',
-    icon: require('../images/icon-white.png'),
+    icon: IconWhite,
     statusBar: 'light-content',
     textColor: 'white',
   },
@@ -15,7 +19,7 @@ export const themes = {
     buttonColor: 'blue',
     buttonText: 'white',
     headerBackground: 'white',
-    icon: require('../images/icon-black.png'),
+    icon: IconBlack,
     statusBar: 'dark-content',
     textColor: 'black',
   },
