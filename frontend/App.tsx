@@ -32,7 +32,6 @@ import { v4 as uuidv4 } from 'uuid';
 import Menu from './components/Menu';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
-import QRReader from './pages/QRReader';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
@@ -45,6 +44,8 @@ import QRWallet from './pages/wallet/QRWallet';
 import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
+import ConnectionRequest from './pages/walletConnect/ConnectionRequest';
+import QRReader from './pages/walletConnect/QRReader';
 import { navigationRef } from './service/RootNavigation';
 import {createSignClient} from './service/walletConnect';
 
@@ -152,6 +153,9 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="QRReader" component={QRReader} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>

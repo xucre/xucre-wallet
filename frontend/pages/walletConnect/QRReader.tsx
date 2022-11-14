@@ -2,7 +2,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-import { createSignClient, signClient } from '../service/walletConnect';
+import { createSignClient, signClient } from '../../service/walletConnect';
 
 export default function QRReader({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -19,9 +19,15 @@ export default function QRReader({navigation}) {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    console.log(data);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    signClient.pair(data);
+    console.log(type, data);
+    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    try {
+      if (data) {
+        signClient.pair({uri: data});
+      }      
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   if (hasPermission === null) {
