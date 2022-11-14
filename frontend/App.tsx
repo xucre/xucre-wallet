@@ -2,6 +2,7 @@
 //import env from '@env';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import '@walletconnect/react-native-compat';
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import {
   Box,
@@ -43,13 +44,16 @@ import QRWallet from './pages/wallet/QRWallet';
 import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
+import ConnectionRequest from './pages/walletConnect/ConnectionRequest';
+import QRReader from './pages/walletConnect/QRReader';
 import { navigationRef } from './service/RootNavigation';
+import {createSignClient} from './service/walletConnect';
 
 const Stack = createNativeStackNavigator();
 
 // Define the config
 const config = {
-  useSystemColorMode: true,
+  //useSystemColorMode: true,
 };
 
 const AppLightTheme = {
@@ -73,9 +77,21 @@ export const theme = extendTheme({ config });
 
 export default function App(): JSX.Element { 
   //const StackNavigator = createThemedComponent(Stack.Navigator);
-  const [scheme, setScheme] = useState('dark');
+  const [scheme, setScheme] = useState('');
   const [routeState, setRouteState] = useState('');
   
+  useEffect(() => {
+    const runAsync = async () => {
+      try {
+        await createSignClient();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    
+    runAsync();
+  }, []);
+
   return (
     //<DAppProvider config={finalConfig}>
     <RecoilRoot>
@@ -134,6 +150,12 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="QRReader" component={QRReader} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>

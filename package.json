@@ -6,15 +6,16 @@
     "@lifi/types": "^1.15.0",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-clipboard/clipboard": "^1.11.1",
-    "@react-native-community/masked-view": "^0.1.11",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.7.0",
     "@uniswap/widgets": "^2.18.0",
     "@usedapp/core": "^1.1.4",
+    "@walletconnect/jsonrpc-types": "^1.0.1",
     "@walletconnect/react-native-compat": "^2.1.2",
     "@walletconnect/react-native-dapp": "1.6.1",
-    "@walletconnect/sign-client": "^2.1.2",
+    "@walletconnect/sign-client": "^2.0.0",
+    "@walletconnect/types": "^2.1.2",
     "@walletconnect/web3-provider": "^1.8.0",
     "array-shuffle": "^3.0.0",
     "axios": "^0.27.2",
@@ -23,6 +24,7 @@
     "ethers": "^5.6.9",
     "expo": "^45.0.0",
     "expo-app-loading": "~2.0.0",
+    "expo-barcode-scanner": "~11.3.0",
     "expo-clipboard": "^3.1.0",
     "expo-font": "~10.1.0",
     "expo-linking": "~3.1.0",
@@ -71,6 +73,7 @@
     "@openzeppelin/contracts": "^4.3.0",
     "@types/jest": "^29.1.2",
     "@types/node": "14.14.22",
+    "@types/pino": "^7.0.5",
     "@types/react": "^17.0.52",
     "@types/react-native": "~0.67.6",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
@@ -101,7 +104,7 @@
     "prettier": "2.2.1",
     "react-test-renderer": "17.0.2",
     "ts-node": "9.1.1",
-    "typescript": "~4.3.5"
+    "typescript": "~4.7.3"
   },
   "scripts": {
     "start": "expo start --dev-client",
@@ -155,5 +158,10 @@
   },
   "resolutions": {
     "@types/react": "17.0.2"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
 }

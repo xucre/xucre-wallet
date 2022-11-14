@@ -105,6 +105,23 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
     );
   }
 
+  function QRScan() {
+    return (
+      <VStack space={4} mt={{ base: 0 }}>
+          <Button
+            variant="outline"
+            my={1} 
+            colorScheme={'yellow'} 
+            rounded={100} 
+            px={10}  
+            onPress={() => {navigate('QRReader');}}          
+          >
+            <Text>{'QR SCAN'}</Text>
+          </Button>
+      </VStack>
+    );
+  }
+
   function NetworkLink() {
     return (
       <VStack space={4} mt={{ base: 0 }}>
@@ -154,6 +171,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           <VStack space={0}>
             <NetworkLink/>
             <WalletLink/>
+            <QRScan />
           </VStack>
 
           <Box my={'2'}></Box>
