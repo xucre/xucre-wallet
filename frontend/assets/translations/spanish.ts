@@ -46,8 +46,9 @@ const values = {
     save_button_loadingtext: 'Enviando'
   },
   SelectLanguage : {
-    en: 'Ingles',
+    en: 'Inglés',
     es: 'Español',
+    po: 'Portugués',
   },
   SelectNetwork: {
     new_button: 'Nueva Red',
