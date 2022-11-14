@@ -79,6 +79,7 @@ export default function SelectLanguage () {
           }}>
             <Menu.Item onPress={() => {setLanguage('en')}}><Text>{translations[languageVal].SelectLanguage.en}</Text></Menu.Item>
             <Menu.Item onPress={() => {setLanguage('es')}}><Text>{translations[languageVal].SelectLanguage.es}</Text></Menu.Item>
+            <Menu.Item onPress={() => {setLanguage('po')}}><Text>{translations[languageVal].SelectLanguage.po}</Text></Menu.Item>
         </Menu>    
       }
     </>
