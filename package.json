@@ -36,6 +36,7 @@
     "path-browserify": "0.0.0",
     "promise.allsettled": "^1.0.5",
     "react": "17.0.2",
+    "react-crypto-icons": "^1.0.5",
     "react-dom": "17.0.2",
     "react-native": "0.68.2",
     "react-native-crypto": "2.2.0",

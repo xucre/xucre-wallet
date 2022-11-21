@@ -35,6 +35,7 @@ import LandingPage from './pages/Landing';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
+import NftList from './pages/nft/NftList';
 import AddToken from './pages/token/AddToken';
 import SendToken from './pages/token/SendToken';
 import SwapToken from './pages/token/SwapToken';
@@ -48,6 +49,7 @@ import ConnectionRequest from './pages/walletConnect/ConnectionRequest';
 import QRReader from './pages/walletConnect/QRReader';
 import { navigationRef } from './service/RootNavigation';
 import {createSignClient} from './service/walletConnect';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -126,37 +128,48 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>                  
                   <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
-                    title: '', 
+                    headerTitleAlign: 'center',
+                    title: 'Wallets', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
-                    title: '', 
+                    headerTitleAlign: 'center',
+                    title: 'Wallet', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
-                    title: '', 
+                    headerTitleAlign: 'center',
+                    title: 'Networks', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
-                    title: '', 
+                    headerTitleAlign: 'center',
+                    title: 'Network',  
                   }} ></Stack.Screen>
                   <Stack.Screen name="AddToken" component={AddToken} options={{ 
-                    title: '', 
+                    headerTitleAlign: 'center',
+                    title: 'Wallet', 
                   }} ></Stack.Screen>                  
                   <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
                     title: '', 
                   }} ></Stack.Screen>      
                   <Stack.Screen name="SendToken" component={SendToken} options={{ 
-                    title: '', 
+                    headerTitleAlign: 'center',
+                    title: 'Wallet', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
-                    title: '', 
+                    headerTitleAlign: 'center',
+                    title: 'Wallet', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="QRReader" component={QRReader} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
                     title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="NFTs" component={NftList} options={{ 
+                    headerTitleAlign: 'center',
+                    title: 'NFTs', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>
             </NavigationContainer>

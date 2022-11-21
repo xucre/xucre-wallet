@@ -13,17 +13,19 @@ export default function QRReader({navigation}) {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     };
-
+    setScanned(false);
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     console.log(type, data);
     //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     try {
       if (data) {
-        signClient.pair({uri: data});
+        signClient.pair({uri: data})
+        //const topic = await signClient.pair({uri: data});
+        //console.log(topic);
       }      
     } catch (e) {
       console.log(e);

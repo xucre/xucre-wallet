@@ -153,7 +153,7 @@ export default function ViewWallet ({navigation, route}) {
       setWallet(_wallet.wallet);
     }
 
-    console.log('ViewWallet', network.chainId);
+    //console.log('ViewWallet', network.chainId);
   }, [_wallet, network]);
 
   useEffect(() => {    
