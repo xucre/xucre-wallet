@@ -46,6 +46,7 @@ import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
 import { getTokenByChain } from '../../store/token';
 import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
+import NftList from "../nft/NftList";
 
 function TabItem({
   tabName,
@@ -219,7 +220,13 @@ export default function ViewWallet ({navigation, route}) {
         safeAreaBottom
       >
         <VStack space={4} p={3}>
-          <Text fontSize={'lg'}>{_wallet.name}</Text>
+          <HStack justifyContent={'space-between'}>
+            <Text fontSize={'lg'}>{_wallet.name}</Text>
+            <Badge rounded={6} variant={'solid'}>
+              <Text color={'lightText'}>{network.chainId}</Text>
+            </Badge>
+          </HStack>
+          
           
             <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
               color: "#fff"
@@ -291,6 +298,12 @@ export default function ViewWallet ({navigation, route}) {
                     })
                   }
                 </VStack>
+              </Box>
+            }
+
+            {currentTab == translations[language].ViewWallet.tab_list[2] &&
+              <Box my={6} >
+                <NftList navigation={navigation} route={route}/>
               </Box>
             }
           </VStack>

@@ -107,9 +107,9 @@ function NftCard({contract, token, chain}) {
     return (
       <Pressable 
         borderRadius="sm"
-        padding={2}
+        padding={0}
         pt={0}
-        mt={0}
+        mx={1}
         width={{ base: 180, md: 250 }}
         _light={{ bg: 'coolGray.100' }}
         _dark={{ bg: 'coolGray.700' }}
@@ -119,7 +119,7 @@ function NftCard({contract, token, chain}) {
           <Badge 
           rounded="full" mt={-5} mb={-4} mr={-4} zIndex={1} size={5} top={200} variant="ghost" alignSelf="flex-start" position='relative' left="0">
             <AvatarImage />
-        </Badge>
+          </Badge>
         }
         
         <Image
@@ -162,7 +162,7 @@ function NftCard({contract, token, chain}) {
   }
 
   return (
-    <Box pt={0} mt={0}>
+    <Box pt={0} mt={0} mx={'auto'}>
       {
         metadata.name != null && 
         <BetterCard

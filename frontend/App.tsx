@@ -47,6 +47,7 @@ import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
 import ConnectionRequest from './pages/walletConnect/ConnectionRequest';
 import QRReader from './pages/walletConnect/QRReader';
+import SignTypedData from './pages/walletConnect/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
 import {createSignClient} from './service/walletConnect';
 
@@ -167,10 +168,10 @@ export default function App(): JSX.Element {
                   <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
-                  <Stack.Screen name="NFTs" component={NftList} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'NFTs', 
+                  <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
+                    title: '', 
                   }} ></Stack.Screen>
+                  
                 </Stack.Navigator>
             </NavigationContainer>
             <Listener />
@@ -239,3 +240,10 @@ export function HeaderComp({navigation}) {
     </Pressable>
   );
 }
+
+/**
+ * <Stack.Screen name="NFTs" component={NftList} options={{ 
+      headerTitleAlign: 'center',
+      title: 'NFTs', 
+    }} ></Stack.Screen>
+ */

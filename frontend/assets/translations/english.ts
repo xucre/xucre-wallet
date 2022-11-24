@@ -70,7 +70,7 @@ const values = {
     clear_button: 'Clear Transactions',
     holdings_placeholder: 'Insert Coin Holdings',
     new_button: 'Add Token',
-    tab_list: ['Holdings', 'Transactions'],
+    tab_list: ['Holdings', 'Transactions', 'NFTs'],
     transactions_placeholder: 'Insert Transaction History',
   }
 };

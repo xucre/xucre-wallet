@@ -114,41 +114,39 @@ export default function NftList ({navigation, route}) {
   }
 
   return (
-    <DashboardLayout title={wallet.name}>
-      <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
-        height={'100%'}
-        safeAreaBottom
+    <Box         
+      _light={{ backgroundColor: 'white' }}
+      _dark={{ backgroundColor: '#1b1e24' }}
+      height={'100%'}
+      safeAreaBottom
+    >
+      <ScrollView 
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}              
+          />
+        }
       >
-        <ScrollView 
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}              
-            />
+        <VStack space="2" px={0} mb={10}>
+          {wallet.name.length > 0 && wallet.wallet.address !== '' &&
+            <Box m={0} >
+              <VStack space={1} >
+                {
+                  holdings.map((nft, i) => {
+                    return (                        
+                      <NftCard key={nft.contract_address+nft.id+i} token={nft.id} contract={nft.contract_address} chain={chain}/>                        
+                    )
+                  })
+                }
+              </VStack>
+              
+              
+              
+            </Box>
           }
-        >
-          <VStack space="5" px={2} mb={10}>
-            {wallet.name.length > 0 && wallet.wallet.address !== '' &&
-              <Box m={6} >
-                <VStack space={2} >
-                  {
-                    holdings.map((nft, i) => {
-                      return (                        
-                        <NftCard key={nft.contract_address+nft.id+i} token={nft.id} contract={nft.contract_address} chain={chain}/>                        
-                      )
-                    })
-                  }
-                </VStack>
-                
-                
-                
-              </Box>
-            }
-          </VStack>
-        </ScrollView>
-      </Box>
-    </DashboardLayout>
+        </VStack>
+      </ScrollView>
+    </Box>
   )
 }

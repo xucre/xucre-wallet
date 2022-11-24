@@ -189,7 +189,6 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           <VStack space={0}>
             <NetworkLink/>
             <WalletLink/>
-            <NFTs />
             <QRScan />
           </VStack>
 

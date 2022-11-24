@@ -32,7 +32,7 @@ export const registerListeners = () => {
 
     signClient.on("session_event", (event) => {
       // Handle session events, such as "chainChanged", "accountsChanged", etc.
-      console.log(event);
+      console.log('session_event', event);
       /*interface Event {
         id: number;
         topic: string;
@@ -45,7 +45,14 @@ export const registerListeners = () => {
 
     signClient.on("session_request", (event) => {
       // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
-      console.log(event);
+      
+      if (event.params.request.method === 'eth_signTypedData') {
+        navigate('SignTyped', {
+          requestDetails: event
+        })
+      } else {
+        console.log('session_request', event);
+      }
       /*interface Event {
         id: number;
         topic: string;
