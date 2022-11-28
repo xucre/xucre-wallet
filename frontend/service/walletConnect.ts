@@ -1,7 +1,16 @@
+import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
 import SignClient from '@walletconnect/sign-client';
+import { SignClientTypes } from '@walletconnect/types'
+import { getSdkError } from '@walletconnect/utils'
+import { providers, utils } from 'ethers'
+import { useRecoilState } from "recoil";
 
+
+import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
+ 
 import { navigate } from './RootNavigation';
 import { env } from './constants';
+import { language as stateLanguage, walletList } from "./state";
 
 // eslint-disable-next-line functional/no-let
 export let signClient: SignClient;
@@ -33,21 +42,36 @@ export const registerListeners = () => {
     signClient.on("session_event", (event) => {
       // Handle session events, such as "chainChanged", "accountsChanged", etc.
       console.log('session_event', event);
-      /*interface Event {
-        id: number;
-        topic: string;
-        params: {
-          event: { name: string; data: any };
-          chainId: string;
-        };
-      }*/
     });
 
     signClient.on("session_request", (event) => {
       // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
       
-      if (event.params.request.method === 'eth_signTypedData') {
+      if (
+        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
+        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
+        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4
+      ) {
         navigate('SignTyped', {
+          requestDetails: event
+        })
+      } else if(
+        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN ||
+        event.params.request.method === EIP155_SIGNING_METHODS.PERSONAL_SIGN
+      ) {
+        navigate('SignEth', {
+          requestDetails: event
+        })
+      } else if(
+        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
+      ) {
+        navigate('SignTransaction', {
+          requestDetails: event
+        })
+      } else if(
+        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION
+      ) {
+        navigate('SendTransaction', {
           requestDetails: event
         })
       } else {

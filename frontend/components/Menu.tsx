@@ -29,6 +29,7 @@ import { constructDefaultNetworks } from "../service/network";
 import { activeNetwork, language, networkList, walletList, } from "../service/state";
 import { loadWalletFromPrivateKey } from "../service/wallet";
 import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../store/network";
+import { getTheme, storeTheme } from '../store/setting';
 import { getWallets } from "../store/wallet";
 
 import SelectLanguage from "./SelectLanguage";
@@ -44,8 +45,29 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   }, []);
 
   const {
-    colorMode
+    colorMode,
+    setColorMode
   } = useColorMode();
+
+  useEffect(() => {
+    const runAsync = async () => {
+      const clientTheme = await getTheme();
+      if (!clientTheme) {
+        console.log('setting default theme');
+        await storeTheme('light');
+        setScheme('light');
+      } else {
+        //console.log('setting existing theme:', clientTheme);
+        setColorMode(clientTheme);
+        setScheme(clientTheme);
+      }
+      //await storeTheme(colorMode);
+    }
+    
+    //console.log('setting from menu top', colorMode);
+    //setScheme(colorMode);
+    runAsync();
+  }, []);
 
   const [walletState, setWalletState] = useRecoilState(walletList);
   const [,setNetworkList] = useRecoilState(networkList);
@@ -70,7 +92,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       if (Array.isArray(_wallets) && _wallets.length > 0) {
         const loadedWallets = _wallets.map((val) => {
           const wallet = loadWalletFromPrivateKey(val.wallet);
-          return {name: val.name, wallet: wallet};
+          return {address: wallet.address, name: val.name, wallet: wallet};
         });
         setWalletState(loadedWallets);
       };
@@ -208,7 +230,13 @@ export const ToggleDarkMode = ({setScheme}) => {
   } = useColorMode();
 
   useEffect(() => {
+    const runAsync = async () => {
+      await storeTheme(colorMode);
+    }
+    
+    console.log('setting from menu button', colorMode);
     setScheme(colorMode);
+    runAsync();
   }, [colorMode]);
 
   return (

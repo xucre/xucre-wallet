@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { JsonRpcResponse, JsonRpcResult } from "@json-rpc-tools/utils";
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import {
   AlertDialog,
   ArrowBackIcon,
@@ -37,15 +37,16 @@ import { EIP155_SIGNING_METHODS } from "../../data/EIP1155Data";
 import GuestLayout from "../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../service/state";
-import { truncateString } from "../../service/utility";
+import { truncateStringStart } from "../../service/utility";
 import { signClient } from "../../service/walletConnect";
 
-export default function SignTransaction({navigation, route}) {
+export default function SendTransaction({navigation, route}) {
   const {requestDetails} = route.params;
   const [request, setRequest] = useState({});
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
   const [method, setMethod] = useState('');
+  const [amount, setAmount] = useState(BigNumber.from(0));
   const [value, setValue] = useState({});
   const [walletAddress, setWalletAddress] = useState('');
   const [walletState, ] = useRecoilState(walletList);
@@ -64,11 +65,11 @@ export default function SignTransaction({navigation, route}) {
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
+      console.log(request['params']['request']['method']);
       setMethod(request['params']['request']['method']);
-      if (request['params']['request']['method'] === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION) {
-        setWalletAddress(request['params']['request']['params'][0]['from']);
-        setTo(request['params']['request']['params'][0]['to'])
-      }
+      setWalletAddress(request['params']['request']['params'][0]['from']);
+      setTo(request['params']['request']['params'][0]['to']);
+      setAmount(BigNumber.from(request['params']['request']['params'][0]['value']));
       setValue(request['params']['request']['params'][0]);
     }
   }, [request])
@@ -111,8 +112,11 @@ export default function SignTransaction({navigation, route}) {
                   <Text>{JSON.stringify(value)}</Text>                    
                 </ScrollView>
               </Box>
-              
-              
+              <Box m={2} p={2}>
+                <Text>From: {truncateStringStart(walletAddress, 25)}</Text>
+                <Text>To: {truncateStringStart(to, 25)}</Text>
+                <Text>Amount: {ethers.utils.parseEther(amount.toString()).toString()}</Text>
+              </Box>
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
               <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{'Approve'}</Text></Button>

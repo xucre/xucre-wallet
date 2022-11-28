@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { JsonRpcResponse, JsonRpcResult } from "@json-rpc-tools/utils";
 import { ethers } from 'ethers';
 import {
   AlertDialog,
@@ -8,6 +9,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Container,
   Divider,
   Drawer,
   Heading,
@@ -21,6 +23,7 @@ import {
   ScrollView,
   SunIcon,
   Text,
+  TextArea,
   Tooltip,
   useColorMode,
   useColorModeValue,
@@ -31,6 +34,7 @@ import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
 import GuestLayout from "../../layouts/GuestLayout";
+import { approveEIP155Request, rejectEIP155Request } from "../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../service/state";
 import { truncateString } from "../../service/utility";
 import { signClient } from "../../service/walletConnect";
@@ -61,6 +65,7 @@ export default function SignTypedData({navigation, route}) {
       setWalletAddress(request['params']['request']['params'][0]);
       const rawData = request['params']['request']['params'][1];
       const data = JSON.parse(rawData);
+      //console.log(data);
       setDomain(data.domain);
       setTypes(data.types);
       setValue(data.message);
@@ -69,23 +74,21 @@ export default function SignTypedData({navigation, route}) {
 
 
   const approve = async () => {
-    // implement signer._signTypedData(domain, types, value);
-    //const pairings = signClient.core.pairing.getPairings();
-    //console.log(pairings);
+    const response = await approveEIP155Request(request, walletState);
+    await signClient.respond({
+      response,
+      topic: request['topic'],
+    })
     navigation.navigate('Home');
   }
 
   const reject = async () => {
-    const payload = {
-      id: request['params']['id'],
-      reason: {
-        code: 1,
-        message: "rejected by user",
-      },
-    }
-
-    await signClient.reject(payload);
-    navigation.navigate('Home');
+    const response = rejectEIP155Request(request)
+    await signClient.respond({
+      response,
+      topic: request['topic'],
+    })
+    navigation.navigate('Home');    
   }
 
   return (
@@ -99,9 +102,17 @@ export default function SignTypedData({navigation, route}) {
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Sign Message</Text></Heading>
-                <Text>{value['contents']}</Text>
+                <Heading size="md" mb={4}><Text>Sign Message Request</Text></Heading>
+                <Heading size="sm" mb={4}><Text>Origin: {domain['name']}</Text></Heading>                
               </Center>
+              
+                <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
+                  <ScrollView height={'50%'} width={'100%'} >
+                    <Text>{JSON.stringify(value)}</Text>                    
+                  </ScrollView>
+                </Box>
+              
+              
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
               <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{'Approve'}</Text></Button>

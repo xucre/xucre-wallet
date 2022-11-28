@@ -40,11 +40,10 @@ import { language as stateLanguage, walletList } from "../../service/state";
 import { truncateString } from "../../service/utility";
 import { signClient } from "../../service/walletConnect";
 
-export default function SignTransaction({navigation, route}) {
+export default function EthSign({navigation, route}) {
   const {requestDetails} = route.params;
   const [request, setRequest] = useState({});
-  const [to, setTo] = useState('');
-  const [data, setData] = useState('');
+  const [domain, setDomain] = useState({});
   const [method, setMethod] = useState('');
   const [value, setValue] = useState({});
   const [walletAddress, setWalletAddress] = useState('');
@@ -65,11 +64,13 @@ export default function SignTransaction({navigation, route}) {
   useEffect(() => {
     if (Object.keys(request).length > 0) {
       setMethod(request['params']['request']['method']);
-      if (request['params']['request']['method'] === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION) {
-        setWalletAddress(request['params']['request']['params'][0]['from']);
-        setTo(request['params']['request']['params'][0]['to'])
+      if (request['params']['request']['method'] === EIP155_SIGNING_METHODS.ETH_SIGN) {
+        setWalletAddress(request['params']['request']['params'][0]);
       }
-      setValue(request['params']['request']['params'][0]);
+      if (request['params']['request']['method'] === EIP155_SIGNING_METHODS.PERSONAL_SIGN) {
+        setWalletAddress(request['params']['request']['params'][1]);
+      }
+      setValue(request['params']['request']['params']);
     }
   }, [request])
 
@@ -103,14 +104,14 @@ export default function SignTransaction({navigation, route}) {
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Sign Transaction</Text></Heading>              
+                <Heading size="md" mb={4}><Text>Signature Request</Text></Heading>              
               </Center>
               
-              <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
-                <ScrollView height={'50%'} width={'100%'} >
-                  <Text>{JSON.stringify(value)}</Text>                    
-                </ScrollView>
-              </Box>
+                <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
+                  <ScrollView height={'50%'} width={'100%'} >
+                    <Text>{JSON.stringify(value)}</Text>                    
+                  </ScrollView>
+                </Box>
               
               
             </VStack>

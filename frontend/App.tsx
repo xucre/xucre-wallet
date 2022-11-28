@@ -4,6 +4,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import '@walletconnect/react-native-compat';
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
+import { run } from 'jest';
 import {
   Box,
   Container,
@@ -46,10 +47,14 @@ import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
 import ConnectionRequest from './pages/walletConnect/ConnectionRequest';
+import EthSign from './pages/walletConnect/EthSign';
 import QRReader from './pages/walletConnect/QRReader';
+import SendTransaction from './pages/walletConnect/SendTransaction';
+import SignTransaction from './pages/walletConnect/SignTransaction';
 import SignTypedData from './pages/walletConnect/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
 import {createSignClient} from './service/walletConnect';
+import { getTheme, storeTheme } from './store/setting';
 
 
 const Stack = createNativeStackNavigator();
@@ -81,12 +86,13 @@ export const theme = extendTheme({ config });
 export default function App(): JSX.Element { 
   //const StackNavigator = createThemedComponent(Stack.Navigator);
   const [scheme, setScheme] = useState('');
-  const [routeState, setRouteState] = useState('');
+  const [routeState, setRouteState] = useState('');  
   
   useEffect(() => {
     const runAsync = async () => {
       try {
         await createSignClient();
+        
       } catch (err) {
         console.log(err);
       }
@@ -169,7 +175,16 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
-                    title: '', 
+                    title: 'Sign Message', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="SignEth" component={EthSign} options={{ 
+                    title: 'Sign Message', 
+                  }} ></Stack.Screen>                  
+                  <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
+                    title: 'Sign Transaction', 
+                  }} ></Stack.Screen>           
+                  <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
+                    title: 'Send Transaction', 
                   }} ></Stack.Screen>
                   
                 </Stack.Navigator>

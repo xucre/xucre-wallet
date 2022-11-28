@@ -62,6 +62,16 @@ export const truncateString = (str, num) => {
   return str.slice(0, num) + '...'
 }
 
+export const truncateStringStart = (str, num) => {
+  // If the length of str is less than or equal to num
+  // just return str--don't truncate it.
+  if (str.length <= num) {
+    return str
+  }
+  // Return str truncated with '...' concatenated to the end of str.
+  return '...' + str.slice(-num) 
+}
+
 export const PromiseHelperAllSettled = (promises) => {
   return Promise.all(promises.map(function (promise) {
       return promise.then(function (value) {
