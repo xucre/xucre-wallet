@@ -29,11 +29,11 @@ import {
 import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../../assets/translations";
-import GuestLayout from "../../layouts/GuestLayout";
-import { language as stateLanguage, walletList } from "../../service/state";
-import { truncateString } from "../../service/utility";
-import { signClient } from "../../service/walletConnect";
+import translations from "../../../assets/translations";
+import GuestLayout from "../../../layouts/GuestLayout";
+import { language as stateLanguage, walletList } from "../../../service/state";
+import { truncateString } from "../../../service/utility";
+import { legacySignClient } from "../../../service/walletConnectLegacy";
 
 export default function ConnectionRequest({navigation, route}) {
   const {requestDetails} = route.params;
@@ -44,7 +44,6 @@ export default function ConnectionRequest({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        //console.log(requestDetails);
         setRequest(requestDetails)
       }
     }
@@ -110,40 +109,23 @@ export default function ConnectionRequest({navigation, route}) {
   }
 
   const approve = async () => {
-    const accountList = selectedWallets.map((wallet) => {
-      return request['params']['requiredNamespaces']['eip155']['chains'].map((chain) => {
-        return chain+ ':' + wallet.wallet.address;
-      })
+    const accountList = selectedWallets.map((wallet) => {     
+      return wallet.wallet.address;
     })
-    const payload = {
-      id: request['params']['id'],
-      namespaces: {
-        eip155: {
-          accounts: accountList.flat(),
-          events: request['params']['requiredNamespaces']['eip155']['events'],
-          methods: request['params']['requiredNamespaces']['eip155']['methods'],
-        },
-      },
-    };
     
     //console.log(payload);
-    const { topic, acknowledged } = await signClient.approve(payload);
-    const session = await acknowledged();
-    //const pairings = signClient.core.pairing.getPairings();
-    //console.log(pairings);
+    legacySignClient.approveSession({
+      accounts: accountList.flat(),
+      chainId: request['params'][0].chainId || 1  
+    })
+    
     navigation.navigate('Home');
   }
 
   const reject = async () => {
-    const payload = {
-      id: request['params']['id'],
-      reason: {
-        code: 1,
-        message: "rejected by user",
-      },
-    }
-
-    await signClient.reject(payload);
+    await legacySignClient.rejectSession({
+      message:  "rejected by user"       // optional
+    });
     navigation.navigate('Home');
   }
 
@@ -189,12 +171,12 @@ export default function ConnectionRequest({navigation, route}) {
               <Button onPress={previousPage} variant={'solid'} colorScheme={'coolGray'} rounded="none" mb={4}><Text color={'text.300'}>{'back'}</Text></Button>
               <HStack space={3} justifyContent="center" alignContent={'center'} rounded="full" mx={8} p={4} py={2} borderStyle={'solid'} borderWidth={1} borderColor={'gray'}>
                 <Avatar bg="green.500" mr="1" source={{
-                  uri: request['params'].proposer.metadata.icons[0]
+                  uri: request['params'][0].peerMeta.icons[0]
                 }}>
-                  <Text pb={0}>{request['params'].proposer.metadata.name || 'DA'}</Text>
+                  <Text pb={0}>{request['params'][0].peerMeta.name || 'DA'}</Text>
                 </Avatar>
                 <Center>
-                  <Text >{request['params'].proposer.metadata.url}</Text>
+                  <Text >{request['params'][0].peerMeta.url}</Text>
                 </Center>
               </HStack>
               <Center mt={5}>          

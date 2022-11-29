@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { JsonRpcResponse, JsonRpcResult } from "@json-rpc-tools/utils";
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import {
   AlertDialog,
   ArrowBackIcon,
@@ -32,18 +32,21 @@ import {
 import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../../assets/translations";
-import GuestLayout from "../../layouts/GuestLayout";
-import { approveEIP155Request, rejectEIP155Request } from "../../service/eip1155Utils";
-import { language as stateLanguage, walletList } from "../../service/state";
-import { truncateString } from "../../service/utility";
-import { signClient } from "../../service/walletConnect";
+import translations from "../../../assets/translations";
+import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data"; 
+import GuestLayout from "../../../layouts/GuestLayout";
+import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
+import { language as stateLanguage, walletList } from "../../../service/state";
+import { truncateStringStart } from "../../../service/utility";
+import { signClient } from "../../../service/walletConnect";
 
-export default function SignTypedData({navigation, route}) {
+export default function SendTransaction({navigation, route}) {
   const {requestDetails} = route.params;
   const [request, setRequest] = useState({});
-  const [domain, setDomain] = useState({});
-  const [types, setTypes] = useState({});
+  const [to, setTo] = useState('');
+  const [data, setData] = useState('');
+  const [method, setMethod] = useState('');
+  const [amount, setAmount] = useState(BigNumber.from(0));
   const [value, setValue] = useState({});
   const [walletAddress, setWalletAddress] = useState('');
   const [walletState, ] = useRecoilState(walletList);
@@ -62,13 +65,12 @@ export default function SignTypedData({navigation, route}) {
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
-      setWalletAddress(request['params']['request']['params'][0]);
-      const rawData = request['params']['request']['params'][1];
-      const data = JSON.parse(rawData);
-      //console.log(data);
-      setDomain(data.domain);
-      setTypes(data.types);
-      setValue(data.message);
+      console.log(request['params']['request']['method']);
+      setMethod(request['params']['request']['method']);
+      setWalletAddress(request['params']['request']['params'][0]['from']);
+      setTo(request['params']['request']['params'][0]['to']);
+      setAmount(BigNumber.from(request['params']['request']['params'][0]['value']));
+      setValue(request['params']['request']['params'][0]);
     }
   }, [request])
 
@@ -98,21 +100,23 @@ export default function SignTypedData({navigation, route}) {
         _dark={{ backgroundColor: '#1b1e24' }}
         height={'100%'}
       >
-        {request && request['params'] && value && value['contents'] && 
+        {request && request['params'] && 
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Sign Message Request</Text></Heading>
-                <Heading size="sm" mb={4}><Text>Origin: {domain['name']}</Text></Heading>                
+                <Heading size="md" mb={4}><Text>Sign Transaction</Text></Heading>              
               </Center>
               
-                <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
-                  <ScrollView height={'50%'} width={'100%'} >
-                    <Text>{JSON.stringify(value)}</Text>                    
-                  </ScrollView>
-                </Box>
-              
-              
+              <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
+                <ScrollView height={'50%'} width={'100%'} >
+                  <Text>{JSON.stringify(value)}</Text>                    
+                </ScrollView>
+              </Box>
+              <Box m={2} p={2}>
+                <Text>From: {truncateStringStart(walletAddress, 25)}</Text>
+                <Text>To: {truncateStringStart(to, 25)}</Text>
+                <Text>Amount: {ethers.utils.parseEther(amount.toString()).toString()}</Text>
+              </Box>
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
               <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{'Approve'}</Text></Button>

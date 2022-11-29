@@ -32,20 +32,18 @@ import {
 import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../../assets/translations";
-import { EIP155_SIGNING_METHODS } from "../../data/EIP1155Data"; 
-import GuestLayout from "../../layouts/GuestLayout";
-import { approveEIP155Request, rejectEIP155Request } from "../../service/eip1155Utils";
-import { language as stateLanguage, walletList } from "../../service/state";
-import { truncateString } from "../../service/utility";
-import { signClient } from "../../service/walletConnect";
+import translations from "../../../assets/translations";
+import GuestLayout from "../../../layouts/GuestLayout";
+import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
+import { language as stateLanguage, walletList } from "../../../service/state";
+import { truncateString } from "../../../service/utility";
+import { signClient } from "../../../service/walletConnect";
 
-export default function SignTransaction({navigation, route}) {
+export default function SignTypedData({navigation, route}) {
   const {requestDetails} = route.params;
   const [request, setRequest] = useState({});
-  const [to, setTo] = useState('');
-  const [data, setData] = useState('');
-  const [method, setMethod] = useState('');
+  const [domain, setDomain] = useState({});
+  const [types, setTypes] = useState({});
   const [value, setValue] = useState({});
   const [walletAddress, setWalletAddress] = useState('');
   const [walletState, ] = useRecoilState(walletList);
@@ -64,12 +62,13 @@ export default function SignTransaction({navigation, route}) {
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
-      setMethod(request['params']['request']['method']);
-      if (request['params']['request']['method'] === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION) {
-        setWalletAddress(request['params']['request']['params'][0]['from']);
-        setTo(request['params']['request']['params'][0]['to'])
-      }
-      setValue(request['params']['request']['params'][0]);
+      setWalletAddress(request['params']['request']['params'][0]);
+      const rawData = request['params']['request']['params'][1];
+      const data = JSON.parse(rawData);
+      //console.log(data);
+      setDomain(data.domain);
+      setTypes(data.types);
+      setValue(data.message);
     }
   }, [request])
 
@@ -99,18 +98,19 @@ export default function SignTransaction({navigation, route}) {
         _dark={{ backgroundColor: '#1b1e24' }}
         height={'100%'}
       >
-        {request && request['params'] && 
+        {request && request['params'] && value && value['contents'] && 
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Sign Transaction</Text></Heading>              
+                <Heading size="md" mb={4}><Text>Sign Message Request</Text></Heading>
+                <Heading size="sm" mb={4}><Text>Origin: {domain['name']}</Text></Heading>                
               </Center>
               
-              <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
-                <ScrollView height={'50%'} width={'100%'} >
-                  <Text>{JSON.stringify(value)}</Text>                    
-                </ScrollView>
-              </Box>
+                <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
+                  <ScrollView height={'50%'} width={'100%'} >
+                    <Text>{JSON.stringify(value)}</Text>                    
+                  </ScrollView>
+                </Box>
               
               
             </VStack>

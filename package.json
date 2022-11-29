@@ -13,6 +13,7 @@
     "@uniswap/widgets": "^2.18.0",
     "@usedapp/core": "^1.1.4",
     "@walletconnect/jsonrpc-types": "^1.0.1",
+    "@walletconnect/legacy-types": "^2.0.0-rc.0",
     "@walletconnect/react-native-compat": "^2.1.2",
     "@walletconnect/react-native-dapp": "1.6.1",
     "@walletconnect/sign-client": "^2.0.0",

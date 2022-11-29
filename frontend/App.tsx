@@ -33,6 +33,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Menu from './components/Menu';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
+import QRReader from './pages/QRReader';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
@@ -46,12 +47,16 @@ import QRWallet from './pages/wallet/QRWallet';
 import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
-import ConnectionRequest from './pages/walletConnect/ConnectionRequest';
-import EthSign from './pages/walletConnect/EthSign';
-import QRReader from './pages/walletConnect/QRReader';
-import SendTransaction from './pages/walletConnect/SendTransaction';
-import SignTransaction from './pages/walletConnect/SignTransaction';
-import SignTypedData from './pages/walletConnect/SignTypedData';
+import LegacyConnectionRequest from './pages/walletConnect/v1/ConnectionRequest';
+import LegacyEthSign from './pages/walletConnect/v1/EthSign';
+import LegacySendTransaction from './pages/walletConnect/v1/SendTransaction';
+import LegacySignTransaction from './pages/walletConnect/v1/SignTransaction';
+import LegacySignTypedData from './pages/walletConnect/v1/SignTypedData';
+import ConnectionRequest from './pages/walletConnect/v2/ConnectionRequest';
+import EthSign from './pages/walletConnect/v2/EthSign';
+import SendTransaction from './pages/walletConnect/v2/SendTransaction';
+import SignTransaction from './pages/walletConnect/v2/SignTransaction';
+import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
 import {createSignClient} from './service/walletConnect';
 import { getTheme, storeTheme } from './store/setting';
@@ -186,7 +191,21 @@ export default function App(): JSX.Element {
                   <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
                     title: 'Send Transaction', 
                   }} ></Stack.Screen>
-                  
+                  <Stack.Screen name="LegacyConnectionRequest" component={LegacyConnectionRequest} options={{ 
+                    title: '', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="LegacySignTypedData" component={LegacySignTypedData} options={{ 
+                    title: 'Sign Message', 
+                  }} ></Stack.Screen>
+                  <Stack.Screen name="LegacyEthSign" component={LegacyEthSign} options={{ 
+                    title: 'Sign Message', 
+                  }} ></Stack.Screen>                  
+                  <Stack.Screen name="LegacySignTransaction" component={LegacySignTransaction} options={{ 
+                    title: 'Sign Transaction', 
+                  }} ></Stack.Screen>           
+                  <Stack.Screen name="LegacySendTransaction" component={LegacySendTransaction} options={{ 
+                    title: 'Send Transaction', 
+                  }} ></Stack.Screen>
                 </Stack.Navigator>
             </NavigationContainer>
             <Listener />

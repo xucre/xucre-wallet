@@ -77,14 +77,6 @@ export const registerListeners = () => {
       } else {
         console.log('session_request', event);
       }
-      /*interface Event {
-        id: number;
-        topic: string;
-        params: {
-          request: { method: string; params: any };
-          chainId: string;
-        };
-      }*/
     });
 
     signClient.on("session_ping", (event) => {
