@@ -37,7 +37,7 @@ import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString } from "../../../service/utility";
-import { signClient } from "../../../service/walletConnect";
+import { legacySignClient } from "../../../service/walletConnectLegacy";
 
 export default function SignTypedData({navigation, route}) {
   const {requestDetails} = route.params;
@@ -62,8 +62,8 @@ export default function SignTypedData({navigation, route}) {
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
-      setWalletAddress(request['params']['request']['params'][0]);
-      const rawData = request['params']['request']['params'][1];
+      setWalletAddress(request['params'][0]);
+      const rawData = request['params'][1];
       const data = JSON.parse(rawData);
       //console.log(data);
       setDomain(data.domain);
@@ -74,19 +74,28 @@ export default function SignTypedData({navigation, route}) {
 
 
   const approve = async () => {
-    const response = await approveEIP155Request(request, walletState);
-    await signClient.respond({
-      response,
-      topic: request['topic'],
+    const result = await approveEIP155Request({
+      id: request['id'],
+      params: { chainId: '1', request: { method: request['method'], params: request['params'] } },
+      topic: '',
+    }, walletState);
+    //console.log(result);
+    legacySignClient.approveRequest({
+      id: request['id'],
+      result: result['result']
     })
     navigation.navigate('Home');
   }
 
   const reject = async () => {
-    const response = rejectEIP155Request(request)
-    await signClient.respond({
-      response,
-      topic: request['topic'],
+    const { error } = rejectEIP155Request({
+      id: request['id'],
+      params: { chainId: '1', request: { method: request['method'], params: request['params'] } },
+      topic: '',
+    })
+    legacySignClient.rejectRequest({
+      error,
+      id: request['id'],
     })
     navigation.navigate('Home');    
   }
@@ -98,7 +107,7 @@ export default function SignTypedData({navigation, route}) {
         _dark={{ backgroundColor: '#1b1e24' }}
         height={'100%'}
       >
-        {request && request['params'] && value && value['contents'] && 
+        {request && request['params'] && value && value['encodedFunction'] && 
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          

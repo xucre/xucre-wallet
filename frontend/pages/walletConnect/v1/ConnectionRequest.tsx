@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { IWalletConnectSession } from '@walletconnect/legacy-types'
 import { ethers } from 'ethers';
 import {
   AlertDialog,
@@ -34,6 +35,7 @@ import GuestLayout from "../../../layouts/GuestLayout";
 import { language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString } from "../../../service/utility";
 import { legacySignClient } from "../../../service/walletConnectLegacy";
+import { storeWCLegacyUrl } from "../../../store/setting";
 
 export default function ConnectionRequest({navigation, route}) {
   const {requestDetails} = route.params;
@@ -118,7 +120,21 @@ export default function ConnectionRequest({navigation, route}) {
       accounts: accountList.flat(),
       chainId: request['params'][0].chainId || 1  
     })
-    
+    //console.log(legacySignClient);
+    const session : IWalletConnectSession = {
+      accounts: legacySignClient.accounts,
+      bridge: legacySignClient.bridge,
+      chainId: legacySignClient.chainId,
+      clientId: legacySignClient.clientId,
+      clientMeta: legacySignClient.clientMeta,
+      connected: legacySignClient.connected,
+      handshakeId: legacySignClient.handshakeId,
+      handshakeTopic: legacySignClient.handshakeTopic,
+      key: legacySignClient.key,
+      peerId: legacySignClient.peerId,
+      peerMeta: legacySignClient.peerMeta,
+    };
+    storeWCLegacyUrl(JSON.stringify(session));
     navigation.navigate('Home');
   }
 

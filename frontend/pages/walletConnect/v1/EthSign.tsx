@@ -38,7 +38,7 @@ import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString } from "../../../service/utility";
-import { signClient } from "../../../service/walletConnect";
+import { legacySignClient } from "../../../service/walletConnectLegacy";
 
 export default function EthSign({navigation, route}) {
   const {requestDetails} = route.params;
@@ -63,32 +63,44 @@ export default function EthSign({navigation, route}) {
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
-      setMethod(request['params']['request']['method']);
-      if (request['params']['request']['method'] === EIP155_SIGNING_METHODS.ETH_SIGN) {
-        setWalletAddress(request['params']['request']['params'][0]);
+      setMethod(request['method']);
+      if (request['method'] === EIP155_SIGNING_METHODS.ETH_SIGN) {
+        setWalletAddress(request['params'][0]);
       }
-      if (request['params']['request']['method'] === EIP155_SIGNING_METHODS.PERSONAL_SIGN) {
-        setWalletAddress(request['params']['request']['params'][1]);
+      if (request['method'] === EIP155_SIGNING_METHODS.PERSONAL_SIGN) {
+        setWalletAddress(request['params'][1]);
       }
-      setValue(request['params']['request']['params']);
+      setValue(request['params']);
     }
+    //console.log(request);
   }, [request])
 
 
   const approve = async () => {
-    const response = await approveEIP155Request(request, walletState);
-    await signClient.respond({
-      response,
-      topic: request['topic'],
+    //const {result} = await approveEIP155Request(request, walletState);
+    const result = await approveEIP155Request({
+      id: request['id'],
+      params: { chainId: '1', request: { method: request['method'], params: request['params'] } },
+      topic: '',
+    }, walletState);
+    //console.log(result);
+    legacySignClient.approveRequest({
+      id: request['id'],
+      result: result['result']
     })
     navigation.navigate('Home');
   }
 
   const reject = async () => {
-    const response = rejectEIP155Request(request)
-    await signClient.respond({
-      response,
-      topic: request['topic'],
+    //const response = rejectEIP155Request(request)
+    const { error } = rejectEIP155Request({
+      id: request['id'],
+      params: { chainId: '1', request: { method: request['method'], params: request['params'] } },
+      topic: '',
+    })
+    legacySignClient.rejectRequest({
+      error,
+      id: request['id'],
     })
     navigation.navigate('Home');    
   }

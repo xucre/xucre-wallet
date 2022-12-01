@@ -24,11 +24,14 @@ import {
 import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
+
 import translations from "../assets/translations";
 import { constructDefaultNetworks } from "../service/network";
 import { activeNetwork, language, networkList, walletList, } from "../service/state";
 import { loadWalletFromPrivateKey } from "../service/wallet";
+import { createLegacySignClient, legacySignClient } from "../service/walletConnectLegacy";
 import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../store/network";
+import { getWCLegacyUrl } from "../store/setting";
 import { getTheme, storeTheme } from '../store/setting';
 import { getWallets } from "../store/wallet";
 
@@ -60,6 +63,10 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
         //console.log('setting existing theme:', clientTheme);
         setColorMode(clientTheme);
         setScheme(clientTheme);
+      }
+      
+      if (!legacySignClient) {
+        createLegacySignClient();
       }
       //await storeTheme(colorMode);
     }

@@ -5,8 +5,9 @@ import { getSdkError } from '@walletconnect/utils'
 import { providers, utils } from 'ethers'
 import { useRecoilState } from "recoil";
 
-import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
- 
+import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data"; 
+import { getWCLegacyUrl, storeWCLegacyUrl } from '../store/setting';
+
 import { navigate } from './RootNavigation';
 import { env } from './constants';
 import { language as stateLanguage, walletList } from "./state";
@@ -14,22 +15,34 @@ import { language as stateLanguage, walletList } from "./state";
 // eslint-disable-next-line functional/no-let
 export let legacySignClient: LegacySignClient;
 
-export function createLegacySignClient({ uri }: { readonly uri?: string } = {}) {
+export const createLegacySignClient = async ({ uri }: { readonly uri?: string } = {}) => {
   // If URI is passed always create a new session,
   // otherwise fall back to cached session if client isn't already instantiated.
   if (uri) {
+    deleteCachedLegacySession();
     console.log('creating legacy client');
     legacySignClient = new LegacySignClient({ uri })
-
+  } else if (!legacySignClient) {    
+    console.log('retrieving legacy client');
+    const local = await getCachedLegacySession();
+    if (local && local !== '') {
+      const session : IWalletConnectSession = JSON.parse(local);
+      //console.log(session);
+      legacySignClient = new LegacySignClient({ session })
+    }   
   } else {
+    console.log('not retrieving legacy client');
     return
   }
 
   legacySignClient.on('session_request', (error, payload) => {
     if (error) {
       console.log(`legacySignClient > session_request failed: ${error}`)
+    } else {
+      //console.log('session_request', payload);
     }
     //console.log('session request', payload);
+    //storeWCLegacyUrl(uri);
     navigate('LegacyConnectionRequest', {
       requestDetails: payload
     })
@@ -48,10 +61,12 @@ export function createLegacySignClient({ uri }: { readonly uri?: string } = {}) 
     if (error) {
       console.log(`legacySignClient > call_request failed: ${error}`)
     }
+    //console.log('call_request', payload);
     onCallRequest(payload)
   })
 
   legacySignClient.on('disconnect', async () => {
+    deleteCachedLegacySession();
     console.log('legacySignClient > disconnect');
   })
 }
@@ -67,7 +82,7 @@ const onCallRequest = async (payload: { readonly id: number; readonly method: st
     case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
     case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
     case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
-      return navigate('LegacySignTyped', {
+      return navigate('LegacySignTypedData', {
         requestDetails: payload
       })
 
@@ -80,4 +95,13 @@ const onCallRequest = async (payload: { readonly id: number; readonly method: st
         requestDetails: payload
       })
   }
+}
+
+function getCachedLegacySession(): any{
+  return getWCLegacyUrl();  
+}
+
+function deleteCachedLegacySession() {
+  console.log('delete session');
+  storeWCLegacyUrl('')
 }

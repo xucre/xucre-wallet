@@ -13,3 +13,14 @@ export const getTheme = async () => {
   return theme;
 }
  
+export const storeWCLegacyUrl = async (url) => {
+  await EncryptedStorage.setItem(
+    "wc_legacy_url",
+    url
+  );
+};
+
+export const getWCLegacyUrl = async () => {
+  const url = await EncryptedStorage.getItem('wc_legacy_url')
+  return url;
+}
