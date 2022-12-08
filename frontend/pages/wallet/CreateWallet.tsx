@@ -311,7 +311,11 @@ export default function CreateWallet ({navigation, route, storage}) {
         await storeWallet({name, wallet: _wallet.privateKey});
         setWalletList((oldWalletList) => [
           ...oldWalletList,
-          {name, wallet: _wallet}
+          {
+            address: _wallet.address,
+            name, 
+            wallet: _wallet
+          }
         ]);
         setLoading(false);
         setTimeout(() => {

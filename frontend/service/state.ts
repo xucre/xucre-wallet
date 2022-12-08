@@ -76,3 +76,8 @@ export const activeTransaction = atom({
   },
   key: 'activeTransaction'
 })
+
+export const lastUnlockDate = atom({
+  default: null,
+  key: 'lastUnlockDate'
+})

@@ -21,7 +21,8 @@ import {
   useColorModeValue,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
+import { AppState } from "react-native";
 import { useRecoilState } from "recoil";
 
 
@@ -35,12 +36,34 @@ import { getWCLegacyUrl } from "../store/setting";
 import { getTheme, storeTheme } from '../store/setting';
 import { getWallets } from "../store/wallet";
 
+import PasswordPage, { needsAuth } from "./Password";
 import SelectLanguage from "./SelectLanguage";
 
 export default function SideBar ({navigation, route, setScheme, storage}) {
+  const appState = useRef(AppState.currentState);
   const [drawerStatus, setDrawerStatus] = useState(false);
+  const [authNeeded, setAuthNeeded] = useState(false);
   const [_language, ] = useRecoilState(language);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        validateAuth();
+        console.log("App has come to the foreground!");
+      }
+      // eslint-disable-next-line functional/immutable-data
+      appState.current = nextAppState;
+      console.log("AppState", appState.current);
+    });
+    validateAuth();
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   useEffect(() => {
     return () => {
       setIsComponentMounted(false);
@@ -71,8 +94,6 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       //await storeTheme(colorMode);
     }
     
-    //console.log('setting from menu top', colorMode);
-    //setScheme(colorMode);
     runAsync();
   }, []);
 
@@ -115,6 +136,15 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       setDrawerStatus(false);
       navigation.navigate(_location);
     //}
+  }
+
+  const validateAuth = async () => {
+    const _authNeeded = await needsAuth();
+    console.log('authNeeded:', _authNeeded);
+    if (_authNeeded) {
+      console.log('authorization needed'); 
+    }
+    setAuthNeeded(_authNeeded);
   }
 
   function WalletLink() {
@@ -226,7 +256,10 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           
         </VStack>
       </Drawer>
-  </>
+      { authNeeded && 
+        <PasswordPage navigation={navigation} route={route} validateAuth={validateAuth}></PasswordPage>
+      }
+    </>
   );
 }
 
@@ -260,4 +293,5 @@ export const BackButton = ({setDrawerStatus}) => {
     </Pressable>
   )
 }
+
 

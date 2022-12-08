@@ -48,6 +48,7 @@
     "react-native-encrypted-storage": "^4.0.2",
     "react-native-gesture-handler": "~2.2.1",
     "react-native-get-random-values": "^1.5.0",
+    "react-native-keychain": "^8.1.1",
     "react-native-localhost": "1.0.0",
     "react-native-paper": "^4.12.4",
     "react-native-reanimated": "^2.12.0",
