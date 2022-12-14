@@ -26,6 +26,7 @@ const values = {
   },
   Menu: {
     network_button: 'NETWORKS',
+    password_button: 'PASSWORD',
     wallet_button: 'WALLETS',
   },
   NewWallet: {

@@ -26,6 +26,14 @@ export const getWCLegacyUrl = async () => {
   return url;
 }
 
+export const hasPassword = async () => {
+  const credentials = await Keychain.getGenericPassword();
+  if (credentials) {
+    return true;
+  }
+  return false;
+}
+
 export const getLastUnlock = async () => {
   const unlockDateRaw = await EncryptedStorage.getItem('lastUnlock');
   if (unlockDateRaw) {
@@ -62,5 +70,5 @@ export const storePassword = async (old, _password) => {
     await EncryptedStorage.setItem('lastUnlock', JSON.stringify(unlockDate));
   }
   
-  return true;
+  return {message: 'success'};
 }

@@ -34,6 +34,7 @@ import Menu from './components/Menu';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import QRReader from './pages/QRReader';
+import SetPassword from './pages/SetPassword';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
@@ -205,6 +206,9 @@ export default function App(): JSX.Element {
                   }} ></Stack.Screen>           
                   <Stack.Screen name="LegacySendTransaction" component={LegacySendTransaction} options={{ 
                     title: 'Send Transaction', 
+                  }} ></Stack.Screen>       
+                  <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
+                    title: 'Set Password', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>
             </NavigationContainer>

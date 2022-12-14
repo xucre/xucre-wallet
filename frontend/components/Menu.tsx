@@ -216,6 +216,23 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
     );
   }
 
+  function SetPassword() {
+    return (
+      <VStack space={4} mt={{ base: 0 }}>
+          <Button
+            variant="outline"
+            my={1} 
+            colorScheme={'yellow'} 
+            rounded={100} 
+            px={10}  
+            onPress={() => {navigate('SetPassword');}}          
+          >
+            <Text>{translations[_language].Menu.password_button}</Text>
+          </Button>
+      </VStack>
+    );
+  }
+
   return (
     <>
       { !drawerStatus && 
@@ -249,6 +266,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             <NetworkLink/>
             <WalletLink/>
             <QRScan />
+            <SetPassword />
           </VStack>
 
           <Box my={'2'}></Box>
