@@ -24,16 +24,19 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   atom,
   RecoilRoot,
+  useRecoilState
 } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
-//import MobileFooter from './components/Footer';
+//import MobileFooter from './components/Footer';n
+import translations from "./assets/translations";
 import Menu from './components/Menu';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import QRReader from './pages/QRReader';
+import SetPassword from './pages/SetPassword';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
@@ -58,6 +61,7 @@ import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
+import { language } from "./service/state";
 import {createSignClient} from './service/walletConnect';
 import { getTheme, storeTheme } from './store/setting';
 
@@ -141,7 +145,7 @@ export default function App(): JSX.Element {
                   }} ></Stack.Screen>                  
                   <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
                     headerTitleAlign: 'center',
-                    title: 'Wallets', 
+                    title: 'Select Wallet', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
                     headerTitleAlign: 'center',
@@ -180,31 +184,43 @@ export default function App(): JSX.Element {
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Sign Message', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="SignEth" component={EthSign} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Sign Message', 
                   }} ></Stack.Screen>                  
                   <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Sign Transaction', 
                   }} ></Stack.Screen>           
                   <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Send Transaction', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="LegacyConnectionRequest" component={LegacyConnectionRequest} options={{ 
                     title: '', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="LegacySignTypedData" component={LegacySignTypedData} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Sign Message', 
                   }} ></Stack.Screen>
                   <Stack.Screen name="LegacyEthSign" component={LegacyEthSign} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Sign Message', 
                   }} ></Stack.Screen>                  
                   <Stack.Screen name="LegacySignTransaction" component={LegacySignTransaction} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Sign Transaction', 
                   }} ></Stack.Screen>           
                   <Stack.Screen name="LegacySendTransaction" component={LegacySendTransaction} options={{ 
+                    headerTitleAlign: 'center',
                     title: 'Send Transaction', 
+                  }} ></Stack.Screen>       
+                  <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
+                    headerTitleAlign: 'center',
+                    title: 'Set Password', 
                   }} ></Stack.Screen>
                 </Stack.Navigator>
             </NavigationContainer>
