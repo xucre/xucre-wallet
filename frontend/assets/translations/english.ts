@@ -5,6 +5,17 @@ const values = {
     name_placeholder: 'Enter Token Name', 
     submit_button: 'Save Token',
   },
+  App: {
+    select_network_title: 'Networks',
+    select_wallet_title: 'Wallets',
+    send_transaction_title: 'Send Transaction',
+    set_password_title: 'Set Password',
+    sign_message_title: 'Sign Message',
+    sign_transaction_title: 'Sign Transaction',
+    token_title: 'Wallet',
+    view_network_title: 'Network',
+    view_wallet_title: 'Wallet',
+  },
   CreateNetwork: {
     chainId_placeholder: 'Enter Chain ID',
     explorer_placeholder: 'Enter Block Explorer Url (optional)',
