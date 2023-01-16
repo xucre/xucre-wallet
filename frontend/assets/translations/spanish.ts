@@ -5,6 +5,17 @@ const values = {
   name_placeholder: 'Ingrese Nombre del Token',
   submit_button: 'Guardar Token',
   },
+  App: {
+      select_network_title: 'Redes',
+      select_wallet_title: 'Wallets',
+      send_transaction_title: 'Enviar Transacción',
+      set_password_title: 'Ingresar contraseña',
+      sign_message_title: 'Firmar Mensaje',
+      sign_transaction_title: 'Firmar Transacción',
+      token_title: 'Billetera',
+      view_network_title: 'Redes',
+      view_wallet_title: 'Billetera',
+    },
   CreateNetwork: {
   chainId_placeholder: 'Ingrese Chain ID',
   explorer_placeholder: 'Ingrese Block Explorer Url (opcional)',
@@ -26,6 +37,7 @@ const values = {
   },
   Menu: {
     network_button: 'REDES',
+    password_button: 'CONTRASEÑA',
     wallet_button: 'BILLETERAS',
   },
   NewWallet: {
@@ -48,7 +60,9 @@ const values = {
   SelectLanguage : {
     en: 'Inglés',
     es: 'Español',
-    po: 'Portugués',
+    pt: 'Portugués',
+    qu: 'Quechua',
+    nah: 'Nahuatl',
   },
   SelectNetwork: {
     new_button: 'Nueva Red',

@@ -60,7 +60,9 @@ const values = {
   SelectLanguage : {
     en: 'English',
     es: 'Spanish',
-    po: 'Portuguese',
+    pt: 'Portuguese',
+    qu: 'Quechua',
+    nah: 'Nahuatl',
   },
   SelectNetwork: {
     new_button: 'New Network',
