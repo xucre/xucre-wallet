@@ -1,16 +1,13 @@
-//import { SwapWidget } from '@uniswap/widgets';
-//import '@uniswap/widgets/fonts.css';
-//import { LiFiWidget, WidgetConfig } from '@lifi/widget';
-import LIFI, {ChainId} from '@lifi/sdk';
+//import LIFI, {ChainId} from '@lifi/sdk';
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
 import React, { useEffect, useMemo, useState } from 'react';
-import { renderToString } from 'react-dom/server';
-import { WebView } from "react-native-webview";
+//import { renderToString } from 'react-dom/server';
+//import { WebView } from "react-native-webview";
 import { useRecoilState } from 'recoil';
 
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../service/state";
 
-const lifi = new LIFI();
+//const lifi = new LIFI();
 
 export default function SwapToken({navigation, route}) {
   const [network, ] = useRecoilState(activeNetwork);
@@ -29,7 +26,8 @@ export default function SwapToken({navigation, route}) {
 
   useEffect(() => {
     const runAsync = async () => {
-      const chains = await lifi.getChains();
+      //const chains = await lifi.getChains();
+      const chains = [];
       console.log(chains[0]);
       const chain = chains.find((val) => {
         console.log(val.id, network.chainId);

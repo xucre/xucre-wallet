@@ -50,6 +50,7 @@ export default function EthSign({navigation, route}) {
   const [walletState, ] = useRecoilState(walletList);
   const [selectedWallets, setSelectedWallets] = useState([]);
   const [page, setPage] = useState(0);
+  const [language, ] = useRecoilState(stateLanguage);
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
@@ -104,7 +105,7 @@ export default function EthSign({navigation, route}) {
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Signature Request</Text></Heading>              
+                <Heading size="md" mb={4}><Text>{translations[language].SignEth.header}</Text></Heading>              
               </Center>
               
                 <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
@@ -116,8 +117,8 @@ export default function EthSign({navigation, route}) {
               
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{'Approve'}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{'Reject'}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignEth.approve_button}</Text></Button>
+              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignEth.reject_button}</Text></Button>
             </Button.Group>
           </Box>
         }        

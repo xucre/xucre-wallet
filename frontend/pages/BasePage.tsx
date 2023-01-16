@@ -26,8 +26,11 @@ import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
+import { language as stateLanguage } from "../service/state";
 
 export default function BasePage({navigation, route}) {
+  const [language, ] = useRecoilState(stateLanguage);
+  //{translations[language].BasePage.title}
   useEffect(() => {
     const runAsync = async () => {
       // do something

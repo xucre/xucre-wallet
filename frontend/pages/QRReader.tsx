@@ -3,13 +3,17 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Box, Center, Text } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet,  View } from 'react-native';
+import { useRecoilState } from 'recoil';
 
+import translations from "../assets/translations";
+import { language as stateLanguage } from "../service/state";
 import { createSignClient, signClient } from '../service/walletConnect';
 import { createLegacySignClient } from '../service/walletConnectLegacy';
 
 export default function QRReader({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [language, ] = useRecoilState(stateLanguage);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -37,10 +41,10 @@ export default function QRReader({navigation}) {
   };
 
   if (hasPermission === null) {
-    return <Center><Text colorScheme={'primary'}>Requesting for camera permission</Text></Center>;
+    return <Center><Text colorScheme={'primary'}>{translations[language].QRReader.permission_request}</Text></Center>;
   }
   if (hasPermission === false) {
-    return <Center><Text colorScheme={'primary'}>No access to camera</Text></Center>;
+    return <Center><Text colorScheme={'primary'}>{translations[language].QRReader.permission_denied}</Text></Center>;
   }
 
   return (
@@ -49,7 +53,7 @@ export default function QRReader({navigation}) {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      {scanned && <Button title={translations[language].QRReader.rescan} onPress={() => setScanned(false)} />}
     </View>
   );
 }

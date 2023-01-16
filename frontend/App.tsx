@@ -61,7 +61,7 @@ import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
-import { language } from "./service/state";
+import { language as stateLanguage } from "./service/state";
 import {createSignClient} from './service/walletConnect';
 import { getTheme, storeTheme } from './store/setting';
 
@@ -94,8 +94,24 @@ export const theme = extendTheme({ config });
 
 export default function App(): JSX.Element { 
   //const StackNavigator = createThemedComponent(Stack.Navigator);
+  
+
+  return (
+    //<DAppProvider config={finalConfig}>
+    <RecoilRoot>
+      <NativeBaseProvider theme={theme}>
+        <AppWrapper />
+      </NativeBaseProvider>
+    </RecoilRoot>
+    //</DAppProvider>
+  )
+}
+
+export const AppWrapper = () => {
+  //
   const [scheme, setScheme] = useState('');
   const [routeState, setRouteState] = useState('');  
+  const [language, ] = useRecoilState(stateLanguage);
   
   useEffect(() => {
     const runAsync = async () => {
@@ -109,126 +125,120 @@ export default function App(): JSX.Element {
     
     runAsync();
   }, []);
-
+  
   return (
-    //<DAppProvider config={finalConfig}>
-    <RecoilRoot>
-      <NativeBaseProvider theme={theme}>
-        <SafeAreaProvider>
-            <NavigationContainer 
-              theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme} 
-              ref={navigationRef}
-            >
-                <Stack.Navigator initialRouteName="Home"
-                  screenOptions={({navigation, route}) => ({        
-                    headerLeft: () => (<HeaderComp navigation={navigation}/>),
-                    headerRight: () => (<Menu navigation={navigation} route={route} setScheme={setScheme} storage={null} />),
-                  })}
-                  screenListeners={{
-                    state: (e) => {
-                      //console.log('state changed');
-                      setRouteState(uuidv4());
-                    },
-                  }}
-                >
-                  <Stack.Screen name="Home" component={LandingPage} options={{ 
-                    headerTitle : ""
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="NewWallet" component={NewWallet} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen> 
-                  <Stack.Screen name="CreateWallet" component={CreateWallet} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen> 
-                  <Stack.Screen name="RecoverWallet" component={RecoverWallet} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen>                  
-                  <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Select Wallet', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Wallet', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Networks', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Network',  
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="AddToken" component={AddToken} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Wallet', 
-                  }} ></Stack.Screen>                  
-                  <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen>      
-                  <Stack.Screen name="SendToken" component={SendToken} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Wallet', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Wallet', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="QRReader" component={QRReader} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Sign Message', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="SignEth" component={EthSign} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Sign Message', 
-                  }} ></Stack.Screen>                  
-                  <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Sign Transaction', 
-                  }} ></Stack.Screen>           
-                  <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Send Transaction', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="LegacyConnectionRequest" component={LegacyConnectionRequest} options={{ 
-                    title: '', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="LegacySignTypedData" component={LegacySignTypedData} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Sign Message', 
-                  }} ></Stack.Screen>
-                  <Stack.Screen name="LegacyEthSign" component={LegacyEthSign} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Sign Message', 
-                  }} ></Stack.Screen>                  
-                  <Stack.Screen name="LegacySignTransaction" component={LegacySignTransaction} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Sign Transaction', 
-                  }} ></Stack.Screen>           
-                  <Stack.Screen name="LegacySendTransaction" component={LegacySendTransaction} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Send Transaction', 
-                  }} ></Stack.Screen>       
-                  <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
-                    headerTitleAlign: 'center',
-                    title: 'Set Password', 
-                  }} ></Stack.Screen>
-                </Stack.Navigator>
-            </NavigationContainer>
-            <Listener />
-        </SafeAreaProvider>
-      </NativeBaseProvider>
-    </RecoilRoot>
-    //</DAppProvider>
+    <SafeAreaProvider>
+      <NavigationContainer 
+        theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme} 
+        ref={navigationRef}
+      >
+          <Stack.Navigator initialRouteName="Home"
+            screenOptions={({navigation, route}) => ({        
+              headerLeft: () => (<HeaderComp navigation={navigation}/>),
+              headerRight: () => (<Menu navigation={navigation} route={route} setScheme={setScheme} storage={null} />),
+            })}
+            screenListeners={{
+              state: (e) => {
+                //console.log('state changed');
+                setRouteState(uuidv4());
+              },
+            }}
+          >
+            <Stack.Screen name="Home" component={LandingPage} options={{ 
+              headerTitle : ""
+            }} ></Stack.Screen>
+            <Stack.Screen name="NewWallet" component={NewWallet} options={{ 
+              title: '', 
+            }} ></Stack.Screen> 
+            <Stack.Screen name="CreateWallet" component={CreateWallet} options={{ 
+              title: '', 
+            }} ></Stack.Screen> 
+            <Stack.Screen name="RecoverWallet" component={RecoverWallet} options={{ 
+              title: '', 
+            }} ></Stack.Screen>                  
+            <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SelectWallet.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].ViewWallet.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
+              title: '', 
+            }} ></Stack.Screen>
+            <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SelectNetwork.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].ViewNetwork.title,  
+            }} ></Stack.Screen>
+            <Stack.Screen name="AddToken" component={AddToken} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].AddToken.title, 
+            }} ></Stack.Screen>                  
+            <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
+              title: '', 
+            }} ></Stack.Screen>      
+            <Stack.Screen name="SendToken" component={SendToken} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SendToken.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SwapToken.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="QRReader" component={QRReader} options={{ 
+              title: '', 
+            }} ></Stack.Screen>
+            <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
+              title: '', 
+            }} ></Stack.Screen>
+            <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SignTyped.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="SignEth" component={EthSign} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SignEth.title, 
+            }} ></Stack.Screen>                  
+            <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SignTransaction.title, 
+            }} ></Stack.Screen>           
+            <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SendTransaction.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="LegacyConnectionRequest" component={LegacyConnectionRequest} options={{ 
+              title: '', 
+            }} ></Stack.Screen>
+            <Stack.Screen name="LegacySignTypedData" component={LegacySignTypedData} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].LegacySignTypedData.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="LegacyEthSign" component={LegacyEthSign} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].LegacyEthSign.title, 
+            }} ></Stack.Screen>                  
+            <Stack.Screen name="LegacySignTransaction" component={LegacySignTransaction} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].LegacySignTransaction.title, 
+            }} ></Stack.Screen>           
+            <Stack.Screen name="LegacySendTransaction" component={LegacySendTransaction} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].LegacySendTransaction.title, 
+            }} ></Stack.Screen>       
+            <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
+              headerTitleAlign: 'center',
+              title: translations[language].SetPassword.title, 
+            }} ></Stack.Screen>
+          </Stack.Navigator>
+      </NavigationContainer>
+      <Listener />
+    </SafeAreaProvider>
   )
 }
 

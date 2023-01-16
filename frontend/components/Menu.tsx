@@ -175,7 +175,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('QRReader');}}          
           >
-            <Text>{'QR SCAN'}</Text>
+            <Text>{translations[_language].Menu.qr_scan_button}</Text>
           </Button>
       </VStack>
     );
@@ -192,7 +192,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('NFTs');}}          
           >
-            <Text>{'NFTS'}</Text>
+            <Text>{translations[_language].Menu.nft_button}</Text>
           </Button>
       </VStack>
     );

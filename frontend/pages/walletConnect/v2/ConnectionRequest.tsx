@@ -41,6 +41,8 @@ export default function ConnectionRequest({navigation, route}) {
   const [walletState, ] = useRecoilState(walletList);
   const [selectedWallets, setSelectedWallets] = useState([]);
   const [page, setPage] = useState(0);
+  const [language, ] = useRecoilState(stateLanguage);
+  //{translations[language].ConnectionRequest.}
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
@@ -139,7 +141,7 @@ export default function ConnectionRequest({navigation, route}) {
       id: request['params']['id'],
       reason: {
         code: 1,
-        message: "rejected by user",
+        message: translations[language].ConnectionRequest.rejected,
       },
     }
 
@@ -157,8 +159,8 @@ export default function ConnectionRequest({navigation, route}) {
         {page === 0 && walletState && 
           <>
             <VStack height={'90%'}>
-                <Center><Heading size="md" mb={2}><Text>Connection Request</Text></Heading></Center>
-                <Center><Heading size="sm"><Text>Select Wallet(s)</Text></Heading></Center>
+                <Center><Heading size="md" mb={2}><Text>{translations[language].ConnectionRequest.title}</Text></Heading></Center>
+                <Center><Heading size="sm"><Text>{translations[language].ConnectionRequest.wallet_select_instructions}</Text></Heading></Center>
                 {
                   walletState.map((val, i) => {
                     return (
@@ -179,7 +181,7 @@ export default function ConnectionRequest({navigation, route}) {
             </VStack>
             
             {selectedWallets.length > 0 && 
-              <Button onPress={nextPage} position={'relative'} bottom={0}><Text>{'Next'}</Text></Button>
+              <Button onPress={nextPage} position={'relative'} bottom={0}><Text>{translations[language].ConnectionRequest.next_button}</Text></Button>
             }
           </>
         }
@@ -198,7 +200,7 @@ export default function ConnectionRequest({navigation, route}) {
                 </Center>
               </HStack>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Connection Request</Text></Heading>
+                <Heading size="md" mb={4}><Text>{translations[language].ConnectionRequest.title}</Text></Heading>
                 {
                   selectedWallets.map((metadata, i) => {                  
                     return (
@@ -220,12 +222,11 @@ export default function ConnectionRequest({navigation, route}) {
                     )
                   })
                 }
-                <Text >{'Connecting several methods'}</Text>
               </Center>
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{'Approve'}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{'Reject'}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].ConnectionRequest.approve_button}</Text></Button>
+              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].ConnectionRequest.reject_button}</Text></Button>
             </Button.Group>
           </Box>
         }        

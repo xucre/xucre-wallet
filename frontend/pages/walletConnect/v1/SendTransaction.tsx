@@ -53,6 +53,8 @@ export default function SendTransaction({navigation, route}) {
   const [walletState, ] = useRecoilState(walletList);
   const [selectedWallets, setSelectedWallets] = useState([]);
   const [page, setPage] = useState(0);
+  const [language, ] = useRecoilState(stateLanguage);
+  
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
@@ -117,7 +119,7 @@ export default function SendTransaction({navigation, route}) {
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Sign Transaction</Text></Heading>              
+                <Heading size="md" mb={4}><Text>{translations[language].SendTransaction.header}</Text></Heading>              
               </Center>
               
               <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
@@ -126,14 +128,14 @@ export default function SendTransaction({navigation, route}) {
                 </ScrollView>
               </Box>
               <Box m={2} p={2}>
-                <Text>From: {truncateStringStart(walletAddress, 25)}</Text>
-                <Text>To: {truncateStringStart(to, 25)}</Text>
-                <Text>Amount: {ethers.utils.parseEther(amount.toString()).toString()}</Text>
+                <Text>{translations[language].SendTransaction.from}{truncateStringStart(walletAddress, 25)}</Text>
+                <Text>{translations[language].SendTransaction.to}{truncateStringStart(to, 25)}</Text>
+                <Text>{translations[language].SendTransaction.amount}{ethers.utils.parseEther(amount.toString()).toString()}</Text>
               </Box>
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{'Approve'}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{'Reject'}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SendTransaction.approve_button}</Text></Button>
+              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SendTransaction.reject_button}</Text></Button>
             </Button.Group>
           </Box>
         }        

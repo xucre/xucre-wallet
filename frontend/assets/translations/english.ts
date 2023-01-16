@@ -4,6 +4,7 @@ const values = {
     chain_placeholder: 'Select Chain',
     name_placeholder: 'Enter Token Name', 
     submit_button: 'Save Token',
+    title: 'Wallet'
   },
   App: {
     select_network_title: 'Networks',
@@ -15,6 +16,14 @@ const values = {
     token_title: 'Wallet',
     view_network_title: 'Network',
     view_wallet_title: 'Wallet',
+  },
+  ConnectionRequest: {
+    approve_button: 'Approve',
+    next_button: 'Next',
+    reject_button: 'Reject',
+    rejected: "rejected by user",
+    title: 'Connection Request',
+    wallet_select_instructions: 'Select Wallet(s)',
   },
   CreateNetwork: {
     chainId_placeholder: 'Enter Chain ID',
@@ -35,15 +44,61 @@ const values = {
     name_entry_button_loadingtext: 'Submitting',
     name_entry_input_placeholder: 'Set Wallet Name',
   },
+  LegacyEthSign: {
+    approve_button: 'Approve',
+    header: 'Signature Request',
+    reject_button: 'Reject',
+    title: 'Sign Message'
+  },
+  LegacySendTransaction: {
+    amount: 'Amount: ',
+    approve_button: 'Approve',
+    from :'From: ',
+    header: 'Sign Transaction',
+    reject_button: 'Reject',
+    title: 'Send Transaction',
+    to: 'To: '
+  },
+  LegacySignTransaction: {
+    approve_button: 'Approve',
+    header: 'Sign Transaction',
+    reject_button: 'Reject',
+    title: 'Sign Transaction'
+  },
+  LegacySignTypedData: {
+    approve_button: 'Approve',
+    header: 'Sign Message Request',
+    header_origin: 'Origin: ',
+    reject_button: 'Reject',
+    title: 'Sign Message'
+  },
+  Listener: {
+    failure_message: 'Transaction Failed',
+    success_message: 'Transaction Successful'
+  },
   Menu: {
     network_button: 'NETWORKS',
+    nft_button: 'NFTS',
     password_button: 'PASSWORD',
+    qr_scan_button: 'QR SCAN',
     wallet_button: 'WALLETS',
   },
   NewWallet: {
     create_button: 'Create Wallet',
     instructions: "Create new or retrieve from mnenomic",
     recover_button: 'Recover Wallet',
+  },
+  PasswordComponent: {
+    error_message: 'Invalid Password',
+    form_label: 'Password',
+    form_placeholder: 'Input password',
+    header: 'Password',
+    submit_button: 'Submit'
+  },
+  QRReader: {
+    permission_denied: 'No access to camera',
+    permission_request: 'Requesting for camera permission',
+    rescan: 'Tap to Scan Again'
   },
   QRWallet: {
     instructions: 'Share to receive funds'
@@ -65,12 +120,14 @@ const values = {
   SelectNetwork: {
     new_button: 'New Network',
     select_button: 'Select Network',
-    select_button_tooltip: 'More Options'
+    select_button_tooltip: 'More Options',
+    title: 'Networks'
   },
   SelectWallet: { 
     new_button: 'New Wallet',
     select_button: 'Select Wallet',
-    select_button_tooltip: 'More Options'
+    select_button_tooltip: 'More Options',
+    title: 'Select Wallet'
   },
   SendToken: {
     address_placeholder: 'Enter Receiver Address',
@@ -78,11 +135,60 @@ const values = {
     title: 'Send Token',
     token_placeholder: 'Select Token',
   },
+  SendTransaction: {
+    amount: 'Amount: ',
+    approve_button: 'Approve',
+    from :'From: ',
+    header: 'Sign Transaction',
+    reject_button: 'Reject',
+    title: 'Send Transaction',
+    to: 'To: '
+  },
+  SetPassword: {
+    form_confirmation: 'Confirm Password',
+    form_error_text: 'At least 6 characters are required.',
+    form_helper_text: 'Must be atleast 6 characters.',
+    form_new_header: 'Password',
+    form_old_header: 'Current Password',
+    form_save_button: 'Save',
+    password_placeholder: 'password',
+    title: 'Set Password'
+  },
+  SignEth: {
+    approve_button: 'Approve',
+    header: 'Signature Request',
+    reject_button: 'Reject',
+    title: 'Sign Message'
+  },
+  SignTransaction: {
+    approve_button: 'Approve',
+    header: 'Sign Transaction',
+    reject_button: 'Reject',
+    title: 'Sign Transaction'
+  },
+  SignTyped: {
+    approve_button: 'Approve',
+    header: 'Sign Message Request',
+    header_origin: 'Origin: ',
+    reject_button: 'Reject',
+    title: 'Sign Message'
+  },
+  SwapToken: {
+    title: 'Wallet'
+  },
+  TokenItem: {
+    menu_accessiblity_label: "More options menu",
+    send_token_button: 'Send'
+  },
+  ViewNetwork: {
+    title: 'Network'
+  },
   ViewWallet: {
     clear_button: 'Clear Transactions',
     holdings_placeholder: 'Insert Coin Holdings',
     new_button: 'Add Token',
     tab_list: ['Holdings', 'Transactions', 'NFTs'],
+    title: 'Wallet',
     transactions_placeholder: 'Insert Transaction History',
   }
 };
