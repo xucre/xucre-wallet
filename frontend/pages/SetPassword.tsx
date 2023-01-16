@@ -30,7 +30,8 @@ import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
-import { getLastUnlock, hasPassword, validatePassword, storePassword } from "../store/setting";
+import { language as stateLanguage } from "../service/state";
+import { getLastUnlock, hasPassword, storePassword, validatePassword } from "../store/setting";
 
 export default function SetPassword({navigation, route}) {
   const [existingPassword, setExistingPassword] = useState(false);
@@ -42,6 +43,9 @@ export default function SetPassword({navigation, route}) {
   const handleChangeCurrentPw = text => setCurrentPw(text);
   const [isValid, setIsValid] = useState(false);
   const [pwMatch, setPwMatch] = useState(false);
+
+  const [language, ] = useRecoilState(stateLanguage);
+
   useEffect(() => {
     const runAsync = async () => {
       const _existingPassword = await hasPassword();
@@ -81,26 +85,26 @@ export default function SetPassword({navigation, route}) {
           {existingPassword && 
             <>
               <Stack mx="4" my={4}>
-                <FormControl.Label><Text>Current Password</Text></FormControl.Label>
-                <Input value={currentPw} onChangeText={handleChangeCurrentPw} shadow={2} type="password" placeholder="password" />
+                <FormControl.Label><Text>{translations[language].SetPassword.form_old_header}</Text></FormControl.Label>
+                <Input value={currentPw} onChangeText={handleChangeCurrentPw} shadow={2} type="password" placeholder={translations[language].SetPassword.password_placeholder} />
               </Stack>
             </>
           }
           <Stack mx="4" my={4}>
-            <FormControl.Label><Text>Password</Text></FormControl.Label>
-            <Input value={inputPw} onChangeText={handleChangeInputPw} shadow={2} type="password" placeholder="password" />
+            <FormControl.Label><Text>{translations[language].SetPassword.form_new_header}</Text></FormControl.Label>
+            <Input value={inputPw} onChangeText={handleChangeInputPw} shadow={2} type="password" placeholder={translations[language].SetPassword.password_placeholder} />
             <FormControl.HelperText>
-              <Text>Must be atleast 6 characters.</Text>
+              <Text>{translations[language].SetPassword.form_helper_text}</Text>
             </FormControl.HelperText>
             <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-            <Text>At least 6 characters are required.</Text>
+            <Text>{translations[language].SetPassword.form_error_text}</Text>
             </FormControl.ErrorMessage>
           </Stack>
           <Stack mx="4" my={4}>
-          <FormControl.Label><Text>Confirm Password</Text></FormControl.Label>
-            <Input value={confirmPw} onChangeText={handleChangeConfirmPw} shadow={2} type="password" placeholder="password" />
+          <FormControl.Label><Text>{translations[language].SetPassword.form_confirmation}</Text></FormControl.Label>
+            <Input value={confirmPw} onChangeText={handleChangeConfirmPw} shadow={2} type="password" placeholder={translations[language].SetPassword.password_placeholder} />
           </Stack>
-          <Button mx="4" my={4} onPress={() => {save()}} isDisabled={(existingPassword && !isValid && !pwMatch) || (!existingPassword && !pwMatch)}>Save</Button>
+          <Button mx="4" my={4} onPress={() => {save()}} isDisabled={(existingPassword && !isValid && !pwMatch) || (!existingPassword && !pwMatch)}>{translations[language].SetPassword.form_save_button}</Button>
         </FormControl>
       </Box>
     </ScrollView>

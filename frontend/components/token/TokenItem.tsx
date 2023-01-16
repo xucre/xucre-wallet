@@ -5,7 +5,9 @@ import React, {createRef, useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
 import erc20Abi from '../../../contracts/erc20.json';
+import translations from "../../assets/translations";
 import { activeNetwork, activeWallet } from "../../service/state";
+import { language as stateLanguage } from "../../service/state";
 import { Token } from "../../service/token";
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
@@ -16,7 +18,8 @@ export default function TokenItem ({navigation, token}) {
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
-  const [amount, setAmount] = useState(BigNumber.from(0))
+  const [amount, setAmount] = useState(BigNumber.from(0));
+  const [language, ] = useRecoilState(stateLanguage);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -100,7 +103,7 @@ export default function TokenItem ({navigation, token}) {
            fontWeight="normal">{ethers.utils.formatEther(amount)}</Text>
        <Tooltip label="More Options" openDelay={500}>
           <Menu w="190" trigger={triggerProps => {
-            return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+            return <Pressable accessibilityLabel={translations[language].TokenItem.menu_accessiblity_label} {...triggerProps}>
               <Icon
                 as={MaterialIcons}
                 name="more-vert"
@@ -110,7 +113,7 @@ export default function TokenItem ({navigation, token}) {
             </Pressable>;
             }}
           >                
-            <Menu.Item onPress={() => {sendToken()}}><Text>{'Send'}</Text></Menu.Item>                
+            <Menu.Item onPress={() => {sendToken()}}><Text>{translations[language].TokenItem.send_token_button}</Text></Menu.Item>                
           </Menu>
        </Tooltip>
      </HStack>

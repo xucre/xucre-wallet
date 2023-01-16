@@ -37,7 +37,6 @@ import { updateTransaction } from "../../store/transaction";
 export default function Listener () {
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const toast = useToast();
-  const [languageVal, setLanguageVal] = useState('');
   useEffect(() => {
     return () => {
       setIsComponentMounted(false);
@@ -48,20 +47,20 @@ export default function Listener () {
     colorMode
   } = useColorMode();
 
-  const [languageState, setLanguageState] = useRecoilState(stateLanguage);
+  const [language, ] = useRecoilState(stateLanguage);
   const [transactions, setTransactionList] = useRecoilState(transactionList);
   const [_transactions, setTransactions] = useState([]);
   const successToast = {
     isClosable: true,
     status: 'success',
-    title: "Transaction Successful",
+    title: translations[language].Listener.success_message,
     variant: "solid",
   };
 
   const failureToast = {
     isClosable: true,
     status: 'error',
-    title: "Transaction Failed",
+    title: translations[language].Listener.failure_message,
     variant: "solid",
   };
   useEffect(() => {

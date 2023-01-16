@@ -9,7 +9,6 @@ import Theme, {createStyle} from 'react-native-theming';
 
 import GuestLayout from '../layouts/GuestLayout';
 
-//import * as SplashScreen from 'expo-splash-screen';
 export default function LandingPage({ navigation, route }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);

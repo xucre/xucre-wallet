@@ -49,6 +49,7 @@ export default function SignTypedData({navigation, route}) {
   const [walletState, ] = useRecoilState(walletList);
   const [selectedWallets, setSelectedWallets] = useState([]);
   const [page, setPage] = useState(0);
+  const [language, ] = useRecoilState(stateLanguage);
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
@@ -102,8 +103,8 @@ export default function SignTypedData({navigation, route}) {
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>Sign Message Request</Text></Heading>
-                <Heading size="sm" mb={4}><Text>Origin: {domain['name']}</Text></Heading>                
+                <Heading size="md" mb={4}><Text>{translations[language].SignTyped.header}</Text></Heading>
+                <Heading size="sm" mb={4}><Text>{translations[language].SignTyped.header_origin}{domain['name']}</Text></Heading>                
               </Center>
               
                 <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
@@ -115,8 +116,8 @@ export default function SignTypedData({navigation, route}) {
               
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{'Approve'}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{'Reject'}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignTyped.approve_button}</Text></Button>
+              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignTyped.reject_button}</Text></Button>
             </Button.Group>
           </Box>
         }        

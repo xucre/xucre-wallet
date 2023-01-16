@@ -30,12 +30,15 @@ import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
+import { language as stateLanguage } from "../service/state";
 import { getLastUnlock, validatePassword } from "../store/setting";
+
 import ErrorToast from "./ErrorToast";
 
 export default function PasswordPage({navigation, route, validateAuth}) {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [language, ] = useRecoilState(stateLanguage);
 
   const handleChange = (event) => {
     //console.log(event.nativeEvent.text);
@@ -47,7 +50,7 @@ export default function PasswordPage({navigation, route, validateAuth}) {
     if (_isValid) {
       validateAuth();
     } else {
-      setErrorMessage('Invalid Password');
+      setErrorMessage(translations[language].PasswordComponent.error_message);
       setTimeout(() => {
         setErrorMessage('');
       }, 2000);
@@ -58,22 +61,19 @@ export default function PasswordPage({navigation, route, validateAuth}) {
   
       <Modal isOpen={true} onClose={() => console.log('attemptedClose')} avoidKeyboard justifyContent="flex-end" bottom="4" size="lg">
         <Modal.Content>
-          <Modal.Header>Password</Modal.Header>
+          <Modal.Header>{translations[language].PasswordComponent.header}</Modal.Header>
           <Modal.Body>
           
             <FormControl mt="3">
-              <FormControl.Label>Password</FormControl.Label>
-              {
-                //translations[language].CreateWallet.name_entry_input_placeholder
-              }
-              <Input w="100%" value={password} onChange={handleChange} placeholder={'Input password'}  />
+              <FormControl.Label>{translations[language].PasswordComponent.form_label}</FormControl.Label>
+              <Input w="100%" value={password} onChange={handleChange} placeholder={translations[language].PasswordComponent.form_placeholder}  />
             </FormControl>
           </Modal.Body>
           <Modal.Footer>
             <Button flex="1" onPress={() => {
             savePassword();
           }}>
-              Submit
+              {translations[language].PasswordComponent.submit_button}
             </Button>
           </Modal.Footer>
         </Modal.Content>
