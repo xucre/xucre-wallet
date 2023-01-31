@@ -4,6 +4,7 @@ const values = {
   chain_placeholder: 'Seleccione Chain',
   name_placeholder: 'Ingrese Nombre del Token',
   submit_button: 'Guardar Token',
+  title: 'Billetera'
   },
   App: {
       select_network_title: 'Redes',
@@ -15,7 +16,15 @@ const values = {
       token_title: 'Billetera',
       view_network_title: 'Redes',
       view_wallet_title: 'Billetera',
-    },
+  },
+  ConnectionRequest: {
+      approve_button: 'Aprobar',
+      next_button: 'Siguiente',
+      reject_button: 'Rechazar',
+      rejected: "Rechazado por el Usuario",
+      title: 'Solicitud de conexión',
+      wallet_select_instructions: 'Seleccionar Billetera(s)',
+  },
   CreateNetwork: {
   chainId_placeholder: 'Ingrese Chain ID',
   explorer_placeholder: 'Ingrese Block Explorer Url (opcional)',
@@ -35,15 +44,61 @@ const values = {
     name_entry_button_loadingtext: 'Enviando',
     name_entry_input_placeholder: 'Establecer nombre de billetera',
   },
+  LegacyEthSign: {
+      approve_button: 'Aprobar',
+      header: 'Solicitud de firma',
+      reject_button: 'Rechazar',
+      title: 'Firmar mensaje'
+    },
+    LegacySendTransaction: {
+      amount: 'Monto: ',
+      approve_button: 'Aprobar',
+      from :'De: ',
+      header: 'Firmar transacción',
+      reject_button: 'Rechazar',
+      title: 'Enviar transacción',
+      to: 'Para: '
+    },
+    LegacySignTransaction: {
+      approve_button: 'Aprobar',
+      header: 'Firmar transacción',
+      reject_button: 'Rechazar',
+      title: 'Firmar transacción'
+    },
+    LegacySignTypedData: {
+      approve_button: 'Aprobar',
+      header: 'Firmar solicitud de mensaje',
+      header_origin: 'Origen: ',
+      reject_button: 'Rechazar',
+      title: 'Firmar Mensaje'
+    },
+    Listener: {
+      failure_message: 'Transacción fallida',
+      success_message: 'Transacción exitosa'
+    },
   Menu: {
     network_button: 'REDES',
+    nft_button: 'NFTS',
     password_button: 'CONTRASEÑA',
+    qr_scan_button: 'ESCANER QR',
     wallet_button: 'BILLETERAS',
   },
   NewWallet: {
     create_button: 'Crear Billetera',
     instructions: 'Crear Nueva o recuperar usando mnemónicos',
     recover_button: 'Recuperar Billetera',
+  },
+  PasswordComponent: {
+      error_message: 'Contraseña invalida',
+      form_label: 'Contraseña',
+      form_placeholder: 'Ingresar Contraseña',
+      header: 'Contraseña',
+      submit_button: 'Enviar'
+    },
+  QRReader: {
+      permission_denied: 'Sin acceso a la cámara',
+      permission_request: 'Solicitando permiso de cámara',
+      rescan: 'Toque para escanear de nuevo'
   },
   QRWallet: {
     instructions: 'Compartir para recibir fondos'
@@ -67,12 +122,14 @@ const values = {
   SelectNetwork: {
     new_button: 'Nueva Red',
     select_button: 'Seleccione Red',
-    select_button_tooltip: 'Mas Opciones'
+    select_button_tooltip: 'Mas Opciones',
+    title: 'Redes'
   },
   SelectWallet: {
     new_button: 'Nueva billetera',
     select_button: 'Seleccione billetera',
-    select_button_tooltip: 'Mas opciones'
+    select_button_tooltip: 'Mas opciones',
+    title: 'Seleccione Billetera'
   },
   SendToken: {
     address_placeholder: 'Ingrese direccion del Receptor',
@@ -80,11 +137,60 @@ const values = {
     title: 'Enviar Token',
     token_placeholder: 'Seleccionar Token',
   },
+  SendTransaction: {
+      amount: 'Cantidad: ',
+      approve_button: 'Aprobar',
+      from :'De: ',
+      header: 'Firmar transacción',
+      reject_button: 'Rechazar',
+      title: 'Enviar transacción',
+      to: 'Para: '
+  },
+  SetPassword: {
+      form_confirmation: 'Confirmar contraseña',
+      form_error_text: 'Se requieren al menos 6 caracteres.',
+      form_helper_text: 'Debe tener como mínimo 6 caracteres.',
+      form_new_header: 'Contraseña',
+      form_old_header: 'Contraseña actual',
+      form_save_button: 'Guardar',
+      password_placeholder: 'Contraseña',
+      title: 'Configurar la Contraseña'
+    },
+    SignEth: {
+      approve_button: 'Aprobar',
+      header: 'Solicitud de Firma',
+      reject_button: 'Rechazar',
+      title: 'Firmar Mensaje'
+    },
+    SignTransaction: {
+      approve_button: 'Aprobar',
+      header: 'Firmar transacción',
+      reject_button: 'Rechazar',
+      title: 'Firmar transacción'
+    },
+    SignTyped: {
+      approve_button: 'Aprobar',
+      header: 'Firmar solicitud de mensaje',
+      header_origin: 'Origen: ',
+      reject_button: 'Rechazar',
+      title: 'Firmar Mensaje'
+    },
+    SwapToken: {
+      title: 'Billetera'
+    },
+    TokenItem: {
+      menu_accessiblity_label: "Menu más opciones",
+      send_token_button: 'Enviar'
+    },
+    ViewNetwork: {
+      title: 'Redes'
+    },
   ViewWallet: {
     clear_button: 'Limpiar Transacciones',
     holdings_placeholder: 'Insertar existencias de monedas',
     new_button: 'Agregar Token',
     tab_list: ['Valores en cartera', 'Transacciones'],
+    title: 'Billetera',
     transactions_placeholder: 'Insertar historial de transacciones'
   }
 };
