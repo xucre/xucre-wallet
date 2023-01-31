@@ -18,6 +18,12 @@
         "buildType" : "apk"
       }
     },
+    "beta": {
+        "distribution": "internal",
+        "android" : {
+          "buildType" : "apk"
+        }
+    },
     "production": {}
   },
   "submit": {
