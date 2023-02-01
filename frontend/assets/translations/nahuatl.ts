@@ -1,115 +1,115 @@
 const values = {
   AddToken: {
-  address_placeholder: 'Ingrese dirección del Token',
-  chain_placeholder: 'Seleccione Chain',
-  name_placeholder: 'Ingrese Nombre del Token',
-  submit_button: 'Guardar Token',
-  title: 'Billetera'
+  address_placeholder: 'Ahaquiaa Token-ixti',
+  chain_placeholder: 'Itlan Chain',
+  name_placeholder: 'Ahaquiaa toocaa Token',
+  submit_button: 'Tla-piya Token',
+  title: 'Tlahcuiloolaamapetlaacaltoon-tli'
   },
   App: {
-      select_network_title: 'Redes',
-      select_wallet_title: 'Wallets',
-      send_transaction_title: 'Enviar Transacción',
-      set_password_title: 'Ingresar contraseña',
-      sign_message_title: 'Firmar Mensaje',
-      sign_transaction_title: 'Firmar Transacción',
-      token_title: 'Billetera',
-      view_network_title: 'Redes',
-      view_wallet_title: 'Billetera',
+      select_network_title: 'Maatla-tl',
+      select_wallet_title: 'Tlahcuiloolaamapetlaacaltoon-tli',
+      send_transaction_title: 'Ihuaa Nenahuatiliz-tli',
+      set_password_title: 'Ahaquiaa Ichtacayooh',
+      sign_message_title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li',
+      sign_transaction_title: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli',
+      token_title: 'Tlahcuiloolaamapetlaacaltoon-tli',
+      view_network_title: 'Maatla-tl',
+      view_wallet_title: 'Tlahcuiloolaamapetlaacaltoon-tli',
   },
   ConnectionRequest: {
-      approve_button: 'Aprobar',
-      next_button: 'Siguiente',
-      reject_button: 'Rechazar',
-      rejected: "Rechazado por el Usuario",
-      title: 'Solicitud de conexión',
-      wallet_select_instructions: 'Seleccionar Billetera(s)',
+      approve_button: 'Ninocaqui',
+      next_button: 'In iuh cah',
+      reject_button: 'Tlahueelcuepiliaa',
+      rejected: "Tlahueelcuepiliaa tlaaca-h",
+      title: 'Teetlaihtlaniliz-tli tlanehnepanooliz-tli',
+      wallet_select_instructions: 'Ihitta Tlahcuiloolaamapetlaacaltoon-tli(s)',
   },
   CreateNetwork: {
-  chainId_placeholder: 'Ingrese Chain ID',
-  explorer_placeholder: 'Ingrese Block Explorer Url (opcional)',
-  name_placeholder: 'Ingrese Nombre',
-  rpcUrl_placeholder: 'Ingrese RPC Url',
-  submit_button: 'Guardar Red',
-  symbol_placeholder: 'Ingrese Chain Symbol',
+  chainId_placeholder: 'Ahaquiaa Chain ID',
+  explorer_placeholder: 'Ahaquiaa Block Explorer Url (tlaihittaliz)',
+  name_placeholder: 'Ahaquiaa toocaa',
+  rpcUrl_placeholder: 'Ahaquiaa RPC Url',
+  submit_button: 'Tla-piya Maatla-tl',
+  symbol_placeholder: 'Ahaquiaa Chain Symbol',
   },
   CreateWallet: {
-    instructions : 'Al crear una nueva billetera, recibirá una secuencia de mnemónicos que representan su "contraseña personal". Cualquier persona con esta secuencia puede reconfigurar su billetera en cualquier dispositivo nuevo. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
-    instructions_button: 'Generar',
-    mnemonic_confirm_button: 'Confirmar mnemotécnico',
-    mnemonic_confirm_instructions: 'Guardar frase mnemotécnica',
+    instructions : 'Tla-yoocoya yancuic Tlahcuiloolaamapetlaacaltoon-tli, recibirá una secuencia de mnemónicos que representan su "Ichtacayooh personal". Cualquier persona con esta secuencia puede reconfigurar su Tlahcuiloolaamapetlaacaltoon-tli en cualquier dispositivo Yancuic. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
+    instructions_button: 'Tla-yoocoya',
+    mnemonic_confirm_button: 'Tee-yooliuhtlamachtiaa mnemotécnico',
+    mnemonic_confirm_instructions: 'Tla-piya frase mnemotécnica',
     mnemonic_error: 'Las frases mnemotécnicas deben coincidir',
     mnemonic_error_button: 'Continuar',
-    name_entry_button: 'Guardar billetera',
+    name_entry_button: 'Tla-piya Tlahcuiloolaamapetlaacaltoon-tli',
     name_entry_button_loadingtext: 'Enviando',
-    name_entry_input_placeholder: 'Establecer nombre de billetera',
+    name_entry_input_placeholder: 'Establecer toocaa de Tlahcuiloolaamapetlaacaltoon-tli',
   },
   LegacyEthSign: {
-      approve_button: 'Aprobar',
-      header: 'Solicitud de firma',
-      reject_button: 'Rechazar',
-      title: 'Firmar mensaje'
+      approve_button: 'Ninocaqui',
+      header: 'Teetlaihtlaniliz tee-tlatquiitiil-li',
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li'
     },
     LegacySendTransaction: {
-      amount: 'Monto: ',
-      approve_button: 'Aprobar',
+      amount: 'Iixquich: ',
+      approve_button: 'Ninocaqui',
       from :'De: ',
-      header: 'Firmar transacción',
-      reject_button: 'Rechazar',
-      title: 'Enviar transacción',
+      header: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli',
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Ihuaa Nenahuatiliz-tli',
       to: 'Para: '
     },
     LegacySignTransaction: {
-      approve_button: 'Aprobar',
-      header: 'Firmar transacción',
-      reject_button: 'Rechazar',
-      title: 'Firmar transacción'
+      approve_button: 'Ninocaqui',
+      header: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli',
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli'
     },
     LegacySignTypedData: {
-      approve_button: 'Aprobar',
-      header: 'Firmar solicitud de mensaje',
+      approve_button: 'Ninocaqui',
+      header: 'Aamamachiyootlahcuilooltzacua teetlaihtlaniliz tee-tlatquiitiil-li',
       header_origin: 'Origen: ',
-      reject_button: 'Rechazar',
-      title: 'Firmar Mensaje'
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li'
     },
     Listener: {
-      failure_message: 'Transacción fallida',
-      success_message: 'Transacción exitosa'
+      failure_message: 'Nenahuatiliz-tli fallida',
+      success_message: 'Nenahuatiliz-tli ahxiliz-tli'
     },
   Menu: {
-    network_button: 'REDES',
+    network_button: 'Maatla-tl',
     nft_button: 'NFTS',
-    password_button: 'CONTRASEÑA',
-    qr_scan_button: 'ESCANER QR',
-    wallet_button: 'BILLETERAS',
+    password_button: 'Ichtacayooh',
+    qr_scan_button: 'QR Scan',
+    wallet_button: 'Tlahcuiloolaamapetlaacaltoon-tli',
   },
   NewWallet: {
-    create_button: 'Crear Billetera',
-    instructions: 'Crear Nueva o recuperar usando mnemónicos',
-    recover_button: 'Recuperar Billetera',
+    create_button: 'Tla-yoocoya Tlahcuiloolaamapetlaacaltoon-tli',
+    instructions: 'Tla-yoocoya Yancuic o pahti usando mnemónicos',
+    recover_button: 'Pahti Tlahcuiloolaamapetlaacaltoon-tli',
   },
   PasswordComponent: {
-      error_message: 'Contraseña invalida',
-      form_label: 'Contraseña',
-      form_placeholder: 'Ingresar Contraseña',
-      header: 'Contraseña',
-      submit_button: 'Enviar'
+      error_message: 'Ichtacayooh invalida',
+      form_label: 'Ichtacayooh',
+      form_placeholder: 'Ahaquiaa Ichtacayooh',
+      header: 'Ichtacayooh',
+      submit_button: 'Ihuaa'
     },
   QRReader: {
       permission_denied: 'Sin acceso a la cámara',
-      permission_request: 'Solicitando permiso de cámara',
+      permission_request: 'Teetlaihtlaniliz permiso de cámara',
       rescan: 'Toque para escanear de nuevo'
   },
   QRWallet: {
     instructions: 'Compartir para recibir fondos'
   },
   RecoverWallet: {
-    instructions: 'Porfavor ingrese la secuencia de mnemónicos del proceso de creacion de su wallet original.',
-    instructions_button: 'Recuperar',
-    mnemonic_entry_input_placeholder: 'Ingrese frase mnemónica separada por espacios',
+    instructions: 'Porfavor ahaquiaa la secuencia de mnemónicos del proceso de creacion de su wallet original.',
+    instructions_button: 'Pahti',
+    mnemonic_entry_input_placeholder: 'Ahaquiaa frase mnemónica separada por espacios',
     mnemonic_not_complete: 'El mnemónicos no tiene la longitud adecuada',
-    name_entry_input_placeholder: 'Ingrese Nombre de la billetera',
-    save_button: 'Guardar',
+    name_entry_input_placeholder: 'Ahaquiaa toocaa de la Tlahcuiloolaamapetlaacaltoon-tli',
+    save_button: 'Tla-piya',
     save_button_loadingtext: 'Enviando'
   },
   SelectLanguage : {
@@ -120,78 +120,78 @@ const values = {
     nah: 'Nahuatl',
   },
   SelectNetwork: {
-    new_button: 'Nueva Red',
-    select_button: 'Seleccione Red',
+    new_button: 'Yancuic Maatla-tl',
+    select_button: 'Itlan Maatla-tl',
     select_button_tooltip: 'Mas Opciones',
-    title: 'Redes'
+    title: 'Maatla-tl'
   },
   SelectWallet: {
-    new_button: 'Nueva billetera',
-    select_button: 'Seleccione billetera',
+    new_button: 'Yancuic Tlahcuiloolaamapetlaacaltoon-tli',
+    select_button: 'Ihitta Tlahcuiloolaamapetlaacaltoon-tli',
     select_button_tooltip: 'Mas opciones',
-    title: 'Seleccione Billetera'
+    title: 'Itlan Tlahcuiloolaamapetlaacaltoon-tli'
   },
   SendToken: {
-    address_placeholder: 'Ingrese direccion del Receptor',
-    submit_button: 'Enviar',
-    title: 'Enviar Token',
-    token_placeholder: 'Seleccionar Token',
+    address_placeholder: 'Ahaquiaa -ixti del Receptor',
+    submit_button: 'Ihuaa',
+    title: 'Ihuaa Token',
+    token_placeholder: 'Ihitta Token',
   },
   SendTransaction: {
-      amount: 'Cantidad: ',
-      approve_button: 'Aprobar',
+      amount: 'Iixquich: ',
+      approve_button: 'Ninocaqui',
       from :'De: ',
-      header: 'Firmar transacción',
-      reject_button: 'Rechazar',
-      title: 'Enviar transacción',
+      header: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli',
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Ihuaa Nenahuatiliz-tli',
       to: 'Para: '
   },
   SetPassword: {
-      form_confirmation: 'Confirmar contraseña',
+      form_confirmation: 'Tee-yooliuhtlamachtiaa Ichtacayooh',
       form_error_text: 'Se requieren al menos 6 caracteres.',
       form_helper_text: 'Debe tener como mínimo 6 caracteres.',
-      form_new_header: 'Contraseña',
-      form_old_header: 'Contraseña actual',
-      form_save_button: 'Guardar',
-      password_placeholder: 'Contraseña',
-      title: 'Configurar la Contraseña'
+      form_new_header: 'Ichtacayooh',
+      form_old_header: 'Ichtacayooh actual',
+      form_save_button: 'Tla-piya',
+      password_placeholder: 'Ichtacayooh',
+      title: 'Nahuatiilxeloaa Ichtacayooh'
     },
     SignEth: {
-      approve_button: 'Aprobar',
-      header: 'Solicitud de Firma',
-      reject_button: 'Rechazar',
-      title: 'Firmar Mensaje'
+      approve_button: 'Ninocaqui',
+      header: 'Teetlaihtlaniliz Firma',
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li'
     },
     SignTransaction: {
-      approve_button: 'Aprobar',
-      header: 'Firmar transacción',
-      reject_button: 'Rechazar',
-      title: 'Firmar transacción'
+      approve_button: 'Ninocaqui',
+      header: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli',
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli'
     },
     SignTyped: {
-      approve_button: 'Aprobar',
-      header: 'Firmar solicitud de mensaje',
+      approve_button: 'Ninocaqui',
+      header: 'Aamamachiyootlahcuilooltzacua teetlaihtlaniliz tee-tlatquiitiil-li',
       header_origin: 'Origen: ',
-      reject_button: 'Rechazar',
-      title: 'Firmar Mensaje'
+      reject_button: 'Tlahueelcuepiliaa',
+      title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li'
     },
     SwapToken: {
-      title: 'Billetera'
+      title: 'Tlahcuiloolaamapetlaacaltoon-tli'
     },
     TokenItem: {
       menu_accessiblity_label: "Menu más opciones",
-      send_token_button: 'Enviar'
+      send_token_button: 'Ihuaa'
     },
     ViewNetwork: {
-      title: 'Redes'
+      title: 'Maatla-tl'
     },
   ViewWallet: {
-    clear_button: 'Limpiar Transacciones',
+    clear_button: 'Limpiar Nenahuatiliz-tli',
     holdings_placeholder: 'Insertar existencias de monedas',
-    new_button: 'Agregar Token',
-    tab_list: ['Valores en cartera', 'Transacciones'],
-    title: 'Billetera',
-    transactions_placeholder: 'Insertar historial de transacciones'
+    new_button: 'Tla-yoocoya Token',
+    tab_list: ['Valores en cartera', 'Nenahuatiliz-tli'],
+    title: 'Tlahcuiloolaamapetlaacaltoon-tli',
+    transactions_placeholder: 'Cla-yoocoya historial de Nenahuatiliz-tli'
   }
 };
 
