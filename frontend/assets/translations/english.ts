@@ -115,9 +115,9 @@ const values = {
   SelectLanguage : {
     en: 'English',
     es: 'Spanish',
+    nah: 'Nahuatl',
     pt: 'Portuguese',
     qu: 'Quechua',
-    nah: 'Nahuatl',
   },
   SelectNetwork: {
     new_button: 'New Network',
@@ -189,7 +189,7 @@ const values = {
     clear_button: 'Clear Transactions',
     holdings_placeholder: 'Insert Coin Holdings',
     new_button: 'Add Token',
-    tab_list: ['Holdings', 'Transactions', 'NFTs'],
+    tab_list: ['Holdings', 'Transactions'],
     title: 'Wallet',
     transactions_placeholder: 'Insert Transaction History',
   }

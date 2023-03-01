@@ -16,6 +16,7 @@ import {
   NativeBaseProvider,
   Pressable,
   SunIcon,
+  Text,
   useColorMode,
   useColorModeValue,
 } from "native-base";
@@ -33,6 +34,7 @@ import { v4 as uuidv4 } from 'uuid';
 //import MobileFooter from './components/Footer';n
 import translations from "./assets/translations";
 import Menu from './components/Menu';
+import Notifications from './components/Notifications';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import QRReader from './pages/QRReader';
@@ -78,6 +80,7 @@ const AppLightTheme = {
   colors: {
     ...DefaultTheme.colors,
     background: '#FFFFFF',
+    primary: '#D4E815',
   },
 };
 
@@ -86,11 +89,28 @@ const AppDarkTheme = {
   colors: {
     ...DarkTheme.colors,
     background: '#1b1e24',
+    primary: '#D4E815',
   },
 };
 
 // extend the theme
-export const theme = extendTheme({ config });
+export const theme = extendTheme({ 
+  colors: {
+    // Add new color
+    primary: {
+      100: '#EEFB6',
+      200: '#E1F245',
+      300: '#E1F245',
+      400: '#D4E815',
+      50: '#EEFB6',
+      500: '#D4E815',
+      600: '#A6B708',
+      700: '#A6B708',
+      800: '#829000',
+      900: '#829000',
+    },
+  }
+ });
 
 export default function App(): JSX.Element { 
   //const StackNavigator = createThemedComponent(Stack.Navigator);
@@ -134,8 +154,14 @@ export const AppWrapper = () => {
       >
           <Stack.Navigator initialRouteName="Home"
             screenOptions={({navigation, route}) => ({        
-              headerLeft: () => (<HeaderComp navigation={navigation}/>),
-              headerRight: () => (<Menu navigation={navigation} route={route} setScheme={setScheme} storage={null} />),
+              headerLeft: () => {                
+                //return route.name === 'Home' ? <></> : <Notifications />;
+                return route.name === 'Home' ? <></> : <Menu navigation={navigation} route={route} setScheme={setScheme} storage={null} />;
+              },
+              headerRight: () => {
+                return route.name === 'Home' ? <></> : <Notifications />;
+                //return route.name === 'Home' ? <></> : <HeaderComp navigation={navigation}/>;
+              },
             })}
             screenListeners={{
               state: (e) => {
@@ -145,7 +171,8 @@ export const AppWrapper = () => {
             }}
           >
             <Stack.Screen name="Home" component={LandingPage} options={{ 
-              headerTitle : ""
+              headerShown: false,
+              headerTitle : "",
             }} ></Stack.Screen>
             <Stack.Screen name="NewWallet" component={NewWallet} options={{ 
               title: '', 
@@ -157,37 +184,37 @@ export const AppWrapper = () => {
               title: '', 
             }} ></Stack.Screen>                  
             <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SelectWallet.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].ViewWallet.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
               title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SelectNetwork.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].ViewNetwork.title,  
             }} ></Stack.Screen>
             <Stack.Screen name="AddToken" component={AddToken} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].AddToken.title, 
             }} ></Stack.Screen>                  
             <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
               title: '', 
             }} ></Stack.Screen>      
             <Stack.Screen name="SendToken" component={SendToken} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SendToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="QRReader" component={QRReader} options={{ 
@@ -197,42 +224,42 @@ export const AppWrapper = () => {
               title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SignTyped.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SignEth" component={EthSign} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SignEth.title, 
             }} ></Stack.Screen>                  
             <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SignTransaction.title, 
             }} ></Stack.Screen>           
             <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SendTransaction.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="LegacyConnectionRequest" component={LegacyConnectionRequest} options={{ 
               title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="LegacySignTypedData" component={LegacySignTypedData} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].LegacySignTypedData.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="LegacyEthSign" component={LegacyEthSign} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].LegacyEthSign.title, 
             }} ></Stack.Screen>                  
             <Stack.Screen name="LegacySignTransaction" component={LegacySignTransaction} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].LegacySignTransaction.title, 
             }} ></Stack.Screen>           
             <Stack.Screen name="LegacySendTransaction" component={LegacySendTransaction} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].LegacySendTransaction.title, 
             }} ></Stack.Screen>       
             <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
-              headerTitleAlign: 'center',
+              headerTitleAlign: 'left',
               title: translations[language].SetPassword.title, 
             }} ></Stack.Screen>
           </Stack.Navigator>
@@ -303,7 +330,7 @@ export function HeaderComp({navigation}) {
 
 /**
  * <Stack.Screen name="NFTs" component={NftList} options={{ 
-      headerTitleAlign: 'center',
+      headerTitleAlign: 'left',
       title: 'NFTs', 
     }} ></Stack.Screen>
  */

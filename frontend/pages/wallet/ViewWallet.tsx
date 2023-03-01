@@ -16,6 +16,7 @@ import {
   Drawer,
   Hidden,
   HStack,
+  Icon,
   IconButton,
   Icon as IconElement,
   Image,
@@ -37,6 +38,7 @@ import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
+import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
 import TransactionItem from "../../components/transaction/TransactionItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
@@ -211,6 +213,8 @@ export default function ViewWallet ({navigation, route}) {
     setCurrentTab(newTab);
   }
 
+  
+
   return (
     <DashboardLayout title={_wallet.name}>
       <Box         
@@ -222,7 +226,7 @@ export default function ViewWallet ({navigation, route}) {
         <VStack space={4} p={3}>
           <HStack justifyContent={'space-between'}>
             <Text fontSize={'lg'}>{_wallet.name}</Text>
-            <Badge rounded={6} variant={'solid'}>
+            <Badge rounded={6} variant={'solid'} >
               <Text color={'lightText'}>{network.chainId}</Text>
             </Badge>
           </HStack>
@@ -308,13 +312,14 @@ export default function ViewWallet ({navigation, route}) {
             }
           </VStack>
         </ScrollView>
-        {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
+        {false && currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
           <Button onPress={addToken} mt={4} width={'full'} position={'absolute'} bottom={0}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
         }
         
-        {currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
+        {false && currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
           <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language].ViewWallet.clear_button}</Text></Button>
         }
+        <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
       </Box>
     </DashboardLayout>
   )
