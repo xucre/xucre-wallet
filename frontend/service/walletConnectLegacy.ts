@@ -23,52 +23,58 @@ export const createLegacySignClient = async ({ uri }: { readonly uri?: string } 
     console.log('creating legacy client');
     legacySignClient = new LegacySignClient({ uri })
   } else if (!legacySignClient) {    
-    console.log('retrieving legacy client');
-    const local = await getCachedLegacySession();
-    if (local && local !== '') {
-      const session : IWalletConnectSession = JSON.parse(local);
-      //console.log(session);
-      legacySignClient = new LegacySignClient({ session })
-    }   
+    console.log('retrieving2 legacy client');
+    getCachedLegacySession().then((local) => {
+      if (local && local !== '') {
+        console.log('local',local);
+        const session : IWalletConnectSession = JSON.parse(local);
+        //console.log(session);
+        legacySignClient = new LegacySignClient({ session })
+      } 
+    });
+      
   } else {
     console.log('not retrieving legacy client');
     return
   }
 
-  legacySignClient.on('session_request', (error, payload) => {
-    if (error) {
-      console.log(`legacySignClient > session_request failed: ${error}`)
-    } else {
-      //console.log('session_request', payload);
-    }
-    //console.log('session request', payload);
-    //storeWCLegacyUrl(uri);
-    navigate('LegacyConnectionRequest', {
-      requestDetails: payload
+  if (legacySignClient) {
+    legacySignClient.on('session_request', (error, payload) => {
+      if (error) {
+        console.log(`legacySignClient > session_request failed: ${error}`)
+      } else {
+        //console.log('session_request', payload);
+      }
+      //console.log('session request', payload);
+      //storeWCLegacyUrl(uri);
+      navigate('LegacyConnectionRequest', {
+        requestDetails: payload
+      })
+      //ModalStore.open('LegacySessionProposalModal', { legacyProposal: payload })
     })
-    //ModalStore.open('LegacySessionProposalModal', { legacyProposal: payload })
-  })
 
-  legacySignClient.on('connect', () => {
-    console.log('legacySignClient > connect')
-  })
+    legacySignClient.on('connect', () => {
+      console.log('legacySignClient > connect')
+    })
 
-  legacySignClient.on('error', error => {
-    console.log(`legacySignClient > on error: ${error}`)
-  })
+    legacySignClient.on('error', error => {
+      console.log(`legacySignClient > on error: ${error}`)
+    })
 
-  legacySignClient.on('call_request', (error, payload) => {
-    if (error) {
-      console.log(`legacySignClient > call_request failed: ${error}`)
-    }
-    //console.log('call_request', payload);
-    onCallRequest(payload)
-  })
+    legacySignClient.on('call_request', (error, payload) => {
+      if (error) {
+        console.log(`legacySignClient > call_request failed: ${error}`)
+      }
+      //console.log('call_request', payload);
+      onCallRequest(payload)
+    })
 
-  legacySignClient.on('disconnect', async () => {
-    deleteCachedLegacySession();
-    console.log('legacySignClient > disconnect');
-  })
+    legacySignClient.on('disconnect', async () => {
+      deleteCachedLegacySession();
+      console.log('legacySignClient > disconnect');
+    })
+  }
+  
 }
 
 const onCallRequest = async (payload: { readonly id: number; readonly method: string; readonly params: readonly any[] }) => {
@@ -97,7 +103,7 @@ const onCallRequest = async (payload: { readonly id: number; readonly method: st
   }
 }
 
-function getCachedLegacySession(): any{
+function getCachedLegacySession(): Promise<string>{
   return getWCLegacyUrl();  
 }
 

@@ -134,11 +134,11 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
                   as={MaterialIcons}
                   name={item.name}
                   size="5"
-                  color='coolGray.400'
+                  color='coolGray.100'
                 />
               }
               _text={{
-                color: 'coolGray.400'
+                color: 'coolGray.100'
               }} 
               paddingY={0}           
               onPress={() => {openPage(item.text)}}

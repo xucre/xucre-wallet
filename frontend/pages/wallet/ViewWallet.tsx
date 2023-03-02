@@ -151,7 +151,7 @@ export default function ViewWallet ({navigation, route}) {
 
   useEffect(() => {
     if (_wallet.name === '') {
-      navigation.navigate('SelectWallet');
+      //navigation.navigate('SelectWallet');
     } else {
       setWallet(_wallet.wallet);
     }
