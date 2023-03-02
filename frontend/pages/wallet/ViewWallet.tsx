@@ -14,8 +14,10 @@ import {
   ColorMode,
   Divider,
   Drawer,
+  Heading,
   Hidden,
   HStack,
+  Icon,
   IconButton,
   Icon as IconElement,
   Image,
@@ -37,6 +39,7 @@ import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
+import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
 import TransactionItem from "../../components/transaction/TransactionItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
@@ -61,10 +64,10 @@ function TabItem({
           fontWeight="medium"
           letterSpacing="0.4"
           _light={{
-            color: tabName === currentTab ? 'primary.900' : 'coolGray.500',
+            color: tabName === currentTab ? 'gray.700' : 'gray.700',
           }}
           _dark={{
-            color: tabName === currentTab ? 'primary.500' : 'coolGray.400',
+            color: tabName === currentTab ? 'gray.100' : 'gray.100',
           }}
           px={4}
           py={2}
@@ -73,15 +76,14 @@ function TabItem({
         </Text>
         {tabName === currentTab && (
           <Box
-            borderTopLeftRadius="sm"
-            borderTopRightRadius="sm"
             _light={{
               bg: 'primary.900',
             }}
             _dark={{
               bg: 'primary.500',
             }}
-            h="1"
+            marginBottom={-1}
+            h="0.5"
           />
         )}
       </VStack>
@@ -149,7 +151,7 @@ export default function ViewWallet ({navigation, route}) {
 
   useEffect(() => {
     if (_wallet.name === '') {
-      navigation.navigate('SelectWallet');
+      //navigation.navigate('SelectWallet');
     } else {
       setWallet(_wallet.wallet);
     }
@@ -202,6 +204,10 @@ export default function ViewWallet ({navigation, route}) {
     navigation.navigate('SwapToken');
   }
 
+  const openNft = () => {
+    navigation.navigate('NFT');
+  }
+
   useEffect(() => {
     //setNetwork(null)
     //setAllNetworks([])
@@ -211,44 +217,122 @@ export default function ViewWallet ({navigation, route}) {
     setCurrentTab(newTab);
   }
 
+  const middleButtons = [
+    {
+      action: sendFunds,
+      icon: 'arrow-right-alt',
+      text: 'Send'
+    },
+    {
+      action: receiveFunds,
+      icon: 'arrow-downward',
+      text: 'Receive'
+    },
+    {
+      action: swapTokens,
+      icon: 'monetization-on',
+      text: 'Buy'
+    },
+    {
+      action: openNft,
+      icon: 'image-search',
+      text: 'NFT'
+    }
+  ]
+
   return (
     <DashboardLayout title={_wallet.name}>
       <Box         
         _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
+        _dark={{ backgroundColor: 'black' }}
         height={'100%'}
         safeAreaBottom
       >
-        <VStack space={4} p={3}>
-          <HStack justifyContent={'space-between'}>
-            <Text fontSize={'lg'}>{_wallet.name}</Text>
-            <Badge rounded={6} variant={'solid'}>
-              <Text color={'lightText'}>{network.chainId}</Text>
-            </Badge>
-          </HStack>
-          
-          
+        {
+          /*<VStack space={4} p={3}>
+            <HStack justifyContent={'space-between'}>
+              <Text fontSize={'lg'}>{_wallet.name}</Text>
+              <Badge rounded={6} variant={'solid'} >
+                <Text color={'lightText'}>{network.chainId}</Text>
+              </Badge>
+            </HStack>            
             <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
               color: "#fff"
             }}>
               <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
-            </Tooltip>
-        </VStack>
-        <HStack my={2}>
-          <Button.Group isAttached colorScheme="muted" size="full">
-            <Button onPress={receiveFunds} width={'1/3'} py={3}><Text>Recieve</Text></Button>
-            <Button width={'1/3'} py={3} colorScheme={'darkBlue'} onPress={swapTokens} ><Text>Swap</Text></Button>
-            <Button width={'1/3'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
-          </Button.Group>
+            </Tooltip>           
+          </VStack>*/
+        }
+
+        {
+          <Box bg={'primary.500'} padding={3} borderRadius={10} marginX={2} >
+            
+            <Text fontSize={'md'} fontWeight={'bold'} color={'darkText'} paddingTop={3}>Total Balance</Text>
+            <HStack paddingBottom={0} space={1}>
+              <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={'darkText'} >$23.898,00</Text></Heading>
+              <Button variant="ghost" color={'darkText'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'darkText'} marginLeft={-1} />}>
+                <Text color={'darkText'} fontWeight={'bold'}>USD</Text>
+              </Button>
+              
+            </HStack>
+            
+            <Badge rounded={10} variant={'solid'} backgroundColor={'black'} width={'2/5'} marginTop={2}>
+              <HStack paddingY={1} alignItems={'center'}>
+                <Icon as={MaterialIcons} name="trending-up" color="primary.500" size={'sm'} marginRight={1.5} />
+                <Text textAlign={'left'} color={'white'} marginRight={1.5}>{'$132.50'}</Text>
+                <Text textAlign={'left'} color={'coolGray.500'}>{'(+15%)'}</Text>
+              </HStack>
+              
+            </Badge>
+          </Box>
+        }
+        {
+          /*<HStack my={2}>
+            <Button.Group isAttached colorScheme="muted" size="full">
+              <Button onPress={receiveFunds} width={'1/3'} py={3}><Text>Recieve</Text></Button>
+              <Button width={'1/3'} py={3} colorScheme={'darkBlue'} onPress={swapTokens} ><Text>Swap</Text></Button>
+              <Button width={'1/3'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
+            </Button.Group>
+          </HStack>*/
+        }
+        <HStack space="4" alignItems="center" justifyContent={'space-around'} marginTop={2} marginLeft={2} marginRight={2}>
+          {
+            middleButtons.map((btn, i) => {
+              return (
+                <Button
+                  key={'middleButtons'+i}
+                  variant="solid"
+                  backgroundColor={'gray.700'}
+                  _stack={{
+                    flexDirection: 'column'
+                  }}
+                  flex={.25}
+                  startIcon={
+                    <Icon
+                      as={MaterialIcons}
+                      name={btn.icon}
+                      color={'white'}
+                      size="5"
+                    />
+                  }
+                  _text={{
+                    color: 'white'
+                  }} 
+                  padding={4}
+                  borderRadius={10}           
+                  onPress={btn.action}
+                >
+                  <Text color={'white'}>{btn.text}</Text>
+                </Button> 
+              )
+            })
+          }
+          
         </HStack>
         <HStack
           mt={5}
-          _light={{
-            bg: 'coolGray.100',
-          }}
-          _dark={{
-            bg: 'coolGray.700',
-          }}
+          borderBottomWidth={1}
+          borderBottomColor={'gray.100'}
           w="100%"
           justifyContent="space-around"
           borderRadius="sm"
@@ -308,13 +392,14 @@ export default function ViewWallet ({navigation, route}) {
             }
           </VStack>
         </ScrollView>
-        {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
+        {false && currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
           <Button onPress={addToken} mt={4} width={'full'} position={'absolute'} bottom={0}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
         }
         
-        {currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
+        {false && currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
           <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language].ViewWallet.clear_button}</Text></Button>
         }
+        <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
       </Box>
     </DashboardLayout>
   )

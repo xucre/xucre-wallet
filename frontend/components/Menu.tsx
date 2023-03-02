@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import {
   AlertDialog,
   ArrowBackIcon,
+  Avatar,
   Box,
   Button,
   Center,
@@ -236,10 +237,18 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   return (
     <>
       { !drawerStatus && 
-        <IconButton onPress={() => {setDrawerStatus(true)}} variant="ghost" colorScheme={colorMode === 'light'? 'coolGray': 'warmGray'} _icon={{
+        /*<IconButton onPress={() => {setDrawerStatus(true)}} variant="ghost" 
+        colorScheme={colorMode === 'light'? 'coolGray': 'warmGray'}
+         _icon={{
           as: MaterialIcons,
           name: "menu"
-        }} />
+        }} />*/
+        
+        <Pressable onPress={() => {setDrawerStatus(true)}}>
+          <Avatar source={
+            require('../assets/images/example-avatar.png')
+          } size="xs" marginRight={3}></Avatar>
+        </Pressable>
       }
       <Drawer
         isOpen={drawerStatus}

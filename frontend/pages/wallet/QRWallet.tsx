@@ -48,7 +48,7 @@ export default function QRWallet ({navigation, route}) {
 
   useEffect(() => {
     if (_wallet.name === '') {
-      navigation.navigate('SelectWallet');
+      //navigation.navigate('SelectWallet');
     }
   }, [_wallet]);
 
