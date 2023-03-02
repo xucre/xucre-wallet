@@ -4,6 +4,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import '@walletconnect/react-native-compat';
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
+import { useFonts } from 'expo-font';
 import { run } from 'jest';
 import {
   Box,
@@ -129,6 +130,9 @@ export default function App(): JSX.Element {
 
 export const AppWrapper = () => {
   //
+  const [fontsLoaded] = useFonts({
+    'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
+  });
   const [scheme, setScheme] = useState('');
   const [routeState, setRouteState] = useState('');  
   const [language, ] = useRecoilState(stateLanguage);
@@ -214,6 +218,10 @@ export const AppWrapper = () => {
               title: translations[language].SendToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
+              headerTitleAlign: 'left',
+              title: translations[language].SwapToken.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="NFT" component={SwapToken} options={{ 
               headerTitleAlign: 'left',
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>

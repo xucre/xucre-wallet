@@ -43,7 +43,7 @@ export default function SelectLanguage () {
         {
           // TODO: Style notification badge
         }
-        <IconButton colorScheme="coolGray" key={'test1'} variant={'ghost'} _icon={{
+        <IconButton colorScheme={'dark'} key={'test1'} variant={'ghost'} _icon={{
           as: MaterialIcons,
           name: "notifications"
         }} />

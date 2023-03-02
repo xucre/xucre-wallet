@@ -90,8 +90,8 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
         borderBottomLeftRadius="20"
         marginLeft="1.5"
         paddingTop="0"
-        _light={{ backgroundColor: 'coolGray.50' }}
-        _dark={{ backgroundColor: 'coolGray.800' }}
+        _light={{ backgroundColor: 'gray.50' }}
+        _dark={{ backgroundColor: 'gray.800' }}
       >
         {footerIcons.map((item, index) => {
           return (
@@ -123,28 +123,28 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
               {item.text}
             </Button> :
             <Button
-            key={index}
-            variant="ghost"
-            colorScheme="coolGray"
-            _stack={{
-              flexDirection: 'column',
-            }}
-            startIcon={
-              <Icon
-                as={MaterialIcons}
-                name={item.name}
-                size="5"
-                color='coolGray.400'
-              />
-            }
-            _text={{
-              color: 'coolGray.400'
-            }} 
-            paddingY={0}           
-            onPress={() => {openPage(item.text)}}
-          >
-            {item.text}
-          </Button> 
+              key={index}
+              variant="ghost"
+              colorScheme="coolGray"
+              _stack={{
+                flexDirection: 'column',
+              }}
+              startIcon={
+                <Icon
+                  as={MaterialIcons}
+                  name={item.name}
+                  size="5"
+                  color='coolGray.400'
+                />
+              }
+              _text={{
+                color: 'coolGray.400'
+              }} 
+              paddingY={0}           
+              onPress={() => {openPage(item.text)}}
+            >
+              {item.text}
+            </Button> 
           );
         })}
       </HStack>
