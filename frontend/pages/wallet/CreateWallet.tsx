@@ -2,6 +2,9 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
+import {StyleSheet} from 'react-native';
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import DashboardLayout from '../../layouts/DashboardLayout';
 import {
   Alert,
   AlertDialog,
@@ -26,8 +29,10 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  View,
   VStack,
 } from "native-base";
+import { background } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
 import { Col, Grid, Row } from "react-native-easy-grid";
@@ -100,19 +105,11 @@ export default function CreateWallet ({navigation, route, storage}) {
     }
 
     return (
-      <VStack space={4} mt={{ base: 0 }}>
-        <Text>{translations[language].CreateWallet.instructions}</Text>
-        <Button
-          variant="outline"
-          my={4} 
-          rounded={100} 
-          px={10}   
-          onPress={createMnemonics}       
-          isLoading={loading}  
-        >
-          <Text>{translations[language].CreateWallet.instructions_button}</Text>
-        </Button>
-      </VStack>
+        <Center mt={10}>
+          <Text  style={{color: '#fff'}} fontSize={'lg'} mt={5}>{translations[language].CreateWallet.instructions_newWwallet}</Text>
+          <Text style={[styles.createANew, styles.createFlexBox]} fontSize={'md'} mt={5}>{translations[language].CreateWallet.instructions}></Text>
+            <Button style={[styles.rectangleParent, styles.rectangleLayout]} onPress={createMnemonics} isLoading={loading}  width={'1/2'} py={3}><Text>{translations[language].CreateWallet.instructions_button}</Text></Button> 
+        </Center>
     );
   }
 
@@ -332,7 +329,8 @@ export default function CreateWallet ({navigation, route, storage}) {
   };
 
   return (
-    <ScrollView w={'full'} h={'full'} marginTop={5}>
+    <View style={{backgroundColor: Color.gray_200}}>
+    <ScrollView w={'full'} h={'full'} marginTop={200}>
       {steps === 0 && 
         <Instructions></Instructions>
       }
@@ -361,5 +359,53 @@ export default function CreateWallet ({navigation, route, storage}) {
         </>
       }
     </ScrollView>
+    </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  // eslint-disable-next-line react-native/no-unused-styles
+  createANew: {
+    top: 230,
+    // eslint-disable-next-line sort-keys
+    fontSize: FontSize.size_base,
+    lineHeight: 21,
+    fontFamily: FontFamily.interRegular,
+    color: Color.darkgray_100,
+    textAlign: "center",
+    letterSpacing: -0.2,
+    left: 33,
+    position: "absolute",
+  },createFlexBox: {
+    textAlign: "center",
+    letterSpacing: -0.2,
+    width: 330,
+  },  yourWallet: {
+    top: 180,
+    left: 126,
+    fontSize: FontSize.size_3xl,
+    letterSpacing: -0.3,
+    lineHeight: 36,
+    textAlign: "center",
+  },  walletTypo: {
+    color: Color.white,
+    fontFamily: FontFamily.interSemibold,
+    fontWeight: "600",
+    position: "absolute",
+  }, rectangleParent: {
+    top: 330,
+    borderRadius: Border.br_sm,
+    backgroundColor: '#CEF213',
+    fontFamily: FontFamily.interSemibold,
+  },rectangleLayout: {
+    height: 60,
+    width: 330,
+    left: 33,
+    position: "absolute",
+  }, rectangleGroup: {
+    top: 410,
+    backgroundColor: Color.gray_200,
+  },
+
+})

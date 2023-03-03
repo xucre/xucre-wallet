@@ -30,12 +30,13 @@ const values = {
     explorer_placeholder: 'Enter Block Explorer Url (optional)',
     name_placeholder: 'Enter Name',
     rpcUrl_placeholder: 'Enter RPC Url',
-    submit_button: 'Save Network',
+    submit_button: 'Save',
     symbol_placeholder: 'Enter Chain Symbol',
   },
   CreateWallet: {
     instructions : 'When creating a new wallet you will receive a sequence of mnemonics which represent your "personal password". Anyone with this sequence may be able to reconfigure your wallet in any new device. Keep it stored as secure as possible. Only you should have access to this information.',
     instructions_button: 'Generate',
+    instructions_newWwallet: 'New Wallet',
     mnemonic_confirm_button: 'Confirm Mnemonic',
     mnemonic_confirm_instructions: 'Save Mnemonic Phrase',
     mnemonic_error: 'Mnemonic phrases must match',
@@ -84,8 +85,9 @@ const values = {
     wallet_button: 'WALLETS',
   },
   NewWallet: {
+    about: "Create a new wallet or if you alreade have one retriave it through your security phrase",
     create_button: 'Create Wallet',
-    instructions: "Create new or retrieve from mnenomic",
+    instructions: "Your Wallet",
     recover_button: 'Recover Wallet',
   },
   PasswordComponent: {
@@ -115,9 +117,9 @@ const values = {
   SelectLanguage : {
     en: 'English',
     es: 'Spanish',
-    nah: 'Nahuatl',
     pt: 'Portuguese',
     qu: 'Quechua',
+    nah: 'Nahuatl',
   },
   SelectNetwork: {
     new_button: 'New Network',
@@ -189,7 +191,7 @@ const values = {
     clear_button: 'Clear Transactions',
     holdings_placeholder: 'Insert Coin Holdings',
     new_button: 'Add Token',
-    tab_list: ['Holdings', 'Transactions'],
+    tab_list: ['Holdings', 'Transactions', 'NFTs'],
     title: 'Wallet',
     transactions_placeholder: 'Insert Transaction History',
   }
