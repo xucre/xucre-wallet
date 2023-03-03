@@ -28,7 +28,7 @@ export default function TransactionItem ({navigation, transaction}) {
        <VStack>
          <Pressable onPress={() => {openTransaction()}}>
            <Text fontSize="md" bold>
-              { transaction.submitDate && 
+              { transaction.submitDate && transaction.submitDate !== '' && 
                 <>{moment(transaction.submitDate).fromNow()}</>}
               {!transaction.submitDate &&
                 <>{truncateString(transaction.hash, 15)}</>}

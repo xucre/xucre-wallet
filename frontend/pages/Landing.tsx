@@ -1,8 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Montserrat_400Regular, Montserrat_700Bold, useFonts } from '@expo-google-fonts/montserrat';
 import * as Font from 'expo-font';
-import { StatusBar } from 'expo-status-bar';
-import {Box, Center, Hidden, HStack, Image, Pressable, Text, VStack} from 'native-base';
+import {Box, Center, Hidden, HStack, Image, Pressable, Stack, StatusBar, Text, useColorMode, VStack} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
 import { Dimensions,  TouchableWithoutFeedback } from 'react-native';
 import Theme, {createStyle} from 'react-native-theming';
@@ -11,14 +10,17 @@ import GuestLayout from '../layouts/GuestLayout';
 
 export default function LandingPage({ navigation, route }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const {
+    colorMode
+  } = useColorMode();
   const [isComponentMounted, setIsComponentMounted] = useState(true);
 
   const toWalletSelect = () => {
     //if (isComponentMounted) {
 
         //navigation.navigate('Channels', {artistId: null, type: 'all'})
-
-        navigation.navigate('SelectWallet');
+        navigation.navigate('ViewWallet');
+        //navigation.navigate('SelectWallet');
       
     //} 
   }
@@ -47,48 +49,91 @@ export default function LandingPage({ navigation, route }) {
     return null;
   }
   return (
-    <GuestLayout>
-      <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
-        height={'100%'}
+    <>
+      {
+        /*<StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'}
+        />*/
+      }
+      <Box
+        _light={{ bg: '#D4E815' }}
+        _dark={{ bg: '#D4E815' }}
+      />
+      <Center
+        flex="1"
+        my="auto"
+        p={{ md: 8 }}
+        _dark={{ bg: '#D4E815' }}
+        _light={{ bg: '#D4E815' }}
       >
-        <VStack 
-          justifyContent="space-between"
-          safeAreaBottom
-          safeAreaTop
-          px="10"
-          alignSelf="center"
-          position='relative'        
-          top={'60%'}
-          _light={{ backgroundColor: 'white' }}
-          _dark={{ backgroundColor: '#1b1e24' }}
+        <Stack
+          w="100%"
+          maxW={{ md: '1016' }}
+          flex={{ base: '1', md: undefined }}
+          direction={{ base: 'column', md: 'row' }}
         >
-          
-          <Pressable onPressIn={toWalletSelect}>
-            <Hidden colorMode="light">
-              <Box >
-                <Image
-                  style={{ height: 100, width: 170 }}
-                  source={require('../assets/images/logo-long-white.png')}
-                  alt="XucreWallet"
-                />
-              </Box>
-            </Hidden>
+          <Box         
+            _light={{ backgroundColor: '#D4E815' }}
+            _dark={{ backgroundColor: '#D4E815' }}
+            height={'100%'}
+          >
+            <VStack 
+              justifyContent="space-between"
+              
+              px="10"
+              alignSelf="center"
+              position='relative'        
+              top={'40%'}
+              _light={{ backgroundColor: '#D4E815' }}
+              _dark={{ backgroundColor: '#D4E815' }}
+            >
+              
+              <Pressable onPressIn={toWalletSelect}>
+                <Hidden colorMode="light">
+                  <Box >
+                    <Image
+                      style={{  height: 80, width: 80 }}
+                      source={require('../assets/images/icon-black.png')}
+                      alt="XucreWallet"
+                    />
+                  </Box>
+                </Hidden>
 
-            <Hidden colorMode="dark">
-              <Box >
-                <Image
-                  style={{ height: 100, width: 170 }}
-                  source={require('../assets/images/logo-long.png')}
-                  alt="XucreWallet"
-                />
-              </Box>
-            </Hidden>
-          </Pressable>
-        </VStack>     
-      </Box>
-    </GuestLayout>
+                <Hidden colorMode="dark">
+                  <Box >
+                    <Image
+                      style={{  height: 80, width: 80 }}
+                      source={require('../assets/images/icon-black.png')}
+                      alt="XucreWallet"
+                    />
+                  </Box>
+                </Hidden>
+              </Pressable>
+            </VStack>     
+            <VStack
+              justifyContent="space-between"
+              safeAreaBottom
+              alignSelf="center"
+              position='absolute'        
+              bottom={'0%'}
+              left={0}
+              zIndex={-1000}
+              _light={{ backgroundColor: '#D4E815' }}
+              _dark={{ backgroundColor: '#D4E815' }}
+            >
+              <Image
+                style={{  height: 325, width: 325, zIndex: -10000 }}
+                source={require('../assets/images/landing-bottom.png')}
+                alt="XucreWallet"
+              />
+            </VStack>
+          </Box>
+        </Stack>
+      </Center>
+    </>
+      
   )
 }
 const customText = createStyle({

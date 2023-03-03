@@ -40,4 +40,4 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 - yarn android
 
 ## How to Build - Deploy
-- eas build -p android --profile preview
+- eas build -p android --profile beta
