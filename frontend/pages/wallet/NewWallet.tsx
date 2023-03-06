@@ -31,6 +31,7 @@ import {
   useColorMode,
   useColorModeValue,
   VStack,
+  View,
 } from "native-base";
 import React, {createRef, useEffect, useState} from "react";
 import QRCode from "react-qr-code";
@@ -65,10 +66,11 @@ export default function NewWallet ({navigation, route}) {
       >
         <Center mt={10}>
           <Text  style={[styles.yourWallet, styles.walletTypo]} fontSize={'lg'} mt={5}>{translations[language].NewWallet.instructions}</Text>
-          <Text style={[styles.createANew, styles.createFlexBox]} fontSize={'md'} mt={5}>{translations[language].NewWallet.about}></Text>
+          <Text style={[styles.createANew, styles.createFlexBox]} fontSize={'md'} mt={5}>{translations[language].NewWallet.about}</Text>
      
-            <Button style={[styles.rectangleParent, styles.rectangleLayout]} onPress={createWallet} width={'1/2'} py={3}><Text>{translations[language].NewWallet.create_button}</Text></Button>
-            <Button style={[styles.rectangleGroup, styles.rectangleLayout]} width={'1/2'} py={3} colorScheme="primary" onPress={recoverWallet} ><Text color={"#fff"}>{translations[language].NewWallet.recover_button}</Text></Button>
+            <Button style={[styles.rectangleParent, styles.rectangleLayout]} onPress={createWallet} width={'1/2'} py={3}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations[language].NewWallet.create_button}</Text></Button>
+        
+            <Button style={[styles.rectangleGroup, styles.rectangleLayout, styles.buttonBorder]} width={'1/2'} py={3} colorScheme="primary" onPress={recoverWallet} ><Text color={"#fff"}>{translations[language].NewWallet.recover_button}</Text></Button>
         
         </Center>
       </Box>
@@ -77,6 +79,12 @@ export default function NewWallet ({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
+  buttonBorder:{
+    borderRadius: Border.br_sm,
+    borderColor: "#fff",
+    borderWidth: 1,
+    borderStyle: "solid",
+  },
   createANew: {
     top: 230,
     fontSize: FontSize.size_base,
@@ -106,16 +114,18 @@ const styles = StyleSheet.create({
   }, rectangleParent: {
     top: 330,
     borderRadius: Border.br_sm,
-    backgroundColor: '#CEF213',
+    backgroundColor: '#D4E815',
     fontFamily: FontFamily.interSemibold,
   },rectangleLayout: {
     height: 60,
     width: 330,
     left: 33,
     position: "absolute",
+    borderColor: '#fff',
   }, rectangleGroup: {
     top: 410,
-    backgroundColor: Color.gray_200,
+    borderColor: '#fff',
+    backgroundColor: Color.gray_300,
   },
 
 })

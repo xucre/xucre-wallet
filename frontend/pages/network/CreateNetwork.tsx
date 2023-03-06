@@ -128,13 +128,13 @@ export default function CreateWallet ({navigation, route, storage}) {
     <ScrollView w={'full'} h={'full'} marginTop={200}>
       <>
         <Box alignItems="center" marginBottom={20}>
-          <Input  w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
-          <Input w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
-          <Input w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
-          <Input w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
-          <Input w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
+          <Input style={styles.textoImput} placeholderTextColor={'white'} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
+          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
+          <Input  style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
+          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
+          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
         </Box>
-        <Button style={styles.buttonContainer} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text>{translations[language].CreateNetwork.submit_button}</Text></Button>
+        <Button style={styles.buttonContainer} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: '#000'}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
       </>
     </ScrollView>
     </View>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     fontWeight: 'bold',
     // eslint-disable-next-line sort-keys
-    backgroundColor: '#CEF213',
+    backgroundColor: '#D4E815',
     position: 'relative',
     width: 370,
     left: 20,
@@ -181,6 +181,25 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interRegular,
     textAlign: "center",
     top: 50,
-  },
-
+  },ethereumTestnet: {
+    top: 1,
+    left: 18,
+    width: 300,
+    color: Color.white,
+    letterSpacing: -0.2,
+    fontFamily: FontFamily.interRegular,
+    lineHeight: 21,
+    fontSize: FontSize.size_base,
+    textAlign: "left",
+    position: "absolute"
+  // eslint-disable-next-line react-native/no-color-literals
+  }, textoImput: {
+    borderRadius: Border.br_xs,
+    backgroundColor: Color.gray_300,
+    borderColor: "#7b7b7b",
+    borderWidth: 1,
+    borderStyle: "solid",
+    width: 339,
+    top: 0,
+  }
 });

@@ -35,15 +35,18 @@ const values = {
   },
   CreateWallet: {
     instructions : 'When creating a new wallet you will receive a sequence of mnemonics which represent your "personal password". Anyone with this sequence may be able to reconfigure your wallet in any new device. Keep it stored as secure as possible. Only you should have access to this information.',
-    instructions_button: 'Generate',
+    instructions_button: 'Next',
     instructions_newWwallet: 'New Wallet',
-    mnemonic_confirm_button: 'Confirm Mnemonic',
+    mnemonic_confirm_button: 'Next',
     mnemonic_confirm_instructions: 'Save Mnemonic Phrase',
     mnemonic_error: 'Mnemonic phrases must match',
-    mnemonic_error_button: 'Continue',
+    mnemonic_error_button: 'Next',
     name_entry_button: 'Save Wallet',
     name_entry_button_loadingtext: 'Submitting',
     name_entry_input_placeholder: 'Set Wallet Name',
+    name_wallet: 'Wallet name',
+    // eslint-disable-next-line sort-keys
+    instructions_nameWallet: 'Set your wallet name'
   },
   LegacyEthSign: {
     approve_button: 'Approve',
