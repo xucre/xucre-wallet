@@ -154,19 +154,21 @@ export default function SelectNetwork ({navigation, route}) {
     <GuestLayout >
 
       <Box         
-         _light={{ backgroundColor: Color.gray_200 }}
+         _light={{ backgroundColor: Color.gray_300 }}
         _dark={{ backgroundColor: Color.gray_300 }}
         height={'100%'}
         width={'100%'}
+        top={-50}
       >
-<Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={60} fontWeight={'bold'}>Network</Text>
-<Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={15} top={70} >Select or create a new network</Text>
+        
+<Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={'md'} top={60} fontWeight={'bold'}>Network</Text>
+<Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={15} top={70} >Select or create a new network</Text>
 
         <VStack space={2} height={'50%'}>
           {
             networks.map((val, i) => {
               return (
-                <Box key={val.name+i} px={4} py={1}>
+                <Box key={val.name+i} px={4} py={1} top={10} >
                   <NetworkItem metadata={val} /> 
                   
                   
