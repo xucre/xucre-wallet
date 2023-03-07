@@ -168,7 +168,7 @@ export default function CreateWallet ({navigation, route, storage}) {
           <Col>
           
           {mnemonics.map((val, i) => {
-              if (i % 3 === 1) {
+              if (i % 3 === 2) {
                 return (
                   <VStack key={val}>
                     <Badge colorScheme="primary.400" rounded="full" mb={-4} mr={11} zIndex={100} variant="solid" alignSelf="flex-end" _text={{
@@ -290,7 +290,7 @@ export default function CreateWallet ({navigation, route, storage}) {
         <Col>
         {
             scrambledMnemonics.map((val, i) => {
-              if (i%3 === 1) {
+              if (i%3 === 2) {
                 return (
                   <Box alignItems="center" key={val+i}>
                     <VStack>
