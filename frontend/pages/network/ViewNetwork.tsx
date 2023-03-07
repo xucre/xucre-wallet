@@ -1,6 +1,8 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
+import {StyleSheet} from 'react-native';
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import {
   Alert,
   AlertDialog,
@@ -113,6 +115,7 @@ export default function ViewNetwork ({navigation, route}) {
         _dark={{ backgroundColor: '#1b1e24' }}
         height={'100%'}
       >
+ 
         {!isEditing && 
           <>
             <VStack space={4} px={2} py={4} height={'90%'}>
@@ -136,22 +139,23 @@ export default function ViewNetwork ({navigation, route}) {
           </>
         }
         {isEditing && 
+        
           <>
-            <VStack space={4} px={2} py={4} height={'90%'}>
-              <Input w="100%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
-              <Input w="100%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
-              <Input w="100%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
-              <Input w="100%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
-              <Input w="100%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
+                 <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={60} >Edit this network</Text>
+
+<Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={130} fontWeight={'bold'}>{network.name}</Text>
+
+            <VStack space={4} px={2} py={150} height={'70%'} alignItems='center'>
+              <Input  style={styles.textoImput} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
+              <Input style={styles.textoImput} w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
+              <Input style={styles.textoImput} w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
+              <Input style={styles.textoImput} w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
+              <Input  style={styles.textoImput}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
             </VStack>        
-            
-            <Button.Group isAttached colorScheme="blue" mx={{
-                base: "auto",
-                md: 0
-              }} size="sm">          
-              <Button onPress={saveNetwork} isLoading={loading}><Text>{'Save'}</Text></Button>
-              <Button onPress={() => {setIsEditing(false)}} variant="outline"><Text>{'Cancel'}</Text></Button>  
-            </Button.Group>
+                     
+              <Button style={styles.buttonContainer} onPress={saveNetwork} isLoading={loading}><Text color={'#000'} fontWeight={'bold'}>{'Save'}</Text></Button>
+              {/* <Button onPress={() => {setIsEditing(false)}} variant="outline"><Text>{'Cancel'}</Text></Button>   */}
+      
           </>
         }
         
@@ -159,3 +163,69 @@ export default function ViewNetwork ({navigation, route}) {
     </DashboardLayout>
   )
 }
+
+
+
+const styles = StyleSheet.create({
+  // eslint-disable-next-line react-native/no-color-literals, react-native/no-unused-styles
+  buttonContainer: {
+    fontWeight: 'bold',
+    // eslint-disable-next-line sort-keys
+    backgroundColor: '#D4E815',
+    position: 'relative',
+    width: 370,
+    left: 20,
+    textAlign: "left",
+    borderRadius: Border.br_sm,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: '#000',
+
+  }, 
+   // eslint-disable-next-line react-native/no-unused-styles
+   groupParent: {
+    top: 100,
+    // eslint-disable-next-line sort-keys
+    left: 22,
+    width: 346,
+    // eslint-disable-next-line sort-keys
+    height: 56,
+    position: "relative",
+   }, rectangleParent: {
+    left: 7,
+    position: "absolute",
+  // eslint-disable-next-line sort-keys
+  }, groupWrapperLayout: {
+    width: 339,
+    // eslint-disable-next-line sort-keys
+    top: 0,
+    // eslint-disable-next-line sort-keys
+    height: 56,
+  // eslint-disable-next-line sort-keys
+  }, titleLayout: {
+    color: Color.white,
+    fontFamily: FontFamily.interRegular,
+    textAlign: "center",
+    top: 50,
+  },ethereumTestnet: {
+    top: 1,
+    left: 18,
+    width: 300,
+    color: Color.white,
+    letterSpacing: -0.2,
+    fontFamily: FontFamily.interRegular,
+    lineHeight: 21,
+    fontSize: FontSize.size_base,
+    textAlign: "left",
+    position: "absolute"
+  // eslint-disable-next-line react-native/no-color-literals
+  }, textoImput: {
+    borderRadius: Border.br_xs,
+    backgroundColor: Color.gray_300,
+    borderColor: "#7b7b7b",
+    borderWidth: 1,
+    borderStyle: "solid",
+    width: 339,
+    top: 0,
+  }
+});

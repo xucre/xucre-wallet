@@ -92,6 +92,7 @@ export default function SelectNetwork ({navigation, route}) {
       viewNetwork();
     }
     return (
+      
       <HStack alignItems="center" justifyContent="space-between">
         <View style={styles.groupParent}>
         <Pressable onPress={openNetwork}>
@@ -150,25 +151,24 @@ export default function SelectNetwork ({navigation, route}) {
   }
 
   return (
-    <GuestLayout>
+    <GuestLayout >
+
       <Box         
-        _light={{ backgroundColor: Color.gray_200 }}
-        _dark={{ backgroundColor: Color.gray_200 }}
+         _light={{ backgroundColor: Color.gray_200 }}
+        _dark={{ backgroundColor: Color.gray_300 }}
         height={'100%'}
+        width={'100%'}
       >
-        <VStack space={4} height={'90%'}>
+<Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={60} fontWeight={'bold'}>Network</Text>
+<Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={15} top={70} >Select or create a new network</Text>
+
+        <VStack space={2} height={'50%'}>
           {
             networks.map((val, i) => {
               return (
                 <Box key={val.name+i} px={4} py={1}>
                   <NetworkItem metadata={val} /> 
-                  {(i+1) !== networks.length && 
-                    <Divider orientation={'horizontal'} mt={4} _light={{
-                      bg: "muted.800"
-                    }} _dark={{
-                      bg: "muted.300"
-                    }} />
-                  }
+                  
                   
                 </Box>
               )              
@@ -188,13 +188,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: Color.gray_200,
     position: 'relative',
-    width: 200,
-    left: 110,
-    textAlign: "left",
+    width: 325,
+    left: 50,
+    textAlign: 'left',
     borderRadius: Border.br_sm,
+    fontFamily: FontFamily.interRegular,
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: '#fff'
+    borderColor: '#000'
 
   }, 
   // eslint-disable-next-line sort-keys, react-native/no-unused-styles
