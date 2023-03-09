@@ -1,6 +1,9 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
+import {StyleSheet} from 'react-native';
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+
 import {
   Alert,
   AlertDialog,
@@ -25,8 +28,10 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  View,
   VStack,
 } from "native-base";
+import { background } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
 import { Col, Grid, Row } from "react-native-easy-grid";
@@ -114,17 +119,87 @@ export default function CreateWallet ({navigation, route, storage}) {
   };
 
   return (
-    <ScrollView w={'full'} h={'full'} marginTop={5}>
+    <View style={{backgroundColor: Color.gray_200}}>
+    <View> 
+      <Text style={styles.titleLayout}>
+        New Network
+      </Text>
+      </View>  
+    <ScrollView w={'full'} h={'full'} marginTop={200}>
       <>
-        <Box alignItems="center" marginBottom={3}>
-          <Input w="100%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
-          <Input w="100%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
-          <Input w="100%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
-          <Input w="100%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
-          <Input w="100%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
+        <Box alignItems="center" marginBottom={20}>
+          <Input style={styles.textoImput} placeholderTextColor={'white'} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
+          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
+          <Input  style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
+          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
+          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
         </Box>
-        <Button onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text>{translations[language].CreateNetwork.submit_button}</Text></Button>
+        <Button style={styles.buttonContainer} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: '#000'}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
       </>
     </ScrollView>
+    </View>
   );
 }
+const styles = StyleSheet.create({
+  // eslint-disable-next-line react-native/no-color-literals
+  buttonContainer: {
+    fontWeight: 'bold',
+    // eslint-disable-next-line sort-keys
+    backgroundColor: '#D4E815',
+    position: 'relative',
+    width: 370,
+    left: 20,
+    textAlign: "left",
+    borderRadius: Border.br_sm,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: '#fff',
+
+  }, 
+   // eslint-disable-next-line react-native/no-unused-styles
+   groupParent: {
+    top: 100,
+    // eslint-disable-next-line sort-keys
+    left: 22,
+    width: 346,
+    // eslint-disable-next-line sort-keys
+    height: 56,
+    position: "relative",
+   }, rectangleParent: {
+    left: 7,
+    position: "absolute",
+  // eslint-disable-next-line sort-keys
+  }, groupWrapperLayout: {
+    width: 339,
+    // eslint-disable-next-line sort-keys
+    top: 0,
+    // eslint-disable-next-line sort-keys
+    height: 56,
+  // eslint-disable-next-line sort-keys
+  }, titleLayout: {
+    color: Color.white,
+    fontFamily: FontFamily.interRegular,
+    textAlign: "center",
+    top: 50,
+  },ethereumTestnet: {
+    top: 1,
+    left: 18,
+    width: 300,
+    color: Color.white,
+    letterSpacing: -0.2,
+    fontFamily: FontFamily.interRegular,
+    lineHeight: 21,
+    fontSize: FontSize.size_base,
+    textAlign: "left",
+    position: "absolute"
+  // eslint-disable-next-line react-native/no-color-literals
+  }, textoImput: {
+    borderRadius: Border.br_xs,
+    backgroundColor: Color.gray_300,
+    borderColor: "#7b7b7b",
+    borderWidth: 1,
+    borderStyle: "solid",
+    width: 339,
+    top: 0,
+  }
+});

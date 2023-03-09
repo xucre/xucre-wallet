@@ -1,6 +1,8 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { BigNumber, ethers, getDefaultProvider, Wallet } from 'ethers';
+import {StyleSheet} from 'react-native';
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import {
   Alert,
   AlertDialog,
@@ -161,12 +163,12 @@ export default function SendToken ({navigation, route, storage}) {
   };
 
   return (
-    <ScrollView w={'full'} h={'full'} marginTop={5}>
+    <ScrollView w={'full'} h={'full'} marginTop={100} >
       <>
-        <Box alignItems="center" marginBottom={3}>
+        <Box alignItems="center" marginBottom={400}>
           <Text fontSize="2xl" bold mb={'5'}>{translations[language].SendToken.title}</Text>        
         
-          <Select selectedValue={selectedToken.address} w="100%" accessibilityLabel={translations[language].SendToken.token_placeholder} placeholder={translations[language].SendToken.token_placeholder} _selectedItem={{
+          <Select selectedValue={selectedToken.address} w="90%" accessibilityLabel={translations[language].SendToken.token_placeholder} placeholder={translations[language].SendToken.token_placeholder} _selectedItem={{
             bg: "teal.600",
             endIcon: <CheckIcon size="5" />
           }} mt={1} onValueChange={itemValue => handleTokenChange(itemValue)} mb={'2'}>
@@ -179,11 +181,78 @@ export default function SendToken ({navigation, route, storage}) {
             }              
           </Select>
           
-          <Input keyboardType="numeric" w="100%" mb={2} value={amount} onChange={handleAmountChange}  />
-          <Input w="100%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].SendToken.address_placeholder}  />
+          <Input  style={styles.textoImput} fontSize={35} keyboardType="numeric" w="90%" h="30%" mb={2} value={amount} onChange={handleAmountChange}  />
+          <Input style={styles.textoImput}   w="90%" h="35%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].SendToken.address_placeholder}  />
+          <Button style={styles.buttonContainer} onPress={() => {send();}} isLoading={loading} disabled={address.length === 0 || type.length === 0}><Text color={'#000'} fontWeight={'bold'}>{translations[language].SendToken.submit_button}</Text></Button>
         </Box>
-        <Button onPress={() => {send();}} isLoading={loading} disabled={address.length === 0 || type.length === 0}><Text>{translations[language].SendToken.submit_button}</Text></Button>
       </>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  // eslint-disable-next-line react-native/no-color-literals, react-native/no-unused-styles
+  buttonContainer: {
+    fontWeight: 'bold',
+    // eslint-disable-next-line sort-keys
+    backgroundColor: '#D4E815',
+    position: 'relative',
+    width: 340,
+    left: 10,
+    top: 180,
+    textAlign: "left",
+    borderRadius: Border.br_sm,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: '#000',
+
+  }, 
+   // eslint-disable-next-line react-native/no-unused-styles
+   groupParent: {
+    top: 100,
+    // eslint-disable-next-line sort-keys
+    left: 22,
+    width: 346,
+    // eslint-disable-next-line sort-keys
+    height: 56,
+    position: "relative",
+   // eslint-disable-next-line react-native/no-unused-styles
+   }, rectangleParent: {
+    left: 7,
+    position: "absolute",
+  // eslint-disable-next-line sort-keys
+  }, groupWrapperLayout: {
+    width: 339,
+    // eslint-disable-next-line sort-keys
+    top: 0,
+    // eslint-disable-next-line sort-keys
+    height: 56,
+  
+  // eslint-disable-next-line react-native/no-unused-styles
+  }, titleLayout: {
+    color: Color.white,
+    fontFamily: FontFamily.interRegular,
+    textAlign: "center",
+    top: 50,
+  },ethereumTestnet: {
+    top: 1,
+    left: 18,
+    width: 300,
+    color: Color.white,
+    letterSpacing: -0.2,
+    fontFamily: FontFamily.interRegular,
+    lineHeight: 21,
+    fontSize: FontSize.size_base,
+    textAlign: "left",
+    position: "absolute"
+  // eslint-disable-next-line react-native/no-color-literals
+  }, textoImput: {
+    borderRadius: Border.br_xs,
+    backgroundColor: Color.gray_300,
+    borderColor: "#7b7b7b",
+    borderWidth: 1,
+    borderStyle: "solid",
+    width: 339,
+    top: 0,
+  }
+});
