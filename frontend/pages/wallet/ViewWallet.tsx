@@ -208,6 +208,10 @@ export default function ViewWallet ({navigation, route}) {
     navigation.navigate('NFT');
   }
 
+  const buyTokens = () =>{
+    navigation.navigate('BuyToken');
+  }
+
   useEffect(() => {
     //setNetwork(null)
     //setAllNetworks([])
@@ -229,7 +233,7 @@ export default function ViewWallet ({navigation, route}) {
       text: 'Receive'
     },
     {
-      action: swapTokens,
+      action: buyTokens,
       icon: 'monetization-on',
       text: 'Buy'
     },
