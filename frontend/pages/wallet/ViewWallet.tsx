@@ -205,7 +205,7 @@ export default function ViewWallet ({navigation, route}) {
   }
 
   const openNft = () => {
-    navigation.navigate('NFT');
+    navigation.navigate('');
   }
 
   const buyTokens = () =>{

@@ -16,8 +16,6 @@ import { activeNetwork, activeWallet, networkList, language as stateLanguage, to
 
 export default function BuyToken({ navigation, route }) {
 
-  console.log('route ', route);
-  console.log('navigation ', navigation);
 
   const [network,] = useRecoilState(activeNetwork);
   const [language,] = useRecoilState(stateLanguage);
