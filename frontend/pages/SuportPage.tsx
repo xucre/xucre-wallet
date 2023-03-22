@@ -1,23 +1,51 @@
 //import LIFI, {ChainId} from '@lifi/sdk';
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
-import { Box, Input, Text, View } from 'native-base';
-import {Button} from 'native-base'
+import { Box, Input, Text, TextArea, View } from 'native-base';
+import { Button } from 'native-base'
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useRecoilState } from 'recoil';
 
+import { sendEmail } from '../service/sendEmail';
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
+
 
 
 
 
 export default function SuportPage({ navigation, route }) {
 
+    const [name, setName] = useState('');
+    const [issue, setIssue] = useState('');
+    const handleNameChange = (event) => {
+        //console.log(event.nativeEvent.text);
+        setName(event.nativeEvent.text)
+      }
+      
+    const handleIssueChange = (event) => {
+        //console.log(event.nativeEvent.text);
+        setIssue(event.nativeEvent.text)
+      }
+
+    function sendEmailButton(){
+        console.log('sendEmail', name);
+        sendEmail(
+            'carevalo@ennube.solutions',
+               name,
+            issue,
+         { cc: 'pjacome@ennube.solutions' }
+        ).then(() => {
+            console.log('Your message was successfully sent!');
+        });
+    }
 
     return (
+        
         <View style={styles.support}>
+            
             <Text style={styles.support1}>Support</Text>
 
             <Text style={[styles.ifYouHaveContainer, styles.contactUsViaTypo]}>
@@ -28,23 +56,24 @@ export default function SuportPage({ navigation, route }) {
                 <Text style={styles.ifYouHave}> or use the form below</Text>
             </Text>
             <View style={[styles.input, styles.inputPosition]}>
-                <Text style={styles.email}>Email</Text>
+                <Text style={styles.email}>Subject</Text>
                 <View style={[styles.rectangleParent, styles.groupItemLayout]}>
-                    <Input style={styles.textoImput} placeholderTextColor={'white'} w="105%" mb={2} placeholder="your@email.com" />
+                    <Input style={styles.textoImput} value={name} onChange={handleNameChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder="Subject" />
                 </View>
             </View>
 
             <View style={[styles.input1, styles.inputPosition]}>
                 <Text style={styles.email}>Describe your issue</Text>
                 <View style={[styles.rectangleGroup, styles.groupLayout]}>
-                    <Input style={styles.textoImputArea} placeholderTextColor={'white'} w="105%" mb={2} placeholder="Suggestions and / or report problems" />
+                   {/*  <Input style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholderTextColor={'white'} w="105%" mb={2}  placeholder="Suggestions and / or report problems" /> */}
+                    <TextArea h={20} style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholder="Text Area Placeholder"  placeholderTextColor={'white'} w="105%" h="200"  maxW="400" />
                 </View>
             </View>
 
-            <Button style= {styles.buttonContainer}><Text color={'#000'}>Send Email</Text></Button>
-       
+            <Button style={styles.buttonContainer} onPress={() => sendEmailButton()}><Text color={'#000'}>Send Email</Text></Button>
+        
         </View>
-      
+       
     )
 }
 
@@ -55,14 +84,14 @@ const styles = StyleSheet.create({
         borderRadius: Border.br_sm,
         backgroundColor: '#D4E815',
         fontFamily: FontFamily.interSemibold,
-      },
+    },
     rectangleLayout: {
         height: 60,
         width: 330,
         left: 33,
         position: "absolute",
         borderColor: '#fff',
-      },
+    },
     support: {
         backgroundColor: Color.black,
         borderColor: "#000",
@@ -161,8 +190,8 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         width: 380,
         top: 0,
-    }, 
-    textoImputArea:{
+    },
+    textoImputArea: {
         borderRadius: Border.br_xs,
         backgroundColor: Color.gray_300,
         borderColor: "#7b7b7b",
@@ -170,31 +199,38 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         width: 339,
         top: 0,
-        height: 190,
+        height: 200,
+        verticalAlign: 'top', 
+        position: "relative",
+        borderBottomWidth: 1,
+        multiline: true,
+        textAlign: "left"
+        
+
     },
 
     input1: {
         top: 284,
         height: 217,
-      },
-      rectangleGroup: {
+    },
+    rectangleGroup: {
         top: 27,
-      },
-      groupLayout: {
+    },
+    groupLayout: {
         height: 190,
         width: 351,
         left: 0,
         position: "absolute",
-      },
-      groupBorder: {
+    },
+    groupBorder: {
         borderColor: "#7b7b7b",
         backgroundColor: Color.gray_300,
         borderRadius: Border.br_xs,
         top: 0,
         borderWidth: 1,
         borderStyle: "solid",
-      },
-      buttonContainer: {
+    },
+    buttonContainer: {
         fontWeight: 'bold',
         // eslint-disable-next-line sort-keys
         backgroundColor: '#D4E815',
@@ -207,6 +243,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: "solid",
         borderColor: '#fff',
-    
-      },
+
+    },
 });
