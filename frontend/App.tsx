@@ -68,6 +68,7 @@ import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient} from './service/walletConnect';
+import whatsapp from './service/whatsapp';
 import { getTheme, storeTheme } from './store/setting';
 
 
@@ -229,6 +230,10 @@ export const AppWrapper = () => {
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SuportPage" component={SuportPage} options={{ 
+              headerTitleAlign: 'left',
+              title: ' ', 
+            }} ></Stack.Screen>
+             <Stack.Screen name="whatsapp" component={whatsapp} options={{ 
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>

@@ -1,13 +1,14 @@
-export async function sendWhatsapp(phone, template, templateLang, options = {}) {
-    //Main Params
-    let phoneNumber = phone; //TODO: Create validation for country code
-    let bearer = 'EAAKP7SOJD78BAOZAPm5nzC2fvoE6QrBjfYEtb9oIWWLO27U1roGHsUygDnYZClU9hMyUVAi4v4FKEMmgA8nqE4wsKjMDdHZAR1tas5HZACDIVpKGSSPo4S5dTyXWVVcvlDNTkXqQEKZCQzuIlbXV6KJMo5g9ErlcTBDXZCZAjcNXrLzbNmOHZCJUIuVpSRICPUKKf7SQNJWDGbYTUH86PAZB8';
+
+  const whatsapp = (phone, template, templateLang, options = {}) => {
+      //Main Params
+    let phoneNumber = phone.phoneNumbers[0].number; //TODO: Create validation for country code
+    let bearer = 'EAAKP7SOJD78BAH5hZALF288dSrnwQFLZBHOdKhJW7ZCsZBZC73uzLacywuu3AC0rbzAwRkKXLTBzZCdY95hFXZAunfZBJbg18PXTJ9ixkxB1O1UZAtCnVrO7fU7wDvm92ENzqjFv2ULNpVXi6rAEbEablCEYWEc2qbJGrOnSBrvpywLeb3zTad8KbFjnU5UYjxTo8yySJEwCHPoGwwG4XAWZB6';
     let authorizationToken = 'Bearer ' + bearer;
     //Template params
     let templateName = 'mediatest'; //TODO: Create multiple template on Whatsapp
     let templateLanguage = 'en'; //TODO: receive this accordingly
     //Variables of Params
-    let trxAmount = options.amount;
+    let trxAmount =  options.amount;
     let trxAccount = options.account;
     const requestOptions = {
       method: 'POST',
@@ -40,21 +41,24 @@ export async function sendWhatsapp(phone, template, templateLang, options = {}) 
       })
     };
 
-  const wspCall = async () => {
-    try {
-      await fetch(
-        'https://graph.facebook.com/v15.0/100338942927842/messages', requestOptions)
-        .then(response => {
-          response.json()
-            .then(data => {
-              //console.log('value: ' + JSON.stringify(response));
-            });
-        })
+
+    const wspCall = async () => {
+      try {
+        await fetch(
+          'https://graph.facebook.com/v15.0/100338942927842/messages', requestOptions)
+          .then(response => {
+            response.json()
+              .then(data => {
+                console.log('value: ' + JSON.stringify(response));
+              });
+          })
+      }
+      catch (error) {
+        console.error('error',error);
+      }
     }
-    catch (error) {
-      console.error('error',error);
-    }
+  
+    return wspCall();
   }
 
-  return wspCall();
-}
+    export default whatsapp;
