@@ -40,11 +40,13 @@ import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import QRReader from './pages/QRReader';
 import SetPassword from './pages/SetPassword';
+import SuportPage from './pages/SuportPage';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
 import NftList from './pages/nft/NftList';
 import AddToken from './pages/token/AddToken';
+import BuyToken from './pages/token/BuyToken';
 import SendToken from './pages/token/SendToken';
 import SwapToken from './pages/token/SwapToken';
 import CreateWallet from './pages/wallet/CreateWallet';
@@ -66,7 +68,9 @@ import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient} from './service/walletConnect';
+import whatsapp from './service/whatsapp';
 import { getTheme, storeTheme } from './store/setting';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -220,6 +224,18 @@ export const AppWrapper = () => {
             <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
               headerTitleAlign: 'left',
               title: translations[language].SwapToken.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="BuyToken" component={BuyToken} options={{ 
+              headerTitleAlign: 'left',
+              title: translations[language].SwapToken.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="SuportPage" component={SuportPage} options={{ 
+              headerTitleAlign: 'left',
+              title: ' ', 
+            }} ></Stack.Screen>
+             <Stack.Screen name="whatsapp" component={whatsapp} options={{ 
+              headerTitleAlign: 'left',
+              title: ' ', 
             }} ></Stack.Screen>
             <Stack.Screen name="NFT" component={SwapToken} options={{ 
               headerTitleAlign: 'left',

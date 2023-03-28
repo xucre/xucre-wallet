@@ -205,7 +205,11 @@ export default function ViewWallet ({navigation, route}) {
   }
 
   const openNft = () => {
-    navigation.navigate('NFT');
+    navigation.navigate('');
+  }
+
+  const buyTokens = () =>{
+    navigation.navigate('BuyToken');
   }
 
   useEffect(() => {
@@ -229,7 +233,7 @@ export default function ViewWallet ({navigation, route}) {
       text: 'Receive'
     },
     {
-      action: swapTokens,
+      action: buyTokens,
       icon: 'monetization-on',
       text: 'Buy'
     },

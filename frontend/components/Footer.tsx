@@ -46,10 +46,10 @@ type IconType = {
 export default function MobileFooter({wallet: Wallet, navigation}) {
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: 'Home' },
-    { highlight: false, name: 'history', text: 'History' },
+    //{ highlight: false, name: 'history', text: 'History' },
     { highlight: true, name: 'swap-vertical-circle', text: 'SWAP' },
     { highlight: false, name: 'live-help', text: 'Support' },
-    { highlight: false, name: 'person', text: 'Profile' },
+    //{ highlight: false, name: 'person', text: 'Profile' },
   ];
 
   const openPage = (pageName: string) => {
@@ -60,14 +60,14 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
       case 'SWAP': 
         navigation.navigate('SwapToken');
         break;
-      case 'History': 
+      //case 'History': 
         //navigation.navigate('History');
         break;
-      case 'Profile': 
+      //case 'Profile': 
         //navigation.navigate('Profile');
         break;
       case 'Support': 
-        //navigation.navigate('Support');
+        navigation.navigate('SuportPage');
         break;
     }
   }

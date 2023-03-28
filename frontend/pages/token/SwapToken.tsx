@@ -1,18 +1,27 @@
 //import LIFI, {ChainId} from '@lifi/sdk';
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
+import { Text } from 'native-base';
+import { color } from 'native-base/lib/typescript/theme/styled-system';
 import React, { useEffect, useMemo, useState } from 'react';
 //import { renderToString } from 'react-dom/server';
 //import { WebView } from "react-native-webview";
+import { Linking } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { useRecoilState } from 'recoil';
+
 
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../service/state";
 
 //const lifi = new LIFI();
 
-export default function SwapToken({navigation, route}) {
-  const [network, ] = useRecoilState(activeNetwork);
-  const [language, ] = useRecoilState(stateLanguage);  
-  const [_wallet, ] = useRecoilState(activeWallet);
+export default function SwapToken({ navigation, route }) {
+
+  console.log('route ', route);
+  console.log('navigation ', navigation);
+
+  const [network,] = useRecoilState(activeNetwork);
+  const [language,] = useRecoilState(stateLanguage);
+  const [_wallet,] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.JsonRpcProvider);
   useEffect(() => {
@@ -39,11 +48,15 @@ export default function SwapToken({navigation, route}) {
     if (network) {
       runAsync();
     }
-    
+
   }, [network])
 
+  const url = 'https://app.uniswap.org/#/swap';
   return (
     <>
+      <WebView
+        source={{ uri: url }}
+      />
     </>
   )
 }
