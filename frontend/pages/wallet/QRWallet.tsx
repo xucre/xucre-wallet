@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-color-literals */
+/* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import {useIsFocused} from '@react-navigation/native';
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
@@ -34,7 +36,7 @@ import {
 } from "native-base";
 import React, {createRef, useEffect, useState} from "react";
 // eslint-disable-next-line react-native/split-platform-components
-import { FlatList, PermissionsAndroid, TouchableOpacity, View } from "react-native";
+import { FlatList, Linking, PermissionsAndroid, TouchableOpacity, View } from "react-native";
 import Communications from 'react-native-communications';
 import Contact from 'react-native-contacts';
 import QRCode from "react-qr-code";
@@ -43,8 +45,8 @@ import { useRecoilState } from "recoil";
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeWallet, language as stateLanguage } from "../../service/state";
-
 import whatsapp from "../../service/whatsapp";
+
 
 
 
@@ -103,7 +105,6 @@ export default function QRWallet ({navigation, route}) {
         <Center mt={10}>
           <QRCode
             size={256}
-            // eslint-disable-next-line react-native/no-inline-styles
             style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%", }}
             value={_wallet.wallet.address}
             viewBox={`0 0 256 256`}
@@ -111,23 +112,23 @@ export default function QRWallet ({navigation, route}) {
           <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
         </Center>
 
-        <View style={{flex: 1, backgroundColor: '#000'}}>
+        <View style={{backgroundColor: '#000', flex: 1}}>
       <FlatList
         data={contactList}
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
               style={{
-                width: '90%',
-                height: 70,
+                alignItems: 'center',
                 alignSelf: 'center',
-                borderWidth: 1,
                 borderColor: '#fff',
                 borderRadius: 10,
-                marginTop: 10,
+                borderWidth: 1,
                 flexDirection: 'row',
+                height: 70,
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                marginTop: 10,
+                width: '90%',
               }}
               onPress={() => {
                 // eslint-disable-next-line sort-keys
@@ -135,12 +136,12 @@ export default function QRWallet ({navigation, route}) {
               }}
               
               >
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{alignItems: 'center',flexDirection: 'row'}}>
                 <Image
                   source={{
                     uri: 'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
                   }}
-                  style={{width: 40, height: 40, marginLeft: 15}}
+                  style={{height: 40, marginLeft: 15, width: 40}}
                 />
                 <View style={{padding: 10}}>
                   <Text style={{color: '#fff'}}>{item.displayName}</Text>
@@ -161,9 +162,9 @@ export default function QRWallet ({navigation, route}) {
                   uri: 'https://cdn-icons-png.flaticon.com/512/2335/2335318.png',
                 }}
                     style={{
-                      width: 40,
                       height: 40,
                       marginRight: 20,
+                      width: 40,
                     }}
                   />
                 </TouchableOpacity>

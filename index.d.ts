@@ -26,6 +26,7 @@ declare module '@env' {
   export const REACT_APP_WALLET_CONNECT_RELAY_URL: string;
   export const REACT_APP_BLOCKSPAN_API_KEY: string;
   export const REACT_APP_BLOCKSPAN_API_URL: string;
+  export const REACT_APP_API_URL: string;
 }
 
 declare module '*.png';

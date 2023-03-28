@@ -153,6 +153,7 @@ export default function ViewWallet ({navigation, route}) {
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
     } else {
+      console.log(_wallet.wallet.address);
       setWallet(_wallet.wallet);
     }
 
@@ -205,7 +206,7 @@ export default function ViewWallet ({navigation, route}) {
   }
 
   const openNft = () => {
-    navigation.navigate('');
+    navigation.navigate('NFT');
   }
 
   const buyTokens = () =>{
@@ -369,9 +370,7 @@ export default function ViewWallet ({navigation, route}) {
                     })
                   }
                 </VStack>
-                
-                
-                
+                <Button onPress={addToken} mt={4} width={'full'}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
               </Box>
             }
 
@@ -396,9 +395,6 @@ export default function ViewWallet ({navigation, route}) {
             }
           </VStack>
         </ScrollView>
-        {false && currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
-          <Button onPress={addToken} mt={4} width={'full'} position={'absolute'} bottom={0}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
-        }
         
         {false && currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
           <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language].ViewWallet.clear_button}</Text></Button>

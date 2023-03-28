@@ -41,15 +41,16 @@ type IconType = {
   readonly name: string;
   readonly text: string;
   readonly highlight: boolean;
+  readonly disabled?: boolean;
 };
 
 export default function MobileFooter({wallet: Wallet, navigation}) {
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: 'Home' },
-    //{ highlight: false, name: 'history', text: 'History' },
+    { disabled: true, highlight: false, name: 'history', text: 'History' },
     { highlight: true, name: 'swap-vertical-circle', text: 'SWAP' },
     { highlight: false, name: 'live-help', text: 'Support' },
-    //{ highlight: false, name: 'person', text: 'Profile' },
+    { disabled: true, highlight: false, name: 'person', text: 'Profile' },
   ];
 
   const openPage = (pageName: string) => {
@@ -60,10 +61,10 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
       case 'SWAP': 
         navigation.navigate('SwapToken');
         break;
-      //case 'History': 
+      case 'History': 
         //navigation.navigate('History');
         break;
-      //case 'Profile': 
+      case 'Profile': 
         //navigation.navigate('Profile');
         break;
       case 'Support': 
@@ -109,13 +110,13 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
                   as={MaterialIcons}
                   name={item.name}
                   size="10"
-                  color="primary.500"
+                  color={item.disabled ? "primary.800" : "primary.500"}
                   marginTop='-3'
                   marginBottom={3}
                 />
               }
               _text={{
-                color : "primary.500"
+                color : item.disabled ? "primary.800" : "primary.500"
               }}
               paddingY={2}
               onPress={() => {openPage(item.text)}}
@@ -134,11 +135,11 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
                   as={MaterialIcons}
                   name={item.name}
                   size="5"
-                  color='coolGray.100'
+                  color={item.disabled ? "coolGray.400" : "coolGray.100"}
                 />
               }
               _text={{
-                color: 'coolGray.100'
+                color: item.disabled ? "coolGray.400" : "coolGray.100"
               }} 
               paddingY={0}           
               onPress={() => {openPage(item.text)}}
