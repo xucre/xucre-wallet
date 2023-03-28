@@ -68,7 +68,6 @@ import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import { navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient} from './service/walletConnect';
-import whatsapp from './service/whatsapp';
 import { getTheme, storeTheme } from './store/setting';
 
 
@@ -233,11 +232,7 @@ export const AppWrapper = () => {
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>
-             <Stack.Screen name="whatsapp" component={whatsapp} options={{ 
-              headerTitleAlign: 'left',
-              title: ' ', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="NFT" component={SwapToken} options={{ 
+            <Stack.Screen name="NFT" component={NftList} options={{ 
               headerTitleAlign: 'left',
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>

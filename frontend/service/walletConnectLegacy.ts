@@ -26,7 +26,7 @@ export const createLegacySignClient = async ({ uri }: { readonly uri?: string } 
     console.log('retrieving2 legacy client');
     getCachedLegacySession().then((local) => {
       if (local && local !== '') {
-        console.log('local',local);
+        //console.log('local',local);
         const session : IWalletConnectSession = JSON.parse(local);
         //console.log(session);
         legacySignClient = new LegacySignClient({ session })

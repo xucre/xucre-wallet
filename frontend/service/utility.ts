@@ -52,14 +52,22 @@ export const urlCheck = (websiteUrl) => {
     return urlRegEx.test(String(websiteUrl).toLowerCase());
 }
 
-export const truncateString = (str, num) => {
+export const truncateString = (str, num, addDots = true) => {
   // If the length of str is less than or equal to num
   // just return str--don't truncate it.
-  if (str.length <= num) {
-    return str
+  if (str) {
+    if (str.length <= num) {
+      return str
+    }
+    // Return str truncated with '...' concatenated to the end of str.
+    if (addDots) {
+      return str.slice(0, num) + '...'
+    } else {
+      return str.slice(0, num)
+    }
   }
-  // Return str truncated with '...' concatenated to the end of str.
-  return str.slice(0, num) + '...'
+  
+  
 }
 
 export const truncateStringStart = (str, num) => {
