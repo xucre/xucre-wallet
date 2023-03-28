@@ -67,7 +67,7 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
         //navigation.navigate('Profile');
         break;
       case 'Support': 
-        navigation.navigate('SuportPage');
+        navigation.navigate('SupportPage');
         break;
     }
   }

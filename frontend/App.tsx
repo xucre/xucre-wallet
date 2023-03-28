@@ -40,7 +40,7 @@ import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import QRReader from './pages/QRReader';
 import SetPassword from './pages/SetPassword';
-import SuportPage from './pages/SuportPage';
+import SupportPage from './pages/SupportPage';
 import CreateNetwork from './pages/network/CreateNetwork';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
@@ -229,7 +229,7 @@ export const AppWrapper = () => {
               headerTitleAlign: 'left',
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>
-            <Stack.Screen name="SuportPage" component={SuportPage} options={{ 
+            <Stack.Screen name="SupportPage" component={SupportPage} options={{ 
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>

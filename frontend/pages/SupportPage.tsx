@@ -9,8 +9,11 @@ import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useRecoilState } from 'recoil';
 
-import { sendEmail } from '../service/sendEmail';
+import sendEmail from '../service/sendEmail'
+import { twillioEmail } from '../service/twillioEmail';
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
+import sendgrid from '@sendgrid/mail';
+
 
 
 
@@ -20,32 +23,35 @@ export default function SuportPage({ navigation, route }) {
 
     const [name, setName] = useState('');
     const [issue, setIssue] = useState('');
+    const [toEmail, setToEmail] = useState('');
+
     const handleNameChange = (event) => {
         //console.log(event.nativeEvent.text);
         setName(event.nativeEvent.text)
-      }
-      
+    }
+
     const handleIssueChange = (event) => {
         //console.log(event.nativeEvent.text);
         setIssue(event.nativeEvent.text)
-      }
+    }
 
-    function sendEmailButton(){
-        console.log('sendEmail', name);
-        sendEmail(
-            'carevalo@ennube.solutions',
-               name,
-            issue,
-         { cc: 'pjacome@ennube.solutions' }
-        ).then(() => {
-            console.log('Your message was successfully sent!');
-        });
+    const handletoEmailChange = (event) => {
+        //console.log(event.nativeEvent.text);
+        setToEmail(event.nativeEvent.text)
+    }
+
+    function sendEmailButton() {
+
+        console.log('toEmail ', toEmail);
+        console.log('name ', name);
+        console.log('issue ', issue);
+
     }
 
     return (
-        
+
         <View style={styles.support}>
-            
+
             <Text style={styles.support1}>Support</Text>
 
             <Text style={[styles.ifYouHaveContainer, styles.contactUsViaTypo]}>
@@ -56,24 +62,31 @@ export default function SuportPage({ navigation, route }) {
                 <Text style={styles.ifYouHave}> or use the form below</Text>
             </Text>
             <View style={[styles.input, styles.inputPosition]}>
+                <Text style={styles.email}> To </Text>
+                <View style={[styles.rectangleParent, styles.groupItemLayout]}>
+                    <Input style={styles.textoImput} value={toEmail} onChange={handletoEmailChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder="Subject" />
+                </View>
+            </View>
+
+            <View style={[styles.input, styles.inputPosition1]}>
                 <Text style={styles.email}>Subject</Text>
                 <View style={[styles.rectangleParent, styles.groupItemLayout]}>
                     <Input style={styles.textoImput} value={name} onChange={handleNameChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder="Subject" />
                 </View>
             </View>
 
-            <View style={[styles.input1, styles.inputPosition]}>
+            <View style={[styles.input1, styles.inputPosition2]}>
                 <Text style={styles.email}>Describe your issue</Text>
                 <View style={[styles.rectangleGroup, styles.groupLayout]}>
-                   {/*  <Input style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholderTextColor={'white'} w="105%" mb={2}  placeholder="Suggestions and / or report problems" /> */}
-                    <TextArea h={20} style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholder="Text Area Placeholder"  placeholderTextColor={'white'} w="105%" h="200"  maxW="400" />
+                    {/*  <Input style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholderTextColor={'white'} w="105%" mb={2}  placeholder="Suggestions and / or report problems" /> */}
+                    <TextArea h={20} style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholder="Text Area Placeholder" placeholderTextColor={'white'} w="105%" h="200" maxW="400" />
                 </View>
             </View>
 
-            <Button style={styles.buttonContainer} onPress={() => sendEmailButton()}><Text color={'#000'}>Send Email</Text></Button>
-        
+            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue)}><Text color={'#000'}>Send Email</Text></Button>
+
         </View>
-       
+
     )
 }
 
@@ -141,8 +154,23 @@ const styles = StyleSheet.create({
     inputPosition: {
         width: 351,
         left: 20,
+
         position: "absolute",
     },
+    inputPosition1: {
+        width: 351,
+        left: 20,
+        top: 285,
+        position: "absolute",
+    },
+
+    inputPosition2: {
+        width: 351,
+        left: 20,
+        top: 380,
+        position: "absolute",
+    },
+
     rectangleParent: {
         top: 27,
     },
@@ -200,12 +228,12 @@ const styles = StyleSheet.create({
         width: 339,
         top: 0,
         height: 200,
-        verticalAlign: 'top', 
+        verticalAlign: 'top',
         position: "relative",
         borderBottomWidth: 1,
         multiline: true,
         textAlign: "left"
-        
+
 
     },
 
@@ -236,7 +264,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D4E815',
         position: 'relative',
         width: 370,
-        top: 580,
+        top: 650,
         left: 20,
         textAlign: "left",
         borderRadius: Border.br_sm,
