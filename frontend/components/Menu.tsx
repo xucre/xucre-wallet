@@ -98,7 +98,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
     runAsync();
   }, []);
 
-  const [walletState, setWalletState] = useRecoilState(walletList);
+  const [, setWalletState] = useRecoilState(walletList);
   const [,setNetworkList] = useRecoilState(networkList);
   const [,setActiveNetwork] = useRecoilState(activeNetwork);
   useEffect(() => {
@@ -124,7 +124,9 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           return {address: wallet.address, name: val.name, wallet: wallet};
         });
         setWalletState(loadedWallets);
-      };
+      } else {
+        navigate('NewWallet')
+      }
 
       
     }
