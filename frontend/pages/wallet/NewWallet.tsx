@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-color-literals */
+/* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
