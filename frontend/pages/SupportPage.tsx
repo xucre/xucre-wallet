@@ -9,10 +9,13 @@ import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useRecoilState } from 'recoil';
 
+import { language as stateLanguage} from '../../frontend/service/state';
 import sendEmail from '../service/sendEmail'
 import { twillioEmail } from '../service/twillioEmail';
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
 import sendgrid from '@sendgrid/mail';
+
+import translations from '../assets/translations';
 
 
 
@@ -20,6 +23,8 @@ import sendgrid from '@sendgrid/mail';
 
 
 export default function SuportPage({ navigation, route }) {
+
+    const [language, ] = useRecoilState(stateLanguage);
 
     const [name, setName] = useState('');
     const [issue, setIssue] = useState('');
@@ -52,38 +57,35 @@ export default function SuportPage({ navigation, route }) {
 
         <View style={styles.support}>
 
-            <Text style={styles.support1}>Support</Text>
+            <Text style={styles.support1}>{translations[language].SupportPage.title}</Text>
 
             <Text style={[styles.ifYouHaveContainer, styles.contactUsViaTypo]}>
                 <Text
-                    style={styles.ifYouHave}
-                >{`If you have problems with our app please contact us at `}</Text>
-                <Text style={styles.supportxsucrecom}>support@xsucre.com</Text>
-                <Text style={styles.ifYouHave}> or use the form below</Text>
+                    style={styles.ifYouHave}>{translations[language].SupportPage.introduction}</Text>
             </Text>
             <View style={[styles.input, styles.inputPosition]}>
-                <Text style={styles.email}> To </Text>
+                <Text style={styles.email}> {translations[language].SupportPage.to_send} </Text>
                 <View style={[styles.rectangleParent, styles.groupItemLayout]}>
-                    <Input style={styles.textoImput} value={toEmail} onChange={handletoEmailChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder="Subject" />
+                    <Input style={styles.textoImput} value={toEmail} onChange={handletoEmailChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder={translations[language].SupportPage.to_send} />
                 </View>
             </View>
 
             <View style={[styles.input, styles.inputPosition1]}>
-                <Text style={styles.email}>Subject</Text>
+                <Text style={styles.email}>{translations[language].SupportPage.subject_send}</Text>
                 <View style={[styles.rectangleParent, styles.groupItemLayout]}>
-                    <Input style={styles.textoImput} value={name} onChange={handleNameChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder="Subject" />
+                    <Input style={styles.textoImput} value={name} onChange={handleNameChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder={translations[language].SupportPage.subject_send} />
                 </View>
             </View>
 
             <View style={[styles.input1, styles.inputPosition2]}>
-                <Text style={styles.email}>Describe your issue</Text>
+                <Text style={styles.email}>{translations[language].SupportPage.describe_issue}</Text>
                 <View style={[styles.rectangleGroup, styles.groupLayout]}>
                     {/*  <Input style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholderTextColor={'white'} w="105%" mb={2}  placeholder="Suggestions and / or report problems" /> */}
-                    <TextArea h={20} style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholder="Text Area Placeholder" placeholderTextColor={'white'} w="105%" h="200" maxW="400" />
+                    <TextArea h={20} style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholder={translations[language].SupportPage.describe_issue} placeholderTextColor={'white'} w="105%" h="200" maxW="400" />
                 </View>
             </View>
 
-            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue)}><Text color={'#000'}>Send Email</Text></Button>
+            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue)}><Text color={'#000'}>{translations[language].SupportPage.button_send}</Text></Button>
 
         </View>
 

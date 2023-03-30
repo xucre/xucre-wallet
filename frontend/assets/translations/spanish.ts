@@ -43,6 +43,8 @@ const values = {
     name_entry_button: 'Guardar billetera',
     name_entry_button_loadingtext: 'Enviando',
     name_entry_input_placeholder: 'Establecer nombre de billetera',
+    // eslint-disable-next-line sort-keys
+    mnemonic_instructions: 'Seleccione el pedido y guarde estas palabras. Si los pierdes nunca podrás recuperar tu billetera'
   },
   LegacyEthSign: {
       approve_button: 'Aprobar',

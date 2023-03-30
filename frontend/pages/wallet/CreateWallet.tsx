@@ -116,8 +116,7 @@ export default function CreateWallet ({navigation, route, storage}) {
   function MnemonicList() {
     return (
       
-        <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>Please select the order and save this words. If you lose them you will
-        never be able to recover your wallet</Text>
+        <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>{translations[language].CreateWallet.mnemonic_instructions}</Text>
         <Grid style={{ alignItems: 'center', justifyContent: 'center', marginTop: 0, paddingBottom: 10 }}>
 
           
@@ -204,8 +203,7 @@ export default function CreateWallet ({navigation, route, storage}) {
       setConfirmMnemonics(filteredList);
     }
     return (
-      <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>Please select the order and save this words. If you lose them you will
-      never be able to recover your wallet</Text>
+      <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>{translations[language].CreateWallet.mnemonic_instructions}</Text>
 
 
       <Grid style={{alignItems: 'center', justifyContent: 'center',marginTop:10, paddingBottom:10}}>

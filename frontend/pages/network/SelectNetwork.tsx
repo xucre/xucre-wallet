@@ -161,8 +161,8 @@ export default function SelectNetwork ({navigation, route}) {
         top={-50}
       >
         
-<Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={'md'} top={60} fontWeight={'bold'}>Network</Text>
-<Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={15} top={70} >Select or create a new network</Text>
+<Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={'md'} top={60} fontWeight={'bold'}>{translations[language].SelectNetwork.title}</Text>
+<Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={15} top={70} >{translations[language].SelectNetwork.select_network}</Text>
 
         <VStack space={2} height={'50%'}>
           {
