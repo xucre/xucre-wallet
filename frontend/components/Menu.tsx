@@ -125,7 +125,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
         });
         setWalletState(loadedWallets);
       } else {
-        navigate('NewWallet')
+        //navigate('NewWallet')
       }
 
       
