@@ -237,7 +237,7 @@ export const AppWrapper = () => {
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>
-            <Stack.Screen name="NFT" component={SwapToken} options={{ 
+            <Stack.Screen name="NFT" component={NftList} options={{
               headerTitleAlign: 'left',
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>

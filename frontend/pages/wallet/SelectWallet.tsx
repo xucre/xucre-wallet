@@ -56,7 +56,7 @@ export default function SelectWallet ({navigation, route}) {
   const WalletItem = ({metadata}) => {
     const selectWallet = () => {
       setActiveWallet(metadata);   
-      storeActiveWallet(metadata);   
+      storeActiveWallet(metadata);  
     }
 
     const openWallet = () => {      

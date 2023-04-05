@@ -5,24 +5,25 @@ import {Box, Center, Hidden, HStack, Image, Pressable, Stack, StatusBar, Text, u
 import React, {useEffect, useRef, useState} from 'react';
 import { Dimensions,  TouchableWithoutFeedback } from 'react-native';
 import Theme, {createStyle} from 'react-native-theming';
+import { useRecoilState } from 'recoil';
 
 import GuestLayout from '../layouts/GuestLayout';
+import { activeWallet } from '../service/state';
 
 export default function LandingPage({ navigation, route }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [_wallet, ] = useRecoilState(activeWallet);
   const {
     colorMode
   } = useColorMode();
   const [isComponentMounted, setIsComponentMounted] = useState(true);
 
   const toWalletSelect = () => {
-    //if (isComponentMounted) {
-
-        //navigation.navigate('Channels', {artistId: null, type: 'all'})
-        navigation.navigate('ViewWallet');
-        //navigation.navigate('SelectWallet');
-      
-    //} 
+    if (_wallet.name !== '') {
+      navigation.navigate('ViewWallet');  
+    } else {
+      navigation.navigate('SelectWallet');
+    }
   }
 
   //Loading Fonts
