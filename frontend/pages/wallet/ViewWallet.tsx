@@ -206,16 +206,13 @@ export default function ViewWallet ({navigation, route}) {
   }
 
   const openNft = () => {
-    navigation.navigate('');
+    navigation.navigate('NFT');
   }
 
   const buyTokens = () =>{
     navigation.navigate('BuyToken');
   }
 
-  const buyTokens = () =>{
-    navigation.navigate('BuyToken');
-  }
 
   useEffect(() => {
     //setNetwork(null)
