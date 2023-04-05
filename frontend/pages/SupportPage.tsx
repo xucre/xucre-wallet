@@ -45,13 +45,6 @@ export default function SuportPage({ navigation, route }) {
         setToEmail(event.nativeEvent.text)
     }
 
-    function sendEmailButton() {
-
-        console.log('toEmail ', toEmail);
-        console.log('name ', name);
-        console.log('issue ', issue);
-
-    }
 
     return (
 
@@ -85,7 +78,7 @@ export default function SuportPage({ navigation, route }) {
                 </View>
             </View>
 
-            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue)}><Text color={'#000'}>{translations[language].SupportPage.button_send}</Text></Button>
+            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue, navigation)}><Text color={'#000'}>{translations[language].SupportPage.button_send}</Text></Button>
 
         </View>
 

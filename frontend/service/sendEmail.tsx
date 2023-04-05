@@ -1,4 +1,4 @@
-const sendEmail = (to, subjectField, body) => {
+const sendEmail = (to, subjectField, body, navigation) => {
     //Main Params
     console.log('to', to);
     console.log('subject', subjectField);
@@ -7,6 +7,8 @@ const sendEmail = (to, subjectField, body) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", "Bearer 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");
+
+    
 
     const message = JSON.stringify({
         personalizations:[
@@ -58,6 +60,7 @@ const sendEmail = (to, subjectField, body) => {
                             console.log('value: ' + JSON.stringify(response));
                         });
                 })
+                navigation.navigate('ViewWallet');       
         }
         catch (error) {
             console.error('error', error);
