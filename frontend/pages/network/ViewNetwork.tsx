@@ -110,11 +110,7 @@ export default function ViewNetwork ({navigation, route}) {
 
   return (
     <DashboardLayout title={network.name}>
-      <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
-        height={'100%'}
-      >
+     <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
  
         {!isEditing && 
           <>
@@ -133,7 +129,9 @@ export default function ViewNetwork ({navigation, route}) {
                 </Center>              
               </Alert>
               : 
+              <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
               <Button onPress={() => {_setActiveNetwork();}}><Text>{translations[language].ViewNetwork.use_network}</Text></Button>
+              </Box>
             } 
             
           </>
@@ -153,9 +151,10 @@ export default function ViewNetwork ({navigation, route}) {
               <Input  style={styles.textoImput}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
             </VStack>        
                      
+            <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
               <Button style={styles.buttonContainer} onPress={saveNetwork} isLoading={loading}><Text color={'#000'} fontWeight={'bold'}>{translations[language].CreateNetwork.button_save}</Text></Button>
               {/* <Button onPress={() => {setIsEditing(false)}} variant="outline"><Text>{'Cancel'}</Text></Button>   */}
-      
+            </Box>
           </>
         }
         
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D4E815',
     position: 'relative',
     width: 370,
-    left: 20,
+
     textAlign: "left",
     borderRadius: Border.br_sm,
     borderWidth: 1,

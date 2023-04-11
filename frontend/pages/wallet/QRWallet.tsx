@@ -106,8 +106,9 @@ export default function QRWallet ({navigation, route}) {
             viewBox={`0 0 256 256`}
           />
           <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
+          <Text>Address: {_wallet.wallet.address}</Text>
+          <Text>Name: {_wallet.name}</Text>
         </Center>
-
         <View style={{backgroundColor: '#000', flex: 1}}>
 
       <FlatList
@@ -168,15 +169,15 @@ export default function QRWallet ({navigation, route}) {
                     }}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity
+{/*                  <TouchableOpacity
                   onPress={() => {
                     Linking.openURL(`https://web.whatsapp.com/send?phone=${item.phoneNumbers[0].number}`);
-                  }}>
-                 {/*  <Image
+                  }}> 
+                   <Image
                     source={require('../images/call.png')}
                     style={{width: 20, height: 20, tintColor: '#fff'}}
-                  /> */}
-                </TouchableOpacity>
+                  /> 
+                </TouchableOpacity> */}
               </View>
             </TouchableOpacity>
           );

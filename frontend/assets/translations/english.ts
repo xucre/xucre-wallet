@@ -135,11 +135,6 @@ const values = {
     // eslint-disable-next-line sort-keys
     select_network: 'Select or create a new network'
   },
-  ViewNetwork: {
-    edit_button: 'Edit',
-    active_network: 'Active Network',
-    use_network: 'Use Network'
-  },
   SelectWallet: { 
     new_button: 'New Wallet',
     select_button: 'Select Wallet',
@@ -198,7 +193,10 @@ const values = {
     send_token_button: 'Send'
   },
   ViewNetwork: {
-    title: 'Network'
+    title: 'Network',
+    edit_button: 'Edit',
+    active_network: 'Active Network',
+    use_network: 'Use Network'
   },
   ViewWallet: {
     clear_button: 'Clear Transactions',

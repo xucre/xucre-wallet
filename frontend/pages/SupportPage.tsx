@@ -48,7 +48,8 @@ export default function SuportPage({ navigation, route }) {
 
     return (
 
-        <View style={styles.support}>
+        <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
+
 
             <Text style={styles.support1}>{translations[language].SupportPage.title}</Text>
 
@@ -80,8 +81,7 @@ export default function SuportPage({ navigation, route }) {
 
             <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue, navigation)}><Text color={'#000'}>{translations[language].SupportPage.button_send}</Text></Button>
 
-        </View>
-
+        </Box>
     )
 }
 
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     rectangleLayout: {
         height: 60,
         width: 330,
-        left: 33,
         position: "absolute",
         borderColor: '#fff',
     },
@@ -110,6 +109,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: "solid",
         textAlign: "center",
+        position: 'absolute'
     },
     support1: {
         top: 39,
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         letterSpacing: -0.2,
         color: Color.white,
-        left: 19,
         position: "absolute",
     },
     ifYouHaveContainer: {
@@ -129,7 +128,6 @@ const styles = StyleSheet.create({
     contactUsViaTypo: {
         width: 330,
         fontFamily: FontFamily.interRegular,
-        left: 20,
         lineHeight: 21,
         fontSize: FontSize.size_base,
         textAlign: "left",
@@ -148,20 +146,16 @@ const styles = StyleSheet.create({
     },
     inputPosition: {
         width: 351,
-        left: 20,
-
         position: "absolute",
     },
     inputPosition1: {
         width: 351,
-        left: 20,
         top: 285,
         position: "absolute",
     },
 
     inputPosition2: {
         width: 351,
-        left: 20,
         top: 380,
         position: "absolute",
     },
@@ -172,7 +166,6 @@ const styles = StyleSheet.create({
     groupItemLayout: {
         height: 47,
         width: 351,
-        left: 0,
         position: "absolute",
     },
     groupBorder: {
@@ -186,12 +179,10 @@ const styles = StyleSheet.create({
     groupItemLayout: {
         height: 47,
         width: 351,
-        left: 0,
         position: "absolute",
     },
     youremailcom: {
         top: 12,
-        left: 19,
         width: 311,
         color: Color.dimgray,
         position: "absolute",

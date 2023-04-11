@@ -92,7 +92,7 @@ export default function SelectNetwork ({navigation, route}) {
       viewNetwork();
     }
     return (
-      
+      <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'} flex={3}>
       <HStack alignItems="center" justifyContent="space-between">
         <View style={styles.groupParent}>
         <Pressable onPress={openNetwork}>
@@ -147,6 +147,7 @@ export default function SelectNetwork ({navigation, route}) {
         </HStack>
         </View>
       </HStack>
+      </Box>
     )
   }
 
@@ -170,15 +171,14 @@ export default function SelectNetwork ({navigation, route}) {
               return (
                 <Box key={val.name+i} px={4} py={1} top={10} >
                   <NetworkItem metadata={val} /> 
-                  
-                  
                 </Box>
               )              
             })
           }
         </VStack>
-        
+        <Box alignItems="center" marginBottom={20} marginTop={10} h={'full'} w ={'full'} >
         <Button style={styles.buttoContainer} onPress={createNetwork}><Text style={{color: '#fff'}}>{translations[language].SelectNetwork.new_button}</Text></Button>
+        </Box>
       </Box>
     </GuestLayout>
   )
@@ -189,9 +189,8 @@ const styles = StyleSheet.create({
   buttoContainer: {
     fontWeight: 'bold',
     backgroundColor: Color.gray_200,
-    position: 'relative',
+    position: 'absolute',
     width: 325,
-    left: 50,
     textAlign: 'left',
     borderRadius: Border.br_sm,
     fontFamily: FontFamily.interRegular,
@@ -204,7 +203,6 @@ const styles = StyleSheet.create({
   groupParent: {
     top: 100,
     // eslint-disable-next-line sort-keys
-    left: 22,
     width: 346,
     // eslint-disable-next-line sort-keys
     height: 56,
