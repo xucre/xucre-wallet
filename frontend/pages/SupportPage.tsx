@@ -251,7 +251,6 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: 370,
         top: 650,
-        left: 20,
         textAlign: "left",
         borderRadius: Border.br_sm,
         borderWidth: 1,
