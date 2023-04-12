@@ -46,7 +46,6 @@ const values = {
     name_entry_button_loadingtext: 'Submitting',
     name_entry_input_placeholder: 'Set Wallet Name',
     name_wallet: 'Wallet name',
-    // eslint-disable-next-line sort-keys
     instructions_nameWallet: 'Set your wallet name',
     mnemonic_instructions: 'Please select the order and save this words. If you lose them you will never be able to recover your wallet'
   },
@@ -90,7 +89,7 @@ const values = {
     wallet_button: 'WALLETS',
   },
   NewWallet: {
-    about: "Create a new wallet or if you alreade have one retriave it through your security phrase",
+    about: "Create a new wallet or if you already have one retrieve it through your security phrase",
     create_button: 'Create Wallet',
     instructions: "Your Wallet",
     recover_button: 'Recover Wallet',
@@ -122,17 +121,15 @@ const values = {
   SelectLanguage : {
     en: 'English',
     es: 'Spanish',
-    nah: 'Nahuatl',
     pt: 'Portuguese',
     qu: 'Quechua',
+    nah: 'Nahuatl'
   },
   SelectNetwork: {
-    title: 'Network',
+    title: 'Networks',
     new_button: 'New Network',
     select_button: 'Select Network',
     select_button_tooltip: 'More Options',
-    title: 'Networks',
-    // eslint-disable-next-line sort-keys
     select_network: 'Select or create a new network'
   },
   SelectWallet: { 
@@ -206,13 +203,10 @@ const values = {
     title: 'Wallet',
     transactions_placeholder: 'Insert Transaction History',
   },
-  // eslint-disable-next-line sort-keys
   SupportPage:{
     title: 'Support',
-    // eslint-disable-next-line sort-keys
     introduction: 'If you have problems with our app please contact us at support@xsucre.com or use the form below',
-    to_send: 'To',
-    // eslint-disable-next-line sort-keys
+    to_send: 'From',
     subject_send:'Subject',
     describe_issue: 'Describe your issue',
     button_send: 'Send Email'
