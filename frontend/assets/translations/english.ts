@@ -32,6 +32,7 @@ const values = {
     rpcUrl_placeholder: 'Enter RPC Url',
     submit_button: 'Save',
     symbol_placeholder: 'Enter Chain Symbol',
+    button_save: 'Save',
   },
   CreateWallet: {
     instructions : 'When creating a new wallet you will receive a sequence of mnemonics which represent your "personal password". Anyone with this sequence may be able to reconfigure your wallet in any new device. Keep it stored as secure as possible. Only you should have access to this information.',
@@ -45,8 +46,8 @@ const values = {
     name_entry_button_loadingtext: 'Submitting',
     name_entry_input_placeholder: 'Set Wallet Name',
     name_wallet: 'Wallet name',
-    // eslint-disable-next-line sort-keys
-    instructions_nameWallet: 'Set your wallet name'
+    instructions_nameWallet: 'Set your wallet name',
+    mnemonic_instructions: 'Please select the order and save this words. If you lose them you will never be able to recover your wallet'
   },
   LegacyEthSign: {
     approve_button: 'Approve',
@@ -88,7 +89,7 @@ const values = {
     wallet_button: 'WALLETS',
   },
   NewWallet: {
-    about: "Create a new wallet or if you alreade have one retriave it through your security phrase",
+    about: "Create a new wallet or if you already have one retrieve it through your security phrase",
     create_button: 'Create Wallet',
     instructions: "Your Wallet",
     recover_button: 'Recover Wallet',
@@ -120,15 +121,16 @@ const values = {
   SelectLanguage : {
     en: 'English',
     es: 'Spanish',
-    nah: 'Nahuatl',
     pt: 'Portuguese',
     qu: 'Quechua',
+    nah: 'Nahuatl'
   },
   SelectNetwork: {
+    title: 'Networks',
     new_button: 'New Network',
     select_button: 'Select Network',
     select_button_tooltip: 'More Options',
-    title: 'Networks'
+    select_network: 'Select or create a new network'
   },
   SelectWallet: { 
     new_button: 'New Wallet',
@@ -188,7 +190,10 @@ const values = {
     send_token_button: 'Send'
   },
   ViewNetwork: {
-    title: 'Network'
+    title: 'Network',
+    edit_button: 'Edit',
+    active_network: 'Active Network',
+    use_network: 'Use Network'
   },
   ViewWallet: {
     clear_button: 'Clear Transactions',
@@ -197,7 +202,17 @@ const values = {
     tab_list: ['Holdings', 'Transactions'],
     title: 'Wallet',
     transactions_placeholder: 'Insert Transaction History',
+  },
+  SupportPage:{
+    title: 'Support',
+    introduction: 'If you have problems with our app please contact us at support@xsucre.com or use the form below',
+    to_send: 'From',
+    subject_send:'Subject',
+    describe_issue: 'Describe your issue',
+    button_send: 'Send Email'
+
   }
+
 };
 
 export default values;

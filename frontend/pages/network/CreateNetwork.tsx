@@ -134,7 +134,9 @@ export default function CreateWallet ({navigation, route, storage}) {
           <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
           <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
         </Box>
+        <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
         <Button style={styles.buttonContainer} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: '#000'}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
+        </Box>
       </>
     </ScrollView>
     </View>
@@ -146,9 +148,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     // eslint-disable-next-line sort-keys
     backgroundColor: '#D4E815',
-    position: 'relative',
+    position: 'absolute',
     width: 370,
-    left: 20,
     textAlign: "left",
     borderRadius: Border.br_sm,
     borderWidth: 1,

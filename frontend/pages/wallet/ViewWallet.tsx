@@ -213,6 +213,7 @@ export default function ViewWallet ({navigation, route}) {
     navigation.navigate('BuyToken');
   }
 
+
   useEffect(() => {
     //setNetwork(null)
     //setAllNetworks([])

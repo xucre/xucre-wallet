@@ -32,7 +32,7 @@ import {
   View,
   VStack,
 } from "native-base";
-import { background } from "native-base/lib/typescript/theme/styled-system";
+import { background, color } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
 import { Col, Grid, Row } from "react-native-easy-grid";
@@ -116,8 +116,7 @@ export default function CreateWallet ({navigation, route, storage}) {
   function MnemonicList() {
     return (
       
-        <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>Please select the order and save this words. If you lose them you will
-        never be able to recover your wallet</Text>
+        <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>{translations[language].CreateWallet.mnemonic_instructions}</Text>
         <Grid style={{ alignItems: 'center', justifyContent: 'center', marginTop: 0, paddingBottom: 10 }}>
 
           
@@ -204,8 +203,7 @@ export default function CreateWallet ({navigation, route, storage}) {
       setConfirmMnemonics(filteredList);
     }
     return (
-      <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>Please select the order and save this words. If you lose them you will
-      never be able to recover your wallet</Text>
+      <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>{translations[language].CreateWallet.mnemonic_instructions}</Text>
 
 
       <Grid style={{alignItems: 'center', justifyContent: 'center',marginTop:10, paddingBottom:10}}>
@@ -404,7 +402,7 @@ export default function CreateWallet ({navigation, route, storage}) {
       }
       
       {steps === 1 && 
-        <Box h={'full'}>
+         <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'} flex={2}>
           <Center _text={{ color: "warmGray.50", fontWeight: "medium" }} marginBottom={0} paddingBottom={0}><Text paddingTop={5} paddingBottom={5}>{translations[language].CreateWallet.mnemonic_confirm_instructions}</Text></Center>
           <MnemonicList></MnemonicList>
           <Button style={styles.buttonMneminic} onPress={nextStep}><Text style={{color: '#000', fontWeight: 'bold',}} >{translations[language].CreateWallet.mnemonic_confirm_button}</Text></Button>
@@ -412,24 +410,21 @@ export default function CreateWallet ({navigation, route, storage}) {
       }
       
       {steps === 2 && 
-        <>
+        <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'} flex={2}>
         <Center _text={{ color: "warmGray.50", fontWeight: "medium" }} marginBottom={0} paddingBottom={0}><Text paddingTop={5} paddingBottom={5}>{translations[language].CreateWallet.mnemonic_confirm_instructions}</Text></Center>
           <ConfirmMnemonicList></ConfirmMnemonicList>
           <MnemonicError></MnemonicError>          
-        </>
+          </Box>
       }
 
       {steps === 3 && 
-        <ScrollView w={'full'} h={'full'} marginTop={70}>
-        <>
-          <Box alignItems="center" marginBottom={250}>
+     
+        <Box alignItems="center" marginBottom={20} h={'800'} w ={'full'} flex={3}>
           <Text  style={{color: '#fff', fontWeight: 'bold'}} fontSize={'lg'} mt={5}>{translations[language].CreateWallet.name_wallet}</Text>
           <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} mt={5}>{translations[language].CreateWallet.instructions_nameWallet}</Text>
-            <Input w="85%" top={70} value={name} onChange={handleChange} placeholder={translations[language].CreateWallet.name_entry_input_placeholder}  />
+          <Input w="85%" top={70} value={name} onChange={handleChange} placeholder={translations[language].CreateWallet.name_entry_input_placeholder}  />
+          <Button style={styles.buttonSave}  onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].CreateWallet.name_entry_button_loadingtext} py={5} disabled={confirmMnemonics.length < mnemonics.length || name.length === 0}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations[language].CreateWallet.name_entry_button}</Text></Button>
           </Box>
-          <Button style={styles.buttonMneminic} top={0} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].CreateWallet.name_entry_button_loadingtext} py={5} disabled={confirmMnemonics.length < mnemonics.length || name.length === 0}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations[language].CreateWallet.name_entry_button}</Text></Button>
-        </>
-        </ScrollView>
       }
     </ScrollView>
     </View>
@@ -440,27 +435,30 @@ export default function CreateWallet ({navigation, route, storage}) {
 const styles = StyleSheet.create({
 
   buttonSave:{
-    backgroundColor: '#D4E815',
-    borderStyle: "solid",
-    borderColor: '#000',
-    borderRadius: 100,
-    width: 350,
-    left: 30,
-  },
-  buttonMneminic: {
     fontWeight: 'bold',
     // eslint-disable-next-line sort-keys
     backgroundColor: '#D4E815',
-    position: 'relative',
+    position: 'absolute',
     width: 350,
-    left: 30,
-    top: 0,
+    top: 250,
     textAlign: "left",
     borderRadius: Border.br_sm,
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: '#000',
-
+  },
+  buttonMneminic: {
+    fontWeight: 'bold',
+    // eslint-disable-next-line sort-keys
+    backgroundColor: '#D4E815',
+    position: 'absolute',
+    width: 350,
+    top: 450,
+    textAlign: "left",
+    borderRadius: Border.br_sm,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: '#000',
   },
   
   buttonContainer: {

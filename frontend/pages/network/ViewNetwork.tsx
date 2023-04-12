@@ -110,16 +110,12 @@ export default function ViewNetwork ({navigation, route}) {
 
   return (
     <DashboardLayout title={network.name}>
-      <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
-        height={'100%'}
-      >
+     <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
  
         {!isEditing && 
           <>
             <VStack space={4} px={2} py={4} height={'90%'}>
-              <Button onPress={() => {setIsEditing(true)}} ml={'auto'} px={8}><Text>{'Edit'}</Text></Button>
+              <Button onPress={() => {setIsEditing(true)}} ml={'auto'} px={8}><Text>{translations[language].ViewNetwork.edit_button}</Text></Button>
               <Text fontSize={28} fontWeight={'bold'}>{network.name}</Text>
               <Text fontSize={20}>Chain Id: {network.chainId}</Text>
               <Text fontSize={16}>Symbol: {network.symbol}</Text>
@@ -129,11 +125,13 @@ export default function ViewNetwork ({navigation, route}) {
             {_activeNetwork.chainId === network.chainId ?             
               <Alert maxW="400" status="info" colorScheme="info">
                 <Center>
-                  <Text color={'black'} fontWeight={'bold'}>Network Active</Text>
+                  <Text color={'black'} fontWeight={'bold'}>{translations[language].ViewNetwork.active_network} </Text>
                 </Center>              
               </Alert>
               : 
-              <Button onPress={() => {_setActiveNetwork();}}><Text>{'Use Network'}</Text></Button>
+              <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
+              <Button onPress={() => {_setActiveNetwork();}}><Text>{translations[language].ViewNetwork.use_network}</Text></Button>
+              </Box>
             } 
             
           </>
@@ -153,9 +151,10 @@ export default function ViewNetwork ({navigation, route}) {
               <Input  style={styles.textoImput}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
             </VStack>        
                      
-              <Button style={styles.buttonContainer} onPress={saveNetwork} isLoading={loading}><Text color={'#000'} fontWeight={'bold'}>{'Save'}</Text></Button>
+            <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
+              <Button style={styles.buttonContainer} onPress={saveNetwork} isLoading={loading}><Text color={'#000'} fontWeight={'bold'}>{translations[language].CreateNetwork.button_save}</Text></Button>
               {/* <Button onPress={() => {setIsEditing(false)}} variant="outline"><Text>{'Cancel'}</Text></Button>   */}
-      
+            </Box>
           </>
         }
         
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D4E815',
     position: 'relative',
     width: 370,
-    left: 20,
+
     textAlign: "left",
     borderRadius: Border.br_sm,
     borderWidth: 1,

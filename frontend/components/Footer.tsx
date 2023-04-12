@@ -61,14 +61,14 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
       case 'SWAP': 
         navigation.navigate('SwapToken');
         break;
-      case 'History': 
+      //case 'History': 
         //navigation.navigate('History');
         break;
-      case 'Profile': 
+      //case 'Profile': 
         //navigation.navigate('Profile');
         break;
-      case 'Support': 
-        navigation.navigate('SuportPage');
+      case 'Support':
+        navigation.navigate('SupportPage');
         break;
     }
   }

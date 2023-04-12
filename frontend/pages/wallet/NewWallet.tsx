@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
@@ -59,24 +57,18 @@ export default function NewWallet ({navigation, route}) {
 }
 
   return (
-    <DashboardLayout title={''}>
-      <Box         
-        _light={{ backgroundColor: '#000' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
-        height={'100%'}
-        safeAreaBottom
-      >
-        <Center mt={10}>
+    
+    <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
+    
           <Text  style={[styles.yourWallet, styles.walletTypo]} fontSize={'lg'} mt={5}>{translations[language].NewWallet.instructions}</Text>
           <Text style={[styles.createANew, styles.createFlexBox]} fontSize={'md'} mt={5}>{translations[language].NewWallet.about}</Text>
      
             <Button style={[styles.rectangleParent, styles.rectangleLayout]} onPress={createWallet} width={'1/2'} py={3}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations[language].NewWallet.create_button}</Text></Button>
         
             <Button style={[styles.rectangleGroup, styles.rectangleLayout, styles.buttonBorder]} width={'1/2'} py={3} colorScheme="primary" onPress={recoverWallet} ><Text color={"#fff"}>{translations[language].NewWallet.recover_button}</Text></Button>
-        
-        </Center>
+  
+              
       </Box>
-    </DashboardLayout>
   )
 }
 
@@ -95,7 +87,6 @@ const styles = StyleSheet.create({
     color: Color.darkgray_100,
     textAlign: "center",
     letterSpacing: -0.2,
-    left: 33,
     position: "absolute",
   },createFlexBox: {
     textAlign: "center",
@@ -103,7 +94,6 @@ const styles = StyleSheet.create({
     width: 330,
   },  yourWallet: {
     top: 180,
-    left: 126,
     fontSize: FontSize.size_3xl,
     letterSpacing: -0.3,
     lineHeight: 36,
@@ -121,7 +111,6 @@ const styles = StyleSheet.create({
   },rectangleLayout: {
     height: 60,
     width: 330,
-    left: 33,
     position: "absolute",
     borderColor: '#fff',
   }, rectangleGroup: {

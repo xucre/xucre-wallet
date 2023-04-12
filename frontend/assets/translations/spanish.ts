@@ -15,7 +15,7 @@ const values = {
       sign_transaction_title: 'Firmar Transacción',
       token_title: 'Billetera',
       view_network_title: 'Redes',
-      view_wallet_title: 'Billetera',
+      view_wallet_title: 'Billetera'
   },
   ConnectionRequest: {
       approve_button: 'Aprobar',
@@ -23,7 +23,7 @@ const values = {
       reject_button: 'Rechazar',
       rejected: "Rechazado por el Usuario",
       title: 'Solicitud de conexión',
-      wallet_select_instructions: 'Seleccionar Billetera(s)',
+      wallet_select_instructions: 'Seleccionar Billetera(s)'
   },
   CreateNetwork: {
   chainId_placeholder: 'Ingrese Chain ID',
@@ -32,17 +32,22 @@ const values = {
   rpcUrl_placeholder: 'Ingrese RPC Url',
   submit_button: 'Guardar Red',
   symbol_placeholder: 'Ingrese Chain Symbol',
+  button_save: 'Guardar'
   },
   CreateWallet: {
     instructions : 'Al crear una nueva billetera, recibirá una secuencia de mnemónicos que representan su "contraseña personal". Cualquier persona con esta secuencia puede reconfigurar su billetera en cualquier dispositivo nuevo. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
     instructions_button: 'Generar',
-    mnemonic_confirm_button: 'Confirmar mnemotécnico',
+    instructions_newWwallet: 'Nueva Billetera',
+    mnemonic_confirm_button: 'Continuar',
     mnemonic_confirm_instructions: 'Guardar frase mnemotécnica',
     mnemonic_error: 'Las frases mnemotécnicas deben coincidir',
     mnemonic_error_button: 'Continuar',
     name_entry_button: 'Guardar billetera',
     name_entry_button_loadingtext: 'Enviando',
     name_entry_input_placeholder: 'Establecer nombre de billetera',
+    name_wallet: 'Nombre de la Billetera',
+    instructions_nameWallet: 'Establecer nombre de billetera',
+    mnemonic_instructions: 'Seleccione el pedido y guarde estas palabras. Si los pierdes nunca podrás recuperar tu billetera'
   },
   LegacyEthSign: {
       approve_button: 'Aprobar',
@@ -81,12 +86,13 @@ const values = {
     nft_button: 'NFTS',
     password_button: 'CONTRASEÑA',
     qr_scan_button: 'ESCANER QR',
-    wallet_button: 'BILLETERAS',
+    wallet_button: 'BILLETERAS'
   },
   NewWallet: {
+    about: "Crea una nueva billetera o si ya tienes una recuperala atraves de la frase de seguridad",
     create_button: 'Crear Billetera',
-    instructions: 'Crear Nueva o recuperar usando mnemónicos',
-    recover_button: 'Recuperar Billetera',
+    instructions: 'Tu Billetera',
+    recover_button: 'Recuperar Billetera'
   },
   PasswordComponent: {
       error_message: 'Contraseña invalida',
@@ -117,13 +123,14 @@ const values = {
     es: 'Español',
     pt: 'Portugués',
     qu: 'Quechua',
-    nah: 'Nahuatl',
+    nah: 'Nahuatl'
   },
   SelectNetwork: {
+    title: 'Redes',
     new_button: 'Nueva Red',
     select_button: 'Seleccione Red',
     select_button_tooltip: 'Mas Opciones',
-    title: 'Redes'
+    select_network: 'Seleccione o crear una nueva red'
   },
   SelectWallet: {
     new_button: 'Nueva billetera',
@@ -183,7 +190,10 @@ const values = {
       send_token_button: 'Enviar'
     },
     ViewNetwork: {
-      title: 'Redes'
+      title: 'Redes',
+      edit_button: 'Editar',
+      active_network: 'Red Activa',
+      use_network: 'Usar Red'
     },
   ViewWallet: {
     clear_button: 'Limpiar Transacciones',
@@ -192,7 +202,17 @@ const values = {
     tab_list: ['Valores en cartera', 'Transacciones'],
     title: 'Billetera',
     transactions_placeholder: 'Insertar historial de transacciones'
-  }
+  },
+    SupportPage:{
+      title: 'Contacto',
+      introduction: 'Si tienes problemas con nuestra aplicacion, por favor contactanos a support@xsucre.com o usa el siguiente formulario',
+      to_send: 'De',
+      subject_send:'Asunto',
+      describe_issue: 'Describe tu problema',
+      button_send: 'Enviar correo'
+
+    }
+
 };
 
 export default values;

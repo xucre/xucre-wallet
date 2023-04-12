@@ -35,14 +35,18 @@ const values = {
     },
       CreateWallet: {
         instructions: 'Ao criar uma nova carteira, você receberá uma sequência de mnemônicos que representam sua "senha pessoal". Qualquer pessoa com essa sequência pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possível. Somente você deve ter acesso a essas informações.',
-        instructions_button: 'Gerar',
-        mnemonic_confirm_button: 'Confirmar mnemônico',
+        instructions_button: 'Proximo',
+        instructions_newWwallet: 'Nova Carteira',
+        mnemonic_confirm_button: 'Proximo',
         mnemonic_confirm_instructions: 'Salvar frase mnemônica',
         mnemonic_error: 'As frases mnemônicas devem corresponder',
-        mnemonic_error_button: 'Continuar',
+        mnemonic_error_button: 'Proximo',
         name_entry_button: 'Salvar carteira',
         name_entry_button_loadingtext: 'Enviando',
         name_entry_input_placeholder: 'Definir nome da carteira',
+        name_wallet: 'Nome da carteira',
+    // chaves de classificação eslint-disable-next-line
+    instructions_nameWallet: 'Defina o nome da sua carteira'
       },
       LegacyEthSign: {
         approve_button: 'Aprovar',
@@ -84,10 +88,11 @@ const values = {
         wallet_button: 'CARTEIRAS',
       },
       NewWallet: {
+        about: "Crie uma nova carteira ou se já tiver uma recupere-a através da sua frase de segurança",
         create_button: 'Criar Carteira',
-        instructions: "Crie novo ou recupere de mnenomic",
-        recover_button: 'Recuperar carteira',
-      },
+        instruções: "Sua Carteira",
+        recovery_button: 'Recuperar Carteira',
+         },
       PasswordComponent: {
         error_message: 'Senha Invalida',
         form_label: 'Senha ',
@@ -189,7 +194,7 @@ const values = {
         clear_button: 'Limpar transações',
         holdings_placeholder: 'Inserir Holdings de moedas',
         new_button: 'Adicionar Token',
-        tab_list: ['Participações', 'Transações', , 'NFTs'],
+        tab_list: ['Participações', 'Transações'],
         title: 'Carteira',
         transaction_placeholder: 'Inserir histórico de transações',
       }

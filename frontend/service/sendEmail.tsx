@@ -1,22 +1,73 @@
-import qs from 'qs';
-import { Linking } from 'react-native';
+const sendEmail = (to, subjectField, body, navigation) => {
+    //Main Params
+    console.log('to', to);
+    console.log('subject', subjectField);
+    console.log('body', body);
 
-export async function sendEmail(to, subject, body, options = {}) {
-    const { cc } = options;
-    let url = `mailto:${to}`;
-    // Create email link query
-    const query = qs.stringify({
-        subject: subject,
-        body: body,
-        cc: cc,
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Bearer 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");
+
+    
+
+    const message = JSON.stringify({
+        personalizations:[
+            {
+            to:
+                [
+                    {
+                        email: to,
+                        name:'User'
+                    }
+                ],    
+            subject: subjectField
+            }
+        ],
+        content: 
+            [
+                {
+                    type: 'text/plain', 
+                    value: body
+                }
+            ],
+        from:
+            {
+                email:'carevalo@ennube.solutions',
+                name:'Cristhian Arevalo'
+            },
+        reply_to:
+            {	
+                email: 'pjacome@ennube.solutions',
+                name: 'Pablo Jacome'
+                }
     });
-    if (query.length) {
-        url += `?${query}`;
+
+    const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: message,
+        redirect: 'follow'
+    };
+
+    const emailCall = async () => {
+        console.log('requestOptions1 ', requestOptions)
+        try {
+            await fetch(
+                'https://api.sendgrid.com/v3/mail/send', requestOptions)
+                .then(response => {
+                    response.json()
+                        .then(data => {
+                            console.log('value: ' + JSON.stringify(response));
+                        });
+                })
+                navigation.navigate('ViewWallet');       
+        }
+        catch (error) {
+            console.error('error', error);
+        }
     }
-    // check if we can use this link
-    const canOpen = await Linking.canOpenURL(url);
-    if (!canOpen) {
-        throw new Error('Provided URL can not be handled');
-    }
-    return Linking.openURL(url);
+
+    return emailCall();
 }
+
+export default sendEmail;

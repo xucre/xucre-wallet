@@ -30,19 +30,23 @@ const values = {
         explorer_placeholder: 'Block Explorer URL nisqapi qillqay (munasqa)',
         name_placeholder: 'Sutita qillqay',
         rpcUrl_placeholder: 'RPC URL nisqapi qillqay',
-        submit_button: 'Llika waqaychay',
+        submit_button: 'Waqaychay',
         symbol_placeholder: 'Kadena siqiman yaykuy',
       },
   CreateWallet: {
     instructions : 'Musuq billetera ruwachkaspa huk secuencia mnemónicas chaskinki mayqinkunachus "kikin contraseñaykita" riqsichinku. Pipas kay qatiqniyuqqa mayqin musuq dispositivopipas billeteraykita wakmanta ruwayta atinman. Atikusqanman hina allinta waqaychay. Kay willakuymanqa qamllam haykunayki.',
-    instructions_button: 'Ñawpaqchay',
-    mnemonic_confirm_button: 'Mnemonicota takyachiy',
+    instructions_button: 'Qhipaman',
+    instructions_newWwallet: 'Musuq Billetera',
+    mnemonic_confirm_button: 'Qhipaman',
     mnemonic_confirm_instructions: 'Mnemonico nisqa rimayta waqaychay',
     mnemonic_error: 'Mnemonico rimaykuna tupanan tiyan',
-    mnemonic_error_button: 'Hinallay',
+    mnemonic_error_button: 'Qhipaman',
     name_entry_button: 'Qillqata waqaychay',
     suti_yaykuchiy_button_loadingtext: 'Kachay',
     name_entry_input_placeholder: 'Belletera sutita churay',
+    name_wallet: 'Belletera suti',
+     // eslint-disable-qhipa-chiru t'aqa-llavekuna
+    instructions_nameWallet: 'Billeteraykipa sutinta churay',
   },
   LegacyEthSign: {
     approve_button: 'Aprobay',
@@ -84,8 +88,9 @@ const values = {
     wallet_button: 'BALLEERAS'
   },
   NewWallet: {
+    about: "Huk musuq billetera ruway utaq sichus alreade hukniyuq kanki chayta kutichiy harkay rimayniykiwan",
     create_button: 'Belleterata ruway',
-    instructions: "Musuq kamay icha mnenomic nisqamanta hurquy",
+    instructions: "Billeterayki",
     recover_button: 'Qillqata kutichiy',
   },
   PasswordComponent: {
@@ -189,7 +194,7 @@ const values = {
     clear_button: 'Rantinakuykunata ch\'uyanchana',
     holdings_placeholder: 'Qolqe hap\'inakunata churay',
     new_button: 'Token yapay',
-    tab_list: ['Holdings nisqa', 'Transacciones nisqakuna', 'NFTs nisqakuna'],
+    tab_list: ['Holdings nisqa', 'Transacciones nisqakuna'],
     title: 'Belletera',
     transactions_placeholder: 'Ruranamanta willayta churay',
   }

@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import {useIsFocused} from '@react-navigation/native';
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
@@ -35,7 +33,6 @@ import {
   VStack,
 } from "native-base";
 import React, {createRef, useEffect, useState} from "react";
-// eslint-disable-next-line react-native/split-platform-components
 import { FlatList, Linking, PermissionsAndroid, TouchableOpacity, View } from "react-native";
 import Communications from 'react-native-communications';
 import Contact from 'react-native-contacts';
@@ -46,7 +43,6 @@ import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeWallet, language as stateLanguage } from "../../service/state";
 import whatsapp from "../../service/whatsapp";
-
 
 
 
@@ -110,9 +106,11 @@ export default function QRWallet ({navigation, route}) {
             viewBox={`0 0 256 256`}
           />
           <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
+          <Text>Address: {_wallet.wallet.address}</Text>
+          <Text>Name: {_wallet.name}</Text>
         </Center>
-
         <View style={{backgroundColor: '#000', flex: 1}}>
+
       <FlatList
         data={contactList}
         renderItem={({item, index}) => {
@@ -136,12 +134,15 @@ export default function QRWallet ({navigation, route}) {
               }}
               
               >
+
               <View style={{alignItems: 'center',flexDirection: 'row'}}>
+
                 <Image
                   source={{
                     uri: 'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
                   }}
                   style={{height: 40, marginLeft: 15, width: 40}}
+
                 />
                 <View style={{padding: 10}}>
                   <Text style={{color: '#fff'}}>{item.displayName}</Text>
@@ -168,15 +169,15 @@ export default function QRWallet ({navigation, route}) {
                     }}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity
+{/*                  <TouchableOpacity
                   onPress={() => {
                     Linking.openURL(`https://web.whatsapp.com/send?phone=${item.phoneNumbers[0].number}`);
-                  }}>
-                 {/*  <Image
+                  }}> 
+                   <Image
                     source={require('../images/call.png')}
                     style={{width: 20, height: 20, tintColor: '#fff'}}
-                  /> */}
-                </TouchableOpacity>
+                  /> 
+                </TouchableOpacity> */}
               </View>
             </TouchableOpacity>
           );

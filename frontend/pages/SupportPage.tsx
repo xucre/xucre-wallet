@@ -9,8 +9,14 @@ import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useRecoilState } from 'recoil';
 
-import { sendEmail } from '../service/sendEmail';
+import { language as stateLanguage} from '../../frontend/service/state';
+import sendEmail from '../service/sendEmail'
+import { twillioEmail } from '../service/twillioEmail';
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
+import sendgrid from '@sendgrid/mail';
+
+import translations from '../assets/translations';
+
 
 
 
@@ -18,62 +24,64 @@ import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
 
 export default function SuportPage({ navigation, route }) {
 
+    const [language, ] = useRecoilState(stateLanguage);
+
     const [name, setName] = useState('');
     const [issue, setIssue] = useState('');
+    const [toEmail, setToEmail] = useState('');
+
     const handleNameChange = (event) => {
         //console.log(event.nativeEvent.text);
         setName(event.nativeEvent.text)
-      }
-      
+    }
+
     const handleIssueChange = (event) => {
         //console.log(event.nativeEvent.text);
         setIssue(event.nativeEvent.text)
-      }
-
-    function sendEmailButton(){
-        console.log('sendEmail', name);
-        sendEmail(
-            'carevalo@ennube.solutions',
-               name,
-            issue,
-         { cc: 'pjacome@ennube.solutions' }
-        ).then(() => {
-            console.log('Your message was successfully sent!');
-        });
     }
 
+    const handletoEmailChange = (event) => {
+        //console.log(event.nativeEvent.text);
+        setToEmail(event.nativeEvent.text)
+    }
+
+
     return (
-        
-        <View style={styles.support}>
-            
-            <Text style={styles.support1}>Support</Text>
+
+        <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
+
+
+            <Text style={styles.support1}>{translations[language].SupportPage.title}</Text>
 
             <Text style={[styles.ifYouHaveContainer, styles.contactUsViaTypo]}>
                 <Text
-                    style={styles.ifYouHave}
-                >{`If you have problems with our app please contact us at `}</Text>
-                <Text style={styles.supportxsucrecom}>support@xsucre.com</Text>
-                <Text style={styles.ifYouHave}> or use the form below</Text>
+                    style={styles.ifYouHave}>{translations[language].SupportPage.introduction}</Text>
             </Text>
             <View style={[styles.input, styles.inputPosition]}>
-                <Text style={styles.email}>Subject</Text>
+                <Text style={styles.email}> {translations[language].SupportPage.to_send} </Text>
                 <View style={[styles.rectangleParent, styles.groupItemLayout]}>
-                    <Input style={styles.textoImput} value={name} onChange={handleNameChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder="Subject" />
+                    <Input style={styles.textoImput} value={toEmail} onChange={handletoEmailChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder={translations[language].SupportPage.to_send} />
                 </View>
             </View>
 
-            <View style={[styles.input1, styles.inputPosition]}>
-                <Text style={styles.email}>Describe your issue</Text>
+            <View style={[styles.input, styles.inputPosition1]}>
+                <Text style={styles.email}>{translations[language].SupportPage.subject_send}</Text>
+                <View style={[styles.rectangleParent, styles.groupItemLayout]}>
+                    <Input style={styles.textoImput} value={name} onChange={handleNameChange} placeholderTextColor={'white'} w="105%" mb={2} placeholder={translations[language].SupportPage.subject_send} />
+                </View>
+            </View>
+
+            <View style={[styles.input1, styles.inputPosition2]}>
+                <Text style={styles.email}>{translations[language].SupportPage.describe_issue}</Text>
                 <View style={[styles.rectangleGroup, styles.groupLayout]}>
-                   {/*  <Input style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholderTextColor={'white'} w="105%" mb={2}  placeholder="Suggestions and / or report problems" /> */}
-                    <TextArea h={20} style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholder="Text Area Placeholder"  placeholderTextColor={'white'} w="105%" h="200"  maxW="400" />
+                    {/*  <Input style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholderTextColor={'white'} w="105%" mb={2}  placeholder="Suggestions and / or report problems" /> */}
+                    <TextArea h={20} style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholder={translations[language].SupportPage.describe_issue} placeholderTextColor={'white'} w="105%" h="200" maxW="400" />
                 </View>
             </View>
 
-            <Button style={styles.buttonContainer} onPress={() => sendEmailButton()}><Text color={'#000'}>Send Email</Text></Button>
-        
-        </View>
-       
+            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue, navigation)}><Text color={'#000'}>{translations[language].SupportPage.button_send}</Text></Button>
+
+        </Box>
     )
 }
 
@@ -88,7 +96,6 @@ const styles = StyleSheet.create({
     rectangleLayout: {
         height: 60,
         width: 330,
-        left: 33,
         position: "absolute",
         borderColor: '#fff',
     },
@@ -102,6 +109,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: "solid",
         textAlign: "center",
+        position: 'absolute'
     },
     support1: {
         top: 39,
@@ -112,7 +120,6 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         letterSpacing: -0.2,
         color: Color.white,
-        left: 19,
         position: "absolute",
     },
     ifYouHaveContainer: {
@@ -121,7 +128,6 @@ const styles = StyleSheet.create({
     contactUsViaTypo: {
         width: 330,
         fontFamily: FontFamily.interRegular,
-        left: 20,
         lineHeight: 21,
         fontSize: FontSize.size_base,
         textAlign: "left",
@@ -140,16 +146,26 @@ const styles = StyleSheet.create({
     },
     inputPosition: {
         width: 351,
-        left: 20,
         position: "absolute",
     },
+    inputPosition1: {
+        width: 351,
+        top: 285,
+        position: "absolute",
+    },
+
+    inputPosition2: {
+        width: 351,
+        top: 380,
+        position: "absolute",
+    },
+
     rectangleParent: {
         top: 27,
     },
     groupItemLayout: {
         height: 47,
         width: 351,
-        left: 0,
         position: "absolute",
     },
     groupBorder: {
@@ -163,12 +179,10 @@ const styles = StyleSheet.create({
     groupItemLayout: {
         height: 47,
         width: 351,
-        left: 0,
         position: "absolute",
     },
     youremailcom: {
         top: 12,
-        left: 19,
         width: 311,
         color: Color.dimgray,
         position: "absolute",
@@ -200,12 +214,12 @@ const styles = StyleSheet.create({
         width: 339,
         top: 0,
         height: 200,
-        verticalAlign: 'top', 
+        verticalAlign: 'top',
         position: "relative",
         borderBottomWidth: 1,
         multiline: true,
         textAlign: "left"
-        
+
 
     },
 
@@ -236,8 +250,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D4E815',
         position: 'relative',
         width: 370,
-        top: 580,
-        left: 20,
+        top: 650,
         textAlign: "left",
         borderRadius: Border.br_sm,
         borderWidth: 1,
