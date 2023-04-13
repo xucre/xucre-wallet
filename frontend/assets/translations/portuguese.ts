@@ -32,50 +32,51 @@ const values = {
       rpcUrl_placeholder: 'Digite o URL RPC',
       submit_button: 'Salvar rede',
       symbol_placeholder: 'Digite o símbolo da cadeia',
+      button_save: 'Salvar'
     },
-      CreateWallet: {
-        instructions: 'Ao criar uma nova carteira, você receberá uma sequência de mnemônicos que representam sua "senha pessoal". Qualquer pessoa com essa sequência pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possível. Somente você deve ter acesso a essas informações.',
-        instructions_button: 'Proximo',
-        instructions_newWwallet: 'Nova Carteira',
-        mnemonic_confirm_button: 'Proximo',
-        mnemonic_confirm_instructions: 'Salvar frase mnemônica',
-        mnemonic_error: 'As frases mnemônicas devem corresponder',
-        mnemonic_error_button: 'Proximo',
-        name_entry_button: 'Salvar carteira',
-        name_entry_button_loadingtext: 'Enviando',
-        name_entry_input_placeholder: 'Definir nome da carteira',
-        name_wallet: 'Nome da carteira',
-    // chaves de classificação eslint-disable-next-line
-    instructions_nameWallet: 'Defina o nome da sua carteira'
+    CreateWallet: {
+      instructions: 'Ao criar uma nova carteira, você receberá uma sequência de mnemônicos que representam sua "senha pessoal". Qualquer pessoa com essa sequência pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possível Somente você deve ter acesso a essas informações.',
+      instructions_button: 'Proximo',
+      instructions_newWwallet: 'Nova Carteira',
+      mnemonic_confirm_button: 'Proximo',
+      mnemonic_confirm_instructions: 'Salvar frase mnemônica',
+      mnemonic_error: 'As frases mnemônicas devem corresponder',
+      mnemonic_error_button: 'Proximo',
+      name_entry_button: 'Salvar carteira',
+      name_entry_button_loadingtext: 'Enviando',
+      name_entry_input_placeholder: 'Definir nome da carteira',
+      name_wallet: 'Nome da carteira',
+      instructions_nameWallet: 'Definir seu nome de carteira',
+      mnemonic_instructions: 'Selecione o pedido e salve essas palavras. Se você os perder, nunca será capaz de recuperar sua carteira '
       },
-      LegacyEthSign: {
-        approve_button: 'Aprovar',
-        header: 'Pedido de Assinatura',
-        reject_button: 'Rejeitar',
-        title: 'Mensagem de assinatura'
-      },
-      LegacySendTransaction: {
-        amount: 'Valor: ',
-        approve_button: 'Aprovar',
-        from :'De: ',
-        header: 'Assinar transação',
-        reject_button: 'Rejeitar',
-        title: 'Enviar transação',
-        to: 'Para: '
-      },
-      LegacySignTransaction: {
-        approve_button: 'Aprovar',
-        header: 'Assinar transação',
-        reject_button: 'Rejeitar',
-        title: 'Assinar Transação'
-      },
-      LegacySignTypedData: {
-        approve_button: 'Aprovar',
-        header: 'Solicitação de mensagem de assinatura',
-        header_origin: 'Origem: ',
-        reject_button: 'Rejeitar',
-        title: 'Mensagem de assinatura'
-      },
+    LegacyEthSign: {
+      approve_button: 'Aprovar',
+      header: 'Pedido de Assinatura',
+      reject_button: 'Rejeitar',
+      title: 'Mensagem de assinatura'
+    },
+    LegacySendTransaction: {
+      amount: 'Valor: ',
+      approve_button: 'Aprovar',
+      from :'De: ',
+      header: 'Assinar transação',
+      reject_button: 'Rejeitar',
+      title: 'Enviar transação',
+      to: 'Para: '
+    },
+    LegacySignTransaction: {
+      approve_button: 'Aprovar',
+      header: 'Assinar transação',
+      reject_button: 'Rejeitar',
+      title: 'Assinar Transação'
+    },
+    LegacySignTypedData: {
+      approve_button: 'Aprovar',
+      header: 'Solicitação de mensagem de assinatura',
+      header_origin: 'Origem: ',
+      reject_button: 'Rejeitar',
+      title: 'Mensagem de assinatura'
+    },
       Listener: {
         failure_message: 'Falha na transação',
         success_message: 'Transação bem-sucedida'
@@ -91,8 +92,8 @@ const values = {
         about: "Crie uma nova carteira ou se já tiver uma recupere-a através da sua frase de segurança",
         create_button: 'Criar Carteira',
         instruções: "Sua Carteira",
-        recovery_button: 'Recuperar Carteira',
-         },
+        recover_button: 'Recuperar Carteira',
+      },
       PasswordComponent: {
         error_message: 'Senha Invalida',
         form_label: 'Senha ',
@@ -125,16 +126,17 @@ const values = {
         nah: 'Nahuatl'
       },
       SelectNetwork: {
+        title: 'Redes',
         new_button: 'Nova Rede',
         select_button: 'Selecionar rede',
         select_button_tooltip: 'Mais opções',
-        title: 'Redes'
+        Select_network: 'Selecione ou crie uma nova rede'
       },
       SelectWallet: {
         new_button: 'Nova carteira',
         select_button: 'Selecionar carteira',
         select_button_tooltip: 'Mais opções',
-        title: 'Redes'
+        title: 'Selecionar carteira'
       },
       SendToken: {
         address_placeholder: 'Digite o endereço do destinatário',
@@ -157,7 +159,7 @@ const values = {
         form_helper_text: 'Deve ter pelo menos 6 caracteres.',
         form_new_header: 'Senha',
         form_old_header: 'Senha atual',
-        form_save_button: 'Save',
+        form_save_button: 'Salvar',
         password_placeholder: 'Senha',
         title: 'Definir Senha'
       },
@@ -188,7 +190,10 @@ const values = {
         send_token_button: 'Enviar'
       },
       ViewNetwork: {
-        title: 'Rede'
+        title: 'Rede',
+        edit_button: 'Editar',
+        active_network: 'Rede Ativa',
+        use_network: 'Use Rede'
       },
       ViewWallet: {
         clear_button: 'Limpar transações',
@@ -198,6 +203,16 @@ const values = {
         title: 'Carteira',
         transaction_placeholder: 'Inserir histórico de transações',
       }
+      SupportPage:{
+      title: 'Suporte',
+      introduction: 'Se você tiver problemas com nosso aplicativo, entre em contato conosco em support@xsucre.com ou use o formulário abaixo',
+      to_send: 'De',
+      subject_send:'Sujeito',
+      describe_issue: 'Descreva seu problema',
+      button_send: 'Enviar Email'
+
+      }
+
     };
     
       export default values;
