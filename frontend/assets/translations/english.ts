@@ -211,7 +211,9 @@ const values = {
     title: 'Wallet',
     transactions_placeholder: 'Insert Transaction History',
   },
-  
+  WalletHistory: {
+    title: 'History'
+  }
 
 };
 

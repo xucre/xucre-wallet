@@ -55,6 +55,7 @@ import QRWallet from './pages/wallet/QRWallet';
 import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
+import WalletHistory from './pages/wallet/WalletHistory';
 import LegacyConnectionRequest from './pages/walletConnect/v1/ConnectionRequest';
 import LegacyEthSign from './pages/walletConnect/v1/EthSign';
 import LegacySendTransaction from './pages/walletConnect/v1/SendTransaction';
@@ -198,6 +199,10 @@ export const AppWrapper = () => {
             <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
               headerTitleAlign: 'left',
               title: translations[language].ViewWallet.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="WalletHistory" component={WalletHistory} options={{ 
+              headerTitleAlign: 'left',
+              title: translations[language].WalletHistory.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
               title: '', 
