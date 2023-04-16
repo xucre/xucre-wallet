@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 /* eslint-disable functional/no-let */
 import { MaterialIcons } from "@expo/vector-icons";
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
@@ -30,15 +31,14 @@ import {
   ScrollView,
   SunIcon,
   Text,
-  Tooltip,
   useColorMode,
   useColorModeValue,
   VStack,
 } from "native-base";
-import React, {createRef, useEffect, useState} from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { Col, Grid, Row } from "react-native-easy-grid";
-import { Area, Chart, HorizontalAxis, Line, VerticalAxis } from 'react-native-responsive-linechart';
+import { Area, Chart, HorizontalAxis, Line, Tooltip, VerticalAxis } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
@@ -55,7 +55,6 @@ import { iconNames } from '../../store/network';
 import { getTokenByChain } from '../../store/token';
 import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
 import NftList from "../nft/NftList";
-const chainName = 'matic-mainnet';
 
 type Holding = {
   readonly timestamp: string;
@@ -115,9 +114,9 @@ type OutputObject = {
   }[];
   readonly itemsWithRecentOpenQuote: readonly {
     readonly contract: {
-       readonly name: string;
-       readonly ticker_symbol: string;
-       readonly address: string;
+      readonly name: string;
+      readonly ticker_symbol: string;
+      readonly address: string;
     };
     readonly mostRecentOpenQuote: {
       readonly balance: number;
@@ -167,17 +166,25 @@ function TabItem({
   );
 }
 
-export default function WalletHistory ({navigation, route}) {
+export default function WalletHistory({ navigation, route }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [chainName, setChainName] = useState('matic-mumbai');
+  const handleNameChange = (event) => {
+    //console.log(event.nativeEvent.text);
+    setChainName(event.nativeEvent.text)
+  }
   const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
-  const [network, ] = useRecoilState(activeNetwork);
+  const [network,] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
+  const [currentHoldings, setCurrentHoldings] = useState({
+    y: '0.00'
+  });
   const [holdings, setHoldings] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [openQuotes, setOpenQuotes] = useState([]);
@@ -191,7 +198,65 @@ export default function WalletHistory ({navigation, route}) {
 
   // Transitions
   const [displayTooltip, setDisplayTooltip] = useState(false);
-  
+
+  const getData = async () => {
+
+    const historyResults = await getWalletHistory(wallet.address, chainName);
+    //console.log(historyResults);
+    console.log('hsitory retrieved');
+    const outputData = processJsonData(historyResults);
+    //console.log(outputData)
+    //console.log(outputData.openQuotesByDay[0]);
+
+    // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
+    const isReady = outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
+    const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, i) => {
+      if (isReady) {
+        if (i === 0) {
+          return {
+            direction: finalVal.direction,
+            quotes: [...finalVal.quotes, {
+              date: d.date,
+              totalQuote: 14555.36
+            }]
+          }
+        }
+        const upAmount = i > 0 ? (finalVal.quotes[i-1].totalQuote + (Math.random()*1500)) : 11255.32;
+        const downAmount = i > 0 ? (finalVal.quotes[i-1].totalQuote - (Math.random()*1500)) : 12655.53;
+        const changeCourse = (upAmount < 300000 && finalVal.direction === 'up') || (downAmount < 10000 && finalVal.direction === 'down');
+        const direction = !changeCourse ? finalVal.direction : finalVal.direction === 'up' ? 'down' : 'up';
+        return {
+          direction,
+          quotes: [...finalVal.quotes, {
+            date: d.date,
+            totalQuote: direction === 'up' ? upAmount : downAmount
+          }]
+        }
+      }
+
+      return  {
+        direction: finalVal.direction, 
+        quotes: [...finalVal.quotes, d]
+      };
+    }, {
+      direction: 'down',
+      quotes: []
+    })
+    console.log(openQuotes.quotes.length);
+    // END TESTING PORTION
+    setHoldings(outputData.itemsWithRecentOpenQuote);
+    const finalQuotes = openQuotes.quotes.map((d) => {
+      return {
+        meta: {
+          'date': d.date
+        },
+        x: moment(d.date).unix(),
+        y: Math.round((d.totalQuote + Number.EPSILON) * 100) / 100
+      }
+    });
+    setCurrentHoldings(finalQuotes[0])
+    setChartData(finalQuotes);
+  }
 
   useEffect(() => {
     if (_wallet.name === '') {
@@ -205,32 +270,19 @@ export default function WalletHistory ({navigation, route}) {
   }, [_wallet, network]);
 
   useEffect(() => {
-    const runAsync = async () => {
-      
-      const historyResults = await getWalletHistory(wallet.address, chainName);
-      //console.log(historyResults);
-      const outputData = processJsonData(historyResults);
-      console.log(outputData.openQuotesByDay[0]);
-      setHoldings(outputData.itemsWithRecentOpenQuote);
-      
-      setChartData(outputData.openQuotesByDay.map((d) => {
-        return {
-          meta: {
-            'date': d.date
-          },
-          x: moment(d.date).valueOf(),
-          y: d.totalQuote
-        }
-      }));
-    }
     if (wallet.address) {
-      runAsync();
+      setHoldings([]);
+      setCurrentHoldings({
+        y: '0.00'
+      });
+      setChartData([]);
+      getData();
     }
-  }, [wallet])
+  }, [wallet, chainName])
 
-  
 
-  useEffect(() => {    
+
+  useEffect(() => {
     //setHoldings([]);
   }, [])
 
@@ -247,8 +299,8 @@ export default function WalletHistory ({navigation, route}) {
     setRefreshing(true);
     setHoldings([]);
     setChartData([]);
-    
-    setTimeout(async() => {
+
+    setTimeout(async () => {
       setRefreshing(false);
     }, 100)
   }, []);
@@ -260,37 +312,38 @@ export default function WalletHistory ({navigation, route}) {
 
   const processJsonData = (jsonData) => {
     const output = {
+      isTokenValue: false,
       itemsWithRecentOpenQuote: [],
       openQuotesByDay: [],
     };
-  
+
     if (jsonData.error) {
-      console.error(jsonData.error_message);
+      //console.error(jsonData.error_message);
       return output;
     }
-  
+
     jsonData.data.items.forEach((item) => {
       let mostRecentOpenQuote = null;
-  
+
       item.holdings.forEach((holding) => {
         const date = holding.timestamp.split("T")[0];
-  
+
         if (holding.open) {
           const existingEntry = output.openQuotesByDay.find((entry) => entry.date === date);
-  
+
           if (existingEntry) {
-            // eslint-disable-next-line functional/immutable-data
             existingEntry.totalQuote += holding.open.quote;
+            existingEntry.quoteRate = holding.quote_rate;
           } else {
             output.openQuotesByDay.push({ date, totalQuote: holding.open.quote });
           }
-  
+
           if (!mostRecentOpenQuote || mostRecentOpenQuote.timestamp < holding.timestamp) {
             mostRecentOpenQuote = holding.open;
           }
         }
       });
-  
+
       if (mostRecentOpenQuote) {
         output.itemsWithRecentOpenQuote.push({
           contract: {
@@ -302,14 +355,14 @@ export default function WalletHistory ({navigation, route}) {
         });
       }
     });
-  
+
     return output;
   }
-  
+
 
   return (
     <DashboardLayout title={_wallet.name}>
-      <Box         
+      <Box
         _light={{ backgroundColor: 'white' }}
         _dark={{ backgroundColor: 'black' }}
         height={'100%'}
@@ -331,24 +384,83 @@ export default function WalletHistory ({navigation, route}) {
           </VStack>*/
         }
 
-        { chartData.length > 0 && 
+        {chartData.length > 0 &&
           <Box padding={0} borderRadius={10} marginX={2} >
+            <HStack space={2} justifyContent={'space-between'}>
+              <VStack>
+                <Text fontSize={'md'} fontWeight={'bold'} color={'coolGray.500'} paddingTop={3}>Total Balance</Text>
+                <HStack paddingBottom={0} space={1}>
+                  <Heading borderBottomColor={'#D4E815'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={'coolGray.100'} >${currentHoldings.y}</Text></Heading>              
+                </HStack>  
+              </VStack>
+              <Menu w="160" shouldOverlapWithTrigger={false} trigger={triggerProps => {
+                  return <Button alignSelf="center" variant="ghost" color={'coolGray.300'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'coolGray.300'} marginLeft={-1} />} {...triggerProps}>
+                          <Text color={'coolGray.300'} fontWeight={'bold'}>{chainName}</Text>
+                        </Button>
+                        ;
+                }}>
+                    <Menu.Item onPress={() => {setChainName('matic-mumbai')}}><Text>matic-mumbai</Text></Menu.Item>
+                    <Menu.Item onPress={() => {setChainName('matic-mainnet')}}><Text>matic-mainnet</Text></Menu.Item>
+                    <Menu.Item onPress={() => {setChainName('eth-mainnet')}}><Text>eth-mainnet</Text></Menu.Item>
+                  </Menu>
+              
+            </HStack>
+            
             <Chart
               // eslint-disable-next-line react-native/no-inline-styles
               style={{ height: 300, width: '100%' }}
               data={chartData}
-              padding={{ bottom: 20, left: 0, right: 0, top: 20 }}
-              yDomain={{ max: 100000, min: -5000}}
+              padding={{ bottom: 20, left: 10, right: 10, top: 50 }}
             >
-              <Area theme={{ gradient: { from: { color: '#D4E815' }, to: { color: 'black', opacity: 0.4 } }}} />
+              <HorizontalAxis />
+              <Area theme={{ gradient: { from: { color: '#D4E815' }, to: { color: 'black', opacity: 0.4 } } }} />
+              <Line
+                tooltipComponent={
+                  <Tooltip theme={{                   
+                    formatter: (value) => {
+                      return '$'+ value.y
+                    },
+                    label: {
+                      color: 'black',
+                      textAnchor: 'middle',
+                    },
+                    shape: {
+                      color: '#D4E815',
+                      dx: 0,
+                      dy: 20,
+                      height: 24,
+                      rx: 4,
+                      width: 85,
+                    }, 
+                  }} />
+                }
+                smoothing={'cubic-spline'}
+                theme={{
+                  scatter: { 
+                    default: { 
+                      color: '#E1F245',
+                      height: 0, 
+                      rx: 4, 
+                      width: 0, 
+                    }, 
+                    selected: {
+                      color: 'white',
+                    }
+                  },
+                  stroke: { 
+                    color: '#E1F245', 
+                    width: 1 
+                  }, 
+                }}
+              />
             </Chart>
           </Box>
         }
-        <ScrollView 
+        <ScrollView
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={onRefresh}              
+              onRefresh={onRefresh}
             />
           }
         >
@@ -358,18 +470,18 @@ export default function WalletHistory ({navigation, route}) {
                 <VStack space={2} >
                   {
                     holdings.map((val, i) => {
-                      return (                        
-                        <SummaryItem key={val.name+i} token={val}/>                        
+                      return (
+                        <SummaryItem key={val.name + i} token={val} />
                       )
                     })
                   }
                 </VStack>
-                
+
               </Box>
             }
           </VStack>
         </ScrollView>
-        
+
         <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
       </Box>
     </DashboardLayout>

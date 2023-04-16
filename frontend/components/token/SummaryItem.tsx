@@ -30,17 +30,19 @@ export default function SummaryItem ({token}) {
   useEffect(() => {
     const runAsync = async () => {
       try {
-
-        const img = await getIconImage(token.contract.ticker_symbol.toLowerCase());
-        console.log('image retrieved', img.type);
-        const blob = new Blob([img.data], {type: "image/png"})
-        const fileReaderInstance = new FileReader();
-        fileReaderInstance.readAsDataURL(blob); 
-        // eslint-disable-next-line functional/immutable-data
-        fileReaderInstance.onload = () => {
-          //console.log(fileReaderInstance.result);
-          setTokenImage(fileReaderInstance.result as string);
+        if (token.contract.ticker_symbol) {
+          const img = await getIconImage(token.contract.ticker_symbol.toLowerCase());
+          console.log('image retrieved', img);
+          setTokenImage(img as string);
         }
+        
+        //const blob = new Blob([img.data], {type: "image/png"})
+        //const fileReaderInstance = new FileReader();
+        //fileReaderInstance.readAsDataURL(blob); 
+        //fileReaderInstance.onload = () => {
+          //console.log(fileReaderInstance.result);
+          //setTokenImage(fileReaderInstance.result as string);
+        //}
         
       } catch (err) {
         console.log('err', err);
@@ -60,13 +62,19 @@ export default function SummaryItem ({token}) {
     ) {
       //
     }
-    const icon_color = colorMode ==='dark'? 'white':'black';
+    const isDark = colorMode === 'dark';
     return (
       <>
         {tokenImage !== '' && 
-          <Avatar bg="primary.600" mr="1" source={{
+          <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} mr="1" source={{
               uri: tokenImage
             }}>
+              <Text>{iname}</Text>
+          </Avatar>
+        }
+
+        {tokenImage === '' && 
+          <Avatar bg="primary.600" mr="1" >
               <Text>{iname}</Text>
           </Avatar>
         }
@@ -92,7 +100,7 @@ export default function SummaryItem ({token}) {
        <Text 
            _light={{ color: 'coolGray.500' }}
            _dark={{ color: 'coolGray.400' }}
-           fontWeight="normal">{token.mostRecentOpenQuote.quote}</Text>
+           fontWeight="normal">{token.mostRecentOpenQuote.quote || 0}</Text>
        
      </HStack>
    </HStack>
