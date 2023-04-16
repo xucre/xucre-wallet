@@ -26,6 +26,7 @@ const values = {
       wallet_select_instructions: 'Selecionar carteira(s)',
     },
     CreateNetwork: {
+      button_save: 'Salvar',
       chainId_placeholder: 'Digite o ID da cadeia',
       explorer_placeholder: 'Digite a URL do Explorador de Blocos (opcional)',
       name_placeholder: 'Digite o nome',
@@ -33,49 +34,49 @@ const values = {
       submit_button: 'Salvar rede',
       symbol_placeholder: 'Digite o símbolo da cadeia',
     },
-      CreateWallet: {
-        instructions: 'Ao criar uma nova carteira, você receberá uma sequência de mnemônicos que representam sua "senha pessoal". Qualquer pessoa com essa sequência pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possível. Somente você deve ter acesso a essas informações.',
-        instructions_button: 'Proximo',
-        instructions_newWwallet: 'Nova Carteira',
-        mnemonic_confirm_button: 'Proximo',
-        mnemonic_confirm_instructions: 'Salvar frase mnemônica',
-        mnemonic_error: 'As frases mnemônicas devem corresponder',
-        mnemonic_error_button: 'Proximo',
-        name_entry_button: 'Salvar carteira',
-        name_entry_button_loadingtext: 'Enviando',
-        name_entry_input_placeholder: 'Definir nome da carteira',
-        name_wallet: 'Nome da carteira',
-    // chaves de classificação eslint-disable-next-line
-    instructions_nameWallet: 'Defina o nome da sua carteira'
+    CreateWallet: {
+      instructions: 'Ao criar uma nova carteira, você receberá uma sequência de mnemônicos que representam sua "senha pessoal". Qualquer pessoa com essa sequência pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possível Somente você deve ter acesso a essas informações.',
+      instructions_button: 'Proximo',
+      instructions_nameWallet: 'Definir seu nome de carteira',
+      instructions_newWwallet: 'Nova Carteira',
+      mnemonic_confirm_button: 'Proximo',
+      mnemonic_confirm_instructions: 'Salvar frase mnemônica',
+      mnemonic_error: 'As frases mnemônicas devem corresponder',
+      mnemonic_error_button: 'Proximo',
+      mnemonic_instructions: 'Selecione o pedido e salve essas palavras. Se você os perder, nunca será capaz de recuperar sua carteira ',
+      name_entry_button: 'Salvar carteira',
+      name_entry_button_loadingtext: 'Enviando',
+      name_entry_input_placeholder: 'Definir nome da carteira',
+      name_wallet: 'Nome da carteira',
       },
-      LegacyEthSign: {
-        approve_button: 'Aprovar',
-        header: 'Pedido de Assinatura',
-        reject_button: 'Rejeitar',
-        title: 'Mensagem de assinatura'
-      },
-      LegacySendTransaction: {
-        amount: 'Valor: ',
-        approve_button: 'Aprovar',
-        from :'De: ',
-        header: 'Assinar transação',
-        reject_button: 'Rejeitar',
-        title: 'Enviar transação',
-        to: 'Para: '
-      },
-      LegacySignTransaction: {
-        approve_button: 'Aprovar',
-        header: 'Assinar transação',
-        reject_button: 'Rejeitar',
-        title: 'Assinar Transação'
-      },
-      LegacySignTypedData: {
-        approve_button: 'Aprovar',
-        header: 'Solicitação de mensagem de assinatura',
-        header_origin: 'Origem: ',
-        reject_button: 'Rejeitar',
-        title: 'Mensagem de assinatura'
-      },
+    LegacyEthSign: {
+      approve_button: 'Aprovar',
+      header: 'Pedido de Assinatura',
+      reject_button: 'Rejeitar',
+      title: 'Mensagem de assinatura'
+    },
+    LegacySendTransaction: {
+      amount: 'Valor: ',
+      approve_button: 'Aprovar',
+      from :'De: ',
+      header: 'Assinar transação',
+      reject_button: 'Rejeitar',
+      title: 'Enviar transação',
+      to: 'Para: '
+    },
+    LegacySignTransaction: {
+      approve_button: 'Aprovar',
+      header: 'Assinar transação',
+      reject_button: 'Rejeitar',
+      title: 'Assinar Transação'
+    },
+    LegacySignTypedData: {
+      approve_button: 'Aprovar',
+      header: 'Solicitação de mensagem de assinatura',
+      header_origin: 'Origem: ',
+      reject_button: 'Rejeitar',
+      title: 'Mensagem de assinatura'
+    },
       Listener: {
         failure_message: 'Falha na transação',
         success_message: 'Transação bem-sucedida'
@@ -91,8 +92,8 @@ const values = {
         about: "Crie uma nova carteira ou se já tiver uma recupere-a através da sua frase de segurança",
         create_button: 'Criar Carteira',
         instruções: "Sua Carteira",
-        recovery_button: 'Recuperar Carteira',
-         },
+        recover_button: 'Recuperar Carteira',
+      },
       PasswordComponent: {
         error_message: 'Senha Invalida',
         form_label: 'Senha ',
@@ -120,21 +121,22 @@ const values = {
       SelectLanguage : {
         en: 'Inglês',
         es: 'Espanhol',
+        nah: 'Nahuatl',
         pt: 'Português',
         qu: 'Quíchua',
-        nah: 'Nahuatl'
       },
       SelectNetwork: {
+        Select_network: 'Selecione ou crie uma nova rede',
         new_button: 'Nova Rede',
         select_button: 'Selecionar rede',
         select_button_tooltip: 'Mais opções',
-        title: 'Redes'
+        title: 'Redes',
       },
       SelectWallet: {
         new_button: 'Nova carteira',
         select_button: 'Selecionar carteira',
         select_button_tooltip: 'Mais opções',
-        title: 'Redes'
+        title: 'Selecionar carteira'
       },
       SendToken: {
         address_placeholder: 'Digite o endereço do destinatário',
@@ -157,7 +159,7 @@ const values = {
         form_helper_text: 'Deve ter pelo menos 6 caracteres.',
         form_new_header: 'Senha',
         form_old_header: 'Senha atual',
-        form_save_button: 'Save',
+        form_save_button: 'Salvar',
         password_placeholder: 'Senha',
         title: 'Definir Senha'
       },
@@ -180,6 +182,14 @@ const values = {
         reject_button: 'Rejeitar',
         title: 'Mensagem de assinatura'
       },
+      SupportPage:{
+        button_send: 'Enviar Email',
+        describe_issue: 'Descreva seu problema',
+        introduction: 'Se você tiver problemas com nosso aplicativo, entre em contato conosco em support@xsucre.com ou use o formulário abaixo',
+        subject_send:'Sujeito',
+        title: 'Suporte',
+        to_send: 'De',
+      },
       SwapToken: {
         title: 'Carteira'
       },
@@ -188,7 +198,10 @@ const values = {
         send_token_button: 'Enviar'
       },
       ViewNetwork: {
-        title: 'Rede'
+        active_network: 'Rede Ativa',
+        edit_button: 'Editar',
+        title: 'Rede',
+        use_network: 'Use Rede'
       },
       ViewWallet: {
         clear_button: 'Limpar transações',
@@ -198,6 +211,7 @@ const values = {
         title: 'Carteira',
         transaction_placeholder: 'Inserir histórico de transações',
       }
+
     };
     
       export default values;

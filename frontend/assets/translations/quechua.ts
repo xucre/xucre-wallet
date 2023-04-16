@@ -1,52 +1,53 @@
 const values = {
    AddToken: {
-        address_placeholder: 'Token direccionta qillqay',
-        chain_placeholder: 'Kadena akllay', 
-        name_placeholder: 'Token sutita qillqay', 
-        submit_button: 'Tokenta waqaychay', 
-        title: 'Belletera'
-    },
-    App: {
-        select_network_title: 'Llikakuna',
-        select_wallet_title: 'Belleterakuna',
-        send_transaction_title: 'Rantinakuyta kachay',
-        set_password_title: 'Contraseña churay',
-        sign_message_title: 'Willakuy firma',
-        sign_transaction_title: 'Rantinakuy firma',
-        token_title: 'Belletera',
-        qhaway_llika_titulo: 'Llika',
-        qhaway_billetera_titulo: 'Belletera',
-    },
-    ConnectionRequest: {
-      approve_button: 'Aprobay',
-      next_button: 'Qhipaman',
-      reject_button: 'Qhipachay',
-      rejected: 'ruraqpa mana chaskisqan',
-      title: "T/'inkinakuy mañakuy",
-      wallet_select_instructions: 'Belletera(s) akllay'
-    },
-    CreateNetwork: {
-        chainId_placeholder: 'Kadena ID nisqaman yaykuy',
-        explorer_placeholder: 'Block Explorer URL nisqapi qillqay (munasqa)',
-        name_placeholder: 'Sutita qillqay',
-        rpcUrl_placeholder: 'RPC URL nisqapi qillqay',
-        submit_button: 'Waqaychay',
-        symbol_placeholder: 'Kadena siqiman yaykuy',
-      },
+    address_placeholder: 'Token direccionta qillqay',
+    chain_placeholder: 'Kadena akllay',
+    name_placeholder: 'Token sutita qillqay',
+    submit_button: 'Tokenta waqaychay',
+    title: 'Belletera'
+  },
+  App: {
+    qhaway_billetera_titulo: 'Belletera',
+    qhaway_llika_titulo: 'Llika',
+    select_network_title: 'Llikakuna',
+    select_wallet_title: 'Belleterakuna',
+    send_transaction_title: 'Rantinakuyta kachay',
+    set_password_title: 'Contraseña churay',
+    sign_message_title: 'Willakuy firma',
+    sign_transaction_title: 'Rantinakuy firma',
+    token_title: 'Belletera',
+  },
+  ConnectionRequest: {
+    approve_button: 'Aprobay',
+    next_button: 'Qhipaman',
+    reject_button: 'Qhipachay',
+    rejected: 'ruraqpa mana chaskisqan',
+    title: "T/'inkinakuy mañakuy",
+    wallet_select_instructions: 'Belletera(s) akllay'
+  },
+  CreateNetwork: {
+    button_save: 'Waqaychay',
+    chainId_placeholder: 'Kadena ID nisqaman yaykuy',
+    explorer_placeholder: 'Block Explorer URL nisqapi qillqay (munasqa)',
+    name_placeholder: 'Sutita qillqay',
+    rpcUrl_placeholder: 'RPC URL nisqapi qillqay',
+    submit_button: 'Waqaychay',
+    symbol_placeholder: 'Kadena siqiman yaykuy',
+  },
   CreateWallet: {
     instructions : 'Musuq billetera ruwachkaspa huk secuencia mnemónicas chaskinki mayqinkunachus "kikin contraseñaykita" riqsichinku. Pipas kay qatiqniyuqqa mayqin musuq dispositivopipas billeteraykita wakmanta ruwayta atinman. Atikusqanman hina allinta waqaychay. Kay willakuymanqa qamllam haykunayki.',
     instructions_button: 'Qhipaman',
+    instructions_nameWallet: 'Billeteraykipa sutinta churay',
     instructions_newWwallet: 'Musuq Billetera',
     mnemonic_confirm_button: 'Qhipaman',
     mnemonic_confirm_instructions: 'Mnemonico nisqa rimayta waqaychay',
     mnemonic_error: 'Mnemonico rimaykuna tupanan tiyan',
     mnemonic_error_button: 'Qhipaman',
+    mnemonic_instructions: 'Ama hina kaspa, ordenta akllaspa kay simikunata waqaychay. Chaykunata chinkachinki chayqa manan hayk`aqpas billeteraykita kutichipuyta atiwaqchu',
     name_entry_button: 'Qillqata waqaychay',
-    suti_yaykuchiy_button_loadingtext: 'Kachay',
+    name_entry_button_loadingtext: 'Kachay',
     name_entry_input_placeholder: 'Belletera sutita churay',
     name_wallet: 'Belletera suti',
-     // eslint-disable-qhipa-chiru t'aqa-llavekuna
-    instructions_nameWallet: 'Billeteraykipa sutinta churay',
   },
   LegacyEthSign: {
     approve_button: 'Aprobay',
@@ -120,15 +121,16 @@ const values = {
   SelectLanguage : {
     en: 'Inglés',
     es: 'Kastilla',
+    nah: 'Nahualt',
     pt: 'Portugués',
     qu: 'Runasimi',
-    nah: 'Nahualt'
   },
   SelectNetwork: {
     new_button: 'Musuq Llika',
     select_button: 'Llika akllay',
     select_button_tooltip: 'Aswan akllanakuna',
-    title: 'Llikakuna'
+    select_network: 'Akllay icha musuq llikata ruray',
+    title: 'Llikakuna',
   },
   SelectWallet: {
     new_button: 'Musuq Billetera',
@@ -180,6 +182,14 @@ const values = {
     reject_button: 'Qhipachay',
     title: 'Willakuy firma'
   },
+  SupportPage:{
+    button_send: 'Correo electrónico nisqa apachiy',
+    describe_issue: 'Asuntoykimanta willakuy',
+    introduction: 'Sichus appniykuwan sasachakuyniyuq kanki chayqa kaypi rimanakuy support@xsucre.com utaq uraypi formulariota llamk\'achiy',
+    subject_send:'Rimana',
+    title: 'Yanapakuy',
+    to_send: 'Kaymanta',
+  },
   SwapToken: {
     title: 'Belletera'
   },
@@ -188,7 +198,10 @@ const values = {
     send_token_button: 'Kachay'
   },
   ViewNetwork: {
-    title: 'Llika'
+    active_network: 'Llika llamk\'achiq',
+    edit_button: 'Apuy',
+    title: 'Llika',
+    use_network: 'Llika llamk\'achiyta',
   },
   ViewWallet: {
     clear_button: 'Rantinakuykunata ch\'uyanchana',
@@ -197,7 +210,7 @@ const values = {
     tab_list: ['Holdings nisqa', 'Transacciones nisqakuna'],
     title: 'Belletera',
     transactions_placeholder: 'Ruranamanta willayta churay',
-  }
+  },
 };
 
 export default values;

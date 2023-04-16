@@ -115,9 +115,9 @@ const values = {
   SelectLanguage : {
     en: 'Inglés',
     es: 'Español',
+    nah: 'Nahuatl',
     pt: 'Portugués',
     qu: 'Quechua',
-    nah: 'Nahuatl',
   },
   SelectNetwork: {
     new_button: 'Yancuic Maatla-tl',
