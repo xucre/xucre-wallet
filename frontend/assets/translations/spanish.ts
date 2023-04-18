@@ -33,6 +33,7 @@ const values = {
   rpcUrl_placeholder: 'Ingrese RPC Url',
   submit_button: 'Guardar Red',
   symbol_placeholder: 'Ingrese Chain Symbol',
+  button_save: 'Guardar'
   },
   CreateWallet: {
     instructions : 'Al crear una nueva billetera, recibirá una secuencia de mnemónicos que representan su "contraseña personal". Cualquier persona con esta secuencia puede reconfigurar su billetera en cualquier dispositivo nuevo. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
@@ -124,13 +125,15 @@ const values = {
     nah: 'Nahuatl',
     pt: 'Portugués',
     qu: 'Quechua',
+    nah: 'Nahuatl'
   },
   SelectNetwork: {
+    title: 'Redes',
     new_button: 'Nueva Red',
     select_button: 'Seleccione Red',
     select_button_tooltip: 'Mas Opciones',
     select_network: 'Seleccione o crear una nueva red',
-    title: 'Redes',
+    title: 'Redes'
   },
   SelectWallet: {
     new_button: 'Nueva billetera',
@@ -182,14 +185,6 @@ const values = {
       reject_button: 'Rechazar',
       title: 'Firmar Mensaje'
     },
-    SupportPage:{
-      button_send: 'Enviar correo',
-      describe_issue: 'Describe tu problema',
-      introduction: 'Si tienes problemas con nuestra aplicacion, por favor contactanos a support@xsucre.com o usa el siguiente formulario',
-      subject_send:'Asunto',
-      title: 'Contacto',
-      to_send: 'De',
-    },
     SwapToken: {
       title: 'Billetera'
     },
@@ -211,7 +206,17 @@ const values = {
     title: 'Billetera',
     transactions_placeholder: 'Insertar historial de transacciones'
   },
-  
+  SupportPage:{
+      title: 'Contacto',
+      introduction: 'Si tienes problemas con nuestra aplicacion, por favor contactanos a support@xsucre.com o usa el siguiente formulario',
+      to_send: 'De',
+      subject_send:'Asunto',
+      describe_issue: 'Describe tu problema',
+      button_send: 'Enviar correo'
+    },
+  WalletHistory: {
+      title: 'History'
+  }
 
 };
 

@@ -15,7 +15,7 @@ const values = {
     sign_transaction_title: 'Sign Transaction',
     token_title: 'Wallet',
     view_network_title: 'Network',
-    view_wallet_title: 'Wallet',
+    view_wallet_title: 'Wallet'
   },
   ConnectionRequest: {
     approve_button: 'Approve',
@@ -33,6 +33,7 @@ const values = {
     rpcUrl_placeholder: 'Enter RPC Url',
     submit_button: 'Save',
     symbol_placeholder: 'Enter Chain Symbol',
+    button_save: 'Save'
   },
   CreateWallet: {
     instructions : 'When creating a new wallet you will receive a sequence of mnemonics which represent your "personal password". Anyone with this sequence may be able to reconfigure your wallet in any new device. Keep it stored as secure as possible. Only you should have access to this information.',
@@ -47,7 +48,7 @@ const values = {
     name_entry_button: 'Save Wallet',
     name_entry_button_loadingtext: 'Submitting',
     name_entry_input_placeholder: 'Set Wallet Name',
-    name_wallet: 'Wallet name',
+    name_wallet: 'Wallet name'
   },
   LegacyEthSign: {
     approve_button: 'Approve',
@@ -121,16 +122,17 @@ const values = {
   SelectLanguage : {
     en: 'English',
     es: 'Spanish',
-    nah: 'Nahuatl',
     pt: 'Portuguese',
     qu: 'Quechua',
+    nah: 'Nahuatl'
   },
   SelectNetwork: {
+    title: 'Networks',
     new_button: 'New Network',
     select_button: 'Select Network',
     select_button_tooltip: 'More Options',
     select_network: 'Select or create a new network',
-    title: 'Networks',
+    title: 'Networks'
   },
   SelectWallet: { 
     new_button: 'New Wallet',
@@ -182,14 +184,6 @@ const values = {
     reject_button: 'Reject',
     title: 'Sign Message'
   },
-  SupportPage:{
-    button_send: 'Send Email',
-    describe_issue: 'Describe your issue',
-    introduction: 'If you have problems with our app please contact us at support@xsucre.com or use the form below',
-    subject_send:'Subject',
-    title: 'Support',
-    to_send: 'From',
-  },
   SwapToken: {
     title: 'Wallet'
   },
@@ -198,10 +192,10 @@ const values = {
     send_token_button: 'Send'
   },
   ViewNetwork: {
-    active_network: 'Active Network',
-    edit_button: 'Edit',
     title: 'Network',
-    use_network: 'Use Network',
+    edit_button: 'Edit',
+    active_network: 'Active Network',
+    use_network: 'Use Network'
   },
   ViewWallet: {
     clear_button: 'Clear Transactions',
@@ -210,6 +204,14 @@ const values = {
     tab_list: ['Holdings', 'Transactions'],
     title: 'Wallet',
     transactions_placeholder: 'Insert Transaction History',
+  },
+  SupportPage:{
+    title: 'Support',
+    introduction: 'If you have problems with our app please contact us at support@xsucre.com or use the form below',
+    to_send: 'From',
+    subject_send:'Subject',
+    describe_issue: 'Describe your issue',
+    button_send: 'Send Email'
   },
   WalletHistory: {
     title: 'History'
