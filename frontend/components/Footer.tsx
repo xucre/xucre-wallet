@@ -47,7 +47,7 @@ type IconType = {
 export default function MobileFooter({wallet: Wallet, navigation}) {
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: 'Home' },
-    { disabled: true, highlight: false, name: 'history', text: 'History' },
+    { disabled: false, highlight: false, name: 'history', text: 'History' },
     { highlight: true, name: 'swap-vertical-circle', text: 'SWAP' },
     { highlight: false, name: 'live-help', text: 'Support' },
     { disabled: true, highlight: false, name: 'person', text: 'Profile' },
@@ -61,8 +61,8 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
       case 'SWAP': 
         navigation.navigate('SwapToken');
         break;
-      //case 'History': 
-        //navigation.navigate('History');
+      case 'History': 
+        navigation.navigate('WalletHistory');
         break;
       //case 'Profile': 
         //navigation.navigate('Profile');

@@ -26,6 +26,7 @@ const values = {
       wallet_select_instructions: 'Seleccionar Billetera(s)'
   },
   CreateNetwork: {
+  button_save: 'Guardar',
   chainId_placeholder: 'Ingrese Chain ID',
   explorer_placeholder: 'Ingrese Block Explorer Url (opcional)',
   name_placeholder: 'Ingrese Nombre',
@@ -37,17 +38,17 @@ const values = {
   CreateWallet: {
     instructions : 'Al crear una nueva billetera, recibirá una secuencia de mnemónicos que representan su "contraseña personal". Cualquier persona con esta secuencia puede reconfigurar su billetera en cualquier dispositivo nuevo. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
     instructions_button: 'Generar',
+    instructions_nameWallet: 'Establecer nombre de billetera',
     instructions_newWwallet: 'Nueva Billetera',
     mnemonic_confirm_button: 'Continuar',
     mnemonic_confirm_instructions: 'Guardar frase mnemotécnica',
     mnemonic_error: 'Las frases mnemotécnicas deben coincidir',
     mnemonic_error_button: 'Continuar',
+    mnemonic_instructions: 'Seleccione el pedido y guarde estas palabras. Si los pierdes nunca podrás recuperar tu billetera',
     name_entry_button: 'Guardar billetera',
     name_entry_button_loadingtext: 'Enviando',
     name_entry_input_placeholder: 'Establecer nombre de billetera',
     name_wallet: 'Nombre de la Billetera',
-    instructions_nameWallet: 'Establecer nombre de billetera',
-    mnemonic_instructions: 'Seleccione el pedido y guarde estas palabras. Si los pierdes nunca podrás recuperar tu billetera'
   },
   LegacyEthSign: {
       approve_button: 'Aprobar',
@@ -121,6 +122,7 @@ const values = {
   SelectLanguage : {
     en: 'Inglés',
     es: 'Español',
+    nah: 'Nahuatl',
     pt: 'Portugués',
     qu: 'Quechua',
     nah: 'Nahuatl'
@@ -130,7 +132,8 @@ const values = {
     new_button: 'Nueva Red',
     select_button: 'Seleccione Red',
     select_button_tooltip: 'Mas Opciones',
-    select_network: 'Seleccione o crear una nueva red'
+    select_network: 'Seleccione o crear una nueva red',
+    title: 'Redes'
   },
   SelectWallet: {
     new_button: 'Nueva billetera',
@@ -190,9 +193,9 @@ const values = {
       send_token_button: 'Enviar'
     },
     ViewNetwork: {
-      title: 'Redes',
-      edit_button: 'Editar',
       active_network: 'Red Activa',
+      edit_button: 'Editar',
+      title: 'Redes',
       use_network: 'Usar Red'
     },
   ViewWallet: {
@@ -203,15 +206,17 @@ const values = {
     title: 'Billetera',
     transactions_placeholder: 'Insertar historial de transacciones'
   },
-    SupportPage:{
+  SupportPage:{
       title: 'Contacto',
       introduction: 'Si tienes problemas con nuestra aplicacion, por favor contactanos a support@xsucre.com o usa el siguiente formulario',
       to_send: 'De',
       subject_send:'Asunto',
       describe_issue: 'Describe tu problema',
       button_send: 'Enviar correo'
-
-    }
+    },
+  WalletHistory: {
+      title: 'History'
+  }
 
 };
 

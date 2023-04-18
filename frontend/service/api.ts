@@ -20,6 +20,10 @@ export const getNftJson = async () => {
   }
 }
 
+export const getIconImageUrl = (iconName) => {
+  return BASEURL + 'icon?icon='+iconName;
+}
+
 export const getIconImage = async (iconName) => {
   try {
     const instance = axios.create({
@@ -32,6 +36,26 @@ export const getIconImage = async (iconName) => {
         icon: iconName
       },
       url: `icon`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+export const getWalletHistory = async (wallet, chainName) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 1000,
+    });
+    const response = await instance({
+      method: 'get',
+      params: {
+        chainName,
+        wallet,
+      },
+      url: `history`,
     });
     return response.data;
   } catch (error) {
