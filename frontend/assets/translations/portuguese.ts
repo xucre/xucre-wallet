@@ -202,7 +202,7 @@ const values = {
         tab_list: ['Participações', 'Transações'],
         title: 'Carteira',
         transaction_placeholder: 'Inserir histórico de transações',
-      }
+      },
       SupportPage:{
       title: 'Suporte',
       introduction: 'Se você tiver problemas com nosso aplicativo, entre em contato conosco em support@xsucre.com ou use o formulário abaixo',

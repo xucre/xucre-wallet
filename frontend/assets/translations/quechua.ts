@@ -47,7 +47,7 @@ const values = {
     name_entry_input_placeholder: 'Belletera sutita churay',
     name_wallet: 'Belletera suti',
     instructions_nameWallet: 'Billeteraykipa sutinta churay',
-    mnemonic_instructions: 'Ama hina kaspa, ordenta akllaspa kay simikunata waqaychay. Chaykunata chinkachinki chayqa manan hayk\’aqpas billeteraykita kutichipuyta atiwaqchu'.
+    mnemonic_instructions: 'Ama hina kaspa, ordenta akllaspa kay simikunata waqaychay. Chaykunata chinkachinki chayqa manan hayk\’aqpas billeteraykita kutichipuyta atiwaqchu'
   },
   LegacyEthSign: {
     approve_button: 'Aprobay',
@@ -126,7 +126,7 @@ const values = {
     nah: 'Nahualt'
   },
   SelectNetwork: {
-    title: 'Llikakuna'
+    title: 'Llikakuna',
     new_button: 'Musuq Llika',
     select_button: 'Llika akllay',
     select_button_tooltip: 'Aswan akllanakuna',
