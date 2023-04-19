@@ -62,3 +62,20 @@ export const getWalletHistory = async (wallet, chainName) => {
     return null;
   }
 }
+
+export const callWhatsApp = async (payload) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 1000,
+    });
+    const response = await instance({
+      data: payload,
+      method: 'post',
+      url: `whatsapp`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
