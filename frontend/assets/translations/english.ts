@@ -211,7 +211,8 @@ const values = {
     to_send: 'From',
     subject_send:'Subject',
     describe_issue: 'Describe your issue',
-    button_send: 'Send Email'
+    button_send: 'Send Email',
+    toast_send: 'Email sent successfully!'
   },
   WalletHistory: {
     title: 'History'

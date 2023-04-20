@@ -79,7 +79,7 @@ export default function SuportPage({ navigation, route }) {
                 </View>
             </View>
 
-            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue, navigation)}><Text color={'#000'}>{translations[language].SupportPage.button_send}</Text></Button>
+            <Button style={styles.buttonContainer} onPress={() => sendEmail(toEmail,name,issue, navigation, translations[language].SupportPage.toast_send)}><Text color={'#000'}>{translations[language].SupportPage.button_send}</Text></Button>
 
         </Box>
     )
