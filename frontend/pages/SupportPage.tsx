@@ -142,20 +142,20 @@ const styles = StyleSheet.create({
     },
     input: {
         top: 192,
-        height: 74,
+        height: 75,
     },
     inputPosition: {
-        width: 351,
+        width: 365,
         position: "absolute",
     },
     inputPosition1: {
-        width: 351,
+        width: 365,
         top: 285,
         position: "absolute",
     },
 
     inputPosition2: {
-        width: 351,
+        width: 365,
         top: 380,
         position: "absolute",
     },
@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
     groupLayout: {
         height: 190,
         width: 351,
-        left: 0,
         position: "absolute",
     },
     groupBorder: {
