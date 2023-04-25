@@ -1,3 +1,6 @@
+/* eslint-disable react-native/split-platform-components */
+/* eslint-disable react-native/no-color-literals */
+/* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import {useIsFocused} from '@react-navigation/native';
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
@@ -80,6 +83,7 @@ export default function QRWallet ({navigation, route}) {
         Contact.getAll()
           .then(con => {
             // work with contacts
+            console.log(con);
             const filteredContacts = con.filter((item) => item.phoneNumbers.length)
             setContactList(filteredContacts);
           })
@@ -98,7 +102,7 @@ export default function QRWallet ({navigation, route}) {
         height={'100%'}
         safeAreaBottom
       >
-        <Center mt={10}>
+        <Center mt={10} mb={6}>
           <QRCode
             size={256}
             style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%", }}
@@ -106,8 +110,7 @@ export default function QRWallet ({navigation, route}) {
             viewBox={`0 0 256 256`}
           />
           <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
-          <Text>Address: {_wallet.wallet.address}</Text>
-          <Text>Name: {_wallet.name}</Text>
+          <Text>{_wallet.wallet.address}</Text>
         </Center>
         <View style={{backgroundColor: '#000', flex: 1}}>
 
@@ -130,7 +133,7 @@ export default function QRWallet ({navigation, route}) {
               }}
               onPress={() => {
                 // eslint-disable-next-line sort-keys
-                whatsapp(item, 'mediatest', 'en', {amount: '54', account: 'Test1234'});
+                whatsapp(item, 'mediatest', 'en', {amount: 54, account: 111111});
               }}
               
               >
