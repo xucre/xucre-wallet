@@ -1,4 +1,10 @@
-const sendEmail = (to, subjectField, body, navigation) => {
+// eslint-disable-next-line react-native/split-platform-components
+import { ToastAndroid } from 'react-native';
+
+
+const sendEmail = (to, subjectField, body, navigation, menssageEmail) => {
+
+
     //Main Params
     console.log('to', to);
     console.log('subject', subjectField);
@@ -6,7 +12,7 @@ const sendEmail = (to, subjectField, body, navigation) => {
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", "Bearer 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");
+    myHeaders.append("Authorization", "Bearer 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");
 
     
 
@@ -16,10 +22,15 @@ const sendEmail = (to, subjectField, body, navigation) => {
             to:
                 [
                     {
-                        email: to,
-                        name:'User'
+                        email: 'support@xucre.io',
+                        name:'Support'
                     }
-                ],    
+                ],
+            cc:[
+                {
+                    email: to
+                }
+            ],    
             subject: subjectField
             }
         ],
@@ -32,14 +43,9 @@ const sendEmail = (to, subjectField, body, navigation) => {
             ],
         from:
             {
-                email:'carevalo@ennube.solutions',
-                name:'Cristhian Arevalo'
+                email:'support@xucre.io',
+                name:'Support'
             },
-        reply_to:
-            {	
-                email: 'pjacome@ennube.solutions',
-                name: 'Pablo Jacome'
-                }
     });
 
     const requestOptions = {
@@ -60,7 +66,10 @@ const sendEmail = (to, subjectField, body, navigation) => {
                             console.log('value: ' + JSON.stringify(response));
                         });
                 })
-                navigation.navigate('ViewWallet');       
+                navigation.navigate('ViewWallet');   
+
+                ToastAndroid.show(menssageEmail,ToastAndroid.SHORT);
+                
         }
         catch (error) {
             console.error('error', error);

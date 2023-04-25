@@ -115,7 +115,10 @@ export const theme = extendTheme({
       800: '#829000',
       900: '#829000',
     },
-  }
+  },
+  config: {
+    initialColorMode: 'dark'
+  },
  });
 
 export default function App(): JSX.Element { 
@@ -158,7 +161,7 @@ export const AppWrapper = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer 
-        theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme} 
+        theme={scheme === 'dark' ? AppDarkTheme : AppDarkTheme} 
         ref={navigationRef}
       >
           <Stack.Navigator initialRouteName="Home"

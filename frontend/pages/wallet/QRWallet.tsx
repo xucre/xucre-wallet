@@ -80,8 +80,8 @@ export default function QRWallet ({navigation, route}) {
         Contact.getAll()
           .then(con => {
             // work with contacts
-            console.log(con);
-            setContactList(con);
+            const filteredContacts = con.filter((item) => item.phoneNumbers.length)
+            setContactList(filteredContacts);
           })
           .catch(e => {
             console.log(e);

@@ -78,7 +78,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
 
   useEffect(() => {
     const runAsync = async () => {
-      const clientTheme = await getTheme();
+      /*const clientTheme = await getTheme();
       if (!clientTheme) {
         console.log('setting default theme');
         await storeTheme('light');
@@ -87,7 +87,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
         //console.log('setting existing theme:', clientTheme);
         setColorMode(clientTheme);
         setScheme(clientTheme);
-      }
+      }*/
       
       if (!legacySignClient) {
         createLegacySignClient();
@@ -264,7 +264,12 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           safeAreaTop
         >
           <HStack justifyContent={'space-between'} py={4} pb={1}>
-            <ToggleDarkMode setScheme={setScheme} />
+            <Pressable onPress={() => {setDrawerStatus(true)}}>
+              <Avatar source={
+                require('../assets/images/example-avatar.png')
+              } size="xs" marginLeft={1}></Avatar>
+            </Pressable>
+            {/*<ToggleDarkMode setScheme={setScheme} />*/}
             <SelectLanguage />
             <BackButton setDrawerStatus={setDrawerStatus}/>              
           </HStack>
@@ -300,11 +305,11 @@ export const ToggleDarkMode = ({setScheme}) => {
 
   useEffect(() => {
     const runAsync = async () => {
-      await storeTheme(colorMode);
+      //await storeTheme(colorMode);
     }
     
     console.log('setting from menu button', colorMode);
-    setScheme(colorMode);
+    //setScheme(colorMode);
     runAsync();
   }, [colorMode]);
 
