@@ -248,7 +248,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
         
         <Pressable onPress={() => {setDrawerStatus(true)}}>
           <Avatar source={
-            require('../assets/images/example-avatar.png')
+            require('../assets/images/example_avatar.png')
           } size="xs" marginRight={3}></Avatar>
         </Pressable>
       }
@@ -266,7 +266,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           <HStack justifyContent={'space-between'} py={4} pb={1}>
             <Pressable onPress={() => {setDrawerStatus(true)}}>
               <Avatar source={
-                require('../assets/images/example-avatar.png')
+                require('../assets/images/example_avatar.png')
               } size="xs" marginLeft={1}></Avatar>
             </Pressable>
             {/*<ToggleDarkMode setScheme={setScheme} />*/}

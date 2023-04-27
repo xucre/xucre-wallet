@@ -1,7 +1,6 @@
 {
   "cli": {
-    "version": ">= 1.2.0",
-    "promptToConfigurePushNotfications": false
+    "version": ">= 1.2.0"
   },
   "build": {
     "development": {
@@ -25,10 +24,10 @@
         }
     },
     "production": {
-      "crunchPngs" : false,
       "android" : {
         "buildType": "apk"
-      }
+      },
+      "prebuildCommand": "prebuild --npm"
     }
   },
   "submit": {

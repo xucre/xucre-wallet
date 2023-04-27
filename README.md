@@ -39,5 +39,8 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 ## How to Build - Local
 - yarn android
 
-## How to Build - Deploy
+## How to Build APK - Deploy
 - eas build -p android --profile beta
+
+## How to Build APK - Local
+- eas build -p android --local --profile production
