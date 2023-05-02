@@ -122,7 +122,6 @@ const values = {
   SelectLanguage : {
     en: 'Inglés',
     es: 'Español',
-    nah: 'Nahuatl',
     pt: 'Portugués',
     qu: 'Quechua',
     nah: 'Nahuatl'
@@ -212,7 +211,8 @@ const values = {
       to_send: 'De',
       subject_send:'Asunto',
       describe_issue: 'Describe tu problema',
-      button_send: 'Enviar correo'
+      button_send: 'Enviar correo',
+      toast_send: 'Correo enviado exitosamente!'
     },
   WalletHistory: {
       title: 'History'
