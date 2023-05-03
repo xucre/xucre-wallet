@@ -37,6 +37,10 @@ import { RefreshControl } from "react-native";
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
+import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../service/state";
+
+import translations from "../assets/translations";
+
 type IconType = {
   readonly name: string;
   readonly text: string;
@@ -44,13 +48,24 @@ type IconType = {
   readonly disabled?: boolean;
 };
 
+
+
 export default function MobileFooter({wallet: Wallet, navigation}) {
+
+  const [language,] = useRecoilState(stateLanguage);
+
+  const homeButton = translations[language].Buttons_Footer.home;
+  const historyButton = translations[language].Buttons_Footer.history;
+  const swapButton = translations[language].Buttons_Footer.buttonswap;
+  const supportButton = translations[language].Buttons_Footer.support;
+  const profileButton = translations[language].Buttons_Footer.profile;
+
   const footerIcons: readonly IconType[] = [
-    { highlight: false, name: 'home', text: 'Home' },
-    { disabled: false, highlight: false, name: 'history', text: 'History' },
-    { highlight: true, name: 'swap-vertical-circle', text: 'SWAP' },
-    { highlight: false, name: 'live-help', text: 'Support' },
-    { disabled: true, highlight: false, name: 'person', text: 'Profile' },
+    { highlight: false, name: 'home', text: homeButton },
+    { disabled: false, highlight: false, name: 'history', text: historyButton },
+    { highlight: true, name: 'swap-vertical-circle', text: swapButton },
+    { highlight: false, name: 'live-help', text: supportButton },
+    { disabled: true, highlight: false, name: 'person', text: profileButton },
   ];
 
   const openPage = (pageName: string) => {

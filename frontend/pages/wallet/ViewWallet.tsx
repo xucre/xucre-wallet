@@ -111,6 +111,13 @@ export default function ViewWallet ({navigation, route}) {
     }
   }, []);
   const tabList = translations[language].ViewWallet.tab_list;
+  //Buttons
+
+  const buttonSend = translations[language].Buttons_Header.send;
+  const buttonReceive = translations[language].Buttons_Header.receive;
+  const buttonBuy = translations[language].Buttons_Header.buy;
+  const buttonNft = translations[language].Buttons_Header.nft;
+
 
   // Transitions
   const [displayTooltip, setDisplayTooltip] = useState(false);
@@ -227,22 +234,22 @@ export default function ViewWallet ({navigation, route}) {
     {
       action: sendFunds,
       icon: 'arrow-right-alt',
-      text: 'Send'
+      text: buttonSend
     },
     {
       action: receiveFunds,
       icon: 'arrow-downward',
-      text: 'Receive'
+      text: buttonReceive
     },
     {
       action: buyTokens,
       icon: 'monetization-on',
-      text: 'Buy'
+      text: buttonBuy
     },
     {
       action: openNft,
       icon: 'image-search',
-      text: 'NFT'
+      text: buttonNft
     }
   ]
 

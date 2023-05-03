@@ -216,6 +216,21 @@ const values = {
     },
   WalletHistory: {
       title: 'History'
+  }, 
+
+  Buttons_Header:{
+    send: 'Enviar',
+    receive: 'Recibir',
+    buy: 'Comprar',
+    nft: 'NFT'
+  },
+
+  Buttons_Footer:{
+    home: 'Inicio',
+    history: 'Historial',
+    buttonswap: 'SWAP',
+    support: 'Soporte',
+    profile: 'Perfil'
   }
 
 };
