@@ -6,7 +6,8 @@ const PROVIDER = providers.getDefaultProvider(network);
 
 export function generateMnemonics(language) {
   //return entropyToMnemonic(utils.randomBytes(16)).split(' ');
-  return Wallet.createRandom({ locale: wordlists[language] }).mnemonic.phrase.split(' ');
+  const langVal = language === 'en' || language === 'es' ? language : 'es';
+  return Wallet.createRandom({ locale: wordlists[langVal] }).mnemonic.phrase.split(' ');
 }
 
 export function loadWalletFromMnemonics(mnemonics) {
