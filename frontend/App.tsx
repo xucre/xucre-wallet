@@ -197,41 +197,41 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>                  
             <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SelectWallet.title, 
+              title: translations[language]?.SelectWallet?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].ViewWallet.title, 
+              title: translations[language]?.ViewWallet?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="WalletHistory" component={WalletHistory} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].WalletHistory.title, 
+              title: translations[language]?.WalletHistory?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
               title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SelectNetwork.title, 
+              title: translations[language]?.SelectNetwork?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].ViewNetwork.title,  
+              title: translations[language]?.ViewNetwork?.title,  
             }} ></Stack.Screen>
             <Stack.Screen name="AddToken" component={AddToken} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].AddToken.title, 
+              title: translations[language]?.AddToken?.title, 
             }} ></Stack.Screen>                  
             <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
               title: '', 
             }} ></Stack.Screen>      
             <Stack.Screen name="SendToken" component={SendToken} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SendToken.title, 
+              title: translations[language]?.SendToken?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SwapToken.title, 
+              title: translations[language]?.SwapToken?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="BuyToken" component={BuyToken} options={{ 
               headerTitleAlign: 'left',
