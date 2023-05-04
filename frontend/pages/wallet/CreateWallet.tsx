@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-single-element-style-arrays */
+/* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
@@ -86,8 +88,9 @@ export default function CreateWallet ({navigation, route, storage}) {
     const runCreateAsync = async () => {
       // test
       setTimeout(() => {
+        console.log('generateMnemonics('+language+')')
         const _mnemonics = generateMnemonics(language);
-        //console.log(_mnemonics);
+        console.log(_mnemonics);
 
         setSteps(steps+1);
         setMnemonics(_mnemonics);
@@ -106,8 +109,8 @@ export default function CreateWallet ({navigation, route, storage}) {
 
     return (
       <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
-          <Text  style={{color: '#fff', fontWeight: 'bold'}} fontSize={'lg'} mt={5}>{translations[language].CreateWallet.instructions_newWwallet}</Text>
-          <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} mt={5}>{translations[language].CreateWallet.instructions}</Text>
+          <Text  style={{color: 'white', fontWeight: 'bold'}} fontSize={'lg'} mt={5}>{translations[language].CreateWallet.instructions_newWwallet}</Text>
+          <Text style={{color: Color.gray_100, marginLeft: 15, marginRight: 15, textAlign: 'center'}}fontSize={'md'} mt={5}>{translations[language].CreateWallet.instructions}</Text>
             <Button style={[styles.buttonContainer]} onPress={createMnemonics} isLoading={loading} ><Text style={{color: '#000'}}>{translations[language].CreateWallet.instructions_button}</Text></Button> 
       </Box>
     );
@@ -116,7 +119,7 @@ export default function CreateWallet ({navigation, route, storage}) {
   function MnemonicList() {
     return (
       
-        <><Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} mt={5}>{translations[language].CreateWallet.mnemonic_instructions}</Text>
+        <><Text style={{ color: Color.gray_100, marginLeft: 15, marginRight: 15, textAlign: 'center' }} fontSize={'md'} mt={5}>{translations[language].CreateWallet.mnemonic_instructions}</Text>
         <Grid style={{ alignItems: 'center', justifyContent: 'center', marginTop: 0, paddingBottom: 10 }}>
 
           
@@ -421,7 +424,7 @@ export default function CreateWallet ({navigation, route, storage}) {
      
         <Box alignItems="center" marginBottom={20} h={'800'} w ={'full'} flex={3}>
           <Text  style={{color: '#fff', fontWeight: 'bold'}} fontSize={'lg'} mt={5}>{translations[language].CreateWallet.name_wallet}</Text>
-          <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} mt={5}>{translations[language].CreateWallet.instructions_nameWallet}</Text>
+          <Text style={{color: Color.gray_100, marginLeft: 15, marginRight: 15, textAlign: 'center'}}fontSize={'md'} mt={5}>{translations[language].CreateWallet.instructions_nameWallet}</Text>
           <Input w="85%" top={70} value={name} onChange={handleChange} placeholder={translations[language].CreateWallet.name_entry_input_placeholder}  />
           <Button style={styles.buttonSave}  onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].CreateWallet.name_entry_button_loadingtext} py={5} disabled={confirmMnemonics.length < mnemonics.length || name.length === 0}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations[language].CreateWallet.name_entry_button}</Text></Button>
           </Box>
