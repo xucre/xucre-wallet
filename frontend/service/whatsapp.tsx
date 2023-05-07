@@ -8,7 +8,7 @@ import { callWhatsApp } from './api'
     //Variables of Params
     const trxAmount =  options?.amount;
     const trxAccount = options?.account;
-    const body = JSON.stringify({
+    const body = {
       messaging_product: 'whatsapp',
       template: {
         components: [{
@@ -30,7 +30,7 @@ import { callWhatsApp } from './api'
       },      
       to: phoneNumber,
       type: 'template',
-    });
+    };
 
     const wspCall = async () => {
       try {
