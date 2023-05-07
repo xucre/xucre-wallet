@@ -46,6 +46,14 @@ export default function LandingPage({ navigation, route }) {
     }
   }, [])
 
+  useEffect(() => {
+    if (fontsLoaded) {
+      setTimeout(() => {
+        toWalletSelect();
+      }, 4000)
+    }
+  }, [fontsLoaded])
+
   if (!fontsLoaded) {
     return null;
   }
