@@ -38,6 +38,7 @@ import Menu from './components/Menu';
 import Notifications from './components/Notifications';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
+import LanguagePage from './pages/Language';
 import QRReader from './pages/QRReader';
 import SetPassword from './pages/SetPassword';
 import SupportPage from './pages/SupportPage';
@@ -186,6 +187,11 @@ export const AppWrapper = () => {
               headerShown: false,
               headerTitle : "",
             }} ></Stack.Screen>
+            <Stack.Screen name="Language" component={LanguagePage} options={{ 
+              headerShown: false,
+              headerTitle : "",
+            }} ></Stack.Screen>
+            
             <Stack.Screen name="NewWallet" component={NewWallet} options={{ 
               title: '', 
             }} ></Stack.Screen> 

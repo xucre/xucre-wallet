@@ -1,7 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-native/no-color-literals */
 import { MaterialIcons } from "@expo/vector-icons";
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
-import {StyleSheet} from 'react-native';
 import {
   Alert,
   AlertDialog,
@@ -30,14 +31,15 @@ import {
   Tooltip,
   useColorMode,
   useColorModeValue,
-  VStack,
   View,
+  VStack,
 } from "native-base";
 import React, {createRef, useEffect, useState} from "react";
+import {StyleSheet} from 'react-native';
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeWallet, language as stateLanguage } from "../../service/state";
@@ -74,49 +76,55 @@ export default function NewWallet ({navigation, route}) {
 
 const styles = StyleSheet.create({
   buttonBorder:{
-    borderRadius: Border.br_sm,
     borderColor: "#fff",
-    borderWidth: 1,
+    borderRadius: Border.br_sm,
     borderStyle: "solid",
+    borderWidth: 1,
   },
   createANew: {
-    top: 230,
-    fontSize: FontSize.size_base,
-    lineHeight: 21,
-    fontFamily: FontFamily.interRegular,
     color: Color.darkgray_100,
-    textAlign: "center",
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
     letterSpacing: -0.2,
+    lineHeight: 21,
     position: "absolute",
-  },createFlexBox: {
     textAlign: "center",
+    top: 230,
+  },
+  createFlexBox: {
     letterSpacing: -0.2,
+    textAlign: "center",
     width: 330,
-  },  yourWallet: {
-    top: 180,
+  },
+  rectangleGroup: {
+    backgroundColor: Color.gray_300,
+    borderColor: '#fff',
+    top: 410,
+  },
+  rectangleLayout: {
+    borderColor: '#fff',
+    height: 60,
+    position: "absolute",
+    width: 330,
+  },
+  rectangleParent: {
+    backgroundColor: '#D4E815',
+    borderRadius: Border.br_sm,
+    fontFamily: FontFamily.inter,
+    top: 330,
+  },
+  walletTypo: {
+    color: Color.white,
+    fontFamily: FontFamily.inter,
+    fontWeight: "600",
+    position: "absolute",
+  },
+  yourWallet: {
     fontSize: FontSize.size_3xl,
     letterSpacing: -0.3,
     lineHeight: 36,
     textAlign: "center",
-  },  walletTypo: {
-    color: Color.white,
-    fontFamily: FontFamily.interSemibold,
-    fontWeight: "600",
-    position: "absolute",
-  }, rectangleParent: {
-    top: 330,
-    borderRadius: Border.br_sm,
-    backgroundColor: '#D4E815',
-    fontFamily: FontFamily.interSemibold,
-  },rectangleLayout: {
-    height: 60,
-    width: 330,
-    position: "absolute",
-    borderColor: '#fff',
-  }, rectangleGroup: {
-    top: 410,
-    borderColor: '#fff',
-    backgroundColor: Color.gray_300,
-  },
+    top: 180,
+  }
 
 })

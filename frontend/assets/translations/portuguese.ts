@@ -62,6 +62,9 @@ const values = {
       name_entry_input_placeholder: "Definir nome da carteira",
       name_wallet: "Nome da carteira"
     },
+    LanguagePage: {
+      select_language: "Selecione seu Idioma"
+    },
     LegacyEthSign: {
       approve_button: 'Aprovar',
       header: 'Pedido de Assinatura',

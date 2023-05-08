@@ -62,6 +62,9 @@ const values = {
     name_entry_input_placeholder: "Set Wallet Name",
     name_wallet: "Wallet name"
   },
+  LanguagePage: {
+    select_language: "Select your Language"
+  },
   LegacyEthSign: {
     approve_button: "Approve",
     header: "Signature Request",

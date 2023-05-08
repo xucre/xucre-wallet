@@ -62,6 +62,9 @@ const values = {
     name_entry_input_placeholder: 'Belletera sutita churay',
     name_wallet: 'Belletera suti',
   },
+  LanguagePage: {
+    select_language: "Simita Akllay"
+  },
   LegacyEthSign: {
     approve_button: 'Aprobay',
     header: 'Firma mañakuy',

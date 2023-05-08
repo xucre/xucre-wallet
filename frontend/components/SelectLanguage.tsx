@@ -77,11 +77,11 @@ export default function SelectLanguage () {
               <MaterialIcons name="language" size={24} color={'gray'} />
             </Pressable>;
           }}>
-            <Menu.Item onPress={() => {setLanguage('en')}}><Text>{translations[languageVal].SelectLanguage.en}</Text></Menu.Item>
             <Menu.Item onPress={() => {setLanguage('es')}}><Text>{translations[languageVal].SelectLanguage.es}</Text></Menu.Item>
             <Menu.Item onPress={() => {setLanguage('pt')}}><Text>{translations[languageVal].SelectLanguage.pt}</Text></Menu.Item>
             <Menu.Item onPress={() => {setLanguage('qu')}}><Text>{translations[languageVal].SelectLanguage.qu}</Text></Menu.Item>
             <Menu.Item onPress={() => {setLanguage('nah')}}><Text>{translations[languageVal].SelectLanguage.nah}</Text></Menu.Item>
+            <Menu.Item onPress={() => {setLanguage('en')}}><Text>{translations[languageVal].SelectLanguage.en}</Text></Menu.Item>
         </Menu>    
       }
     </>

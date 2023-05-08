@@ -62,6 +62,9 @@ const values = {
     name_entry_input_placeholder: "Establecer nombre de billetera",
     name_wallet: "Nombre de la Billetera"
   },
+  LanguagePage: {
+    select_language: "Seleccione su Idioma"
+  },
   LegacyEthSign: {
     approve_button: "Aprobar",
     header: "Solicitud de firma",

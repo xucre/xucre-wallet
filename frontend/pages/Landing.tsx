@@ -9,17 +9,24 @@ import { useRecoilState } from 'recoil';
 
 import GuestLayout from '../layouts/GuestLayout';
 import { activeWallet } from '../service/state';
+import { language as stateLanguage } from "../service/state";
+import { getLanguage, storeLanguage } from "../store/language";
 
 export default function LandingPage({ navigation, route }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [languageDefault, setLanguageDefault] = useState(false);
   const [_wallet, ] = useRecoilState(activeWallet);
+  const [languageState, setLanguageState] = useRecoilState(stateLanguage);
   const {
     colorMode
   } = useColorMode();
   const [isComponentMounted, setIsComponentMounted] = useState(true);
 
   const toWalletSelect = () => {
-    if (_wallet.name !== '') {
+    console.log('languageDefault',languageDefault)
+    if (languageDefault) {
+      navigation.navigate('Language');  
+    } else if (_wallet.name !== '') {
       navigation.navigate('ViewWallet');  
     } else {
       navigation.navigate('SelectWallet');
@@ -33,9 +40,18 @@ export default function LandingPage({ navigation, route }) {
         Montserrat_400Regular,
         Montserrat_700Bold
       });
+      const _language = await getLanguage();
+      console.log('_language',_language);
       if (isComponentMounted) {
         setFontsLoaded(true);
-      }
+
+        if (_language) {
+          setLanguageState(_language);
+        } else {
+          setLanguageState('en');
+          setLanguageDefault(true);
+        }
+      }     
     }
     if (isComponentMounted) {
       callAsync();
@@ -52,7 +68,7 @@ export default function LandingPage({ navigation, route }) {
         toWalletSelect();
       }, 4000)
     }
-  }, [fontsLoaded])
+  }, [fontsLoaded, languageDefault])
 
   if (!fontsLoaded) {
     return null;

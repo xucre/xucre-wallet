@@ -64,6 +64,9 @@ const values = {
       'Establecer toocaa de Tlahcuiloolaamapetlaacaltoon-tli',
     name_wallet: "Wallet name",
   },
+  LanguagePage: {
+    select_language: "Tlapepenalli Tlahtolli" // NEEDS UPDATE
+  },
   LegacyEthSign: {
     approve_button: 'Ninocaqui',
     header: 'Teetlaihtlaniliz tee-tlatquiitiil-li',
