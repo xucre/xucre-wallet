@@ -125,7 +125,8 @@
     "audit": "npx yarn-audit-fix",
     "postinstall_nomore": "node_modules/.bin/ts-node scripts/postinstall",
     "test": "npx hardhat test && jest",
-    "web:deploy": "expo build:web && gh-pages -d web-build"
+    "web:deploy": "expo build:web && gh-pages -d web-build",
+    "eas-build": "eas build -p android --profile production"
   },
   "version": "1.0.0",
   "private": true,
