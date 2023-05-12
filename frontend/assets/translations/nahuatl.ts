@@ -48,8 +48,7 @@ const values = {
     symbol_placeholder: 'Ahaquiaa Chain Symbol',
   },
   CreateWallet: {
-    instructions:
-      'Tla-yoocoya yancuic Tlahcuiloolaamapetlaacaltoon-tli, recibirá una secuencia de mnemónicos que representan su "Ichtacayooh personal". Cualquier persona con esta secuencia puede reconfigurar su Tlahcuiloolaamapetlaacaltoon-tli en cualquier dispositivo Yancuic. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
+    instructions:'Tla-yoocoya yancuic Tlahcuiloolaamapetlaacaltoon-tli, recibirá una secuencia de mnemónicos que representan su "Ichtacayooh personal". Cualquier persona con esta secuencia puede reconfigurar su Tlahcuiloolaamapetlaacaltoon-tli en cualquier dispositivo Yancuic. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
     instructions_button: 'Tla-yoocoya',
     instructions_nameWallet: "Set your wallet name",
     instructions_newWwallet: "New Wallet",
@@ -60,8 +59,7 @@ const values = {
     mnemonic_instructions: "Please select the order and save this words. If you lose them you will never be able to recover your wallet",
     name_entry_button: 'Tla-piya Tlahcuiloolaamapetlaacaltoon-tli',
     name_entry_button_loadingtext: 'Enviando',
-    name_entry_input_placeholder:
-      'Establecer toocaa de Tlahcuiloolaamapetlaacaltoon-tli',
+    name_entry_input_placeholder:'Establecer toocaa de Tlahcuiloolaamapetlaacaltoon-tli',
     name_wallet: "Wallet name",
   },
   LanguagePage: {
@@ -90,8 +88,7 @@ const values = {
   },
   LegacySignTypedData: {
     approve_button: 'Ninocaqui',
-    header:
-      'Aamamachiyootlahcuilooltzacua teetlaihtlaniliz tee-tlatquiitiil-li',
+    header:'Aamamachiyootlahcuilooltzacua teetlaihtlaniliz tee-tlatquiitiil-li',
     header_origin: 'Origen: ',
     reject_button: 'Tlahueelcuepiliaa',
     title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li',
@@ -129,14 +126,11 @@ const values = {
     instructions: 'Compartir para recibir fondos',
   },
   RecoverWallet: {
-    instructions:
-      'Porfavor ahaquiaa la secuencia de mnemónicos del proceso de creacion de su wallet original.',
+    instructions:'Porfavor ahaquiaa la secuencia de mnemónicos del proceso de creacion de su wallet original.',
     instructions_button: 'Pahti',
-    mnemonic_entry_input_placeholder:
-      'Ahaquiaa frase mnemónica separada por espacios',
+    mnemonic_entry_input_placeholder:'Ahaquiaa frase mnemónica separada por espacios',
     mnemonic_not_complete: 'El mnemónicos no tiene la longitud adecuada',
-    name_entry_input_placeholder:
-      'Ahaquiaa toocaa de la Tlahcuiloolaamapetlaacaltoon-tli',
+    name_entry_input_placeholder:'Ahaquiaa toocaa de la Tlahcuiloolaamapetlaacaltoon-tli',
     save_button: 'Tla-piya',
     save_button_loadingtext: 'Enviando',
   },
@@ -199,8 +193,7 @@ const values = {
   },
   SignTyped: {
     approve_button: 'Ninocaqui',
-    header:
-      'Aamamachiyootlahcuilooltzacua teetlaihtlaniliz tee-tlatquiitiil-li',
+    header:'Aamamachiyootlahcuilooltzacua teetlaihtlaniliz tee-tlatquiitiil-li',
     header_origin: 'Origen: ',
     reject_button: 'Tlahueelcuepiliaa',
     title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li',
@@ -228,12 +221,15 @@ const values = {
     use_network: "Use Network"
   },
   ViewWallet: {
-    clear_button: 'Limpiar Nenahuatiliz-tli',
-    holdings_placeholder: 'Insertar existencias de monedas',
-    new_button: 'Tla-yoocoya Token',
-    tab_list: ['Valores en cartera', 'Nenahuatiliz-tli'],
-    title: 'Tlahcuiloolaamapetlaacaltoon-tli',
-    transactions_placeholder: 'Cla-yoocoya historial de Nenahuatiliz-tli',
+    clear_button: "Clear Transactions",
+    holdings_placeholder: "Insert Coin Holdings",
+    new_button: "Add Token",
+    tab_list: [
+      "Holdings",
+      "Transactions"
+    ],
+    title: "Wallet",
+    transactions_placeholder: "Insert Transaction History"
   },
   WalletHistory: {
     title: "History"
