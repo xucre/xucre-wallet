@@ -19,16 +19,16 @@ const values = {
   },
   Buttons_Footer: {
     buttonswap: "SWAP",
-    history: "History",
-    home: "Home",
+    history: "Tlaquetzal-li",
+    home: "Peehualiz-tli",
     profile: "Profile",
-    support: "Support"
+    support: "Tlaxicooliz-tli"
   },
   Buttons_Header: {
-    buy: "Buy",
+    buy: "Tla-coohua",
     nft: "NFT",
-    receive: "Receive",
-    send: "Send"
+    receive: "Tla-celia",
+    send: "Ihuaa"
   },
   ConnectionRequest: {
     approve_button: 'Ninocaqui',
@@ -39,7 +39,7 @@ const values = {
     wallet_select_instructions: 'Ihitta Tlahcuiloolaamapetlaacaltoon-tli(s)',
   },
   CreateNetwork: {
-    button_save: "Save",
+    button_save: "Malhuiaa",
     chainId_placeholder: 'Ahaquiaa Chain ID',
     explorer_placeholder: 'Ahaquiaa Block Explorer Url (tlaihittaliz)',
     name_placeholder: 'Ahaquiaa toocaa',
@@ -50,17 +50,17 @@ const values = {
   CreateWallet: {
     instructions:'Tla-yoocoya yancuic Tlahcuiloolaamapetlaacaltoon-tli, recibirá una secuencia de mnemónicos que representan su "Ichtacayooh personal". Cualquier persona con esta secuencia puede reconfigurar su Tlahcuiloolaamapetlaacaltoon-tli en cualquier dispositivo Yancuic. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
     instructions_button: 'Tla-yoocoya',
-    instructions_nameWallet: "Set your wallet name",
-    instructions_newWwallet: "New Wallet",
+    instructions_nameWallet: "Tla-ihcuiloa toocaa",
+    instructions_newWwallet: "Yancuic Tlahcuiloolaamapetlaacaltoon-tli",
     mnemonic_confirm_button: 'Tee-yooliuhtlamachtiaa mnemotécnico',
     mnemonic_confirm_instructions: 'Tla-piya frase mnemotécnica',
     mnemonic_error: 'Las frases mnemotécnicas deben coincidir',
-    mnemonic_error_button: 'Continuar',
-    mnemonic_instructions: "Please select the order and save this words. If you lose them you will never be able to recover your wallet",
+    mnemonic_error_button: 'Centoca',
+    mnemonic_instructions: "Ihitta yehhuaa-tl nemocihuiliz huaan malhuiaa iin tlahtool tlahtool. Queemah poloaa aiicmah huel pahti tehhua Tlahcuiloolaamapetlaacaltoon-tli",
     name_entry_button: 'Tla-piya Tlahcuiloolaamapetlaacaltoon-tli',
-    name_entry_button_loadingtext: 'Enviando',
+    name_entry_button_loadingtext: 'Ihuaa',
     name_entry_input_placeholder:'Establecer toocaa de Tlahcuiloolaamapetlaacaltoon-tli',
-    name_wallet: "Wallet name",
+    name_wallet: "Toocaa tla Tlahcuiloolaamapetlaacaltoon-tli",
   },
   LanguagePage: {
     select_language: "Tlapepenalli Tlahtolli" // NEEDS UPDATE
@@ -105,7 +105,7 @@ const values = {
     wallet_button: 'Tlahcuiloolaamapetlaacaltoon-tli',
   },
   NewWallet: {
-    about: "Create a new wallet or if you already have one retrieve it through your security phrase",
+    about: "Yoocaya cente-tl yancuic Tlahcuiloolaamapetlaacaltoon-tli ouh queemah ehqueh cente-tl tlacxitoc-tli la iihuaan teoonaappa tla neteentlahpaltiliz-tli",
     create_button: 'Tla-yoocoya Tlahcuiloolaamapetlaacaltoon-tli',
     instructions: 'Tla-yoocoya Yancuic o pahti usando mnemónicos',
     recover_button: 'Pahti Tlahcuiloolaamapetlaacaltoon-tli',
