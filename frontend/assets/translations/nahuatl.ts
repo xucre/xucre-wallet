@@ -74,11 +74,11 @@ const values = {
   LegacySendTransaction: {
     amount: 'Iixquich: ',
     approve_button: 'Ninocaqui',
-    from: 'De: ',
+    from: 'Tee-tech: ',
     header: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli',
     reject_button: 'Tlahueelcuepiliaa',
     title: 'Ihuaa Nenahuatiliz-tli',
-    to: 'Para: ',
+    to: 'Pampa: ',
   },
   LegacySignTransaction: {
     approve_button: 'Ninocaqui',
@@ -89,7 +89,7 @@ const values = {
   LegacySignTypedData: {
     approve_button: 'Ninocaqui',
     header:'Aamamachiyootlahcuilooltzacua teetlaihtlaniliz tee-tlatquiitiil-li',
-    header_origin: 'Origen: ',
+    header_origin: 'Tziintiliz-tli: ',
     reject_button: 'Tlahueelcuepiliaa',
     title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li',
   },
@@ -119,11 +119,11 @@ const values = {
   },
   QRReader: {
     permission_denied: 'Sin acceso a la cámara',
-    permission_request: 'Teetlaihtlaniliz permiso de cámara',
+    permission_request: 'Teetlaihtlaniliz iixtlantzinco tce-tech cámara',
     rescan: 'Toque para escanear de nuevo',
   },
   QRWallet: {
-    instructions: 'Compartir para recibir fondos',
+    instructions: 'Quimilceehuiaa pampa tla-celia tlacohcoohualooni',
   },
   RecoverWallet: {
     instructions:'Porfavor ahaquiaa la secuencia de mnemónicos del proceso de creacion de su wallet original.',
@@ -145,13 +145,13 @@ const values = {
     new_button: 'Yancuic Maatla-tl',
     select_button: 'Itlan Maatla-tl',
     select_button_tooltip: 'Mas Opciones',
-    select_network: "Select or create a new network",
+    select_network: "Tlaihittal-li o tla-yoocoya a Yancuic Maatla-tl",
     title: 'Maatla-tl',
   },
   SelectWallet: {
     new_button: 'Yancuic Tlahcuiloolaamapetlaacaltoon-tli',
     select_button: 'Ihitta Tlahcuiloolaamapetlaacaltoon-tli',
-    select_button_tooltip: 'Mas opciones',
+    select_button_tooltip: 'Yeh cencah tlaihittaliz-tli',
     title: 'Itlan Tlahcuiloolaamapetlaacaltoon-tli',
   },
   SendToken: {
@@ -199,40 +199,40 @@ const values = {
     title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li',
   },
   SupportPage: {
-    button_send: "Send Email",
-    describe_issue: "Describe your issue",
+    button_send: "Xitlatitlani email",
+    describe_issue: "Caquiztliaa mo neyool-polooliz-tli",
     introduction: "If you have problems with our app please contact us at support@xsucre.com or use the form below",
-    subject_send: "Subject",
-    title: "Support",
-    to_send: "From",
-    toast_send: "Email sent successfully!"
+    subject_send: "Tlatzohuaztlaalil-li",
+    title: "Tlamaamalloo-tl",
+    to_send: "Iuikpa",
+    toast_send: "Email otitlani successfully!"
   },
   SwapToken: {
     title: 'Tlahcuiloolaamapetlaacaltoon-tli',
   },
   TokenItem: {
-    menu_accessiblity_label: 'Menu más opciones',
+    menu_accessiblity_label: 'Menu okachi tlaihittaliz-tli',
     send_token_button: 'Ihuaa',
   },
   ViewNetwork: {
-    active_network: "Active Network",
-    edit_button: "Edit",
+    active_network: "Zaazahuatic maatla-tl",
+    edit_button: "Pahpanhuetzi",
     title: "Maatla-tl",
-    use_network: "Use Network"
+    use_network: "Tequitiltiaa maatla-tl"
   },
   ViewWallet: {
-    clear_button: "Clear Transactions",
-    holdings_placeholder: "Insert Coin Holdings",
-    new_button: "Add Token",
+    clear_button: "Tlatoma tlapeepeehuiliz-tli",
+    holdings_placeholder: "Ahaquiaa tlacohcoohualooni",
+    new_button: "Ahaquiaa Token",
     tab_list: [
-      "Holdings",
-      "Transactions"
+      "Iixquich talhcuiloolaamapetlaacaltoon-tli",
+      "tlapeepeehuiliz-tli"
     ],
-    title: "Wallet",
-    transactions_placeholder: "Insert Transaction History"
+    title: "Talhcuiloolaamapetlaacaltoon-tli",
+    transactions_placeholder: "Ahaquiaa necocteentiaa tlapeepeehuiliz-tli"
   },
   WalletHistory: {
-    title: "History"
+    title: "Necocteentiaa"
   }
 }
 
