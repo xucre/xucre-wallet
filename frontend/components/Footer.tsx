@@ -71,7 +71,7 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
   const openPage = (pageName: string) => {
     switch (pageName) {
       case 'Home': 
-        navigation.navigate('Home');
+        navigation.navigate('ViewWallet');
         break;
       case 'SWAP': 
         navigation.navigate('SwapToken');
