@@ -79,3 +79,19 @@ export const callWhatsApp = async (payload) => {
     return null;
   }
 }
+
+export const getWhatsAppToken = async () => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 1000,
+    });
+    const response = await instance({
+      method: 'get',
+      url: `whatsapp`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}

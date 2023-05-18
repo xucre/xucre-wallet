@@ -1,4 +1,4 @@
-import { callWhatsApp } from './api'
+import { getWhatsAppToken } from './api'
   const whatsapp = (phone, template, templateLang, options = { account: 0, amount: 0, }) => {
       //Main Params
     const phoneNumber = phone.phoneNumbers[0].number; //TODO: Create validation for country code
@@ -8,7 +8,7 @@ import { callWhatsApp } from './api'
     //Variables of Params
     const trxAmount =  options?.amount;
     const trxAccount = options?.account;
-    const body = {
+    const body = JSON.stringify({
       messaging_product: 'whatsapp',
       template: {
         components: [{
@@ -30,12 +30,28 @@ import { callWhatsApp } from './api'
       },      
       to: phoneNumber,
       type: 'template',
-    };
+    });
 
     const wspCall = async () => {
       try {
-        const resp = await callWhatsApp(body)
-        console.log(resp);
+        
+        const { token, url } = await getWhatsAppToken();
+        const requestOptions = {
+          body : body,
+          headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+        }
+        await fetch(
+          url, requestOptions)
+          .then(response => {
+            response.json()
+              .then(data => {
+                console.log('value: ' + JSON.stringify(data));
+              });
+          })
       }
       catch (error) {
         console.error('error',error);
