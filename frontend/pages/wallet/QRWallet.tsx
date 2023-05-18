@@ -1,7 +1,7 @@
 /* eslint-disable react-native/split-platform-components */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import {useIsFocused} from '@react-navigation/native';
 import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
@@ -18,8 +18,10 @@ import {
   ColorMode,
   Divider,
   Drawer,
+  Heading,
   Hidden,
   HStack,
+  Icon,
   IconButton,
   Icon as IconElement,
   Image,
@@ -94,6 +96,26 @@ export default function QRWallet ({navigation, route}) {
     });
   };
 
+  const searchItem = (textSearch) => {
+    const data = contactList;
+    console.log(data)
+    console.log(textSearch)
+
+    if(textSearch){
+      const newData = data.filter(item => {
+        const itemData = item.givenName ? item.givenName.toUpperCase() : ''.toUpperCase();
+        const textData = textSearch.toUpperCase();
+        console.log(itemData)
+        console.log(textData)
+  
+        return itemData.indexOf(textData) > -1
+      })
+      console.log('newDta',newData)
+    }else{
+      console.log('h')
+    }
+  }
+
   return (
     <DashboardLayout title={_wallet.name}>
       <Box         
@@ -113,6 +135,11 @@ export default function QRWallet ({navigation, route}) {
           <Text>{_wallet.wallet.address}</Text>
         </Center>
         <View style={{backgroundColor: '#000', flex: 1}}>
+
+        <VStack w="100%" space={5} alignSelf="center">
+        <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}  
+        onChangeText={(text) => {searchItem(text)}}/>
+      </VStack>
 
       <FlatList
         data={contactList}
