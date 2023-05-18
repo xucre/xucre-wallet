@@ -42,6 +42,7 @@ import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
 import TransactionItem from "../../components/transaction/TransactionItem";
+import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
 import { Transaction } from "../../service/transaction";
@@ -278,26 +279,7 @@ export default function ViewWallet ({navigation, route}) {
         }
 
         {
-          <Box bg={'primary.500'} padding={3} borderRadius={10} marginX={2} >
-            
-            <Text fontSize={'md'} fontWeight={'bold'} color={'darkText'} paddingTop={3}>Total Balance</Text>
-            <HStack paddingBottom={0} space={1}>
-              <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={'darkText'} >$23.898,00</Text></Heading>
-              <Button variant="ghost" color={'darkText'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'darkText'} marginLeft={-1} />}>
-                <Text color={'darkText'} fontWeight={'bold'}>USD</Text>
-              </Button>
-              
-            </HStack>
-            
-            <Badge rounded={10} variant={'solid'} backgroundColor={'black'} width={'2/5'} marginTop={2}>
-              <HStack paddingY={1} alignItems={'center'}>
-                <Icon as={MaterialIcons} name="trending-up" color="primary.500" size={'sm'} marginRight={1.5} />
-                <Text textAlign={'left'} color={'white'} marginRight={1.5}>{'$132.50'}</Text>
-                <Text textAlign={'left'} color={'coolGray.500'}>{'(+15%)'}</Text>
-              </HStack>
-              
-            </Badge>
-          </Box>
+          <TotalBalance />
         }
         {
           /*<HStack my={2}>

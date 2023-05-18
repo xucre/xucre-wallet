@@ -54,7 +54,6 @@ import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
 import { getTokenByChain } from '../../store/token';
 import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
-import NftList from "../nft/NftList";
 
 type Holding = {
   readonly timestamp: string;
@@ -166,7 +165,7 @@ function TabItem({
   );
 }
 
-export default function WalletHistory({ navigation, route }) {
+export default function WalletHistory() {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
@@ -176,16 +175,21 @@ export default function WalletHistory({ navigation, route }) {
     //console.log(event.nativeEvent.text);
     setChainName(event.nativeEvent.text)
   }
+  const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
+  const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
   const [network,] = useRecoilState(activeNetwork);
+  const [networks, setAllNetworks] = useRecoilState(networkList);
   const [currentHoldings, setCurrentHoldings] = useState({
     y: '0.00'
   });
-  const [holdings, setHoldings] = useState([]);
-  const [chartData, setChartData] = useState([]);
-  const [openQuotes, setOpenQuotes] = useState([]);
-  const [isZeroData, setIsZeroData] = useState(false);
+  const [secondToLastHoldings, setSecondToLastHoldings] = useState({
+    percent: '0%',
+    trend: 'flat',
+    y: '0.00',
+
+  })
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -201,7 +205,7 @@ export default function WalletHistory({ navigation, route }) {
 
     const historyResults = await getWalletHistory(wallet.address, chainName);
     //console.log(historyResults);
-    console.log('history retrieved');
+    console.log('hsitory retrieved');
     const outputData = processJsonData(historyResults);
     //console.log(outputData)
     //console.log(outputData.openQuotesByDay[0]);
@@ -219,7 +223,6 @@ export default function WalletHistory({ navigation, route }) {
     })
     console.log(openQuotes.quotes.length);
     // END TESTING PORTION
-    setHoldings(outputData.itemsWithRecentOpenQuote);
     const finalQuotes = openQuotes.quotes.map((d) => {
       return {
         meta: {
@@ -229,9 +232,12 @@ export default function WalletHistory({ navigation, route }) {
         y: Math.round((d.totalQuote + Number.EPSILON) * 100) / 100
       }
     });
-    setCurrentHoldings(finalQuotes[0])
-    setChartData(finalQuotes);
-    setIsZeroData(isReady);
+    setCurrentHoldings(finalQuotes[0]);
+    setSecondToLastHoldings({
+      percent: (((finalQuotes[1].y - finalQuotes[0].y)/finalQuotes[0].y) || 0).toFixed(0)+ '%' ,
+      trend: finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat',
+      y: (finalQuotes[1].y - finalQuotes[0].y).toFixed(2),
+    })
   }
 
   useEffect(() => {
@@ -247,11 +253,9 @@ export default function WalletHistory({ navigation, route }) {
 
   useEffect(() => {
     if (wallet.address) {
-      setHoldings([]);
       setCurrentHoldings({
         y: '0.00'
       });
-      setChartData([]);
       getData();
     }
   }, [wallet, chainName])
@@ -273,8 +277,6 @@ export default function WalletHistory({ navigation, route }) {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    setHoldings([]);
-    setChartData([]);
 
     setTimeout(async () => {
       setRefreshing(false);
@@ -334,140 +336,54 @@ export default function WalletHistory({ navigation, route }) {
 
     return output;
   }
-
-  const getMaxValue = () => {
-    return chartData.reduce((retVal, chart) => {
-      if (retVal < chart.y) {
-        return chart.y+10;
-      }
-      return retVal;
-    }, 0)
+  
+  const formatCurrency = (amount) => {
+    return Number.parseFloat(amount).toFixed(2);
   }
-  return (
-    <DashboardLayout title={_wallet.name}>
-      <Box
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: 'black' }}
-        height={'100%'}
-        safeAreaBottom
-      >
-        {
-          /*<VStack space={4} p={3}>
-            <HStack justifyContent={'space-between'}>
-              <Text fontSize={'lg'}>{_wallet.name}</Text>
-              <Badge rounded={6} variant={'solid'} >
-                <Text color={'lightText'}>{network.chainId}</Text>
-              </Badge>
-            </HStack>            
-            <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
-              color: "#fff"
-            }}>
-              <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
-            </Tooltip>           
-          </VStack>*/
-        }
 
-        {chartData.length > 0 &&
-          <Box padding={0} borderRadius={10} marginX={2} >
-            <HStack space={2} justifyContent={'space-between'}>
-              <VStack>
-                <Text fontSize={'md'} fontWeight={'bold'} color={'coolGray.500'} paddingTop={3}>Total Balance</Text>
-                <HStack paddingBottom={0} space={1}>
-                  <Heading borderBottomColor={'#D4E815'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={'coolGray.100'} >${currentHoldings.y}</Text></Heading>              
-                </HStack>  
-              </VStack>
-              <Menu w="160" shouldOverlapWithTrigger={false} trigger={triggerProps => {
-                  return <Button alignSelf="center" variant="ghost" color={'coolGray.300'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'coolGray.300'} marginLeft={-1} />} {...triggerProps}>
-                          <Text color={'coolGray.300'} fontWeight={'bold'}>{chainName}</Text>
-                        </Button>
-                        ;
-                }}>
-                    <Menu.Item onPress={() => {setChainName('matic-mumbai')}}><Text>matic-mumbai</Text></Menu.Item>
-                    <Menu.Item onPress={() => {setChainName('matic-mainnet')}}><Text>matic-mainnet</Text></Menu.Item>
-                    <Menu.Item onPress={() => {setChainName('eth-mainnet')}}><Text>eth-mainnet</Text></Menu.Item>
-                  </Menu>
-              
+  return (
+    <Box
+      _light={{ backgroundColor: 'white' }}
+      _dark={{ backgroundColor: 'black' }}
+      safeAreaBottom
+    >
+      {
+        <Box bg={'primary.500'} padding={3} borderRadius={10} marginX={2} >
+            
+          <Text fontSize={'md'} fontWeight={'bold'} color={'darkText'} paddingTop={3}>Total Balance</Text>
+          <HStack paddingBottom={0} space={1}>
+            <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={'darkText'} >${formatCurrency(currentHoldings.y)}</Text></Heading>
+            <Menu w="160" marginTop={-1} shouldOverlapWithTrigger={false} trigger={triggerProps => {
+                return <Button alignSelf="center" variant="ghost" color={'darkText'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'darkText'} marginLeft={-1} />} {...triggerProps}>
+                        <Text color={'darkText'} fontWeight={'bold'}>{chainName}</Text>
+                      </Button>
+                      ;
+              }}>
+                  <Menu.Item onPress={() => {setChainName('matic-mumbai')}}><Text>matic-mumbai</Text></Menu.Item>
+                  <Menu.Item onPress={() => {setChainName('matic-mainnet')}}><Text>matic-mainnet</Text></Menu.Item>
+                  <Menu.Item onPress={() => {setChainName('eth-mainnet')}}><Text>eth-mainnet</Text></Menu.Item>
+            </Menu>
+            
+          </HStack>
+          
+          <Badge rounded={10} variant={'solid'} backgroundColor={'black'} width={'2/5'} marginTop={2}>
+            <HStack paddingY={1} alignItems={'center'}>
+              {secondToLastHoldings.trend === 'up' && 
+                <Icon as={MaterialIcons} name="trending-up" color="primary.500" size={'sm'} marginRight={1.5} />              
+              }
+              {secondToLastHoldings.trend === 'flat' && 
+                <Icon as={MaterialIcons} name="trending-flat" color="primary.500" size={'sm'} marginRight={1.5} />              
+              }
+              {secondToLastHoldings.trend === 'down' && 
+                <Icon as={MaterialIcons} name="trending-down" color="primary.500" size={'sm'} marginRight={1.5} />              
+              }
+              <Text textAlign={'left'} color={'white'} marginRight={1.5}>${formatCurrency(secondToLastHoldings.y)}</Text>
+              <Text textAlign={'left'} color={'coolGray.500'}>{`(${secondToLastHoldings.percent})`}</Text>
             </HStack>
             
-            <Chart
-              // eslint-disable-next-line react-native/no-inline-styles
-              style={{ height: 300, width: '100%' }}
-              data={chartData}
-              yDomain={isZeroData ? { max: 20, min: -20 } : {max: getMaxValue(), min : 0}}
-              padding={{ bottom: 20, left: 10, right: 10, top: 50 }}
-            >
-              <HorizontalAxis />
-              <Area theme={{ gradient: { from: { color: '#D4E815' }, to: { color: 'black', opacity: 0.4 } } }} />
-              <Line
-                tooltipComponent={
-                  <Tooltip theme={{                   
-                    formatter: (value) => {
-                      return '$'+ value.y
-                    },
-                    label: {
-                      color: 'black',
-                      textAnchor: 'middle',
-                    },
-                    shape: {
-                      color: '#D4E815',
-                      dx: 0,
-                      dy: 20,
-                      height: 24,
-                      rx: 4,
-                      width: 85,
-                    }, 
-                  }} />
-                }
-                smoothing={'cubic-spline'}
-                theme={{
-                  scatter: { 
-                    default: { 
-                      color: '#E1F245',
-                      height: 0, 
-                      rx: 4, 
-                      width: 0, 
-                    }, 
-                    selected: {
-                      color: 'white',
-                    }
-                  },
-                  stroke: { 
-                    color: '#E1F245', 
-                    width: 1 
-                  }, 
-                }}
-              />
-            </Chart>
-          </Box>
-        }
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-        >
-          <VStack space="5" px={2} mb={10}>
-            {holdings.length > 0 &&
-              <Box m={6} >
-                <VStack space={2} >
-                  {
-                    holdings.map((val, i) => {
-                      return (
-                        <SummaryItem key={val.name + i} token={val} />
-                      )
-                    })
-                  }
-                </VStack>
-
-              </Box>
-            }
-          </VStack>
-        </ScrollView>
-
-        <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
-      </Box>
-    </DashboardLayout>
+          </Badge>
+        </Box>
+      }
+    </Box>
   )
 }
