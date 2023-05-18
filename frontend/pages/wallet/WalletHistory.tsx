@@ -188,6 +188,7 @@ export default function WalletHistory({ navigation, route }) {
   const [holdings, setHoldings] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [openQuotes, setOpenQuotes] = useState([]);
+  const [isZeroData, setIsZeroData] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -217,7 +218,7 @@ export default function WalletHistory({ navigation, route }) {
             direction: finalVal.direction,
             quotes: [...finalVal.quotes, {
               date: d.date,
-              totalQuote: 14555.36
+              totalQuote: 0.0
             }]
           }
         }
@@ -229,7 +230,7 @@ export default function WalletHistory({ navigation, route }) {
           direction,
           quotes: [...finalVal.quotes, {
             date: d.date,
-            totalQuote: direction === 'up' ? upAmount : downAmount
+            totalQuote: 0
           }]
         }
       }
@@ -256,6 +257,7 @@ export default function WalletHistory({ navigation, route }) {
     });
     setCurrentHoldings(finalQuotes[0])
     setChartData(finalQuotes);
+    setIsZeroData(isReady);
   }
 
   useEffect(() => {
@@ -410,6 +412,7 @@ export default function WalletHistory({ navigation, route }) {
               // eslint-disable-next-line react-native/no-inline-styles
               style={{ height: 300, width: '100%' }}
               data={chartData}
+              yDomain={isZeroData ? { max: 20, min: -20 } : null}
               padding={{ bottom: 20, left: 10, right: 10, top: 50 }}
             >
               <HorizontalAxis />
