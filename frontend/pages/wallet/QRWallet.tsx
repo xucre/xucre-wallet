@@ -98,8 +98,10 @@ export default function QRWallet ({navigation, route}) {
 
   const searchItem = (textSearch) => {
     const data = contactList;
-    console.log(data)
-    console.log(textSearch)
+    const dataC = contactList;
+
+    console.log('data',data)
+    console.log('letra',textSearch)
 
     if(textSearch){
       const newData = data.filter(item => {
@@ -111,8 +113,10 @@ export default function QRWallet ({navigation, route}) {
         return itemData.indexOf(textData) > -1
       })
       console.log('newDta',newData)
+      setContactList(newData);
     }else{
-      console.log('h')
+      console.log('entro else', dataC)
+      getPermission();
     }
   }
 
