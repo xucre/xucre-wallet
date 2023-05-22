@@ -35,17 +35,17 @@ import { getWhatsAppToken } from './api'
     const wspCall = async () => {
       try {
         
-        const { token, url } = await getWhatsAppToken();
+        const tokenData = await getWhatsAppToken();
         const requestOptions = {
           body : body,
           headers: {
-            'Authorization': token,
+            'Authorization': tokenData.token,
             'Content-Type': 'application/json'
           },
           method: 'POST',
         }
         await fetch(
-          url, requestOptions)
+          tokenData.url, requestOptions)
           .then(response => {
             response.json()
               .then(data => {
