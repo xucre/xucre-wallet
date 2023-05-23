@@ -124,6 +124,7 @@ const values = {
   },
   QRWallet: {
     instructions: 'Quimilceehuiaa pampa tla-celia tlacohcoohualooni',
+    toast_send: "WhatsApp otitlani successfully!"
   },
   RecoverWallet: {
     instructions:'Porfavor ahaquiaa la secuencia de mnemónicos del proceso de creacion de su wallet original.',

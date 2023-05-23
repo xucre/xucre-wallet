@@ -123,7 +123,8 @@ const values = {
     rescan: "Toque para escanear de nuevo"
   },
   QRWallet: {
-    instructions: "Compartir para recibir fondos"
+    instructions: "Compartir para recibir fondos",
+    toast_send: "WhatsApp enviado exitosamente!"
   },
   RecoverWallet: {
     instructions: "Porfavor ingrese la secuencia de mnemónicos del proceso de creacion de su wallet original.",

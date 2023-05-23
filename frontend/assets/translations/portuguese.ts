@@ -123,7 +123,8 @@ const values = {
     rescan: 'Toque para escanear novamente'
   },
   Qrwallet: {
-    instructions: 'Compartilhe para receber fundos'
+    instructions: 'Compartilhe para receber fundos',
+    toast_send: "WhatsApp enviado com sucesso!"
   },
   RecoverWallet: {
     instructions: 'Insira a sequÃªncia de mnemÃ´nicos do seu processo de criaÃ§Ã£o de carteira original.',

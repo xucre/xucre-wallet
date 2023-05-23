@@ -123,7 +123,8 @@ const values = {
     rescan: 'Hukmanta escanear Ã±it\'iy'
   },
     QRWallet: {
-    instructions: 'Qullqita chaskinapaq rakinakuy'
+    instructions: 'Qullqita chaskinapaq rakinakuy',
+    toast_send: "WhatsApp allinta apachisqa!"
   },
   RecoverWallet: { 
     instructions: 'Ama hina kaspa, Ã±awpaq billetera ruwayniykimanta mnemÃ³nicos nisqap qatiqninta qillqay.',
