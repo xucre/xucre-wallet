@@ -3,8 +3,8 @@ import { getWhatsAppToken } from './api'
       //Main Params
     const phoneNumber = phone.phoneNumbers[0].number; //TODO: Create validation for country code
     //Template params
-    const templateName = 'mediatest'; //TODO: Create multiple template on Whatsapp
-    const templateLanguage = 'en'; //TODO: receive this accordingly
+    const templateName = 'shareqrcode'; //TODO: Create multiple template on Whatsapp
+    const templateLanguage = 'en_US'; //TODO: receive this accordingly
     //Variables of Params
     const trxAmount =  options?.amount;
     const trxAccount = options?.account;
