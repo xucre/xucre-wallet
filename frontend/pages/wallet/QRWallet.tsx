@@ -99,7 +99,7 @@ export default function QRWallet ({navigation, route}) {
 
   const eventFocus = (event) => {
     const eventFocus = event
-    console.log('evento focus entro')
+    console.log('evento focus entro', event)
     return(
       <Text>hola</Text>
     )
@@ -183,7 +183,8 @@ export default function QRWallet ({navigation, route}) {
               }}
               onPress={() => {
                 // eslint-disable-next-line sort-keys
-                whatsapp(item, 'mediatest', 'en', {amount: 54, account: 111111});
+                const walletA = _wallet.wallet.address
+                whatsapp(item, 'mediatest', 'en', {amount: 'www.google.com', account: walletA}, translations[language].QRWallet.toast_send);
               }}
               
               >

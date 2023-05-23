@@ -1,9 +1,13 @@
+// eslint-disable-next-line react-native/split-platform-components
+import { ToastAndroid } from 'react-native';
+
 import { getWhatsAppToken } from './api'
-  const whatsapp = (phone, template, templateLang, options = { account: 0, amount: 0, }) => {
+  const whatsapp = (phone, template, templateLang, options = { account: String, amount: String }, menssageSend) => {
+
       //Main Params
     const phoneNumber = phone.phoneNumbers[0].number; //TODO: Create validation for country code
     //Template params
-    const templateName = 'shareqrcode'; //TODO: Create multiple template on Whatsapp
+    const templateName = 'shareqrcode';  //TODO: Create multiple template on Whatsapp
     const templateLanguage = 'en_US'; //TODO: receive this accordingly
     //Variables of Params
     const trxAmount =  options?.amount;
@@ -52,6 +56,7 @@ import { getWhatsAppToken } from './api'
                 console.log('value: ' + JSON.stringify(data));
               });
           })
+          ToastAndroid.show(menssageSend,ToastAndroid.SHORT);
       }
       catch (error) {
         console.error('error',error);

@@ -123,7 +123,8 @@ const values = {
     rescan: "Tap to Scan Again"
   },
   QRWallet: {
-    instructions: "Share to receive funds"
+    instructions: "Share to receive funds",
+    toast_send: "WhatsApp sent successfully!"
   },
   RecoverWallet: {
     instructions: "Please input the sequence of mnemonics from your original wallet creation process.",
