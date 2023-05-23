@@ -131,12 +131,11 @@ export default function QRWallet ({navigation, route}) {
   }
 
   return (
-    <ScrollView px={10} _contentContainerStyle={{
-      px: "-50px",
-      w: "100%",
-    }}>
-
-    <DashboardLayout title={_wallet.name}>
+    <ScrollView horizontal={false} style={{flex: 1}}>
+    <ScrollView
+      horizontal={true}
+      contentContainerStyle={{width: '100%', height: '100%'}}>
+    <DashboardLayout title={_wallet.name} >
       <Box         
         _light={{ backgroundColor: 'white' }}
         _dark={{ backgroundColor: '#1b1e24' }}
@@ -166,6 +165,7 @@ export default function QRWallet ({navigation, route}) {
 
       <FlatList
         data={contactList}
+        horizontal={false}
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
@@ -241,6 +241,7 @@ export default function QRWallet ({navigation, route}) {
     </View>
       </Box>
     </DashboardLayout>
+    </ScrollView>
     </ScrollView>
   )
 }
