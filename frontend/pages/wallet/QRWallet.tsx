@@ -69,6 +69,7 @@ export default function QRWallet ({navigation, route}) {
   }, [])
 
   const [contactList, setContactList] = useState([]);
+  const [viewWalletQR, setViewWalletQR] = useState(Boolean);
   const isFocused = useIsFocused();
   useEffect(() => {
     getPermission();
@@ -96,6 +97,15 @@ export default function QRWallet ({navigation, route}) {
     });
   };
 
+  const eventFocus = (event) => {
+    const eventFocus = event
+    console.log('evento focus entro')
+    return(
+      <Text>hola</Text>
+    )
+    
+  }
+
   const searchItem = (textSearch) => {
     const data = contactList;
     const dataC = contactList;
@@ -121,6 +131,11 @@ export default function QRWallet ({navigation, route}) {
   }
 
   return (
+    <ScrollView px={10} _contentContainerStyle={{
+      px: "-50px",
+      w: "100%",
+    }}>
+
     <DashboardLayout title={_wallet.name}>
       <Box         
         _light={{ backgroundColor: 'white' }}
@@ -128,6 +143,7 @@ export default function QRWallet ({navigation, route}) {
         height={'100%'}
         safeAreaBottom
       >
+
         <Center mt={10} mb={6}>
           <QRCode
             size={256}
@@ -138,12 +154,15 @@ export default function QRWallet ({navigation, route}) {
           <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
           <Text>{_wallet.wallet.address}</Text>
         </Center>
-        <View style={{backgroundColor: '#000', flex: 1}}>
+
+        
+        <View style={{backgroundColor: '#1b1e24', flex: 1}}>
 
         <VStack w="100%" space={5} alignSelf="center">
         <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}  
-        onChangeText={(text) => {searchItem(text)}}/>
+        onChangeText={(text) => {searchItem(text)}} onFocus={(event) => {eventFocus(event)}}/>
       </VStack>
+
 
       <FlatList
         data={contactList}
@@ -214,11 +233,14 @@ export default function QRWallet ({navigation, route}) {
                 </TouchableOpacity> */}
               </View>
             </TouchableOpacity>
+        
           );
         }}
       />
+      
     </View>
       </Box>
     </DashboardLayout>
+    </ScrollView>
   )
 }
