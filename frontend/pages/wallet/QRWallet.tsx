@@ -182,9 +182,8 @@ export default function QRWallet ({navigation, route}) {
                 width: '90%',
               }}
               onPress={() => {
-                // eslint-disable-next-line sort-keys
                 const walletA = _wallet.wallet.address
-                whatsapp(item, 'mediatest', 'en', {amount: 'www.google.com', account: walletA}, translations[language].QRWallet.toast_send);
+                whatsapp(item, 'shareqrcode', 'en_US', {param1: 'www.google.com', param2: walletA}, translations[language].QRWallet.toast_send);
               }}
               
               >
