@@ -63,7 +63,8 @@ const values = {
     name_wallet: "Wallet name"
   },
   LanguagePage: {
-    select_language: "Select your Language"
+    menu_button: "LANGUAGE",
+    select_language: "Select your Language",
   },
   LegacyEthSign: {
     approve_button: "Approve",

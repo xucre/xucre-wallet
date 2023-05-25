@@ -63,6 +63,7 @@ const values = {
     name_wallet: "Toocaa tla Tlahcuiloolaamapetlaacaltoon-tli",
   },
   LanguagePage: {
+    menu_button: "Tlahtolli",
     select_language: "Tlapepenalli Tlahtolli" // NEEDS UPDATE
   },
   LegacyEthSign: {

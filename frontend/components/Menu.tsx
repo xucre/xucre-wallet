@@ -219,6 +219,23 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
     );
   }
 
+  function SelectLanguageLink() {
+    return (
+      <VStack space={4} mt={{ base: 0 }}>
+          <Button
+            variant="outline"
+            my={1} 
+            colorScheme={'yellow'} 
+            rounded={100} 
+            px={10}  
+            onPress={() => {navigate('Language');}}          
+          >
+            <Text>{translations[_language].LanguagePage.menu_button}</Text>
+          </Button>
+      </VStack>
+    );
+  }
+
   function SetPassword() {
     return (
       <VStack space={4} mt={{ base: 0 }}>
@@ -269,8 +286,8 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
                 require('../assets/images/example_avatar.png')
               } size="xs" marginLeft={1}></Avatar>
             </Pressable>
-            {/*<ToggleDarkMode setScheme={setScheme} />*/}
-            <SelectLanguage />
+            {<ToggleDarkMode setScheme={setScheme} />}
+            {/*<SelectLanguage />*/}
             <BackButton setDrawerStatus={setDrawerStatus}/>              
           </HStack>
           
@@ -279,6 +296,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             //<Button onPressIn={() => {storage.clear()}} variant="outline" >Clear Queue</Button>
           }
           <VStack space={0}>
+            <SelectLanguageLink />
             <NetworkLink/>
             <WalletLink/>
             <QRScan />

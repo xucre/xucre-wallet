@@ -63,6 +63,7 @@ const values = {
     name_wallet: 'Nome da carteira',
   },
   LanguagePage: {  
+    menu_button: "Idioma",
     select_language: "Selecione seu idioma" 
   },
   LegacyEthSign: {

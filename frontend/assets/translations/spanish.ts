@@ -63,6 +63,7 @@ const values = {
     name_wallet: "Nombre de la Billetera"
   },
   LanguagePage: {
+    menu_button: 'Idioma',
     select_language: "Seleccione su Idioma"
   },
   LegacyEthSign: {
