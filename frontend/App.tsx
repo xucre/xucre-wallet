@@ -67,6 +67,7 @@ import EthSign from './pages/walletConnect/v2/EthSign';
 import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
+import CodeCountry from './service/CodeCountry';
 import { navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient} from './service/walletConnect';
@@ -244,6 +245,10 @@ export const AppWrapper = () => {
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SupportPage" component={SupportPage} options={{ 
+              headerTitleAlign: 'left',
+              title: ' ', 
+            }} ></Stack.Screen>
+            <Stack.Screen name="CodeCountry" component={CodeCountry} options={{ 
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>

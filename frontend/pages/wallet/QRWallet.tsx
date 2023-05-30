@@ -33,12 +33,18 @@ import {
   SunIcon,
   Text,
   Tooltip,
+  Modal,
   useColorMode,
   useColorModeValue,
   VStack,
+  FormControl,
+  NativeBaseProvider,
+  Popover,
 } from "native-base";
+import { background, color, position } from "native-base/lib/typescript/theme/styled-system";
 import React, {createRef, useEffect, useState} from "react";
 import { FlatList, Linking, PermissionsAndroid, TouchableOpacity, View } from "react-native";
+import { StyleSheet } from 'react-native';
 import Communications from 'react-native-communications';
 import Contact from 'react-native-contacts';
 import QRCode from "react-qr-code";
@@ -48,14 +54,16 @@ import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeWallet, language as stateLanguage } from "../../service/state";
 import whatsapp from "../../service/whatsapp";
+import CodeCountry from "../../service/CodeCountry";
+import { AnyARecord } from "dns";
 
 
 
 export default function QRWallet ({navigation, route}) {
   const { colorMode } = useColorMode();
-
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
+  const initialFocusRef = React.useRef(null);
 
   useEffect(() => {
     if (_wallet.name === '') {
@@ -70,6 +78,7 @@ export default function QRWallet ({navigation, route}) {
 
   const [contactList, setContactList] = useState([]);
   const [viewWalletQR, setViewWalletQR] = useState(Boolean);
+  const [showModal, setShowModal] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
     getPermission();
@@ -97,12 +106,18 @@ export default function QRWallet ({navigation, route}) {
     });
   };
 
+  const openPage = (pageName: string, param1: any, param2: any) => {
+    switch (pageName) {
+      case 'CodeCountry':
+        navigation.navigate('CodeCountry',{param1,param2});
+        break;
+    }
+  }
+
   const eventFocus = (event) => {
     const eventFocus = event
     console.log('evento focus entro', event)
-    return(
-      <Text>hola</Text>
-    )
+
     
   }
 
@@ -162,7 +177,7 @@ export default function QRWallet ({navigation, route}) {
         onChangeText={(text) => {searchItem(text)}} onFocus={(event) => {eventFocus(event)}}/>
       </VStack>
 
-
+      
       <FlatList
         data={contactList}
         horizontal={false}
@@ -181,9 +196,12 @@ export default function QRWallet ({navigation, route}) {
                 marginTop: 10,
                 width: '90%',
               }}
-              onPress={() => {
+              onPress={()=>{
                 const walletA = _wallet.wallet.address
-                whatsapp(item, 'shareqrcode', 'en_US', {param1: 'www.google.com', param2: walletA}, translations[language].QRWallet.toast_send);
+                openPage('CodeCountry', item, walletA)
+                //<CodeCountry navigation={navigation} route={item}/>
+               /*  const walletA = _wallet.wallet.address
+                whatsapp(item, 'shareqrcode', 'en_US', {param1: 'www.google.com', param2: walletA}, translations[language].QRWallet.toast_send); */
               }}
               
               >
