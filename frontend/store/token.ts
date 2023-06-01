@@ -7,15 +7,17 @@ export const addToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
   const tokens = JSON.parse(_tokens) as readonly Token[];
   if (Array.isArray(tokens)) {
-    await EncryptedStorage.setItem(
+    const isSet = await EncryptedStorage.setItem(
       "token_list",
       JSON.stringify([...tokens, token])
     );
+    console.log(isSet);
   } else {
-    await EncryptedStorage.setItem(
+    const isSet = await EncryptedStorage.setItem(
       "token_list",
       JSON.stringify([token])
     );
+    console.log(isSet);
   }
 };
 
