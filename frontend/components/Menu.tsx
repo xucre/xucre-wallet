@@ -37,6 +37,7 @@ import { getWCLegacyUrl } from "../store/setting";
 import { getTheme, storeTheme } from '../store/setting';
 import { getWallets } from "../store/wallet";
 
+import NetworkIcon from './NetworkIcon';
 import PasswordPage, { needsAuth } from "./Password";
 import SelectLanguage from "./SelectLanguage";
 
@@ -100,7 +101,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
 
   const [, setWalletState] = useRecoilState(walletList);
   const [,setNetworkList] = useRecoilState(networkList);
-  const [,setActiveNetwork] = useRecoilState(activeNetwork);
+  const [_activeNetwork,setActiveNetwork] = useRecoilState(activeNetwork);
   useEffect(() => {
     const runAsync = async () => {
       const _networks = await getNetworks();
@@ -108,14 +109,17 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       if (!Array.isArray(_networks) || _networks.length === 0) {
         const _newNetworks = constructDefaultNetworks();
         setNetworkList(_newNetworks);
-        setActiveNetwork(_newNetworks[0]);
         await storeNetworks(_newNetworks);
-        await storeActiveNetwork(_newNetworks[0]);
+        if (!_activeNetwork) {
+          setActiveNetwork(_newNetworks[0]);
+          await storeActiveNetwork(_newNetworks[0]);
+        }        
+      }
+      if (!_activeNetwork) {
+        const currentNetwork = await getActiveNetwork();        
+        setActiveNetwork(currentNetwork);    
       }
       
-      const currentNetwork = await getActiveNetwork();        
-      setActiveNetwork(currentNetwork);    
-
       const _wallets = await getWallets();
       //console.log('menu get wallets',_wallets);
       if (Array.isArray(_wallets) && _wallets.length > 0) {
@@ -286,8 +290,9 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
                 require('../assets/images/example_avatar.png')
               } size="xs" marginLeft={1}></Avatar>
             </Pressable>
-            {<ToggleDarkMode setScheme={setScheme} />}
+            {/*<ToggleDarkMode setScheme={setScheme} />*/}
             {/*<SelectLanguage />*/}
+            {<NetworkIcon navigation={navigation} route={route}/>}
             <BackButton setDrawerStatus={setDrawerStatus}/>              
           </HStack>
           

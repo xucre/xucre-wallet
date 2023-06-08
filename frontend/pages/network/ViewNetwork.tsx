@@ -139,9 +139,9 @@ export default function ViewNetwork ({navigation, route}) {
         {isEditing && 
         
           <>
-                 <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={60} >Edit this network</Text>
+            <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={60} >Edit this network</Text>
 
-<Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={130} fontWeight={'bold'}>{network.name}</Text>
+            <Text style={{color: '#fff', textAlign: 'center', marginLeft: 15, marginRight: 15}}fontSize={'md'} top={130} fontWeight={'bold'}>{network.name}</Text>
 
             <VStack space={4} px={2} py={150} height={'70%'} alignItems='center'>
               <Input  style={styles.textoImput} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />

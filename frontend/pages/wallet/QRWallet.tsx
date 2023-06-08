@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 /* eslint-disable react-native/split-platform-components */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
@@ -97,6 +99,9 @@ export default function QRWallet ({navigation, route}) {
     });
   };
 
+  // Transitions
+  const [displayTooltip, setDisplayTooltip] = useState(false);
+
   const eventFocus = (event) => {
     const eventFocus = event
     console.log('evento focus entro', event)
@@ -130,11 +135,24 @@ export default function QRWallet ({navigation, route}) {
     }
   }
 
+  const copyToClipboard = () => {
+    console.log('copyToClipboard', _wallet.wallet.address);
+    Clipboard.setStringAsync(String(_wallet.wallet.address));
+    setDisplayTooltip(true);
+    setTimeout(() => {
+      setDisplayTooltip(false);
+    }, 1000)
+  };
+
+
   return (
     <ScrollView horizontal={false} style={{flex: 1}}>
     <ScrollView
       horizontal={true}
-      contentContainerStyle={{width: '100%', height: '100%'}}>
+      contentContainerStyle={{
+        height: '100%',
+        width: '100%', 
+        }}>
     <DashboardLayout title={_wallet.name} >
       <Box         
         _light={{ backgroundColor: 'white' }}
@@ -151,7 +169,11 @@ export default function QRWallet ({navigation, route}) {
             viewBox={`0 0 256 256`}
           />
           <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
-          <Text>{_wallet.wallet.address}</Text>
+          <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
+              color: "#fff"
+          }}>
+            <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
+          </Tooltip> 
         </Center>
 
         

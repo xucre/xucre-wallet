@@ -1,8 +1,8 @@
+/* eslint-disable react-native/no-color-literals */
+/* eslint-disable react-native/no-unused-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { BigNumber, ethers, getDefaultProvider, Wallet } from 'ethers';
-import {StyleSheet} from 'react-native';
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import {
   Alert,
   AlertDialog,
@@ -33,9 +33,11 @@ import {
 } from "native-base";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
+import {StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import erc20Abi from '../../../contracts/erc20.json';
 import translations from "../../assets/translations";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../service/state";
@@ -70,7 +72,7 @@ export default function SendToken ({navigation, route, storage}) {
   useEffect(() => {
     const runAsync = async () => {
       const _tokens = await getTokenByChain(network.chainId);
-      //console.log(_tokens);
+      console.log('sendToken',network, _tokens);
       setTokens(_tokens);
     }
 
@@ -191,68 +193,57 @@ export default function SendToken ({navigation, route, storage}) {
 }
 
 const styles = StyleSheet.create({
-  // eslint-disable-next-line react-native/no-color-literals, react-native/no-unused-styles
   buttonContainer: {
-    fontWeight: 'bold',
-    // eslint-disable-next-line sort-keys
     backgroundColor: '#D4E815',
-    position: 'relative',
-    width: 340,
-    left: 10,
-    top: 180,
-    textAlign: "left",
-    borderRadius: Border.br_sm,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: '#000',
+    borderRadius: Border.br_sm,
+    borderStyle: "solid",
+    borderWidth: 1,
+    fontWeight: 'bold',
+    left: 10,
+    position: 'relative',
+    textAlign: "left",
+    top: 180,
+    width: 340,
 
   }, 
-   // eslint-disable-next-line react-native/no-unused-styles
+  ethereumTestnet: {
+    color: Color.white,
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
+    left: 18,
+    letterSpacing: -0.2,
+    lineHeight: 21,
+    position: "absolute",
+    textAlign: "left",
+    top: 1,
+    width: 300,
+  },
    groupParent: {
-    top: 100,
-    // eslint-disable-next-line sort-keys
-    left: 22,
-    width: 346,
-    // eslint-disable-next-line sort-keys
     height: 56,
+    left: 22,
     position: "relative",
-   // eslint-disable-next-line react-native/no-unused-styles
-   }, rectangleParent: {
+    top: 100,
+    width: 346,
+   }, groupWrapperLayout: {
+    height: 56,
+    top: 0,
+    width: 339,
+  }, rectangleParent: {
     left: 7,
     position: "absolute",
-  // eslint-disable-next-line sort-keys
-  }, groupWrapperLayout: {
-    width: 339,
-    // eslint-disable-next-line sort-keys
-    top: 0,
-    // eslint-disable-next-line sort-keys
-    height: 56,
-  
-  // eslint-disable-next-line react-native/no-unused-styles
-  }, titleLayout: {
-    color: Color.white,
-    fontFamily: FontFamily.interRegular,
-    textAlign: "center",
-    top: 50,
-  },ethereumTestnet: {
-    top: 1,
-    left: 18,
-    width: 300,
-    color: Color.white,
-    letterSpacing: -0.2,
-    fontFamily: FontFamily.interRegular,
-    lineHeight: 21,
-    fontSize: FontSize.size_base,
-    textAlign: "left",
-    position: "absolute"
-  // eslint-disable-next-line react-native/no-color-literals
   }, textoImput: {
-    borderRadius: Border.br_xs,
     backgroundColor: Color.gray_300,
     borderColor: "#7b7b7b",
-    borderWidth: 1,
+    borderRadius: Border.br_xs,
     borderStyle: "solid",
-    width: 339,
+    borderWidth: 1,
     top: 0,
-  }
+    width: 339,
+  }, titleLayout: {
+    color: Color.white,
+    fontFamily: FontFamily.inter,
+    textAlign: "center",
+    top: 50,
+  },
 });

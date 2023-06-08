@@ -14,7 +14,7 @@ import { iconNames } from '../../store/network';
 
 export default function TokenItem ({navigation, token}) {
   const { colorMode } = useColorMode();
-  const [network, setNetwork] = useRecoilState(activeNetwork);
+  const [network, ] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
@@ -43,6 +43,7 @@ export default function TokenItem ({navigation, token}) {
   useEffect(() => {
     const runAsync = async () => {
       try {
+        //console.log('token onload', token);
         if (token.type === 'coin' && provider.getBlockNumber) {
           const currentBlock = await provider.getBlockNumber();
           if (wallet.address && currentBlock > 0) {
@@ -54,7 +55,9 @@ export default function TokenItem ({navigation, token}) {
           }//
         } else if (token.type === 'token' && wallet.address) {
           const contract = new ethers.Contract(token.address, erc20Abi, provider);
+          //console.log('token get balance', contract.balanceOf);
           const balance = await contract.balanceOf((wallet.address));
+          console.log('token balance', token.name, balance);
           if (isComponentMounted) {
             setAmount(balance);
           }
