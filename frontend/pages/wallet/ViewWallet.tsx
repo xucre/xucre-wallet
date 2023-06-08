@@ -125,6 +125,7 @@ export default function ViewWallet ({navigation, route}) {
   
   const syncTokens = async () => {
     const _tokens = await getTokenByChain(network.chainId);
+    console.log('tokens', _tokens);
     const coinToken = {
       address : '',
       amount : ethers.utils.formatEther( 0 ),

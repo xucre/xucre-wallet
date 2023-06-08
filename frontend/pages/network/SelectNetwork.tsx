@@ -5,9 +5,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from '@expo/vector-icons'; 
-
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
+import { position } from "native-base/lib/typescript/theme/styled-system";
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 
 import arrayShuffle from 'array-shuffle';
@@ -56,7 +56,6 @@ import {
 } from "../../service/state";
 import { truncateString } from "../../service/utility";
 import { getNetworks, storeActiveNetwork } from "../../store/network";
-import { position } from "native-base/lib/typescript/theme/styled-system";
 
 export default function SelectNetwork ({navigation, route}) {
   const [language,] = useRecoilState(stateLanguage);
