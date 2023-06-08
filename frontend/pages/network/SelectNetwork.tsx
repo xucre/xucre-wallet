@@ -203,7 +203,6 @@ export default function SelectNetwork ({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
-  // eslint-disable-next-line react-native/no-color-literals, react-native/no-unused-styles
   buttoContainer: {
     fontWeight: 'bold',
     backgroundColor: Color.gray_200,
@@ -211,7 +210,7 @@ const styles = StyleSheet.create({
     width: 325,
     textAlign: 'left',
     borderRadius: Border.br_sm,
-    fontFamily: FontFamily.interRegular,
+    fontFamily: FontFamily.inter,
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: '#000'
@@ -260,7 +259,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
 
     color: Color.white,
-    fontFamily: FontFamily.interRegular,
+    fontFamily: FontFamily.inter,
     lineHeight: 21,
 
     letterSpacing: -0.2,
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_2xl,
     lineHeight: 30,
     fontWeight: "600",
-    fontFamily: FontFamily.interSemibold,
+    fontFamily: FontFamily.inter,
     textAlign: "left",
     color: Color.white,
     letterSpacing: -0.2,
