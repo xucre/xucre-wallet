@@ -5,7 +5,7 @@ import { getWhatsAppToken } from './api'
   const whatsapp = (phone, template, templateLang, options = { param1: String, param2: String }, messageSend) => {
 
       //Main Params
-    const phoneNumber = phone.phoneNumbers[0].number; //TODO: Create validation for country code
+    const phoneNumber = phone //TODO: Create validation for country code
     //Template params
     const templateName = template;
     const templateLanguage = templateLang;
@@ -56,7 +56,7 @@ import { getWhatsAppToken } from './api'
                 console.log('value: ' + JSON.stringify(data));
               });
           })
-          ToastAndroid.show(messageSend,ToastAndroid.SHORT);
+          ToastAndroid.show(messageSend,ToastAndroid.TOP);
       }
       catch (error) {
         console.error('error',error);

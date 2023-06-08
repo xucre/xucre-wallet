@@ -1,8 +1,12 @@
+/* eslint-disable react-native/no-unused-styles */
+/* eslint-disable sort-keys */
+/* eslint-disable import/order */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from '@expo/vector-icons'; 
-
+import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
+import React, {createRef, useEffect, useState} from "react";
 import { position } from "native-base/lib/typescript/theme/styled-system";
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 
@@ -12,6 +16,7 @@ import {
   Alert,
   AlertDialog,
   ArrowBackIcon,
+  Avatar,
   Badge,
   Box,
   Button,
@@ -37,13 +42,10 @@ import {
   View,
   VStack,
 } from "native-base";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, {createRef, useEffect, useState} from "react";
 import {StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
-
-
+import { getIconImage } from "../../service/api";
 import translations from "../../assets/translations";
 import GuestLayout from '../../layouts/GuestLayout';
 import { 
@@ -57,18 +59,21 @@ import { getNetworks, storeActiveNetwork } from "../../store/network";
 
 export default function SelectNetwork ({navigation, route}) {
   const [language,] = useRecoilState(stateLanguage);
+  const { colorMode } = useColorMode();
   const [, setSelectedNetwork] = useRecoilState(selectedNetwork);
   const [networks, setNetworks] = useRecoilState(networkList);
   const [, setActiveNetwork] = useRecoilState(activeNetwork);
+  const [tokenImage, setTokenImage] = useState('');
   useEffect(() => {
     const runAsync = async () => {
       const _networks = await getNetworks();
+      console.log('nectworks ', _networks)
       if (Array.isArray(_networks)) {
         setNetworks(_networks);
       }
     }
     runAsync();
-  }, [])
+  }, [tokenImage])
 
   const createNetwork = () => {
     navigation.navigate('CreateNetwork');
@@ -78,10 +83,24 @@ export default function SelectNetwork ({navigation, route}) {
     navigation.navigate('ViewNetwork');
   }
 
+  const getIconNetwork = async (metadata: any) => {
+    try {
+      const img = await getIconImage(metadata.symbol.toLowerCase());
+        console.log('data1', img)
+        return img
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
   const NetworkItem = ({metadata}) => {
+    
+      const avatarNetwork = getIconNetwork(metadata)
+      console.log('avatarNetworks', avatarNetwork)
+
+    console.log('paso4', metadata)
     const selectNetwork= () => {
-      //
-      //console.log(metadata);
       setActiveNetwork(metadata);
       storeActiveNetwork(metadata);
       //viewNetwork();
@@ -91,6 +110,10 @@ export default function SelectNetwork ({navigation, route}) {
       setSelectedNetwork(metadata);
       viewNetwork();
     }
+
+    const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/'+metadata.symbol.toLowerCase()+'.png'
+
+    const isDark = colorMode === 'dark';
     return (
       <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'} flex={3}>
       <HStack alignItems="center" justifyContent="space-between">
@@ -127,15 +150,10 @@ export default function SelectNetwork ({navigation, route}) {
               return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
                 {
 
-                  <Icon
-                  as={MaterialIcons}
-                  name='network-cell'
-                  size="6"
-                  margin={4}
-                  color="#fff"
-                /> 
-              
-                
+                  <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="md" ml="10px" mb="10px" mr="1" source={{
+                    uri: avatar
+                  }}>
+                  </Avatar>
                 }
               </Pressable>;
               }}
@@ -199,25 +217,22 @@ const styles = StyleSheet.create({
     borderColor: '#000'
 
   }, 
-  // eslint-disable-next-line sort-keys, react-native/no-unused-styles
   groupParent: {
     top: 100,
-    // eslint-disable-next-line sort-keys
     width: 346,
-    // eslint-disable-next-line sort-keys
     height: 56,
     position: "relative",
   },  rectangleParent: {
     left: 7,
     position: "absolute",
-  // eslint-disable-next-line sort-keys
+
   },  groupWrapperLayout: {
     width: 339,
-    // eslint-disable-next-line sort-keys
+    
     top: 0,
-    // eslint-disable-next-line sort-keys
+
     height: 56,
-  // eslint-disable-next-line sort-keys
+
   },  groupChild: {
     borderColor: "#858585",
   }, groupLayout: {
@@ -225,51 +240,48 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_sm,
     left: 0,
     width: 339,
-    // eslint-disable-next-line sort-keys
+
     top: 0,
-    // eslint-disable-next-line sort-keys
+
     height: 56,
     position: "absolute",
   },  networksBorder: {
     borderWidth: 1,
-    // eslint-disable-next-line sort-keys
+    
     borderStyle: "solid",
-  // eslint-disable-next-line sort-keys
+
   },  ethereum: {
     top: 16,
-    // eslint-disable-next-line sort-keys
     left: 60,
   },  ethereumLayout1: {
     width: 234,
-    // eslint-disable-next-line sort-keys
+
     height: 27,
     textAlign: "left",
-    // eslint-disable-next-line sort-keys
+
     color: Color.white,
     fontFamily: FontFamily.interRegular,
     lineHeight: 21,
-    // eslint-disable-next-line sort-keys
+
     letterSpacing: -0.2,
-    // eslint-disable-next-line sort-keys
+
     fontSize: FontSize.size_base,
   },
-  // eslint-disable-next-line react-native/no-unused-styles
+
   networksInner: {
     top: 437,
   },
-  // eslint-disable-next-line react-native/no-unused-styles
   newNetwork: {
     top: 17,
-    // eslint-disable-next-line sort-keys
+
     left: 21,
-  // eslint-disable-next-line sort-keys, react-native/no-unused-styles
   }, networksPosition: {
     left: 29,
     width: 339,
-    // eslint-disable-next-line sort-keys
+
     height: 56,
     position: "absolute",
-  // eslint-disable-next-line sort-keys
+
   }, ethereumLayout: {
     height: 27,
     position: "absolute",
