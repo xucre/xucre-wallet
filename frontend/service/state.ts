@@ -39,11 +39,11 @@ export const networkList = atom({
 
 export const activeNetwork = atom({
   default: {
-    blockExplorer: '',
-    chainId: 0,
-    name: '',
-    rpcUrl: '',
-    symbol: '',
+    blockExplorer: 'https://etherscan.io',
+      chainId: 1,
+      name: 'Ethereum Mainnet',
+      rpcUrl: 'wss://nd-lu5iumrlejgoxnmlpsxb2nkyw4.wss.ethereum.managedblockchain.us-east-1.amazonaws.com',
+      symbol: 'ETH',
   } as Network,
   key: 'activeNetwork'
 })
