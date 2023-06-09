@@ -270,7 +270,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
         <Pressable onPress={() => {setDrawerStatus(true)}}>
           <Avatar source={
             require('../assets/images/example_avatar.png')
-          } size="xs" marginRight={3}></Avatar>
+          } size="xs" m={1} ml={2} mb={1}></Avatar>
         </Pressable>
       }
       <Drawer
@@ -288,7 +288,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             <Pressable onPress={() => {setDrawerStatus(true)}}>
               <Avatar source={
                 require('../assets/images/example_avatar.png')
-              } size="xs" marginLeft={1}></Avatar>
+              } size="xs" m={1} ml={2} mb={1}></Avatar>
             </Pressable>
             {/*<ToggleDarkMode setScheme={setScheme} />*/}
             {/*<SelectLanguage />*/}

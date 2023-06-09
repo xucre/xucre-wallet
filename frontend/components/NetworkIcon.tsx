@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import {
   AlertDialog,
   ArrowBackIcon,
+  Avatar,
   Box,
   Button,
   Center,
@@ -13,11 +14,13 @@ import {
   Icon,
   IconButton,
   Image,
+  Menu,
   MoonIcon,
   Pressable,
   ScrollView,
   SunIcon,
   Text,
+  Tooltip,
   useColorMode,
   useColorModeValue,
   VStack,
@@ -32,16 +35,22 @@ import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage
 export default function NetworkIcon({navigation, route}) {
   const [language, ] = useRecoilState(stateLanguage);
   const [network, ] = useRecoilState(selectedNetwork);
+  const {colorMode} = useColorMode();
   const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
+  const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/'+_activeNetwork.symbol.toLowerCase()+'.png';
+  const isDark = colorMode === 'dark';
   //{translations[language].BasePage.title}
   useEffect(() => {
     const runAsync = async () => {
       //
     }
-    //console.log('NetworkIcon',_activeNetwork, network);
+    //console.log('NetworkIcon',_activeNetwork.chainId, network.chainId);
     runAsync();
   }, [_activeNetwork, network])
   return (
-    <></>
+    <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
+      uri: avatar
+    }}>
+    </Avatar>
   );
 }
