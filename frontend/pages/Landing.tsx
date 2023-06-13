@@ -83,7 +83,7 @@ export default function LandingPage({ navigation, route }) {
         />*/
       }
       <Box
-        _light={{ bg: '#D4E815' }}
+        _light={{ bg: '#1B1E3F' }}
         _dark={{ bg: '#D4E815' }}
       />
       <Center
@@ -91,7 +91,7 @@ export default function LandingPage({ navigation, route }) {
         my="auto"
         p={{ md: 8 }}
         _dark={{ bg: '#D4E815' }}
-        _light={{ bg: '#D4E815' }}
+        _light={{ bg: '#1B1E3F' }}
       >
         <Stack
           w="100%"
@@ -100,7 +100,7 @@ export default function LandingPage({ navigation, route }) {
           direction={{ base: 'column', md: 'row' }}
         >
           <Box         
-            _light={{ backgroundColor: '#D4E815' }}
+            _light={{ backgroundColor: '#1B1E3F' }}
             _dark={{ backgroundColor: '#D4E815' }}
             height={'100%'}
           >
@@ -111,7 +111,7 @@ export default function LandingPage({ navigation, route }) {
               alignSelf="center"
               position='relative'        
               top={'40%'}
-              _light={{ backgroundColor: '#D4E815' }}
+              _light={{ backgroundColor: '#1B1E3F' }}
               _dark={{ backgroundColor: '#D4E815' }}
             >
               
@@ -130,7 +130,7 @@ export default function LandingPage({ navigation, route }) {
                   <Box >
                     <Image
                       style={{  height: 80, width: 80 }}
-                      source={require('../assets/images/icon-black.png')}
+                      source={require('../assets/images/icon-white.png')}
                       alt="XucreWallet"
                     />
                   </Box>
@@ -145,7 +145,7 @@ export default function LandingPage({ navigation, route }) {
               bottom={'0%'}
               left={0}
               zIndex={-1000}
-              _light={{ backgroundColor: '#D4E815' }}
+              _light={{ backgroundColor: '#1B1E3F' }}
               _dark={{ backgroundColor: '#D4E815' }}
             >
               <Image

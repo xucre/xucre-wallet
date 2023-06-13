@@ -161,7 +161,7 @@ export default function ViewWallet ({navigation, route}) {
   useEffect(() => {
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
-    } else {
+    } else if (network) {
       console.log(_wallet.wallet.address);
       setWallet(_wallet.wallet);
     }
@@ -257,141 +257,164 @@ export default function ViewWallet ({navigation, route}) {
 
   return (
     <DashboardLayout title={_wallet.name}>
-      <Box         
+      {network && network.rpcUrl === '' && 
+        <Center         
         _light={{ backgroundColor: 'white' }}
         _dark={{ backgroundColor: 'black' }}
         height={'100%'}
+        justifyContent={'center'}
         safeAreaBottom
-      >
-        {
-          /*<VStack space={4} p={3}>
-            <HStack justifyContent={'space-between'}>
-              <Text fontSize={'lg'}>{_wallet.name}</Text>
-              <Badge rounded={6} variant={'solid'} >
-                <Text color={'lightText'}>{network.chainId}</Text>
-              </Badge>
-            </HStack>            
-            <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
-              color: "#fff"
-            }}>
-              <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
-            </Tooltip>           
-          </VStack>*/
-        }
-
-        {
-          <TotalBalance />
-        }
-        {
-          /*<HStack my={2}>
-            <Button.Group isAttached colorScheme="muted" size="full">
-              <Button onPress={receiveFunds} width={'1/3'} py={3}><Text>Recieve</Text></Button>
-              <Button width={'1/3'} py={3} colorScheme={'darkBlue'} onPress={swapTokens} ><Text>Swap</Text></Button>
-              <Button width={'1/3'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
-            </Button.Group>
-          </HStack>*/
-        }
-        <HStack space="4" alignItems="center" justifyContent={'space-around'} marginTop={2} marginLeft={2} marginRight={2}>
+        >
+          <Center bg={colorMode === 'dark' ? "primary.400" : "tertiary.500"} _text={{
+            color: "white",
+            fontWeight: "bold"
+          }} height={200} width={{
+            base: 200,
+            lg: 250
+          }}>
+              <Text fontSize="md" _light={{color: 'lightText'}} _dark={{color: 'darkText'}} bold={true}>{translations[language].ViewWallet.no_network_error}</Text>
+            </Center>
+        </Center>
+      }
+      {network && network.rpcUrl !== '' && 
+          <Box         
+          _light={{ backgroundColor: 'white' }}
+          _dark={{ backgroundColor: 'black' }}
+          height={'100%'}
+          safeAreaBottom
+        >
           {
-            middleButtons.map((btn, i) => {
-              return (
-                <Button
-                  key={'middleButtons'+i}
-                  variant="solid"
-                  backgroundColor={'gray.700'}
-                  _stack={{
-                    flexDirection: 'column'
-                  }}
-                  flex={.25}
-                  startIcon={
-                    <Icon
-                      as={MaterialIcons}
-                      name={btn.icon}
-                      color={'white'}
-                      size="5"
-                    />
-                  }
-                  _text={{
-                    color: 'white'
-                  }} 
-                  padding={4}
-                  borderRadius={10}           
-                  onPress={btn.action}
-                >
-                  <Text color={'white'}>{btn.text}</Text>
-                </Button> 
-              )
-            })
+            /*<VStack space={4} p={3}>
+              <HStack justifyContent={'space-between'}>
+                <Text fontSize={'lg'}>{_wallet.name}</Text>
+                <Badge rounded={6} variant={'solid'} >
+                  <Text color={'lightText'}>{network.chainId}</Text>
+                </Badge>
+              </HStack>            
+              <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
+                color: "#fff"
+              }}>
+                <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
+              </Tooltip>           
+            </VStack>*/
           }
+
+          {
+            <TotalBalance />
+          }
+          {
+            /*<HStack my={2}>
+              <Button.Group isAttached colorScheme="muted" size="full">
+                <Button onPress={receiveFunds} width={'1/3'} py={3}><Text>Recieve</Text></Button>
+                <Button width={'1/3'} py={3} colorScheme={'darkBlue'} onPress={swapTokens} ><Text>Swap</Text></Button>
+                <Button width={'1/3'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
+              </Button.Group>
+            </HStack>*/
+          }
+          <HStack space="4" alignItems="center" justifyContent={'space-around'} marginTop={2} marginLeft={2} marginRight={2}>
+            {
+              middleButtons.map((btn, i) => {
+                return (
+                  <Button
+                    key={'middleButtons'+i}
+                    variant="solid"
+                    backgroundColor={'gray.700'}
+                    _stack={{
+                      flexDirection: 'column'
+                    }}
+                    flex={.25}
+                    startIcon={
+                      <Icon
+                        as={MaterialIcons}
+                        name={btn.icon}
+                        color={'white'}
+                        size="5"
+                      />
+                    }
+                    _text={{
+                      color: 'white'
+                    }} 
+                    padding={4}
+                    borderRadius={10}           
+                    onPress={btn.action}
+                  >
+                    <Text color={'white'}>{btn.text}</Text>
+                  </Button> 
+                )
+              })
+            }
+            
+          </HStack>
+          <HStack
+            mt={5}
+            borderBottomWidth={1}
+            borderBottomColor={'gray.100'}
+            w="100%"
+            justifyContent="space-around"
+            borderRadius="sm"
+          >
+            {
+              tabList.map((tab, index) => {
+                return (
+                  <TabItem key={index} tabName={tab} currentTab={currentTab} handleTabChange={handleTabChange} />
+                )
+              })
+            }
+          </HStack>
+          <ScrollView 
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}              
+              />
+            }
+          >
+            <VStack space="5" px={2} mb={10}>
+              {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
+                <Box m={6} >
+                  <VStack space={2} >
+                    {
+                      holdings.map((val, i) => {
+                        return (                        
+                          <TokenItem key={val.name+i} token={val} navigation={navigation}/>                        
+                        )
+                      })
+                    }
+                  </VStack>
+                  <Button onPress={addToken} mt={4} width={'full'}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
+                </Box>
+              }
+
+              {currentTab == translations[language].ViewWallet.tab_list[1] &&
+                <Box m={6} >
+                  <VStack space={2} direction={'column-reverse'}>
+                    {
+                      transactions.map((val, i) => {
+                        return (                        
+                          <TransactionItem key={val.hash+iconNames} transaction={val} navigation={navigation}/>                        
+                        )
+                      })
+                    }
+                  </VStack>
+                </Box>
+              }
+
+              {currentTab == translations[language].ViewWallet.tab_list[2] &&
+                <Box my={6} >
+                  <NftList navigation={navigation} route={route}/>
+                </Box>
+              }
+            </VStack>
+          </ScrollView>
           
-        </HStack>
-        <HStack
-          mt={5}
-          borderBottomWidth={1}
-          borderBottomColor={'gray.100'}
-          w="100%"
-          justifyContent="space-around"
-          borderRadius="sm"
-        >
-          {
-            tabList.map((tab, index) => {
-              return (
-                <TabItem key={index} tabName={tab} currentTab={currentTab} handleTabChange={handleTabChange} />
-              )
-            })
+          {false && currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
+            <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language].ViewWallet.clear_button}</Text></Button>
           }
-        </HStack>
-        <ScrollView 
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}              
-            />
-          }
-        >
-          <VStack space="5" px={2} mb={10}>
-            {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
-              <Box m={6} >
-                <VStack space={2} >
-                  {
-                    holdings.map((val, i) => {
-                      return (                        
-                        <TokenItem key={val.name+i} token={val} navigation={navigation}/>                        
-                      )
-                    })
-                  }
-                </VStack>
-                <Button onPress={addToken} mt={4} width={'full'}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
-              </Box>
-            }
+          <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
+        </Box>
+      }
 
-            {currentTab == translations[language].ViewWallet.tab_list[1] &&
-              <Box m={6} >
-                <VStack space={2} direction={'column-reverse'}>
-                  {
-                    transactions.map((val, i) => {
-                      return (                        
-                        <TransactionItem key={val.hash+iconNames} transaction={val} navigation={navigation}/>                        
-                      )
-                    })
-                  }
-                </VStack>
-              </Box>
-            }
-
-            {currentTab == translations[language].ViewWallet.tab_list[2] &&
-              <Box my={6} >
-                <NftList navigation={navigation} route={route}/>
-              </Box>
-            }
-          </VStack>
-        </ScrollView>
-        
-        {false && currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
-          <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language].ViewWallet.clear_button}</Text></Button>
-        }
-        <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
-      </Box>
+      
     </DashboardLayout>
   )
 }

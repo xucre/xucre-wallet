@@ -226,6 +226,7 @@ const values = {
     clear_button: "Limpiar Transacciones",
     holdings_placeholder: "Insertar existencias de monedas",
     new_button: "Agregar Token",
+    no_network_error: 'No Network Selected',
     tab_list: [
       "Valores en cartera",
       "Transacciones"

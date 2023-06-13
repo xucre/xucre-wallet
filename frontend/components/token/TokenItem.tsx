@@ -28,7 +28,7 @@ export default function TokenItem ({navigation, token}) {
   }, []);
 
   useEffect(() => {
-    if (_wallet.name != '' && network) {
+    if (_wallet.name != '' && network && network.rpcUrl !== '') {
       const _provider = getDefaultProvider(network.rpcUrl);
       if (isComponentMounted) {
         setProvider(_provider);
