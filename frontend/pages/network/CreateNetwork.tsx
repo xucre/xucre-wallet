@@ -62,7 +62,7 @@ export default function CreateWallet ({navigation, route, storage}) {
   const {
     colorMode
   } = useColorMode();
-  
+  const icon_color = colorMode ==='dark'? 'white':'black';
 
   const handleNameChange = (event) => {
     //console.log(event.nativeEvent.text);
@@ -119,23 +119,22 @@ export default function CreateWallet ({navigation, route, storage}) {
   };
 
   return (
-    <View style={{backgroundColor: Color.gray_200}}>
-    <View> 
-      <Text style={styles.titleLayout}>
+    <View style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}}>
+
+      <Text style={colorMode === 'dark' ? styles.titleLayout : lightStyles.titleLayout}>
         New Network
       </Text>
-      </View>  
     <ScrollView w={'full'} h={'full'} marginTop={200}>
       <>
         <Box alignItems="center" marginBottom={20}>
-          <Input style={styles.textoImput} placeholderTextColor={'white'} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
-          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
-          <Input  style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
-          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
-          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
+          <Input style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput} placeholderTextColor={colorMode === 'dark' ? 'white' : 'gray'} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
+          <Input style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput} placeholderTextColor={colorMode === 'dark' ?'white' : 'gray'}  w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
+          <Input  style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput} placeholderTextColor={colorMode === 'dark' ?'white' : 'gray'}  w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
+          <Input style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput} placeholderTextColor={colorMode === 'dark' ?'white' : 'gray'}  w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
+          <Input style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput} placeholderTextColor={colorMode === 'dark' ?'white' : 'gray'}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
         </Box>
         <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
-        <Button style={styles.buttonContainer} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: '#000'}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
+        <Button style={colorMode === 'dark' ? styles.buttonContainer : lightStyles.buttonContainer} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: colorMode === 'dark' ? '#000' : '#fff'}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
         </Box>
       </>
     </ScrollView>
@@ -145,9 +144,52 @@ export default function CreateWallet ({navigation, route, storage}) {
 const styles = StyleSheet.create({
   // eslint-disable-next-line react-native/no-color-literals
   buttonContainer: {
+    backgroundColor: '#D4E815',
+    borderColor: '#fff',
+    borderRadius: Border.br_sm,
+    borderStyle: "solid",
+    borderWidth: 1,
+    fontWeight: 'bold',
+    position: 'absolute',
+    textAlign: "left",
+    width: 370,
+
+  }, 
+   // eslint-disable-next-line react-native/no-unused-styles
+   groupParent: {
+    top: 100,
+    // eslint-disable-next-line sort-keys
+    left: 22,
+    width: 346,
+    // eslint-disable-next-line sort-keys
+    height: 56,
+    position: "relative",
+   }, 
+   titleLayout: {
+    color: Color.white,
+    fontFamily: FontFamily.inter,
+    textAlign: "center",
+    fontSize: 30,
+    top: 30,
+    paddingTop:10,
+  }, 
+  textoImput: {
+    borderRadius: Border.br_xs,
+    backgroundColor: Color.gray_300,
+    borderColor: "#7b7b7b",
+    borderWidth: 1,
+    borderStyle: "solid",
+    width: 339,
+    top: 0,
+  }
+});
+
+const lightStyles = StyleSheet.create({
+  // eslint-disable-next-line react-native/no-color-literals
+  buttonContainer: {
     fontWeight: 'bold',
     // eslint-disable-next-line sort-keys
-    backgroundColor: '#D4E815',
+    backgroundColor: '#1B1E3F',
     position: 'absolute',
     width: 370,
     textAlign: "left",
@@ -166,41 +208,22 @@ const styles = StyleSheet.create({
     // eslint-disable-next-line sort-keys
     height: 56,
     position: "relative",
-   }, rectangleParent: {
-    left: 7,
-    position: "absolute",
-  // eslint-disable-next-line sort-keys
-  }, groupWrapperLayout: {
-    width: 339,
-    // eslint-disable-next-line sort-keys
-    top: 0,
-    // eslint-disable-next-line sort-keys
-    height: 56,
-  // eslint-disable-next-line sort-keys
-  }, titleLayout: {
-    color: Color.white,
-    fontFamily: FontFamily.interRegular,
-    textAlign: "center",
-    top: 50,
-  },ethereumTestnet: {
-    top: 1,
-    left: 18,
-    width: 300,
-    color: Color.white,
-    letterSpacing: -0.2,
-    fontFamily: FontFamily.interRegular,
-    lineHeight: 21,
-    fontSize: FontSize.size_base,
-    textAlign: "left",
-    position: "absolute"
-  // eslint-disable-next-line react-native/no-color-literals
-  }, textoImput: {
-    borderRadius: Border.br_xs,
-    backgroundColor: Color.gray_300,
-    borderColor: "#7b7b7b",
-    borderWidth: 1,
-    borderStyle: "solid",
-    width: 339,
-    top: 0,
-  }
+   }, 
+    titleLayout: {
+      color: Color.black,
+      fontFamily: FontFamily.inter,
+      textAlign: "center",
+      fontSize: 30,
+      top: 30,
+      paddingTop:10,
+    },
+    textoImput: {
+      borderRadius: Border.br_xs,
+      backgroundColor: Color.white,
+      borderColor: "#7b7b7b",
+      borderWidth: 1,
+      borderStyle: "solid",
+      width: 339,
+      top: 0,
+    }
 });

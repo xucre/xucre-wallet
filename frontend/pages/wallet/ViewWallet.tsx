@@ -381,7 +381,7 @@ export default function ViewWallet ({navigation, route}) {
                       })
                     }
                   </VStack>
-                  <Button onPress={addToken} mt={4} width={'full'}><Text>{translations[language].ViewWallet.new_button}</Text></Button>
+                  <Button onPress={addToken} mt={4} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language].ViewWallet.new_button}</Text></Button>
                 </Box>
               }
 

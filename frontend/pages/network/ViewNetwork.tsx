@@ -54,6 +54,7 @@ export default function ViewNetwork ({navigation, route}) {
   const [rpcUrl, setRpcUrl] = useState('');
   const [symbol, setSymbol] = useState('');
   const [blockExplorer, setExplorer] = useState('');
+  const {colorMode} = useColorMode();
 
   const handleNameChange = (event) => {
     setName(event.nativeEvent.text)
@@ -115,7 +116,7 @@ export default function ViewNetwork ({navigation, route}) {
         {!isEditing && 
           <>
             <VStack space={4} px={2} py={4} height={'90%'}>
-              <Button onPress={() => {setIsEditing(true)}} ml={'auto'} px={8}><Text>{translations[language].ViewNetwork.edit_button}</Text></Button>
+              <Button onPress={() => {setIsEditing(true)}} ml={'auto'} px={8} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language].ViewNetwork.edit_button}</Text></Button>
               <Text fontSize={28} fontWeight={'bold'}>{network.name}</Text>
               <Text fontSize={20}>Chain Id: {network.chainId}</Text>
               <Text fontSize={16}>Symbol: {network.symbol}</Text>
@@ -130,7 +131,7 @@ export default function ViewNetwork ({navigation, route}) {
               </Alert>
               : 
               <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
-              <Button onPress={() => {_setActiveNetwork();}}><Text>{translations[language].ViewNetwork.use_network}</Text></Button>
+                <Button onPress={() => {_setActiveNetwork();}} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language].ViewNetwork.use_network}</Text></Button>
               </Box>
             } 
             

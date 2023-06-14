@@ -42,6 +42,7 @@ import translations from "../../assets/translations";
 import { language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromMnemonics} from '../../service/wallet'
 import { storeWallet } from "../../store/wallet";
+import { color } from "native-base/lib/typescript/theme/styled-system";
 
 
 export default function RecoverWallet ({navigation, route, storage}) {
@@ -171,7 +172,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
   };
 
   return (
-    <View style={{backgroundColor: Color.gray_200}}>
+    <View style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}}>
     <ScrollView w={'full'} h={'full'} marginTop={200}>
      {/*  {steps === 0 && 
         <Instructions></Instructions>
@@ -180,47 +181,45 @@ export default function RecoverWallet ({navigation, route, storage}) {
       {steps === 0 && 
         <>
           <Box alignItems="center" marginBottom={250}>
-          <Text style={[styles.recoverWallet, styles.walletClr]}>
-            Recover wallet
+            <Text style={[styles.recoverWallet, styles.walletClr]}>
+              Recover wallet
             </Text>
             <Text style={[styles.pleaseEnterThe, styles.theLayout]}>
-        Please enter the name and the sequence of mnemonics from your original
-        wallet creation proces
-      </Text>
-      <Text
-          style={[
-            styles.walletName,
-            styles.walletClr,
-            styles.groupChildPosition,
-          ]}
-        >
-          Wallet name
-        </Text>
+              Please enter the name and the sequence of mnemonics from your original
+              wallet creation proces
+            </Text>
+            <Text
+            style={[
+              styles.walletName,
+              styles.walletClr,
+              styles.groupChildPosition,
+            ]}
+            >
+              Wallet name
+            </Text>
 
-<View style={styles.containerText}>
-            <Input  w="90%" value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} my={7} />
+            <View style={styles.containerText}>
+              <Input  w="90%" value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} my={7} />
             </View>
 
             <Text
-          style={[
-            styles.walletName,
-            styles.walletClr,
-            styles.groupChildPositionArea,
-          ]}
-        >
-          Mnemonic phrase
-        </Text>
+              style={[
+                styles.walletName,
+                styles.walletClr,
+                styles.groupChildPositionArea,
+              ]}
+            >
+              Mnemonic phrase
+            </Text>
 
-<View style={styles.containerTextArea} >
-
-            <TextArea totalLines={3} autoCompleteType={'off'} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="90%" />
-</View>            
-          
-</Box>
-          <Button style={styles.buttonContainer} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
-            <Text>{translations[language].RecoverWallet.save_button}</Text>
+            <View style={styles.containerTextArea} >
+              <TextArea totalLines={3} autoCompleteType={'off'} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="90%" />
+            </View>            
+            
+          </Box>
+          <Button style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
+            <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].RecoverWallet.save_button}</Text>
           </Button>
-         
         </>
       }
     </ScrollView>
@@ -232,16 +231,12 @@ const styles = StyleSheet.create({
   // eslint-disable-next-line react-native/no-color-literals
   buttonContainer: {
     fontWeight: 'bold',
-    // eslint-disable-next-line sort-keys
-    backgroundColor: '#CEF213',
     position: 'relative',
-    width: 370,
-    left: 20,
+    width: '100%',
     textAlign: "left",
     borderRadius: Border.br_sm,
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: '#fff',
 
   },
   containerTextArea:{
@@ -257,37 +252,32 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_2xl,
     lineHeight: 30,
     textAlign: "left",
-    fontFamily: FontFamily.interSemibold,
+    fontFamily: FontFamily.inter,
     fontWeight: "600",
-    color: Color.white,
   }, walletClr: {
-    color: Color.white,
     textAlign: "left",
     letterSpacing: -0.2,
     position: "absolute",
   },pleaseEnterThe: {
     top: 50,
     left: 40,
-    color: Color.darkgray_100,
     textAlign: "center",
   },theLayout: {
     width: 306,
-    fontFamily: FontFamily.interRegular,
+    fontFamily: FontFamily.inter,
     lineHeight: 21,
     letterSpacing: -0.2,
     fontSize: FontSize.size_base,
     position: "absolute",
   },walletName: {
     fontWeight: "500",
-    fontFamily: FontFamily.interMedium,
+    fontFamily: FontFamily.inter,
     width: 316,
     textAlign: "left",
-    color: Color.white,
     lineHeight: 21,
     fontSize: FontSize.size_base,
     top: 0,
   },   walletClr: {
-    color: Color.white,
     textAlign: "left",
 
     letterSpacing: -0.2,
@@ -309,9 +299,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },groupBorder: {
     borderWidth: 1,
-    borderColor: "#7b7b7b",
     borderStyle: "solid",
-    backgroundColor: Color.gray_300,
     borderRadius: Border.br_xs,
     top: 0,
   },

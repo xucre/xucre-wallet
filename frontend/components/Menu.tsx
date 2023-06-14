@@ -329,7 +329,8 @@ export const ToggleDarkMode = ({setScheme}) => {
 
   useEffect(() => {
     const runAsync = async () => {
-      //await storeTheme(colorMode);
+      await storeTheme(colorMode);
+      setScheme(colorMode);
     }
     
     console.log('setting from menu button', colorMode);

@@ -130,9 +130,6 @@ export const theme = extendTheme({
       900: '#1B1E3F',
     }
   },
-  config: {
-    initialColorMode: 'dark'
-  },
  });
 
 export default function App(): JSX.Element { 
@@ -177,6 +174,9 @@ export const AppWrapper = () => {
 
   useEffect(() => {
     console.log('scheme',scheme);
+    if (scheme) {
+      setColorMode(scheme);
+    }
   }, [scheme])
 
   useEffect(() => {
@@ -185,6 +185,7 @@ export const AppWrapper = () => {
       if (!clientTheme) {
         console.log('setting default theme');
         await storeTheme('light');
+        setColorMode(clientTheme);
         setScheme('light');
       } else {
         //console.log('setting existing theme:', clientTheme);

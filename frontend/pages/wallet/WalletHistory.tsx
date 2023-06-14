@@ -55,6 +55,7 @@ import { iconNames } from '../../store/network';
 import { getTokenByChain } from '../../store/token';
 import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
 import NftList from "../nft/NftList";
+import { color } from "native-base/lib/typescript/theme/styled-system";
 
 type Holding = {
   readonly timestamp: string;
@@ -130,6 +131,7 @@ function TabItem({
   tabName,
   currentTab,
   handleTabChange,
+  colorMode
 }) {
   return (
     <Pressable onPress={() => handleTabChange(tabName)} px="4" pt="2">
@@ -371,14 +373,14 @@ export default function WalletHistory({ navigation, route }) {
           <Box padding={0} borderRadius={10} marginX={2} >
             <HStack space={2} justifyContent={'space-between'}>
               <VStack>
-                <Text fontSize={'md'} fontWeight={'bold'} color={'coolGray.500'} paddingTop={3}>Total Balance</Text>
+                <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} paddingTop={3} >Total Balance</Text>
                 <HStack paddingBottom={0} space={1}>
-                  <Heading borderBottomColor={'#D4E815'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={'coolGray.100'} >${currentHoldings.y}</Text></Heading>              
+                  <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >${currentHoldings.y}</Text></Heading>              
                 </HStack>  
               </VStack>
               <Menu w="160" shouldOverlapWithTrigger={false} trigger={triggerProps => {
-                  return <Button alignSelf="center" variant="ghost" color={'coolGray.300'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'coolGray.300'} marginLeft={-1} />} {...triggerProps}>
-                          <Text color={'coolGray.300'} fontWeight={'bold'}>{chainName}</Text>
+                  return <Button alignSelf="center" variant="ghost" color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} marginLeft={-1} />} {...triggerProps}>
+                          <Text color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} fontWeight={'bold'}>{chainName}</Text>
                         </Button>
                         ;
                 }}>
@@ -397,7 +399,7 @@ export default function WalletHistory({ navigation, route }) {
               padding={{ bottom: 20, left: 10, right: 10, top: 50 }}
             >
               <HorizontalAxis />
-              <Area theme={{ gradient: { from: { color: '#D4E815' }, to: { color: 'black', opacity: 0.4 } } }} />
+              <Area theme={{ gradient: { from: { color: colorMode === 'dark' ? 'primary' : '#6b21a8' }, to: { color: colorMode === 'dark' ? 'black' : 'white', opacity: 0.4 } } }} />
               <Line
                 tooltipComponent={
                   <Tooltip theme={{                   
@@ -405,11 +407,11 @@ export default function WalletHistory({ navigation, route }) {
                       return '$'+ value.y
                     },
                     label: {
-                      color: 'black',
+                      color: colorMode === 'dark' ? 'black' : 'white',
                       textAnchor: 'middle',
                     },
                     shape: {
-                      color: '#D4E815',
+                      color: colorMode === 'dark' ? 'primary' : '#6b21a8',
                       dx: 0,
                       dy: 20,
                       height: 24,
@@ -422,7 +424,7 @@ export default function WalletHistory({ navigation, route }) {
                 theme={{
                   scatter: { 
                     default: { 
-                      color: '#E1F245',
+                      color: colorMode === 'dark' ? '#E1F245' : '#6b21a8',
                       height: 0, 
                       rx: 4, 
                       width: 0, 
@@ -432,7 +434,7 @@ export default function WalletHistory({ navigation, route }) {
                     }
                   },
                   stroke: { 
-                    color: '#E1F245', 
+                    color: colorMode === 'dark' ? '#E1F245' : '#6b21a8', 
                     width: 1 
                   }, 
                 }}
