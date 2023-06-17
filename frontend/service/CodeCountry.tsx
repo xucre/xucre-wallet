@@ -30,6 +30,25 @@ const CodeCountry = ({ navigation, route }) => {
         await delay(3000);
         navigation.navigate('QRWallet')
     };
+
+    const formaterNumber = () => {
+        console.log('entro')
+        const checkValid = phoneInput.current?.isValidNumber(value);
+        console.log('checkValid', checkValid)
+        if(!checkValid){
+            let character = '+'
+            let phoneNumber = phoneInput.current.state.number
+            let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
+            console.log('getNumberAfterPossiblyEliminatingZero', getNumberAfterPossiblyEliminatingZero)
+            let newFormatterNumber = phoneNumber.includes(phoneInput.current.state.code) ? phoneNumber.replace(character+phoneInput.current.state.code,'') : getNumberAfterPossiblyEliminatingZero.number;
+            console.log('newFormatterNumber', newFormatterNumber)
+            let newNumber = phoneNumber
+            console.log('newNumber', newNumber)
+            _final = phoneInput.current.state.code+newFormatterNumber
+            buttonPress();
+        }
+    }
+
     return (
         <View style={styles.container}>
             <PhoneInput
@@ -49,14 +68,7 @@ const CodeCountry = ({ navigation, route }) => {
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                    const checkValid = phoneInput.current?.isValidNumber(value);
-                    setValid(checkValid ? checkValid : false);
-                    let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
-                    console.log('fORMATTER :', getNumberAfterPossiblyEliminatingZero.formattedNumber);
-                    _final = getNumberAfterPossiblyEliminatingZero.formattedNumber
-
-                    setphoneNumber(getNumberAfterPossiblyEliminatingZero.formattedNumber);
-                    buttonPress();
+                    formaterNumber();
                 }}
             >
                 <Text>Send Whatsapp</Text>

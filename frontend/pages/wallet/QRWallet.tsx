@@ -99,6 +99,7 @@ export default function QRWallet ({navigation, route}) {
             // work with contacts
             console.log(con);
             const filteredContacts = con.filter((item) => item.phoneNumbers.length)
+            filteredContacts.sort((a,b) => a.displayName > b.displayName) 
             setContactList(filteredContacts);
           })
           .catch(e => {
