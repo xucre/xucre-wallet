@@ -71,7 +71,10 @@ export default function RecoverWallet ({navigation, route, storage}) {
         return 'false';
       }      
     }, 'true');
-    if (mnemonic.split(' ').length === 12 && areValidEntries === 'true') {
+    const trimmedMnemonics = mnemonic.split(' ').filter((val, i) => {
+      return val !== '' && val !== ' ';
+    })
+    if ((trimmedMnemonics.length === 12) && areValidEntries === 'true') {
       setMnemonicMatchComplete(true); 
     } else {
       setMnemonicMatchComplete(false); 
@@ -133,7 +136,10 @@ export default function RecoverWallet ({navigation, route, storage}) {
       try {
         if (mnemonic.length > 0 ) {
           console.log('save your wallet');
-          const _wallet = await loadWalletFromMnemonics(mnemonic);
+          const trimmedMnemonics = mnemonic.split(' ').filter((val, i) => {
+            return val !== '' && val !== ' ';
+          })
+          const _wallet = await loadWalletFromMnemonics(trimmedMnemonics);
           //console.log(_wallet.privateKey, name);
           
           await storeWallet({name, wallet: _wallet.privateKey});
