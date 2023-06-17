@@ -73,3 +73,10 @@ export const basicSvg = {
 };
 
 export const levels = ['bronze', 'silver', 'gold'];
+
+export const chainNames = ['matic-mumbai', 'matic-mainnet', 'eth-mainnet'];
+export const chainIdToNameMap = {
+  1: 'eth-mainnet',
+  137:'matic-mainnet', 
+  80001: 'matic-mumbai', 
+};

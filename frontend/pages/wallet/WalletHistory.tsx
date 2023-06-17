@@ -35,6 +35,7 @@ import {
   useColorModeValue,
   VStack,
 } from "native-base";
+import { color } from "native-base/lib/typescript/theme/styled-system";
 import React, { createRef, useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { Col, Grid, Row } from "react-native-easy-grid";
@@ -48,6 +49,7 @@ import TokenItem from '../../components/token/TokenItem';
 import TransactionItem from "../../components/transaction/TransactionItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletHistory } from "../../service/api";
+import { chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
 import { Transaction } from "../../service/transaction";
 import { truncateString } from "../../service/utility";
@@ -55,7 +57,7 @@ import { iconNames } from '../../store/network';
 import { getTokenByChain } from '../../store/token';
 import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
 import NftList from "../nft/NftList";
-import { color } from "native-base/lib/typescript/theme/styled-system";
+
 
 type Holding = {
   readonly timestamp: string;
@@ -167,6 +169,8 @@ function TabItem({
     </Pressable>
   );
 }
+
+
 
 export default function WalletHistory({ navigation, route }) {
   const { colorMode } = useColorMode();
@@ -384,9 +388,13 @@ export default function WalletHistory({ navigation, route }) {
                         </Button>
                         ;
                 }}>
-                    <Menu.Item onPress={() => {setChainName('matic-mumbai')}}><Text>matic-mumbai</Text></Menu.Item>
-                    <Menu.Item onPress={() => {setChainName('matic-mainnet')}}><Text>matic-mainnet</Text></Menu.Item>
-                    <Menu.Item onPress={() => {setChainName('eth-mainnet')}}><Text>eth-mainnet</Text></Menu.Item>
+                    {
+                      chainNames.map((cname, i) => {
+                        return (
+                          <Menu.Item onPress={() => {setChainName(cname)}} key={cname+i}><Text>{cname}</Text></Menu.Item>
+                        )
+                      })
+                    }
                   </Menu>
               
             </HStack>

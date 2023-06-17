@@ -41,11 +41,14 @@ import { useRecoilState } from "recoil";
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
-import TransactionItem from "../../components/transaction/TransactionItem";
+//import TransactionItem from "../../components/transaction/TransactionItem";
+import CovalentItem from "../../components/transaction/CovalentItem";
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { getWalletTransactions } from "../../service/api";
+import { chainIdToNameMap } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
-import { Transaction } from "../../service/transaction";
+import { CovalentTransaction, Transaction } from "../../service/transaction";
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
 import { getTokenByChain } from '../../store/token';
@@ -104,7 +107,7 @@ export default function ViewWallet ({navigation, route}) {
   const [network, ] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
   const [holdings, setHoldings] = useState([]);
-  const [transactions, setTransactions] = useState([] as readonly Transaction[]);
+  const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -140,17 +143,18 @@ export default function ViewWallet ({navigation, route}) {
   
   const syncTransactions = async () => {
     //console.log(network.chainId, _wallet.wallet.address);
-    const _transactions = await getTransactionsByChainAndWallet(network.chainId, _wallet.wallet.address);
-    //console.log(_transactions);
-    if (isComponentMounted) {
-      setTransactions(_transactions);
-      
+    console.log('loading transactions $$$');
+    const _transactions = await getWalletTransactions(_wallet.wallet.address, chainIdToNameMap[network.chainId]);
+    //console.log(_transactions.data.items[0]);
+    if (_transactions.data.items) {
+      console.log('setting transactions');
+      setTransactions(_transactions.data.items as readonly CovalentTransaction[]);
     }
   }
 
   const clearTransactions = () => {
     const runAsync = async () => {
-      await storeTransactions([] as readonly Transaction[]);
+      //await storeTransactions([] as readonly CovalentTransaction[]);
       await syncTransactions();
       setLoading(false);
     }
@@ -172,8 +176,13 @@ export default function ViewWallet ({navigation, route}) {
   useEffect(() => {    
     //setHoldings([]);
     setTimeout(() => {
-      syncTokens();
-      syncTransactions();
+      if(holdings.length === 0) {
+        syncTokens();
+      }
+      //console.log(transactions[0]);
+      if (transactions.length === 0) {
+        syncTransactions();
+      }      
     }, 1000)
   }, [])
 
@@ -391,7 +400,7 @@ export default function ViewWallet ({navigation, route}) {
                     {
                       transactions.map((val, i) => {
                         return (                        
-                          <TransactionItem key={val.hash+iconNames} transaction={val} navigation={navigation}/>                        
+                          <CovalentItem key={val.tx_hash} transaction={val} navigation={navigation}/>                        
                         )
                       })
                     }

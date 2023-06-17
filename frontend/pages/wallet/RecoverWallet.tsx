@@ -1,7 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
-import {StyleSheet} from 'react-native';
 import {
   Alert,
   AlertDialog,
@@ -31,18 +30,18 @@ import {
   View,
   VStack,
 } from "native-base";
+import { color } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
+import {StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
+
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
-
-
 import translations from "../../assets/translations";
 import { language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromMnemonics} from '../../service/wallet'
 import { storeWallet } from "../../store/wallet";
-import { color } from "native-base/lib/typescript/theme/styled-system";
 
 
 export default function RecoverWallet ({navigation, route, storage}) {
@@ -228,79 +227,64 @@ export default function RecoverWallet ({navigation, route, storage}) {
 }
 
 const styles = StyleSheet.create({
-  // eslint-disable-next-line react-native/no-color-literals
   buttonContainer: {
+    borderRadius: Border.br_sm,
+    borderStyle: "solid",
+    borderWidth: 1,
     fontWeight: 'bold',
     position: 'relative',
-    width: '100%',
     textAlign: "left",
-    borderRadius: Border.br_sm,
-    borderWidth: 1,
-    borderStyle: "solid",
-
-  },
-  containerTextArea:{
-    top: 155,
-    fontWeight: 300
+    width: '100%',
   },
   containerText:{
     top: 130
   },
-  recoverWallet: {
-    top: 0,
-    left: 135,
-    fontSize: FontSize.size_2xl,
-    lineHeight: 30,
-    textAlign: "left",
-    fontFamily: FontFamily.inter,
-    fontWeight: "600",
-  }, walletClr: {
-    textAlign: "left",
-    letterSpacing: -0.2,
-    position: "absolute",
-  },pleaseEnterThe: {
-    top: 50,
-    left: 40,
-    textAlign: "center",
-  },theLayout: {
-    width: 306,
-    fontFamily: FontFamily.inter,
-    lineHeight: 21,
-    letterSpacing: -0.2,
-    fontSize: FontSize.size_base,
-    position: "absolute",
-  },walletName: {
-    fontWeight: "500",
-    fontFamily: FontFamily.inter,
-    width: 316,
-    textAlign: "left",
-    lineHeight: 21,
-    fontSize: FontSize.size_base,
-    top: 0,
-  },   walletClr: {
-    textAlign: "left",
-
-    letterSpacing: -0.2,
-    position: "absolute",
-  },   groupChildPosition: {
-    top: 130,
+  containerTextArea:{
+    fontWeight: 300,
+    top: 155,
+  },
+  groupChildPosition: {
     left: 30,
+    top: 130,
   },
   groupChildPositionArea: {
-    top: 230,
     left: 30,
+    top: 230,
   },
-  rectangleGroup: {
-    top: 27,
-  },   groupLayout: {
-    height: 47,
-    width: 351,
-    left: 0,
-    position: "absolute",
-  },groupBorder: {
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderRadius: Border.br_xs,
+  pleaseEnterThe: {
+    left: 40,
+    textAlign: "center",
+    top: 50,
+  },
+  recoverWallet: {
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_2xl,
+    fontWeight: "600",
+    left: 135,
+    lineHeight: 30,
+    textAlign: "left",
     top: 0,
+  },  
+  theLayout: {
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
+    letterSpacing: -0.2,
+    lineHeight: 21,
+    position: "absolute",
+    width: 306,
   },
+  walletClr: {
+    letterSpacing: -0.2,
+    position: "absolute",
+    textAlign: "left",
+  },
+  walletName: {
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
+    fontWeight: "500",
+    lineHeight: 21,
+    textAlign: "left",
+    top: 0,
+    width: 316,
+  },    
 })

@@ -36,24 +36,14 @@ import {
   VStack,
 } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
-import { RefreshControl } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
-import { Area, Chart, HorizontalAxis, Line, Tooltip, VerticalAxis } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
-import MobileFooter from "../../components/Footer";
-import SummaryItem from "../../components/token/SummaryItem";
-import TokenItem from '../../components/token/TokenItem';
-import TransactionItem from "../../components/transaction/TransactionItem";
-import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletHistory } from "../../service/api";
+import { chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
-import { Transaction } from "../../service/transaction";
-import { truncateString } from "../../service/utility";
-import { iconNames } from '../../store/network';
-import { getTokenByChain } from '../../store/token';
-import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
+
+
 
 type Holding = {
   readonly timestamp: string;
@@ -359,9 +349,13 @@ export default function WalletHistory() {
                       </Button>
                       ;
               }}>
-                  <Menu.Item onPress={() => {setChainName('matic-mumbai')}}><Text>matic-mumbai</Text></Menu.Item>
-                  <Menu.Item onPress={() => {setChainName('matic-mainnet')}}><Text>matic-mainnet</Text></Menu.Item>
-                  <Menu.Item onPress={() => {setChainName('eth-mainnet')}}><Text>eth-mainnet</Text></Menu.Item>
+                {
+                  chainNames.map((cname, i) => {
+                    return (
+                      <Menu.Item onPress={() => {setChainName(cname)}} key={cname+i}><Text>{cname}</Text></Menu.Item>
+                    )
+                  })
+                }
             </Menu>
             
           </HStack>
