@@ -226,6 +226,7 @@ const values = {
     clear_button: 'Rantinakuykunata ch\'uyanchana', 
     holdings_placeholder: 'Qolqe hap\'inakunata churay',
     new_button: 'Token yapay', 
+    no_network_error: 'No Network Selected',
     tab_list: [
               'Holdings nisqa', 
               'Transacciones nisqakuna'

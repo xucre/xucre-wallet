@@ -41,6 +41,9 @@ import { truncateString } from "../../service/utility";
 import { getWallets, storeActiveWallet } from "../../store/wallet";
 
 export default function SelectWallet ({navigation, route}) {
+  const {
+    colorMode
+  } = useColorMode();
   const [language,] = useRecoilState(stateLanguage);
   const [walletState, setWalletState] = useRecoilState(walletList);
   const [, setActiveWallet] = useRecoilState(activeWallet);
@@ -127,7 +130,7 @@ export default function SelectWallet ({navigation, route}) {
           }
         </VStack>
         
-        <Button onPress={createWallet}><Text>{translations[language].SelectWallet.new_button}</Text></Button>
+        <Button onPress={createWallet} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'darkText' : 'lightText'}>{translations[language].SelectWallet.new_button}</Text></Button>
       </Box>
     </GuestLayout>
   )

@@ -36,24 +36,14 @@ import {
   VStack,
 } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
-import { RefreshControl } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
-import { Area, Chart, HorizontalAxis, Line, Tooltip, VerticalAxis } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
-import MobileFooter from "../../components/Footer";
-import SummaryItem from "../../components/token/SummaryItem";
-import TokenItem from '../../components/token/TokenItem';
-import TransactionItem from "../../components/transaction/TransactionItem";
-import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletHistory } from "../../service/api";
+import { chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
-import { Transaction } from "../../service/transaction";
-import { truncateString } from "../../service/utility";
-import { iconNames } from '../../store/network';
-import { getTokenByChain } from '../../store/token';
-import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
+
+
 
 type Holding = {
   readonly timestamp: string;
@@ -348,36 +338,40 @@ export default function WalletHistory() {
       safeAreaBottom
     >
       {
-        <Box bg={'primary.500'} padding={3} borderRadius={10} marginX={2} >
+        <Box bg={colorMode === 'dark' ? "primary.500" : "tertiary.500"} padding={3} borderRadius={10} marginX={2} >
             
-          <Text fontSize={'md'} fontWeight={'bold'} color={'darkText'} paddingTop={3}>Total Balance</Text>
+          <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>Total Balance</Text>
           <HStack paddingBottom={0} space={1}>
-            <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={'darkText'} >${formatCurrency(currentHoldings.y)}</Text></Heading>
+            <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >${formatCurrency(currentHoldings.y)}</Text></Heading>
             <Menu w="160" marginTop={-1} shouldOverlapWithTrigger={false} trigger={triggerProps => {
-                return <Button alignSelf="center" variant="ghost" color={'darkText'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'darkText'} marginLeft={-1} />} {...triggerProps}>
-                        <Text color={'darkText'} fontWeight={'bold'}>{chainName}</Text>
+                return <Button alignSelf="center" variant="ghost" color={colorMode === 'dark' ? "darkText" : "lightText"} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'darkText'} marginLeft={-1} />} {...triggerProps}>
+                        <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
                       </Button>
                       ;
               }}>
-                  <Menu.Item onPress={() => {setChainName('matic-mumbai')}}><Text>matic-mumbai</Text></Menu.Item>
-                  <Menu.Item onPress={() => {setChainName('matic-mainnet')}}><Text>matic-mainnet</Text></Menu.Item>
-                  <Menu.Item onPress={() => {setChainName('eth-mainnet')}}><Text>eth-mainnet</Text></Menu.Item>
+                {
+                  chainNames.map((cname, i) => {
+                    return (
+                      <Menu.Item onPress={() => {setChainName(cname)}} key={cname+i}><Text>{cname}</Text></Menu.Item>
+                    )
+                  })
+                }
             </Menu>
             
           </HStack>
           
-          <Badge rounded={10} variant={'solid'} backgroundColor={'black'} width={'2/5'} marginTop={2}>
+          <Badge rounded={10} variant={'solid'} backgroundColor={colorMode === 'dark' ? "black" : "primary.500"} width={'2/5'} marginTop={2}>
             <HStack paddingY={1} alignItems={'center'}>
               {secondToLastHoldings.trend === 'up' && 
-                <Icon as={MaterialIcons} name="trending-up" color="primary.500" size={'sm'} marginRight={1.5} />              
+                <Icon as={MaterialIcons} name="trending-up" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />              
               }
               {secondToLastHoldings.trend === 'flat' && 
-                <Icon as={MaterialIcons} name="trending-flat" color="primary.500" size={'sm'} marginRight={1.5} />              
+                <Icon as={MaterialIcons} name="trending-flat" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />              
               }
               {secondToLastHoldings.trend === 'down' && 
-                <Icon as={MaterialIcons} name="trending-down" color="primary.500" size={'sm'} marginRight={1.5} />              
+                <Icon as={MaterialIcons} name="trending-down" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />              
               }
-              <Text textAlign={'left'} color={'white'} marginRight={1.5}>${formatCurrency(secondToLastHoldings.y)}</Text>
+              <Text textAlign={'left'} color={colorMode === 'dark' ? 'white': 'black'} marginRight={1.5}>${formatCurrency(secondToLastHoldings.y)}</Text>
               <Text textAlign={'left'} color={'coolGray.500'}>{`(${secondToLastHoldings.percent})`}</Text>
             </HStack>
             

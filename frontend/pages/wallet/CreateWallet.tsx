@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-unused-styles */
-/* eslint-disable react-native/no-single-element-style-arrays */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
@@ -115,7 +114,7 @@ export default function CreateWallet({ navigation, route, storage }) {
     return (
       <Box alignItems="center" marginBottom={20} h={"full"} w={"full"}>
         <Text
-          style={{ color: "white", fontWeight: "bold" }}
+          style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
           fontSize={"lg"}
           mt={5}
         >
@@ -134,11 +133,12 @@ export default function CreateWallet({ navigation, route, storage }) {
           {translations[language].CreateWallet.instructions}
         </Text>
         <Button
-          style={[styles.buttonContainer]}
+          style={styles.buttonContainer}
+          colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
           onPress={createMnemonics}
           isLoading={loading}
         >
-          <Text style={{ color: "#000" }}>
+          <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>
             {translations[language].CreateWallet.instructions_button}
           </Text>
         </Button>
@@ -175,7 +175,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                 return (
                   <VStack key={val}>
                     <Badge
-                      colorScheme="primary.400"
+                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                       rounded="full"
                       mb={-4}
                       mr={11}
@@ -186,7 +186,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                         fontSize: 12,
                       }}
                     >
-                      <Text>{i + 1}</Text>
+                      <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
                     </Badge>
                     <Button
                       left={25}
@@ -216,18 +216,18 @@ export default function CreateWallet({ navigation, route, storage }) {
                 return (
                   <VStack key={val}>
                     <Badge
-                      colorScheme="primary.400"
+                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                       rounded="full"
                       mb={-4}
                       mr={11}
                       zIndex={100}
                       variant="solid"
-                      alignSelf="flex-end"
+                      alignSelf="flex-start"
                       _text={{
                         fontSize: 12,
                       }}
                     >
-                      <Text>{i + 1}</Text>
+                      <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
                     </Badge>
                     <Button
                       width={120}
@@ -256,18 +256,18 @@ export default function CreateWallet({ navigation, route, storage }) {
                 return (
                   <VStack key={val}>
                     <Badge
-                      colorScheme="primary.400"
+                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                       rounded="full"
                       mb={-4}
                       mr={11}
                       zIndex={100}
                       variant="solid"
-                      alignSelf="flex-end"
+                      alignSelf="flex-start"
                       _text={{
                         fontSize: 12,
                       }}
                     >
-                      <Text>{i + 1}</Text>
+                      <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
                     </Badge>
                     <Button
                       right={3}
@@ -344,7 +344,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                           zIndex={1000}
                         >
                           <Badge
-                            colorScheme="gray"
+                            colorScheme={colorMode === 'dark' ? 'warmGray' : 'coolGray'}
                             rounded="full"
                             mb={-4}
                             mr={-1}
@@ -361,7 +361,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                       )}
                       {confirmMnemonics.includes(val) && (
                         <Badge
-                          colorScheme="primary.400"
+                          colorScheme={colorMode === 'dark' ? "primary.400" : 'tertiary'}
                           rounded="full"
                           mb={-4}
                           mr={11}
@@ -372,7 +372,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                             fontSize: 12,
                           }}
                         >
-                          <Text>{confirmMnemonics.indexOf(val) + 1}</Text>
+                          <Text color={colorMode === 'dark' ? Color.black : Color.white}>{confirmMnemonics.indexOf(val) + 1}</Text>
                         </Badge>
                       )}
 
@@ -417,7 +417,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                           zIndex={1000}
                         >
                           <Badge
-                            colorScheme="coolGray"
+                            colorScheme={colorMode === 'dark' ? 'warmGray' : 'coolGray'}
                             rounded="full"
                             mb={-4}
                             mr={-1}
@@ -434,7 +434,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                       )}
                       {confirmMnemonics.includes(val) && (
                         <Badge
-                          colorScheme="primary.400"
+                          colorScheme={colorMode === 'dark' ? "primary.400" : 'tertiary'}
                           rounded="full"
                           mb={-4}
                           mr={11}
@@ -445,7 +445,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                             fontSize: 12,
                           }}
                         >
-                          <Text>{confirmMnemonics.indexOf(val) + 1}</Text>
+                          <Text color={colorMode === 'dark' ? Color.black : Color.white}>{confirmMnemonics.indexOf(val) + 1}</Text>
                         </Badge>
                       )}
 
@@ -488,7 +488,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                           zIndex={1000}
                         >
                           <Badge
-                            colorScheme="coolGray"
+                            colorScheme={colorMode === 'dark' ? 'warmGray' : 'coolGray'}
                             rounded="full"
                             mb={-4}
                             mr={0}
@@ -505,7 +505,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                       )}
                       {confirmMnemonics.includes(val) && (
                         <Badge
-                          colorScheme="primary.400"
+                          colorScheme={colorMode === 'dark' ? "primary.400" : 'tertiary'}
                           rounded="full"
                           mb={-4}
                           mr={11}
@@ -516,7 +516,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                             fontSize: 12,
                           }}
                         >
-                          <Text>{confirmMnemonics.indexOf(val) + 1}</Text>
+                          <Text color={colorMode === 'dark' ? Color.black : Color.white}>{confirmMnemonics.indexOf(val) + 1}</Text>
                         </Badge>
                       )}
 
@@ -628,7 +628,7 @@ export default function CreateWallet({ navigation, route, storage }) {
   };
 
   return (
-    <View style={{ backgroundColor: Color.gray_200 }}>
+    <View style={{ backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white }}>
       <ScrollView w={"full"} h={"full"} marginTop={150}>
         {steps === 0 && <Instructions></Instructions>}
 
@@ -645,7 +645,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               marginBottom={0}
               paddingBottom={0}
             >
-              <Text paddingTop={5} paddingBottom={5}>
+              <Text paddingTop={1} paddingBottom={5} fontSize={'lg'}>
                 {
                   translations[language].CreateWallet
                     .mnemonic_confirm_instructions
@@ -653,8 +653,8 @@ export default function CreateWallet({ navigation, route, storage }) {
               </Text>
             </Center>
             <MnemonicList></MnemonicList>
-            <Button style={styles.buttonMneminic} onPress={nextStep}>
-              <Text style={{ color: "#000", fontWeight: "bold" }}>
+            <Button style={styles.buttonMneminic} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
+              <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
                 {translations[language].CreateWallet.mnemonic_confirm_button}
               </Text>
             </Button>
@@ -674,7 +674,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               marginBottom={0}
               paddingBottom={0}
             >
-              <Text paddingTop={5} paddingBottom={5}>
+              <Text paddingTop={1} paddingBottom={5} fontSize={'lg'}>
                 {
                   translations[language].CreateWallet
                     .mnemonic_confirm_instructions
@@ -695,7 +695,7 @@ export default function CreateWallet({ navigation, route, storage }) {
             flex={3}
           >
             <Text
-              style={{ color: "#fff", fontWeight: "bold" }}
+              style={{ color: colorMode === 'dark' ? Color.white : Color.black, fontWeight: "bold" }}
               fontSize={"lg"}
               mt={5}
             >
@@ -736,8 +736,9 @@ export default function CreateWallet({ navigation, route, storage }) {
               disabled={
                 confirmMnemonics.length < mnemonics.length || name.length === 0
               }
+              colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
             >
-              <Text style={{ color: "#000", fontWeight: "bold" }}>
+              <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
                 {translations[language].CreateWallet.name_entry_button}
               </Text>
             </Button>
@@ -750,8 +751,6 @@ export default function CreateWallet({ navigation, route, storage }) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: "#D4E815",
-    borderColor: "#000",
     borderRadius: Border.br_sm,
     borderStyle: "solid",
     borderWidth: 1,
@@ -764,8 +763,6 @@ const styles = StyleSheet.create({
   },
   
   buttonMneminic: {
-    backgroundColor: "#D4E815",
-    borderColor: "#000",
     borderRadius: Border.br_sm,
     borderStyle: "solid",
     borderWidth: 1,
@@ -777,8 +774,6 @@ const styles = StyleSheet.create({
   },
 
   buttonSave: {
-    backgroundColor: "#D4E815",
-    borderColor: "#000",
     borderRadius: Border.br_sm,
     borderStyle: "solid",
     borderWidth: 1,

@@ -226,6 +226,7 @@ const values = {
     clear_button: "Clear Transactions",
     holdings_placeholder: "Insert Coin Holdings",
     new_button: "Add Token",
+    no_network_error: 'No Network Selected',
     tab_list: [
       "Holdings",
       "Transactions"

@@ -62,12 +62,25 @@ export default function NewWallet ({navigation, route}) {
     
     <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
     
-          <Text  style={[styles.yourWallet, styles.walletTypo]} fontSize={'lg'} mt={5}>{translations[language].NewWallet.instructions}</Text>
-          <Text style={[styles.createANew, styles.createFlexBox]} fontSize={'md'} mt={5}>{translations[language].NewWallet.about}</Text>
+          <Text  style={[
+            colorMode === 'dark' ? styles.yourWallet : lightStyles.yourWallet, 
+            colorMode === 'dark' ? styles.walletTypo : lightStyles.walletTypo,
+          ]} fontSize={'lg'} mt={10}>{translations[language].NewWallet.instructions}</Text>
+          <Text style={[
+            colorMode === 'dark' ? styles.createANew : lightStyles.createANew,
+            colorMode === 'dark' ? styles.createFlexBox : lightStyles.createFlexBox,
+          ]} fontSize={'md'} mt={5}>{translations[language].NewWallet.about}</Text>
      
-            <Button style={[styles.rectangleParent, styles.rectangleLayout]} onPress={createWallet} width={'1/2'} py={3}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations[language].NewWallet.create_button}</Text></Button>
+            <Button style={[
+              colorMode === 'dark' ? styles.rectangleParent : lightStyles.rectangleParent,
+              colorMode === 'dark' ? styles.rectangleLayout : lightStyles.rectangleLayout,
+            ]} onPress={createWallet} width={'1/2'} py={3}><Text style={{color: colorMode === 'dark' ? 'black' : 'black', fontWeight: 'bold'}}>{translations[language].NewWallet.create_button}</Text></Button>
         
-            <Button style={[styles.rectangleGroup, styles.rectangleLayout, styles.buttonBorder]} width={'1/2'} py={3} colorScheme="primary" onPress={recoverWallet} ><Text color={"#fff"}>{translations[language].NewWallet.recover_button}</Text></Button>
+            <Button style={[
+              colorMode === 'dark' ? styles.rectangleGroup : lightStyles.rectangleGroup,
+              colorMode === 'dark' ? styles.rectangleLayout : lightStyles.rectangleLayout,
+              colorMode === 'dark' ? styles.buttonBorder : lightStyles.buttonBorder,
+            ]} width={'1/2'} py={3} colorScheme="primary" onPress={recoverWallet} ><Text color={colorMode === 'dark' ? 'white' : 'white'}>{translations[language].NewWallet.recover_button}</Text></Button>
   
               
       </Box>
@@ -120,6 +133,62 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   yourWallet: {
+    fontSize: FontSize.size_3xl,
+    letterSpacing: -0.3,
+    lineHeight: 36,
+    textAlign: "center",
+    top: 180,
+  }
+
+})
+
+const lightStyles = StyleSheet.create({
+  buttonBorder:{
+    borderColor: "#000",
+    borderRadius: Border.br_sm,
+    borderStyle: "solid",
+    borderWidth: 1,
+  },
+  createANew: {
+    color: Color.darkgray_100,
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
+    letterSpacing: -0.2,
+    lineHeight: 21,
+    position: "absolute",
+    textAlign: "center",
+    top: 230,
+  },
+  createFlexBox: {
+    letterSpacing: -0.2,
+    textAlign: "center",
+    width: 330,
+  },
+  rectangleGroup: {
+    backgroundColor: Color.gray_300,
+    borderColor: '#fff',
+    top: 410,
+  },
+  rectangleLayout: {
+    borderColor: '#fff',
+    height: 60,
+    position: "absolute",
+    width: 330,
+  },
+  rectangleParent: {
+    backgroundColor: '#D4E815',
+    borderRadius: Border.br_sm,
+    fontFamily: FontFamily.inter,
+    top: 330,
+  },
+  walletTypo: {
+    color: Color.black,
+    fontFamily: FontFamily.inter,
+    fontWeight: "600",
+    position: "absolute",
+  },
+  yourWallet: {
+    color: 'black',
     fontSize: FontSize.size_3xl,
     letterSpacing: -0.3,
     lineHeight: 36,

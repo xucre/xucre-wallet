@@ -62,7 +62,7 @@ export default function LanguagePage ({navigation}) {
 
   return (
     <>
-        <Text style={[styles.yourWallet, styles.walletTypo]} fontSize={'lg'} mt={5}>{translations[languageState].LanguagePage.select_language}</Text>
+        <Text color={colorMode === 'dark' ? Color.white : Color.black} style={[styles.yourWallet, styles.walletTypo]} fontSize={'lg'} mt={5}>{translations[languageState].LanguagePage.select_language}</Text>
           
         <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
               <Button style={[styles.rectangleParent, styles.rectangleSibling]} onPress={() => {setLanguage('es')}} width={'1/2'} py={3}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations['es'].LanguagePage.select_language || 'select your language : es'}</Text></Button>
@@ -121,7 +121,6 @@ const styles = StyleSheet.create({
     margin: 10
   },
   walletTypo: {
-    color: Color.white,
     fontFamily: FontFamily.inter,
     fontWeight: "600",
     //position: "absolute",

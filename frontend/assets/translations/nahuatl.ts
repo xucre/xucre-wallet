@@ -226,6 +226,7 @@ const values = {
     clear_button: "Tlatoma tlapeepeehuiliz-tli",
     holdings_placeholder: "Ahaquiaa tlacohcoohualooni",
     new_button: "Ahaquiaa Token",
+    no_network_error: 'No Network Selected',
     tab_list: [
       "Iixquich talhcuiloolaamapetlaacaltoon-tli",
       "tlapeepeehuiliz-tli"

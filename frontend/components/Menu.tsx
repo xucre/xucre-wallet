@@ -270,7 +270,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
         <Pressable onPress={() => {setDrawerStatus(true)}}>
           <Avatar source={
             require('../assets/images/example_avatar.png')
-          } size="xs" m={1} ml={2} mb={1}></Avatar>
+          } size="xs" m={1} ml={0} mr={3} mb={1}></Avatar>
         </Pressable>
       }
       <Drawer
@@ -290,10 +290,11 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
                 require('../assets/images/example_avatar.png')
               } size="xs" m={1} ml={2} mb={1}></Avatar>
             </Pressable>
-            {/*<ToggleDarkMode setScheme={setScheme} />*/}
+            
             {/*<SelectLanguage />*/}
             {<NetworkIcon navigation={navigation} route={route}/>}
-            <BackButton setDrawerStatus={setDrawerStatus}/>              
+            {<ToggleDarkMode setScheme={setScheme} />}
+            {/*<BackButton setDrawerStatus={setDrawerStatus}/>*/}
           </HStack>
           
           <Divider my="2" />
@@ -328,7 +329,8 @@ export const ToggleDarkMode = ({setScheme}) => {
 
   useEffect(() => {
     const runAsync = async () => {
-      //await storeTheme(colorMode);
+      await storeTheme(colorMode);
+      setScheme(colorMode);
     }
     
     console.log('setting from menu button', colorMode);
@@ -337,7 +339,7 @@ export const ToggleDarkMode = ({setScheme}) => {
   }, [colorMode]);
 
   return (
-    <Pressable onPress={() => colorMode === "light" ? setColorMode("dark") : setColorMode("light")} pl={2}>
+    <Pressable onPress={() => colorMode === "light" ? setColorMode("dark") : setColorMode("light")} m={2}>
       {useColorModeValue(<MoonIcon size={6} />, <SunIcon size={6} />)}
     </Pressable>
   )

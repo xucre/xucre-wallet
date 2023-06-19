@@ -1,7 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
-import {StyleSheet} from 'react-native';
 import {
   Alert,
   AlertDialog,
@@ -31,13 +30,14 @@ import {
   View,
   VStack,
 } from "native-base";
+import { color } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
+import {StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
+
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
-
-
 import translations from "../../assets/translations";
 import { language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromMnemonics} from '../../service/wallet'
@@ -71,7 +71,10 @@ export default function RecoverWallet ({navigation, route, storage}) {
         return 'false';
       }      
     }, 'true');
-    if (mnemonic.split(' ').length === 12 && areValidEntries === 'true') {
+    const trimmedMnemonics = mnemonic.split(' ').filter((val, i) => {
+      return val !== '' && val !== ' ';
+    })
+    if ((trimmedMnemonics.length === 12) && areValidEntries === 'true') {
       setMnemonicMatchComplete(true); 
     } else {
       setMnemonicMatchComplete(false); 
@@ -133,7 +136,10 @@ export default function RecoverWallet ({navigation, route, storage}) {
       try {
         if (mnemonic.length > 0 ) {
           console.log('save your wallet');
-          const _wallet = await loadWalletFromMnemonics(mnemonic);
+          const trimmedMnemonics = mnemonic.split(' ').filter((val, i) => {
+            return val !== '' && val !== ' ';
+          })
+          const _wallet = await loadWalletFromMnemonics(trimmedMnemonics);
           //console.log(_wallet.privateKey, name);
           
           await storeWallet({name, wallet: _wallet.privateKey});
@@ -171,7 +177,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
   };
 
   return (
-    <View style={{backgroundColor: Color.gray_200}}>
+    <View style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}}>
     <ScrollView w={'full'} h={'full'} marginTop={200}>
      {/*  {steps === 0 && 
         <Instructions></Instructions>
@@ -180,47 +186,45 @@ export default function RecoverWallet ({navigation, route, storage}) {
       {steps === 0 && 
         <>
           <Box alignItems="center" marginBottom={250}>
-          <Text style={[styles.recoverWallet, styles.walletClr]}>
-            Recover wallet
+            <Text style={[styles.recoverWallet, styles.walletClr]}>
+              Recover wallet
             </Text>
             <Text style={[styles.pleaseEnterThe, styles.theLayout]}>
-        Please enter the name and the sequence of mnemonics from your original
-        wallet creation proces
-      </Text>
-      <Text
-          style={[
-            styles.walletName,
-            styles.walletClr,
-            styles.groupChildPosition,
-          ]}
-        >
-          Wallet name
-        </Text>
+              Please enter the name and the sequence of mnemonics from your original
+              wallet creation proces
+            </Text>
+            <Text
+            style={[
+              styles.walletName,
+              styles.walletClr,
+              styles.groupChildPosition,
+            ]}
+            >
+              Wallet name
+            </Text>
 
-<View style={styles.containerText}>
-            <Input  w="90%" value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} my={7} />
+            <View style={styles.containerText}>
+              <Input  w="90%" value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} my={7} />
             </View>
 
             <Text
-          style={[
-            styles.walletName,
-            styles.walletClr,
-            styles.groupChildPositionArea,
-          ]}
-        >
-          Mnemonic phrase
-        </Text>
+              style={[
+                styles.walletName,
+                styles.walletClr,
+                styles.groupChildPositionArea,
+              ]}
+            >
+              Mnemonic phrase
+            </Text>
 
-<View style={styles.containerTextArea} >
-
-            <TextArea totalLines={3} autoCompleteType={'off'} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="90%" />
-</View>            
-          
-</Box>
-          <Button style={styles.buttonContainer} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
-            <Text>{translations[language].RecoverWallet.save_button}</Text>
+            <View style={styles.containerTextArea} >
+              <TextArea totalLines={3} autoCompleteType={'off'} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="90%" />
+            </View>            
+            
+          </Box>
+          <Button style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
+            <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].RecoverWallet.save_button}</Text>
           </Button>
-         
         </>
       }
     </ScrollView>
@@ -229,90 +233,64 @@ export default function RecoverWallet ({navigation, route, storage}) {
 }
 
 const styles = StyleSheet.create({
-  // eslint-disable-next-line react-native/no-color-literals
   buttonContainer: {
-    fontWeight: 'bold',
-    // eslint-disable-next-line sort-keys
-    backgroundColor: '#CEF213',
-    position: 'relative',
-    width: 370,
-    left: 20,
-    textAlign: "left",
     borderRadius: Border.br_sm,
-    borderWidth: 1,
     borderStyle: "solid",
-    borderColor: '#fff',
-
-  },
-  containerTextArea:{
-    top: 155,
-    fontWeight: 300
+    borderWidth: 1,
+    fontWeight: 'bold',
+    position: 'relative',
+    textAlign: "left",
+    width: '100%',
   },
   containerText:{
     top: 130
   },
-  recoverWallet: {
-    top: 0,
-    left: 135,
-    fontSize: FontSize.size_2xl,
-    lineHeight: 30,
-    textAlign: "left",
-    fontFamily: FontFamily.interSemibold,
-    fontWeight: "600",
-    color: Color.white,
-  }, walletClr: {
-    color: Color.white,
-    textAlign: "left",
-    letterSpacing: -0.2,
-    position: "absolute",
-  },pleaseEnterThe: {
-    top: 50,
-    left: 40,
-    color: Color.darkgray_100,
-    textAlign: "center",
-  },theLayout: {
-    width: 306,
-    fontFamily: FontFamily.interRegular,
-    lineHeight: 21,
-    letterSpacing: -0.2,
-    fontSize: FontSize.size_base,
-    position: "absolute",
-  },walletName: {
-    fontWeight: "500",
-    fontFamily: FontFamily.interMedium,
-    width: 316,
-    textAlign: "left",
-    color: Color.white,
-    lineHeight: 21,
-    fontSize: FontSize.size_base,
-    top: 0,
-  },   walletClr: {
-    color: Color.white,
-    textAlign: "left",
-
-    letterSpacing: -0.2,
-    position: "absolute",
-  },   groupChildPosition: {
-    top: 130,
+  containerTextArea:{
+    fontWeight: 300,
+    top: 155,
+  },
+  groupChildPosition: {
     left: 30,
+    top: 130,
   },
   groupChildPositionArea: {
-    top: 230,
     left: 30,
+    top: 230,
   },
-  rectangleGroup: {
-    top: 27,
-  },   groupLayout: {
-    height: 47,
-    width: 351,
-    left: 0,
-    position: "absolute",
-  },groupBorder: {
-    borderWidth: 1,
-    borderColor: "#7b7b7b",
-    borderStyle: "solid",
-    backgroundColor: Color.gray_300,
-    borderRadius: Border.br_xs,
+  pleaseEnterThe: {
+    left: 40,
+    textAlign: "center",
+    top: 50,
+  },
+  recoverWallet: {
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_2xl,
+    fontWeight: "600",
+    left: 135,
+    lineHeight: 30,
+    textAlign: "left",
     top: 0,
+  },  
+  theLayout: {
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
+    letterSpacing: -0.2,
+    lineHeight: 21,
+    position: "absolute",
+    width: 306,
   },
+  walletClr: {
+    letterSpacing: -0.2,
+    position: "absolute",
+    textAlign: "left",
+  },
+  walletName: {
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
+    fontWeight: "500",
+    lineHeight: 21,
+    textAlign: "left",
+    top: 0,
+    width: 316,
+  },    
 })

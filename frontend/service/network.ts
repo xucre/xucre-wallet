@@ -15,14 +15,14 @@ export type Network = {
 export const constructDefaultNetworks = () => {
   return [
     {
-      blockExplorer: 'https://etherscan.io',
+      blockExplorer: 'https://etherscan.io/',
       chainId: 1,
       name: 'Ethereum Mainnet',
       rpcUrl: 'wss://nd-lu5iumrlejgoxnmlpsxb2nkyw4.wss.ethereum.managedblockchain.us-east-1.amazonaws.com',
       symbol: 'ETH',
     } as Network,
     {
-      blockExplorer: 'https://polygonscan.com',
+      blockExplorer: 'https://polygonscan.com/',
       chainId: 137,
       name: 'Polygon',
       rpcUrl: 'wss://rpc-mumbai.maticvigil.com/ws/v1/0c4a9f14b452f00dc7bcf6b571b1de22a6126b86',

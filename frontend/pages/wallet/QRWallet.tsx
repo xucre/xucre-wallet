@@ -123,7 +123,7 @@ export default function QRWallet ({navigation, route}) {
 
   const eventFocus = (event) => {
     const eventFocus = event
-    console.log('evento focus entro', event)
+    //console.log('evento focus entro', event)
 
     
   }
@@ -132,22 +132,22 @@ export default function QRWallet ({navigation, route}) {
     const data = contactList;
     const dataC = contactList;
 
-    console.log('data',data)
-    console.log('letra',textSearch)
+    //console.log('data',data)
+    //console.log('letra',textSearch)
 
     if(textSearch){
       const newData = data.filter(item => {
         const itemData = item.givenName ? item.givenName.toUpperCase() : ''.toUpperCase();
         const textData = textSearch.toUpperCase();
-        console.log(itemData)
-        console.log(textData)
+        //console.log(itemData)
+        //console.log(textData)
   
         return itemData.indexOf(textData) > -1
       })
-      console.log('newDta',newData)
+      //console.log('newDta',newData)
       setContactList(newData);
     }else{
-      console.log('entro else', dataC)
+      //console.log('entro else', dataC)
       getPermission();
     }
   }
@@ -189,12 +189,12 @@ export default function QRWallet ({navigation, route}) {
           <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
               color: "#fff"
           }}>
-            <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
+            <Button onPress={copyToClipboard} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{_wallet.wallet.address}</Text></Button>
           </Tooltip> 
         </Center>
 
         
-        <View style={{backgroundColor: '#1b1e24', flex: 1}}>
+        <View style={{backgroundColor: colorMode === 'dark' ? '#1b1e24' : '#fff', flex: 1}}>
 
         <VStack w="100%" space={5} alignSelf="center">
         <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}  

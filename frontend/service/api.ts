@@ -63,6 +63,26 @@ export const getWalletHistory = async (wallet, chainName) => {
   }
 }
 
+export const getWalletTransactions = async (wallet, chainName) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 1000,
+    });
+    const response = await instance({
+      method: 'get',
+      params: {
+        chainName,
+        wallet,
+      },
+      url: `transactions`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
 export const callWhatsApp = async (payload) => {
   try {
     const instance = axios.create({

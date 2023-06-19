@@ -1,9 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
-import {StyleSheet} from 'react-native';
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
-
 import {
   Alert,
   AlertDialog,
@@ -34,10 +31,11 @@ import {
 import { background } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
+import {StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
-
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import { constructDefaultNetworks, Network } from "../../service/network";
 import { activeNetwork, language, networkList, language as stateLanguage, walletList } from "../../service/state";
@@ -62,7 +60,7 @@ export default function CreateWallet ({navigation, route, storage}) {
   const {
     colorMode
   } = useColorMode();
-  
+  const icon_color = colorMode ==='dark'? 'white':'black';
 
   const handleNameChange = (event) => {
     //console.log(event.nativeEvent.text);
@@ -119,88 +117,53 @@ export default function CreateWallet ({navigation, route, storage}) {
   };
 
   return (
-    <View style={{backgroundColor: Color.gray_200}}>
-    <View> 
+    <View style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}}>
+
       <Text style={styles.titleLayout}>
         New Network
       </Text>
-      </View>  
     <ScrollView w={'full'} h={'full'} marginTop={200}>
       <>
         <Box alignItems="center" marginBottom={20}>
-          <Input style={styles.textoImput} placeholderTextColor={'white'} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
-          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
-          <Input  style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
-          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
-          <Input style={styles.textoImput} placeholderTextColor={'white'}  w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
+          <Input style={styles.textoImput} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
+          <Input style={styles.textoImput} w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
+          <Input  style={styles.textoImput} w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
+          <Input style={styles.textoImput} w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
+          <Input style={styles.textoImput} w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
         </Box>
         <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
-        <Button style={styles.buttonContainer} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: '#000'}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
+        <Button style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: colorMode === 'dark' ? Color.black : Color.white}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
         </Box>
       </>
     </ScrollView>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
-  // eslint-disable-next-line react-native/no-color-literals
   buttonContainer: {
-    fontWeight: 'bold',
-    // eslint-disable-next-line sort-keys
-    backgroundColor: '#D4E815',
-    position: 'absolute',
-    width: 370,
-    textAlign: "left",
     borderRadius: Border.br_sm,
-    borderWidth: 1,
     borderStyle: "solid",
-    borderColor: '#fff',
+    borderWidth: 1,
+    fontWeight: 'bold',
+    position: 'absolute',
+    textAlign: "left",
+    width: 370,
 
   }, 
-   // eslint-disable-next-line react-native/no-unused-styles
-   groupParent: {
-    top: 100,
-    // eslint-disable-next-line sort-keys
-    left: 22,
-    width: 346,
-    // eslint-disable-next-line sort-keys
-    height: 56,
-    position: "relative",
-   }, rectangleParent: {
-    left: 7,
-    position: "absolute",
-  // eslint-disable-next-line sort-keys
-  }, groupWrapperLayout: {
-    width: 339,
-    // eslint-disable-next-line sort-keys
-    top: 0,
-    // eslint-disable-next-line sort-keys
-    height: 56,
-  // eslint-disable-next-line sort-keys
-  }, titleLayout: {
-    color: Color.white,
-    fontFamily: FontFamily.interRegular,
-    textAlign: "center",
-    top: 50,
-  },ethereumTestnet: {
-    top: 1,
-    left: 18,
-    width: 300,
-    color: Color.white,
-    letterSpacing: -0.2,
-    fontFamily: FontFamily.interRegular,
-    lineHeight: 21,
-    fontSize: FontSize.size_base,
-    textAlign: "left",
-    position: "absolute"
-  // eslint-disable-next-line react-native/no-color-literals
-  }, textoImput: {
+  textoImput: {
     borderRadius: Border.br_xs,
-    backgroundColor: Color.gray_300,
-    borderColor: "#7b7b7b",
-    borderWidth: 1,
     borderStyle: "solid",
-    width: 339,
+    borderWidth: 1,
     top: 0,
-  }
+    width: 339,
+  },
+    titleLayout: {
+      color: Color.black,
+      fontFamily: FontFamily.inter,
+      fontSize: 30,
+      paddingTop:10,
+      textAlign: "center",
+      top: 30,
+    },
 });

@@ -53,7 +53,7 @@ type IconType = {
 export default function MobileFooter({wallet: Wallet, navigation}) {
 
   const [language,] = useRecoilState(stateLanguage);
-
+  const {colorMode} = useColorMode();
   const homeButton = translations[language].Buttons_Footer.home;
   const historyButton = translations[language].Buttons_Footer.history;
   const swapButton = translations[language].Buttons_Footer.buttonswap;
@@ -115,7 +115,7 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
             <Button
               key={index}
               variant="ghost"
-              colorScheme="primary"
+              colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
               _stack={{
                 flexDirection: 'column',
               }}
@@ -125,13 +125,18 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
                   as={MaterialIcons}
                   name={item.name}
                   size="10"
-                  color={item.disabled ? "primary.800" : "primary.500"}
+                  _dark={{
+                    color : item.disabled ? "primary.800" : "primary.600"
+                  }}
+                  _light={{
+                    color : item.disabled ? "primary.500" : "primary.600"
+                  }}
                   marginTop='-3'
                   marginBottom={3}
                 />
               }
               _text={{
-                color : item.disabled ? "primary.800" : "primary.500"
+                color : item.disabled ? colorMode === 'dark' ? "primary.800" : "primary.500" : colorMode === 'dark' ? "primary.800" : "primary.600"
               }}
               paddingY={2}
               onPress={() => {openPage(item.text)}}
@@ -141,7 +146,7 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
             <Button
               key={index}
               variant="ghost"
-              colorScheme="coolGray"
+              colorScheme={colorMode === 'dark' ? 'coolGray' : 'coolGray.600'}
               _stack={{
                 flexDirection: 'column',
               }}
@@ -150,11 +155,18 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
                   as={MaterialIcons}
                   name={item.name}
                   size="5"
-                  color={item.disabled ? "coolGray.400" : "coolGray.100"}
+                  _dark={{
+                    color: item.disabled ? "coolGray.400" : "coolGray.100"
+                  }}
+                  _light={{
+                    color: item.disabled ? "coolGray.300" : "coolGray.500"
+                  }}
+                  
+                  
                 />
               }
               _text={{
-                color: item.disabled ? "coolGray.400" : "coolGray.100"
+                color : item.disabled ? colorMode === 'dark' ? "coolGray.800" : "coolGray.500" : colorMode === 'dark' ? "coolGray.800" : "coolGray.600"
               }} 
               paddingY={0}           
               onPress={() => {openPage(item.text)}}

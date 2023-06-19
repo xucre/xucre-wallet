@@ -227,6 +227,7 @@ const values = {
     clear_button: 'Limpar transaÃ§Ãµes',
     holdings_placeholder: 'Inserir Holdings de moedas',
     new_button: 'Adicionar Token',
+    no_network_error: 'No Network Selected',
     tab_list: [
         "ParticipaÃ§Ãµes", 
         "TransaÃ§Ãµes"

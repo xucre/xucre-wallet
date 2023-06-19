@@ -168,7 +168,7 @@ export default function SendToken ({navigation, route, storage}) {
     <ScrollView w={'full'} h={'full'} marginTop={100} >
       <>
         <Box alignItems="center" marginBottom={400}>
-          <Text fontSize="2xl" bold mb={'5'}>{translations[language].SendToken.title}</Text>        
+          <Text fontSize="2xl" bold mb={'5'} pt={1}>{translations[language].SendToken.title}</Text>        
         
           <Select selectedValue={selectedToken.address} w="90%" accessibilityLabel={translations[language].SendToken.token_placeholder} placeholder={translations[language].SendToken.token_placeholder} _selectedItem={{
             bg: "teal.600",
@@ -183,9 +183,9 @@ export default function SendToken ({navigation, route, storage}) {
             }              
           </Select>
           
-          <Input  style={styles.textoImput} fontSize={35} keyboardType="numeric" w="90%" h="30%" mb={2} value={amount} onChange={handleAmountChange}  />
-          <Input style={styles.textoImput}   w="90%" h="35%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].SendToken.address_placeholder}  />
-          <Button style={styles.buttonContainer} onPress={() => {send();}} isLoading={loading} disabled={address.length === 0 || type.length === 0}><Text color={'#000'} fontWeight={'bold'}>{translations[language].SendToken.submit_button}</Text></Button>
+          <Input  style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput} fontSize={35} keyboardType="numeric" w="90%" h="30%" mb={2} value={amount} onChange={handleAmountChange}  />
+          <Input style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput}   w="90%" h="35%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].SendToken.address_placeholder}  />
+          <Button style={colorMode === 'dark' ? styles.buttonContainer : lightStyles.buttonContainer} onPress={() => {send();}} isLoading={loading} disabled={address.length === 0 || type.length === 0}><Text color={colorMode === 'dark' ? 'black' : 'white'} fontWeight={'bold'}>{translations[language].SendToken.submit_button}</Text></Button>
         </Box>
       </>
     </ScrollView>
@@ -235,6 +235,63 @@ const styles = StyleSheet.create({
   }, textoImput: {
     backgroundColor: Color.gray_300,
     borderColor: "#7b7b7b",
+    borderRadius: Border.br_xs,
+    borderStyle: "solid",
+    borderWidth: 1,
+    top: 0,
+    width: 339,
+  }, titleLayout: {
+    color: Color.white,
+    fontFamily: FontFamily.inter,
+    textAlign: "center",
+    top: 50,
+  },
+});
+
+
+const lightStyles = StyleSheet.create({
+  buttonContainer: {
+    backgroundColor: '#1B1E3F',
+    borderColor: '#fff',
+    borderRadius: Border.br_sm,
+    borderStyle: "solid",
+    borderWidth: 1,
+    fontWeight: 'bold',
+    left: 10,
+    position: 'relative',
+    textAlign: "left",
+    top: 180,
+    width: 340,
+
+  }, 
+  ethereumTestnet: {
+    color: Color.black,
+    fontFamily: FontFamily.inter,
+    fontSize: FontSize.size_base,
+    left: 18,
+    letterSpacing: -0.2,
+    lineHeight: 21,
+    position: "absolute",
+    textAlign: "left",
+    top: 1,
+    width: 300,
+  },
+   groupParent: {
+    height: 56,
+    left: 22,
+    position: "relative",
+    top: 100,
+    width: 346,
+   }, groupWrapperLayout: {
+    height: 56,
+    top: 0,
+    width: 339,
+  }, rectangleParent: {
+    left: 7,
+    position: "absolute",
+  }, textoImput: {
+    backgroundColor: Color.white,
+    borderColor: Color.gray_100,
     borderRadius: Border.br_xs,
     borderStyle: "solid",
     borderWidth: 1,

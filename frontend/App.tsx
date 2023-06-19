@@ -88,7 +88,7 @@ const AppLightTheme = {
   colors: {
     ...DefaultTheme.colors,
     background: '#FFFFFF',
-    primary: '#D4E815',
+    primary: '#1B1E3F',
   },
 };
 
@@ -106,7 +106,7 @@ export const theme = extendTheme({
   colors: {
     // Add new color
     primary: {
-      100: '#EEFB6',
+      100: '#EEFB65',
       200: '#E1F245',
       300: '#E1F245',
       400: '#D4E815',
@@ -117,9 +117,18 @@ export const theme = extendTheme({
       800: '#829000',
       900: '#829000',
     },
-  },
-  config: {
-    initialColorMode: 'dark'
+    tertiary: {
+      100: '#1B1E3F',
+      200: '#1B1E3F',
+      300: '#1B1E3F',
+      400: '#1B1E3F',
+      50: '#1B1E3F',
+      500: '#1B1E3F',
+      600: '#1B1E3F',
+      700: '#1B1E3F',
+      800: '#1B1E3F',
+      900: '#1B1E3F',
+    }
   },
  });
 
@@ -146,7 +155,10 @@ export const AppWrapper = () => {
   const [scheme, setScheme] = useState('');
   const [routeState, setRouteState] = useState('');  
   const [language, ] = useRecoilState(stateLanguage);
-  
+  const {
+    colorMode,
+    setColorMode
+  } = useColorMode();  
   useEffect(() => {
     const runAsync = async () => {
       try {
@@ -159,11 +171,37 @@ export const AppWrapper = () => {
     
     runAsync();
   }, []);
+
+  useEffect(() => {
+    console.log('scheme',scheme);
+    if (scheme) {
+      setColorMode(scheme);
+    }
+  }, [scheme])
+
+  useEffect(() => {
+    const runAsync = async () => {
+      const clientTheme = await getTheme();
+      if (!clientTheme) {
+        console.log('setting default theme');
+        await storeTheme('light');
+        setColorMode(clientTheme);
+        setScheme('light');
+      } else {
+        //console.log('setting existing theme:', clientTheme);
+        setColorMode(clientTheme);
+        setScheme(clientTheme);
+      }
+      
+    }
+    
+    runAsync();
+  }, []);
   
   return (
     <SafeAreaProvider>
       <NavigationContainer 
-        theme={scheme === 'dark' ? AppDarkTheme : AppDarkTheme} 
+        theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme} 
         ref={navigationRef}
       >
           <Stack.Navigator initialRouteName="Home"
