@@ -1,0 +1,6 @@
+REACT_APP_API_URL=https://pgoh3ugkwf7bg4avrcwe5yts7e0epnon.lambda-url.sa-east-1.on.aws/
+REACT_APP_WALLET_CONNECT_PROJECT_ID=e2e04799c9e9d2f29bb0804e027a2968
+REACT_APP_WALLET_CONNECT_RELAY_URL=wss://relay.walletconnect.org/?projectId=e2e04799c9e9d2f29bb0804e027a2968
+REACT_APP_BLOCKSPAN_API_KEY=TrSYiLZVBQD81AqQA9l9xpLP0qjj30ad
+REACT_APP_BLOCKSPAN_API_URL=https://api.blockspan.com/v1/
+REACT_APP_API_URL=https://pgoh3ugkwf7bg4avrcwe5yts7e0epnon.lambda-url.sa-east-1.on.aws/
