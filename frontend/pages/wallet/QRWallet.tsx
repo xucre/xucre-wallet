@@ -3,50 +3,24 @@
 /* eslint-disable react-native/split-platform-components */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import {useIsFocused} from '@react-navigation/native';
-import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Avatar,
-  Badge,
   Box,
   Button,
   Center,
-  CloseIcon,
-  ColorMode,
-  Divider,
-  Drawer,
-  Heading,
-  Hidden,
-  HStack,
   Icon,
-  IconButton,
-  Icon as IconElement,
   Image,
   Input,
-  Menu,
-  MoonIcon,
-  Pressable,
   ScrollView,
-  SunIcon,
   Text,
   Tooltip,
-  Modal,
   useColorMode,
-  useColorModeValue,
   VStack,
-  FormControl,
-  NativeBaseProvider,
-  Popover,
 } from "native-base";
-import { background, color, position } from "native-base/lib/typescript/theme/styled-system";
-import React, {createRef, useEffect, useState} from "react";
-import { FlatList, Linking, PermissionsAndroid, TouchableOpacity, View } from "react-native";
-import { StyleSheet } from 'react-native';
+import React, {useEffect, useState} from "react";
+import { FlatList, PermissionsAndroid, TouchableOpacity, View } from "react-native";
 import Communications from 'react-native-communications';
 import Contact from 'react-native-contacts';
 import QRCode from "react-qr-code";
@@ -55,9 +29,6 @@ import { useRecoilState } from "recoil";
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeWallet, language as stateLanguage } from "../../service/state";
-import whatsapp from "../../service/whatsapp";
-import CodeCountry from "../../service/CodeCountry";
-import { AnyARecord } from "dns";
 
 
 
@@ -211,7 +182,7 @@ export default function QRWallet ({navigation, route}) {
               style={{
                 alignItems: 'center',
                 alignSelf: 'center',
-                borderColor: '#fff',
+                borderColor: colorMode === 'dark' ? Color.white : Color.black,
                 borderRadius: 10,
                 borderWidth: 1,
                 flexDirection: 'row',
@@ -240,8 +211,8 @@ export default function QRWallet ({navigation, route}) {
 
                 />
                 <View style={{padding: 10}}>
-                  <Text style={{color: '#fff'}}>{item.displayName}</Text>
-                  <Text style={{color: '#fff', marginTop: 4}}>
+                  <Text style={{color: colorMode === 'dark' ? Color.white : Color.black}}>{item.displayName}</Text>
+                  <Text style={{color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4}}>
                     {item.phoneNumbers[0].number}
                   </Text>
                 </View>

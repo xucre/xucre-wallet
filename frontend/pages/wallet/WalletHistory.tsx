@@ -238,6 +238,7 @@ export default function WalletHistory({ navigation, route }) {
     setCurrentHoldings(finalQuotes[0])
     setChartData(finalQuotes);
     setIsZeroData(isReady);
+    setRefreshing(false);
   }
 
   useEffect(() => {
@@ -258,6 +259,7 @@ export default function WalletHistory({ navigation, route }) {
         y: '0.00'
       });
       setChartData([]);
+      setRefreshing(true);
       getData();
     }
   }, [wallet, chainName])
@@ -281,10 +283,10 @@ export default function WalletHistory({ navigation, route }) {
     setRefreshing(true);
     setHoldings([]);
     setChartData([]);
-
-    setTimeout(async () => {
+    getData();
+    /*setTimeout(async () => {
       setRefreshing(false);
-    }, 100)
+    }, 100)*/
   }, []);
 
   useEffect(() => {
