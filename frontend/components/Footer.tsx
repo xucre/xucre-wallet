@@ -37,9 +37,9 @@ import { RefreshControl } from "react-native";
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
+import translations from "../assets/translations";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../service/state";
 
-import translations from "../assets/translations";
 
 type IconType = {
   readonly name: string;
@@ -146,7 +146,7 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
             <Button
               key={index}
               variant="ghost"
-              colorScheme={colorMode === 'dark' ? 'coolGray' : 'coolGray.600'}
+              colorScheme={colorMode === 'dark' ? 'coolGray' : 'coolGray'}
               _stack={{
                 flexDirection: 'column',
               }}
@@ -160,14 +160,15 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
                   }}
                   _light={{
                     color: item.disabled ? "coolGray.300" : "coolGray.500"
-                  }}
-                  
-                  
+                  }}                
                 />
               }
-              _text={{
-                color : item.disabled ? colorMode === 'dark' ? "coolGray.800" : "coolGray.500" : colorMode === 'dark' ? "coolGray.800" : "coolGray.600"
-              }} 
+              _dark={{
+                color: item.disabled ? "coolGray.400" : "coolGray.100"
+              }}              
+              _light={{
+                color: item.disabled ? "coolGray.300" : "coolGray.500"
+              }}       
               paddingY={0}           
               onPress={() => {openPage(item.text)}}
             >
