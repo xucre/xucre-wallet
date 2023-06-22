@@ -26,6 +26,7 @@ import Contact from 'react-native-contacts';
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
 
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeWallet, language as stateLanguage } from "../../service/state";
