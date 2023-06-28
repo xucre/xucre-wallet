@@ -55,14 +55,14 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
   const [language,] = useRecoilState(stateLanguage);
   const {colorMode} = useColorMode();
   const homeButton = translations[language].Buttons_Footer.home;
-  const historyButton = translations[language].Buttons_Footer.history;
+  const buttonNft = translations[language].Buttons_Header.nft;
   const swapButton = translations[language].Buttons_Footer.buttonswap;
   const supportButton = translations[language].Buttons_Footer.support;
   const profileButton = translations[language].Buttons_Footer.profile;
 
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: homeButton },
-    { disabled: false, highlight: false, name: 'history', text: historyButton },
+    { disabled: false, highlight: false, name: 'image-search', text: buttonNft },
     { highlight: true, name: 'swap-vertical-circle', text: swapButton },
     { highlight: false, name: 'live-help', text: supportButton },
     { disabled: true, highlight: false, name: 'person', text: profileButton },
@@ -76,8 +76,8 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
       case 'SWAP': 
         navigation.navigate('SwapToken');
         break;
-      case 'History': 
-        navigation.navigate('WalletHistory');
+      case 'NFT':
+        navigation.navigate('NFT');
         break;
       //case 'Profile': 
         //navigation.navigate('Profile');

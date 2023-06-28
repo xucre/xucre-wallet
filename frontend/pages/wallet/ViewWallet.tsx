@@ -120,7 +120,6 @@ export default function ViewWallet ({navigation, route}) {
   const buttonSend = translations[language].Buttons_Header.send;
   const buttonReceive = translations[language].Buttons_Header.receive;
   const buttonBuy = translations[language].Buttons_Header.buy;
-  const buttonNft = translations[language].Buttons_Header.nft;
 
 
   // Transitions
@@ -223,10 +222,6 @@ export default function ViewWallet ({navigation, route}) {
     navigation.navigate('SwapToken');
   }
 
-  const openNft = () => {
-    navigation.navigate('NFT');
-  }
-
   const buyTokens = () =>{
     navigation.navigate('BuyToken');
   }
@@ -241,28 +236,23 @@ export default function ViewWallet ({navigation, route}) {
     setCurrentTab(newTab);
   }
 
-  const middleButtons = [
+const middleButtons = [
     {
-      action: sendFunds,
-      icon: 'arrow-right-alt',
-      text: buttonSend
+        action: sendFunds,
+        icon: "arrow-right-alt",
+        text: buttonSend,
     },
     {
-      action: receiveFunds,
-      icon: 'arrow-downward',
-      text: buttonReceive
+        action: buyTokens,
+        icon: "monetization-on",
+        text: buttonBuy,
     },
     {
-      action: buyTokens,
-      icon: 'monetization-on',
-      text: buttonBuy
+        action: receiveFunds,
+        icon: "arrow-downward",
+        text: buttonReceive,
     },
-    {
-      action: openNft,
-      icon: 'image-search',
-      text: buttonNft
-    }
-  ]
+];
 
   return (
     <DashboardLayout title={_wallet.name}>
@@ -331,7 +321,7 @@ export default function ViewWallet ({navigation, route}) {
                     _stack={{
                       flexDirection: 'column'
                     }}
-                    flex={.25}
+                    flex={.33}
                     startIcon={
                       <Icon
                         as={MaterialIcons}
