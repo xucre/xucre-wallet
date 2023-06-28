@@ -12,12 +12,14 @@ import {
   CloseIcon,
   Divider,
   Drawer,
+  Heading,
   Hidden,
   HStack,
   Icon,
   IconButton,
   Image,
   Input,
+  KeyboardAvoidingView,
   MoonIcon,
   Pressable,
   ScrollView,
@@ -26,6 +28,7 @@ import {
   TextArea,
   useColorMode,
   useColorModeValue,
+  useSafeArea,
   useToast,
   View,
   VStack,
@@ -33,7 +36,7 @@ import {
 import { color } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
@@ -177,120 +180,77 @@ export default function RecoverWallet ({navigation, route, storage}) {
   };
 
   return (
-    <View style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}}>
-    <ScrollView w={'full'} h={'full'} marginTop={200}>
+    <Center style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}} flex={1} px="3">          
+      <KeyboardAvoidingView h={{
+        base: "400px",
+        lg: "auto"
+      }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
      {/*  {steps === 0 && 
         <Instructions></Instructions>
       } */}
 
       {steps === 0 && 
-        <>
-          <Box alignItems="center" marginBottom={250}>
-            <Text style={[styles.recoverWallet, styles.walletClr]}>
-              Recover wallet
-            </Text>
+        
+        <Center>
+          <VStack minW="300px" w="100%" alignItems="center" flex="1" justifyContent="flex-start">
+            <Heading mb={5} style={styles.recoverWallet} fontWeight={'normal'}><Text>Recover wallet</Text></Heading>
             <Text style={[styles.pleaseEnterThe, styles.theLayout]}>
               Please enter the name and the sequence of mnemonics from your original
               wallet creation proces
             </Text>
-            <Text
-            style={[
-              styles.walletName,
-              styles.walletClr,
-              styles.groupChildPosition,
-            ]}
-            >
-              Wallet name
-            </Text>
+            <Box py={3}>
+              <Text style={styles.walletName} textAlign={'center'}>
+                Wallet name
+              </Text>
 
-            <View style={styles.containerText}>
-              <Input  w="90%" value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} my={7} />
-            </View>
-
-            <Text
-              style={[
-                styles.walletName,
-                styles.walletClr,
-                styles.groupChildPositionArea,
-              ]}
-            >
-              Mnemonic phrase
-            </Text>
-
-            <View style={styles.containerTextArea} >
-              <TextArea totalLines={3} autoCompleteType={'off'} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="90%" />
-            </View>            
+              <Input  w="90%" value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} />
+            </Box>
             
-          </Box>
-          <Button style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
-            <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].RecoverWallet.save_button}</Text>
-          </Button>
-        </>
+            <Box py={3}>
+              <Text style={ styles.walletName} textAlign={'center'}>
+                Mnemonic phrase
+              </Text>            
+              <TextArea totalLines={3} autoCompleteType={'off'} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="90%" />
+            </Box>
+              <Button w={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
+                <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].RecoverWallet.save_button}</Text>
+              </Button>        
+          </VStack>
+        
+        </Center>
+    
       }
-    </ScrollView>
-    </View>
+    
+      </KeyboardAvoidingView>
+    </Center>
   );
 }
 
 const styles = StyleSheet.create({
   buttonContainer: {
+    borderColor: Color.transparent,
     borderRadius: Border.br_sm,
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: 'bold',
     position: 'relative',
     textAlign: "left",
-    width: '100%',
-  },
-  containerText:{
-    top: 130
-  },
-  containerTextArea:{
-    fontWeight: 300,
-    top: 155,
-  },
-  groupChildPosition: {
-    left: 30,
-    top: 130,
-  },
-  groupChildPositionArea: {
-    left: 30,
-    top: 230,
   },
   pleaseEnterThe: {
-    left: 40,
     textAlign: "center",
-    top: 50,
   },
   recoverWallet: {
     fontFamily: FontFamily.inter,
     fontSize: FontSize.size_2xl,
     fontWeight: "600",
-    left: 135,
-    lineHeight: 30,
-    textAlign: "left",
-    top: 0,
   },  
   theLayout: {
     fontFamily: FontFamily.inter,
     fontSize: FontSize.size_base,
-    letterSpacing: -0.2,
-    lineHeight: 21,
-    position: "absolute",
-    width: 306,
-  },
-  walletClr: {
-    letterSpacing: -0.2,
-    position: "absolute",
-    textAlign: "left",
   },
   walletName: {
     fontFamily: FontFamily.inter,
     fontSize: FontSize.size_base,
     fontWeight: "500",
-    lineHeight: 21,
-    textAlign: "left",
-    top: 0,
-    width: 316,
   },    
 })

@@ -18,14 +18,14 @@ export const constructDefaultNetworks = () => {
       blockExplorer: 'https://etherscan.io/',
       chainId: 1,
       name: 'Ethereum Mainnet',
-      rpcUrl: 'wss://nd-lu5iumrlejgoxnmlpsxb2nkyw4.wss.ethereum.managedblockchain.us-east-1.amazonaws.com',
+      rpcUrl: 'wss://eth-mainnet.g.alchemy.com/v2/JqOD3cdBDl50H65bk315fAE614CDHa9u',
       symbol: 'ETH',
     } as Network,
     {
       blockExplorer: 'https://polygonscan.com/',
       chainId: 137,
       name: 'Polygon',
-      rpcUrl: 'wss://rpc-mumbai.maticvigil.com/ws/v1/0c4a9f14b452f00dc7bcf6b571b1de22a6126b86',
+      rpcUrl: 'wss://polygon-mumbai.g.alchemy.com/v2/Lhg7TLiuGtQ3-HMJWB3NO_ok2Nlu01um',
       symbol: 'MATIC',
     } as Network,
     {
