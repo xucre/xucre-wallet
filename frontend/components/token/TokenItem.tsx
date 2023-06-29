@@ -45,7 +45,8 @@ export default function TokenItem ({navigation, token}) {
       try {
         //console.log('token onload', token);
         if (token.type === 'coin' && wallet.address) {
-          console.log(typeof wallet.getBalance);
+          //console.log(typeof wallet.getBalance);
+          //console.log('what');
           const walletBalance = await wallet.getBalance();
           console.log('balance',walletBalance);
           if (isComponentMounted) {
@@ -62,6 +63,7 @@ export default function TokenItem ({navigation, token}) {
           }
         }        
       } catch (e) {
+        console.log('error getting balance')
         console.log(e);
       }
         
