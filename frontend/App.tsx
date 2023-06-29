@@ -57,11 +57,11 @@ import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
 import WalletHistory from './pages/wallet/WalletHistory';
-import LegacyConnectionRequest from './pages/walletConnect/v1/ConnectionRequest';
+/*import LegacyConnectionRequest from './pages/walletConnect/v1/ConnectionRequest';
 import LegacyEthSign from './pages/walletConnect/v1/EthSign';
 import LegacySendTransaction from './pages/walletConnect/v1/SendTransaction';
 import LegacySignTransaction from './pages/walletConnect/v1/SignTransaction';
-import LegacySignTypedData from './pages/walletConnect/v1/SignTypedData';
+import LegacySignTypedData from './pages/walletConnect/v1/SignTypedData';*/
 import ConnectionRequest from './pages/walletConnect/v2/ConnectionRequest';
 import EthSign from './pages/walletConnect/v2/EthSign';
 import SendTransaction from './pages/walletConnect/v2/SendTransaction';
@@ -315,26 +315,7 @@ export const AppWrapper = () => {
             <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
               headerTitleAlign: 'left',
               title: translations[language].SendTransaction.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="LegacyConnectionRequest" component={LegacyConnectionRequest} options={{ 
-              title: '', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="LegacySignTypedData" component={LegacySignTypedData} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language].LegacySignTypedData.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="LegacyEthSign" component={LegacyEthSign} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language].LegacyEthSign.title, 
-            }} ></Stack.Screen>                  
-            <Stack.Screen name="LegacySignTransaction" component={LegacySignTransaction} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language].LegacySignTransaction.title, 
-            }} ></Stack.Screen>           
-            <Stack.Screen name="LegacySendTransaction" component={LegacySendTransaction} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language].LegacySendTransaction.title, 
-            }} ></Stack.Screen>       
+            }} ></Stack.Screen>    
             <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
               headerTitleAlign: 'left',
               title: translations[language].SetPassword.title, 

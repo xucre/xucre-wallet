@@ -8,7 +8,6 @@ import { useRecoilState } from 'recoil';
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
 import { createSignClient, signClient } from '../service/walletConnect';
-import { createLegacySignClient } from '../service/walletConnectLegacy';
 
 export default function QRReader({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -31,7 +30,7 @@ export default function QRReader({navigation}) {
     //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     try {
       if (version === 1) {
-        createLegacySignClient({uri: data})
+        //createLegacySignClient({uri: data})
       } else if (version === 2) {
         signClient.pair({uri: data});
       } 
