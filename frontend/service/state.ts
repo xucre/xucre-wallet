@@ -42,7 +42,7 @@ export const activeNetwork = atom({
     blockExplorer: 'https://etherscan.io',
       chainId: 1,
       name: 'Ethereum Mainnet',
-      rpcUrl: 'wss://nd-lu5iumrlejgoxnmlpsxb2nkyw4.wss.ethereum.managedblockchain.us-east-1.amazonaws.com',
+      rpcUrl: 'wss://eth-mainnet.g.alchemy.com/v2/JqOD3cdBDl50H65bk315fAE614CDHa9u',
       symbol: 'ETH',
   } as Network,
   key: 'activeNetwork'
