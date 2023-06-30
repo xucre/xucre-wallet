@@ -70,7 +70,7 @@ import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import CodeCountry from './service/CodeCountry';
 import { navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
-import {createSignClient} from './service/walletConnect';
+import {createSignClient, signClient} from './service/walletConnect';
 import whatsapp from './service/whatsapp';
 import { getTheme, storeTheme } from './store/setting';
 
@@ -163,7 +163,7 @@ export const AppWrapper = () => {
     const runAsync = async () => {
       try {
         await createSignClient();
-        
+        console.log('sign in created')
       } catch (err) {
         console.log(err);
       }
