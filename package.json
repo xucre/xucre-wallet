@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@babel/plugin-syntax-bigint": "^7.8.3",
     "@expo-google-fonts/inter": "^0.2.2",
     "@expo-google-fonts/montserrat": "^0.2.2",
     "@json-rpc-tools/utils": "^1.7.6",
@@ -15,13 +16,14 @@
     "@walletconnect/legacy-types": "^2.0.0-rc.0",
     "@walletconnect/react-native-compat": "^2.1.2",
     "@walletconnect/react-native-dapp": "1.6.1",
-    "@walletconnect/sign-client": "^2.0.0",
+    "@walletconnect/sign-client": "^2.8.6",
     "@walletconnect/types": "^2.1.2",
     "@walletconnect/utils": "^2.1.4",
     "@walletconnect/web3-provider": "^1.8.0",
     "array-shuffle": "^3.0.0",
     "axios": "^0.27.2",
     "base-64": "1.0.0",
+    "big-integer": "^1.6.51",
     "buffer": "6.0.3",
     "ethers": "^5.6.9",
     "expo": "^45.0.0",
