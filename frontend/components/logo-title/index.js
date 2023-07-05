@@ -18,6 +18,7 @@ function LogoTitle() {
     <Image
       style={styles.image}
       source={logo}
+      alt="logo"
     />
   );
 }
