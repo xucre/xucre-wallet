@@ -44,15 +44,15 @@ export default function TokenItem ({navigation, token}) {
     const runAsync = async () => {
       try {
         //console.log('token onload', token);
-        if (token.type === 'coin' && provider.getBlockNumber) {
-          const currentBlock = await provider.getBlockNumber();
-          if (wallet.address && currentBlock > 0) {
-            const walletBalance = await wallet.getBalance();
-            //console.log('balance',walletBalance);
-            if (isComponentMounted) {
-              setAmount(walletBalance);
-            }
-          }//
+        if (token.type === 'coin' && wallet.address) {
+          //console.log(typeof wallet.getBalance);
+          //console.log('what');
+          const walletBalance = await wallet.getBalance();
+          console.log('balance',walletBalance);
+          if (isComponentMounted) {
+            setAmount(walletBalance);
+          }
+          
         } else if (token.type === 'token' && wallet.address) {
           const contract = new ethers.Contract(token.address, erc20Abi, provider);
           //console.log('token get balance', contract.balanceOf);
@@ -63,6 +63,7 @@ export default function TokenItem ({navigation, token}) {
           }
         }        
       } catch (e) {
+        console.log('error getting balance')
         console.log(e);
       }
         

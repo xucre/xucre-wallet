@@ -1,4 +1,4 @@
-/* eslint-disable react-native/no-color-literals */
+
 /* eslint-disable react-native/no-unused-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
@@ -21,10 +21,12 @@ import {
   IconButton,
   Image,
   Input,
+  KeyboardAvoidingView,
   MoonIcon,
   Pressable,
   ScrollView,
   Select,
+  Stack,
   SunIcon,
   Text,
   useColorMode,
@@ -33,7 +35,7 @@ import {
 } from "native-base";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
@@ -73,7 +75,14 @@ export default function SendToken ({navigation, route, storage}) {
     const runAsync = async () => {
       const _tokens = await getTokenByChain(network.chainId);
       console.log('sendToken',network, _tokens);
-      setTokens(_tokens);
+      const coinToken = {
+        address : '',
+        amount : ethers.utils.formatEther( 0 ),
+        chainId : network.chainId,
+        name: network.symbol,
+        type: 'coin',
+      };
+      setTokens([coinToken, ..._tokens]);
     }
 
     if (network) {
@@ -165,14 +174,18 @@ export default function SendToken ({navigation, route, storage}) {
   };
 
   return (
-    <ScrollView w={'full'} h={'full'} marginTop={100} >
-      <>
-        <Box alignItems="center" marginBottom={400}>
+    <Center style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}} flex={1} px="3">          
+      <KeyboardAvoidingView h={{
+        base: "400px",
+        lg: "auto"
+      }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <VStack minW="300px" w="100%" alignItems="center" flex="1" justifyContent="space-between" marginBottom={20} marginTop={20}>
           <Text fontSize="2xl" bold mb={'5'} pt={1}>{translations[language].SendToken.title}</Text>        
         
           <Select selectedValue={selectedToken.address} w="90%" accessibilityLabel={translations[language].SendToken.token_placeholder} placeholder={translations[language].SendToken.token_placeholder} _selectedItem={{
-            bg: "teal.600",
-            endIcon: <CheckIcon size="5" />
+            bg: colorMode === 'dark' ? 'primary.600' : 'info.600',
+            color: Color.white,
+            endIcon: <CheckIcon size="5" color={Color.white} />
           }} mt={1} onValueChange={itemValue => handleTokenChange(itemValue)} mb={'2'}>
             {
               tokens.map((_token) => {
@@ -184,123 +197,85 @@ export default function SendToken ({navigation, route, storage}) {
           </Select>
           
           <Input  style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput} fontSize={35} keyboardType="numeric" w="90%" h="30%" mb={2} value={amount} onChange={handleAmountChange}  />
-          <Input style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput}   w="90%" h="35%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].SendToken.address_placeholder}  />
-          <Button style={colorMode === 'dark' ? styles.buttonContainer : lightStyles.buttonContainer} onPress={() => {send();}} isLoading={loading} disabled={address.length === 0 || type.length === 0}><Text color={colorMode === 'dark' ? 'black' : 'white'} fontWeight={'bold'}>{translations[language].SendToken.submit_button}</Text></Button>
-        </Box>
-      </>
-    </ScrollView>
+          <Input style={colorMode === 'dark' ? styles.textoImput : lightStyles.textoImput}   w="90%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].SendToken.address_placeholder}  />
+          <Box >
+            <Box>
+              <Button style={styles.buttonContainer} w={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {send();}} isLoading={loading} disabled={address.length === 0 || type.length === 0}>
+                <Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language].SendToken.submit_button}</Text>
+              </Button>
+            </Box>
+          </Box>
+        </VStack>
+      </KeyboardAvoidingView>
+    </Center>
   );
 }
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: '#D4E815',
-    borderColor: '#000',
+    borderColor: Color.transparent,
     borderRadius: Border.br_sm,
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: 'bold',
-    left: 10,
-    position: 'relative',
-    textAlign: "left",
-    top: 180,
-    width: 340,
 
   }, 
   ethereumTestnet: {
     color: Color.white,
     fontFamily: FontFamily.inter,
     fontSize: FontSize.size_base,
-    left: 18,
     letterSpacing: -0.2,
     lineHeight: 21,
-    position: "absolute",
-    textAlign: "left",
-    top: 1,
-    width: 300,
   },
    groupParent: {
     height: 56,
-    left: 22,
-    position: "relative",
-    top: 100,
-    width: 346,
    }, groupWrapperLayout: {
     height: 56,
-    top: 0,
-    width: 339,
   }, rectangleParent: {
-    left: 7,
-    position: "absolute",
   }, textoImput: {
     backgroundColor: Color.gray_300,
-    borderColor: "#7b7b7b",
+    borderColor: Color.transparent,
     borderRadius: Border.br_xs,
     borderStyle: "solid",
     borderWidth: 1,
-    top: 0,
-    width: 339,
   }, titleLayout: {
     color: Color.white,
     fontFamily: FontFamily.inter,
     textAlign: "center",
-    top: 50,
   },
 });
 
 
 const lightStyles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: '#1B1E3F',
-    borderColor: '#fff',
+    borderColor: Color.transparent,
     borderRadius: Border.br_sm,
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: 'bold',
-    left: 10,
-    position: 'relative',
-    textAlign: "left",
-    top: 180,
-    width: 340,
 
   }, 
   ethereumTestnet: {
     color: Color.black,
     fontFamily: FontFamily.inter,
     fontSize: FontSize.size_base,
-    left: 18,
     letterSpacing: -0.2,
     lineHeight: 21,
-    position: "absolute",
-    textAlign: "left",
-    top: 1,
-    width: 300,
   },
    groupParent: {
     height: 56,
-    left: 22,
-    position: "relative",
-    top: 100,
-    width: 346,
    }, groupWrapperLayout: {
     height: 56,
-    top: 0,
-    width: 339,
   }, rectangleParent: {
-    left: 7,
-    position: "absolute",
   }, textoImput: {
     backgroundColor: Color.white,
-    borderColor: Color.gray_100,
+    borderColor: Color.transparent,
     borderRadius: Border.br_xs,
     borderStyle: "solid",
     borderWidth: 1,
-    top: 0,
-    width: 339,
   }, titleLayout: {
     color: Color.white,
     fontFamily: FontFamily.inter,
     textAlign: "center",
-    top: 50,
   },
 });

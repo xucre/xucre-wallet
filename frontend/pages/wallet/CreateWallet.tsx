@@ -15,15 +15,18 @@ import {
   CloseIcon,
   Divider,
   Drawer,
+  Heading,
   Hidden,
   HStack,
   Icon,
   IconButton,
   Image,
   Input,
+  KeyboardAvoidingView,
   MoonIcon,
   Pressable,
   ScrollView,
+  Stack,
   SunIcon,
   Text,
   useColorMode,
@@ -37,7 +40,7 @@ import {
 } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, { createRef, useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
@@ -112,27 +115,25 @@ export default function CreateWallet({ navigation, route, storage }) {
     };
 
     return (
-      <Box alignItems="center" marginBottom={20} h={"full"} w={"full"}>
-        <Text
+      <Center marginBottom={20} h={"3/4"} w={"full"}>
+        <Heading
           style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
-          fontSize={"lg"}
-          mt={5}
+          py={2}
         >
           {translations[language].CreateWallet.instructions_newWwallet}
-        </Text>
+        </Heading>
         <Text
           style={{
             color: Color.gray_100,
-            marginLeft: 15,
-            marginRight: 15,
             textAlign: "center",
           }}
           fontSize={"md"}
-          mt={5}
+          py={5}
         >
           {translations[language].CreateWallet.instructions}
         </Text>
         <Button
+          w={'full'}
           style={styles.buttonContainer}
           colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
           onPress={createMnemonics}
@@ -142,13 +143,13 @@ export default function CreateWallet({ navigation, route, storage }) {
             {translations[language].CreateWallet.instructions_button}
           </Text>
         </Button>
-      </Box>
+      </Center>
     );
   }
 
   function MnemonicList() {
     return (
-      <>
+      <Box>
         <Text
           style={{
             color: Color.gray_100,
@@ -157,15 +158,12 @@ export default function CreateWallet({ navigation, route, storage }) {
             textAlign: "center",
           }}
           fontSize={"md"}
-          mt={5}
+          my={2}
         >
           {translations[language].CreateWallet.mnemonic_instructions}
         </Text>
         <Grid
           style={{
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 0,
             paddingBottom: 10,
           }}
         >
@@ -181,7 +179,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                       mr={11}
                       zIndex={100}
                       variant="solid"
-                      alignSelf="flex-end"
+                      alignSelf="flex-start"
                       _text={{
                         fontSize: 12,
                       }}
@@ -189,8 +187,8 @@ export default function CreateWallet({ navigation, route, storage }) {
                       <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
                     </Badge>
                     <Button
-                      left={25}
-                      width={101}
+                      left={0}
+                      width={100}
                       height={50}
                       bg="Color.gray_100"
                       rounded="sm"
@@ -230,7 +228,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                       <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
                     </Badge>
                     <Button
-                      width={120}
+                      width={100}
                       height={50}
                       bg="Color.gray_100"
                       rounded="sm"
@@ -270,8 +268,8 @@ export default function CreateWallet({ navigation, route, storage }) {
                       <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
                     </Badge>
                     <Button
-                      right={3}
-                      width={120}
+                      right={0}
+                      width={100}
                       height={50}
                       bg="Color.gray_100"
                       rounded="sm"
@@ -292,7 +290,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           </Col>
           <Col></Col>
         </Grid>
-      </>
+      </Box>
     );
   }
 
@@ -327,9 +325,10 @@ export default function CreateWallet({ navigation, route, storage }) {
             justifyContent: "center",
             marginTop: 10,
             paddingBottom: 10,
+            paddingLeft: 20,
+            paddingRight: 20,
           }}
         >
-          <Col></Col>
           <Col>
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 0) {
@@ -377,14 +376,17 @@ export default function CreateWallet({ navigation, route, storage }) {
                       )}
 
                       <Button
-                        left={15}
                         width={100}
                         height={50}
+                        colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                         bg="Color.gray_100"
                         rounded="sm"
                         _text={{
                           color: "warmGray.50",
                           fontWeight: "medium",
+                        }}
+                        _hover={{
+                          color: "warmGray.800"
                         }}
                         margin={1}
                         shadow={"3"}
@@ -452,11 +454,15 @@ export default function CreateWallet({ navigation, route, storage }) {
                       <Button
                         width={100}
                         height={50}
+                        colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                         bg="Color.gray_100"
                         rounded="sm"
                         _text={{
                           color: "warmGray.50",
                           fontWeight: "medium",
+                        }}
+                        _hover={{
+                          color: "warmGray.800"
                         }}
                         margin={1}
                         shadow={"3"}
@@ -521,14 +527,17 @@ export default function CreateWallet({ navigation, route, storage }) {
                       )}
 
                       <Button
-                        right={3}
-                        width={120}
+                        width={100}
                         height={50}
+                        colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                         bg="Color.gray_100"
                         rounded="sm"
                         _text={{
                           color: "warmGray.50",
                           fontWeight: "medium",
+                        }}
+                        _hover={{
+                          color: "warmGray.800"
                         }}
                         margin={1}
                         shadow={"3"}
@@ -545,8 +554,6 @@ export default function CreateWallet({ navigation, route, storage }) {
               }
             })}
           </Col>
-
-          <Col></Col>
         </Grid>
       </>
     );
@@ -565,8 +572,8 @@ export default function CreateWallet({ navigation, route, storage }) {
           </Alert>
         )}
         {mnemonicMatchComplete && (
-          <Button style={styles.buttonMneminic} onPress={nextStep}>
-            <Text style={{ color: "#000", fontWeight: "bold" }}>
+          <Button w={'full'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
+            <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
               {translations[language].CreateWallet.mnemonic_error_button}
             </Text>
           </Button>
@@ -628,71 +635,63 @@ export default function CreateWallet({ navigation, route, storage }) {
   };
 
   return (
-    <View style={{ backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white }}>
-      <ScrollView w={"full"} h={"full"} marginTop={150}>
-        {steps === 0 && <Instructions></Instructions>}
+    <Center style={{ backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white }} flex={1} px="3">
+      <KeyboardAvoidingView h={{
+        base: "auto",
+        lg: "auto"
+      }} behavior={Platform.OS === "ios" ? "padding" : "height"} py={10}>
+        {steps === 0 && 
+          <Box>
+            <Instructions></Instructions>
+          </Box>
+        }
 
         {steps === 1 && (
           <Box
             alignItems="center"
-            marginBottom={20}
-            h={"full"}
-            w={"full"}
-            flex={2}
           >
-            <Center
-              _text={{ color: "warmGray.50", fontWeight: "medium" }}
-              marginBottom={0}
-              paddingBottom={0}
-            >
-              <Text paddingTop={1} paddingBottom={5} fontSize={'lg'}>
-                {
-                  translations[language].CreateWallet
-                    .mnemonic_confirm_instructions
-                }
-              </Text>
+            <Center marginBottom={20} h={"3/4"} w={"full"} alignItems="center" flex="1" justifyContent="space-between">
+              
+              <Heading
+                style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
+                py={2}
+              >
+                {translations[language].CreateWallet.mnemonic_confirm_instructions}
+              </Heading>
+              <MnemonicList></MnemonicList>
+              <Box>
+                <Stack >
+                  <Button w={'full'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
+                    <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
+                      {translations[language].CreateWallet.mnemonic_confirm_button}
+                    </Text>
+                  </Button>
+                </Stack>
+              </Box>
             </Center>
-            <MnemonicList></MnemonicList>
-            <Button style={styles.buttonMneminic} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
-              <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
-                {translations[language].CreateWallet.mnemonic_confirm_button}
-              </Text>
-            </Button>
           </Box>
         )}
 
         {steps === 2 && (
           <Box
-            alignItems="center"
-            marginBottom={20}
-            h={"full"}
-            w={"full"}
-            flex={2}
+          alignItems="center"
           >
-            <Center
-              _text={{ color: "warmGray.50", fontWeight: "medium" }}
-              marginBottom={0}
-              paddingBottom={0}
+          <Center marginBottom={0} h={"3/4"} w={"full"} alignItems="center" flex="1" justifyContent="space-between" _text={{ color: "warmGray.50", fontWeight: "medium" }}>
+            <Heading
+              style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
+              py={2}
             >
-              <Text paddingTop={1} paddingBottom={5} fontSize={'lg'}>
-                {
-                  translations[language].CreateWallet
-                    .mnemonic_confirm_instructions
-                }
-              </Text>
-            </Center>
+              {translations[language].CreateWallet.mnemonic_confirm_instructions}
+            </Heading>
             <ConfirmMnemonicList></ConfirmMnemonicList>
             <MnemonicError></MnemonicError>
+          </Center>
           </Box>
         )}
 
         {steps === 3 && (
-          <Box
+          <Center
             alignItems="center"
-            marginBottom={20}
-            h={"800"}
-            w={"full"}
-            flex={3}
           >
             <Text
               style={{ color: colorMode === 'dark' ? Color.white : Color.black, fontWeight: "bold" }}
@@ -709,13 +708,12 @@ export default function CreateWallet({ navigation, route, storage }) {
                 textAlign: "center",
               }}
               fontSize={"md"}
-              mt={5}
+              my={5}
             >
               {translations[language].CreateWallet.instructions_nameWallet}
             </Text>
             <Input
-              w="85%"
-              top={70}
+              w="full"
               value={name}
               onChange={handleChange}
               placeholder={
@@ -723,7 +721,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               }
             />
             <Button
-              style={styles.buttonSave}
+              style={styles.buttonContainer}
               onPress={() => {
                 saveWallet();
               }}
@@ -732,20 +730,21 @@ export default function CreateWallet({ navigation, route, storage }) {
                 translations[language].CreateWallet
                   .name_entry_button_loadingtext
               }
-              py={5}
+              my={5}
+              w={'full'}
               disabled={
                 confirmMnemonics.length < mnemonics.length || name.length === 0
               }
               colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
             >
-              <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
+              <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }} textAlign={'center'}>
                 {translations[language].CreateWallet.name_entry_button}
               </Text>
             </Button>
-          </Box>
+          </Center>
         )}
-      </ScrollView>
-    </View>
+      </KeyboardAvoidingView>
+    </Center>
   );
 }
 
@@ -755,80 +754,39 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: "bold",
-    left: 0,
-    position: "relative",
-    textAlign: "left",
-    top: 80,
-    width: 350,
-  },
-  
-  buttonMneminic: {
-    borderRadius: Border.br_sm,
-    borderStyle: "solid",
-    borderWidth: 1,
-    fontWeight: "bold",
-    position: "absolute",
-    textAlign: "left",
-    top: 450,
-    width: 350,
-  },
-
-  buttonSave: {
-    borderRadius: Border.br_sm,
-    borderStyle: "solid",
-    borderWidth: 1,
-    fontWeight: "bold",
-    position: "absolute",
-    textAlign: "left",
-    top: 250,
-    width: 350,
   },
 
   createANew: {
-    top: 230,
-    // eslint-disable-next-line sort-keys
     color: Color.darkgray_100,
     fontFamily: FontFamily['interRegular'],
     fontSize: FontSize.size_base,
-    left: 33,
     letterSpacing: -0.2,
     lineHeight: 21,
-    position: "absolute",
     textAlign: "center",
   },
   createFlexBox: {
     letterSpacing: -0.2,
     textAlign: "center",
-    width: 330,
   },
   rectangleGroup: {
     backgroundColor: Color.gray_200,
-    top: 410,
   },
   rectangleLayout: {
-    height: 60,
-    left: 33,
-    position: "absolute",
-    width: 330,
   },
   rectangleParent: {
     backgroundColor: "#CEF213",
     borderRadius: Border.br_sm,
     fontFamily: FontFamily['interSemibold'],
-    top: 330,
   },
   walletTypo: {
     color: Color.white,
     fontFamily: FontFamily['interSemibold'],
     fontWeight: "600",
-    position: "absolute",
   },
   yourWallet: {
     fontSize: FontSize.size_3xl,
-    left: 126,
     letterSpacing: -0.3,
     lineHeight: 36,
     textAlign: "center",
-    top: 180,
   },
 });

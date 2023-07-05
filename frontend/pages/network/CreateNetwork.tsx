@@ -12,12 +12,14 @@ import {
   CloseIcon,
   Divider,
   Drawer,
+  Heading,
   Hidden,
   HStack,
   Icon,
   IconButton,
   Image,
   Input,
+  KeyboardAvoidingView,
   MoonIcon,
   Pressable,
   ScrollView,
@@ -31,7 +33,7 @@ import {
 import { background } from "native-base/lib/typescript/theme/styled-system";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
 import React, {createRef, useEffect, useState} from "react";
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
@@ -117,26 +119,25 @@ export default function CreateWallet ({navigation, route, storage}) {
   };
 
   return (
-    <View style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}}>
-
-      <Text style={styles.titleLayout}>
-        New Network
-      </Text>
-    <ScrollView w={'full'} h={'full'} marginTop={200}>
-      <>
-        <Box alignItems="center" marginBottom={20}>
-          <Input style={styles.textoImput} w="90%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
-          <Input style={styles.textoImput} w="90%" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
-          <Input  style={styles.textoImput} w="90%" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
-          <Input style={styles.textoImput} w="90%" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
-          <Input style={styles.textoImput} w="90%" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
-        </Box>
-        <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
-        <Button style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}><Text style={{color: colorMode === 'dark' ? Color.black : Color.white}}>{translations[language].CreateNetwork.submit_button}</Text></Button>
-        </Box>
-      </>
-    </ScrollView>
-    </View>
+        <Center style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}} flex={1} px="3">          
+          <KeyboardAvoidingView h={{
+            base: "400px",
+            lg: "auto"
+          }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            <VStack minW="300px" w="100%" alignItems="center" flex="1" justifyContent="flex-end" marginBottom={20} marginTop={20}>
+              <Heading mb={5} style={styles.titleLayout} fontWeight={'normal'}><Text>New Network</Text></Heading>
+              <Input style={styles.textoImput} mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
+              <Input style={styles.textoImput} mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
+              <Input style={styles.textoImput} mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
+              <Input style={styles.textoImput} mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
+              <Input style={styles.textoImput} mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
+              <Button style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}>
+                <Text style={{color: colorMode === 'dark' ? Color.black : Color.white}}>{translations[language].CreateNetwork.submit_button}</Text>
+              </Button>
+            </VStack>
+              
+          </KeyboardAvoidingView>
+        </Center>
   );
 }
 
@@ -146,24 +147,18 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: 'bold',
-    position: 'absolute',
-    textAlign: "left",
-    width: 370,
+    textAlign: "center",
 
   }, 
   textoImput: {
     borderRadius: Border.br_xs,
     borderStyle: "solid",
     borderWidth: 1,
-    top: 0,
-    width: 339,
   },
     titleLayout: {
       color: Color.black,
       fontFamily: FontFamily.inter,
       fontSize: 30,
-      paddingTop:10,
       textAlign: "center",
-      top: 30,
     },
 });

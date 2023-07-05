@@ -40,7 +40,7 @@ import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
 import { getWalletHistory } from "../../service/api";
-import { chainNames } from "../../service/constants";
+import { chainIdToNameMap, chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
 
 
@@ -160,17 +160,14 @@ export default function WalletHistory() {
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [chainName, setChainName] = useState('matic-mumbai');
-  const handleNameChange = (event) => {
-    //console.log(event.nativeEvent.text);
-    setChainName(event.nativeEvent.text)
-  }
+
   const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
   const [network,] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
+  const [chainName, setChainName] = useState(chainIdToNameMap[network.chainId] || 1);
   const [currentHoldings, setCurrentHoldings] = useState({
     y: '0.00'
   });
@@ -236,6 +233,10 @@ export default function WalletHistory() {
     } else {
       console.log(_wallet.wallet.address);
       setWallet(_wallet.wallet);
+    }
+
+    if (network) {
+      console.log(network);
     }
 
     //console.log('ViewWallet', network.chainId);
