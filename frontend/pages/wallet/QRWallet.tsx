@@ -29,6 +29,7 @@ import { useRecoilState } from "recoil";
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { getIconImage } from "../../service/api";
 import { activeWallet, language as stateLanguage } from "../../service/state";
 
 
@@ -133,7 +134,7 @@ export default function QRWallet ({navigation, route}) {
     }, 1000)
   };
 
-
+  const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png'
   return (
     <ScrollView horizontal={false} style={{flex: 1}}>
     <ScrollView
@@ -206,10 +207,10 @@ export default function QRWallet ({navigation, route}) {
 
                 <Image
                   source={{
-                    uri: 'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
+                    uri:  'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
                   }}
                   style={{height: 40, marginLeft: 15, width: 40}}
-
+                  alt="logo"
                 />
                 <View style={{padding: 10}}>
                   <Text style={{color: colorMode === 'dark' ? Color.white : Color.black}}>{item.displayName}</Text>
@@ -227,13 +228,14 @@ export default function QRWallet ({navigation, route}) {
                   }}>
                   <Image
                     source={{
-                  uri: 'https://cdn-icons-png.flaticon.com/512/2335/2335318.png',
+                  uri: avatar,
                 }}
                     style={{
                       height: 40,
                       marginRight: 20,
                       width: 40,
                     }}
+                    alt="logo"
                   />
                 </TouchableOpacity>
 {/*                  <TouchableOpacity
