@@ -236,6 +236,9 @@ const values = {
   },
   WalletHistory: {
     title: "History"
+  },
+  WhatsAppNotification:{
+    button: "Enviar notificación de WhatsApp"
   }
 };
 

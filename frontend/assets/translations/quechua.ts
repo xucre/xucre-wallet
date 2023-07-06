@@ -236,7 +236,11 @@ const values = {
   },
   WalletHistory: {  
     title: "Willarina"  
+  },
+  WhatsAppNotification:{
+    button: "Kachay WhatsApp Willana"
   }
+
 };
 
 export default values;

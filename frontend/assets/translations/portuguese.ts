@@ -237,7 +237,10 @@ const values = {
   },
   WalletHistory: {  
     title: "HistÃ³ria"   
-  }   
+  },  
+  WhatsAppNotification:{
+    button: "Enviar notificação pelo WhatsApp"
+  }
 };
   
 export default values;
