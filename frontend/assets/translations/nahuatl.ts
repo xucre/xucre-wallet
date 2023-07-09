@@ -26,6 +26,7 @@ const values = {
   },
   Buttons_Header: {
     buy: "Tla-coohua",
+    connect: "Conectar",
     nft: "NFT",
     receive: "Tla-celia",
     send: "Ihuaa"

@@ -26,6 +26,7 @@ const values = {
   },
   Buttons_Header: {
     buy: "Comprar",
+    connect: "Conectar",
     nft: "NFT",
     receive: "Recibir",
     send: "Enviar"
