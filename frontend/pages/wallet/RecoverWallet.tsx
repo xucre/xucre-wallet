@@ -67,6 +67,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
   } = useColorMode();
 
   useEffect(() => {   
+    // Add Whitespace trimming
     const areValidEntries = mnemonic.split(' ').reduce((prev, curr) => {
       if (curr.length > 0 && prev === 'true') {
         return 'true';

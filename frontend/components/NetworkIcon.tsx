@@ -59,10 +59,12 @@ export default function NetworkIcon({navigation, route}) {
   return (
     <>
       {avatar !== '' && 
-        <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
-          uri: avatar
-        }}>
-        </Avatar>
+        <Pressable onPress={navigation.navigate('ViewNetwork')}>
+          <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
+            uri: avatar
+          }}>
+          </Avatar>
+        </Pressable>
       }
     </>
     
