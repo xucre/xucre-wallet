@@ -29,12 +29,13 @@ import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
+import { Network } from "../service/network";
 import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../service/state";
 
 
 export default function NetworkIcon({navigation, route}) {
   const [language, ] = useRecoilState(stateLanguage);
-  const [network, ] = useRecoilState(selectedNetwork);
+  const [network, setSelectedNetwork] = useRecoilState(selectedNetwork);
   const {colorMode} = useColorMode();
   const [avatar, setAvatar] = useState('');
   const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
@@ -47,7 +48,8 @@ export default function NetworkIcon({navigation, route}) {
     }
     console.log(_activeNetwork.symbol);
     if (_activeNetwork.symbol !== null && _activeNetwork.symbol !== '') {
-      setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/'+ _activeNetwork.symbol.toLowerCase() +'.png')
+      setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/'+ _activeNetwork.symbol.toLowerCase() +'.png');
+      setSelectedNetwork(_activeNetwork as Network)
     }
     //console.log('NetworkIcon',_activeNetwork.chainId, network.chainId);
     runAsync();
@@ -59,12 +61,11 @@ export default function NetworkIcon({navigation, route}) {
   return (
     <>
       {avatar !== '' && 
-        <Pressable onPress={navigation.navigate('ViewNetwork')}>
+        <Button variant={'unstyled'} onPress={() => {navigation.navigate('ViewNetwork')}}>
           <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
-            uri: avatar
-          }}>
-          </Avatar>
-        </Pressable>
+              uri: avatar
+            }} />
+        </Button>
       }
     </>
     

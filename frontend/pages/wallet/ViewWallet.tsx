@@ -121,6 +121,7 @@ export default function ViewWallet ({navigation, route}) {
   const buttonReceive = translations[language].Buttons_Header.receive;
   const buttonBuy = translations[language].Buttons_Header.buy;
   const buttonNft = translations[language].Buttons_Header.nft;
+  const buttonConnect = translations[language].Buttons_Header.connect;
 
 
   // Transitions
@@ -231,6 +232,10 @@ export default function ViewWallet ({navigation, route}) {
     navigation.navigate('BuyToken');
   }
 
+  const connectWallet = () => {
+    navigation.navigate('QRReader');
+  }
+
 
   useEffect(() => {
     //setNetwork(null)
@@ -257,6 +262,11 @@ export default function ViewWallet ({navigation, route}) {
         icon: "arrow-downward",
         text: buttonReceive,
     },
+    {
+      action: connectWallet,
+      icon: "qr-code-2",
+      text: buttonConnect,
+  },
   ];
 
   return (
@@ -326,7 +336,7 @@ export default function ViewWallet ({navigation, route}) {
                     _stack={{
                       flexDirection: 'column'
                     }}
-                    flex={.33}
+                    flex={.25}
                     startIcon={
                       <Icon
                         as={MaterialIcons}
@@ -338,7 +348,8 @@ export default function ViewWallet ({navigation, route}) {
                     _text={{
                       color: 'white'
                     }} 
-                    padding={4}
+                    paddingY={4}
+                    paddingX={3}
                     borderRadius={10}           
                     onPress={btn.action}
                   >

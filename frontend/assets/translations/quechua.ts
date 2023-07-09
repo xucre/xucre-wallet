@@ -26,6 +26,7 @@ const values = {
   },  
   Buttons_Header: { 
       buy: "Rantiy", 
+      connect: "Conectar",
       nft: "NFT", 
       receive: "Chaskiy", 
       send: "Kachay"  

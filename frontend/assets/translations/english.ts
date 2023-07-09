@@ -26,9 +26,10 @@ const values = {
   },
   Buttons_Header: {
     buy: "Buy",
+    connect: "Connect",
     nft: "NFT",
     receive: "Receive",
-    send: "Send"
+    send: "Send",
   },
   ConnectionRequest: {
     approve_button: "Approve",
