@@ -21,6 +21,7 @@ import { useRecoilState } from "recoil";
 import QRWallet from "../pages/wallet/QRWallet";
 
 const CodeCountry = ({ navigation, route }) => {
+    console.log('route ccodeCountry ',route )
   const [language] = useRecoilState(stateLanguage);
   const [phoneNumber, setphoneNumber] = useState("");
   const [value, setValue] = useState("");
@@ -31,10 +32,36 @@ const CodeCountry = ({ navigation, route }) => {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   if (route.params.param4 === "send") {
-    const buttonPress = async () => {
-      const amoutAndName = route.params.param1 + " " + route.params.param3;
+
+    const formaterNumberSend = () => {
+      console.log("entro");
+      const checkValid = phoneInput.current?.isValidNumber(value);
+      console.log("checkValid", checkValid);
+      if (!checkValid) {
+        let character = "+";
+        let phoneNumber = phoneInput.current.state.number;
+        let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
+        console.log(
+          "getNumberAfterPossiblyEliminatingZero",
+          getNumberAfterPossiblyEliminatingZero
+        );
+        let newFormatterNumber = phoneNumber.includes(
+          phoneInput.current.state.code
+        )
+          ? phoneNumber.replace(character + phoneInput.current.state.code, "")
+          : getNumberAfterPossiblyEliminatingZero.number;
+        console.log("newFormatterNumber", newFormatterNumber);
+        let newNumber = phoneNumber;
+        console.log("newNumber", newNumber);
+        _final = phoneInput.current.state.code + newFormatterNumber;
+        buttonPressSend();
+      }
+    };
+
+    const buttonPressSend = async () => {
+      const amoutAndName =  route.params.param3 +" " + route.params.param5
       whatsapp(
-        phoneNumber,
+        _final,
         "shared_notification",
         "en_US",
         { param1: route.params.param2, param2: amoutAndName },
@@ -48,7 +75,7 @@ const CodeCountry = ({ navigation, route }) => {
       <View style={styles.container}>
         <PhoneInput
           ref={phoneInput}
-          defaultValue=""
+          defaultValue={route.params.param1.phoneNumbers[0].number}
           defaultCode="EC"
           layout="first"
           withShadow
@@ -63,7 +90,8 @@ const CodeCountry = ({ navigation, route }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            buttonPress();
+
+            formaterNumberSend();
           }}
         >
           <Text>Send Whatsapp</Text>

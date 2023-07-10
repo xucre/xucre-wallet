@@ -136,14 +136,17 @@ export default function SendToken({ navigation, route, storage }) {
 
   const openPage = (pageName: string, param1: any, param2: any, param3: any, param4: any) => {
     switch (pageName) {
-      case 'CodeCountry':
-        navigation.navigate('CodeCountry',{param1,param2,param3,param4});
+      case 'SendNotificationToken':
+        navigation.navigate('SendNotificationToken',{param1,param2,param3,param4});
         break;
     }
   }
 
   const send = () => {
     //console.log(address, selectedToken, amount);
+    if(checkValues){
+      openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
+    }
     const runAsync = async () => {
       try {
         if (address.length > 0) {
@@ -174,8 +177,9 @@ export default function SendToken({ navigation, route, storage }) {
             setTransactionList([...pendingTransactions, _submitted]);
             if (_transaction) {
               console.log("transaction submitted", _submitted.hash);
+              //Whatsapp Integration
               if(checkValues){
-                openPage('CodeCountry', amount, address,selectedToken.name,'send')
+                openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
               }
               navigation.navigate("ViewWallet");
             }

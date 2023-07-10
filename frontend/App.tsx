@@ -49,6 +49,7 @@ import NftList from './pages/nft/NftList';
 import AddToken from './pages/token/AddToken';
 import BuyToken from './pages/token/BuyToken';
 import SendToken from './pages/token/SendToken';
+import SendNotificationToken from './service/SendNotificationToken';
 import SwapToken from './pages/token/SwapToken';
 import CreateWallet from './pages/wallet/CreateWallet';
 import NewWallet from './pages/wallet/NewWallet';
@@ -287,6 +288,10 @@ export const AppWrapper = () => {
               title: ' ', 
             }} ></Stack.Screen>
             <Stack.Screen name="CodeCountry" component={CodeCountry} options={{ 
+              headerTitleAlign: 'left',
+              title: ' ', 
+            }} ></Stack.Screen>
+            <Stack.Screen name="SendNotificationToken" component={SendNotificationToken} options={{ 
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>
