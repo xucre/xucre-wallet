@@ -237,6 +237,9 @@ const values = {
   },
   WalletHistory: {
     title: "Necocteentiaa"
+  },
+  WhatsAppNotification:{
+    button: "Ihuaa WhatsApp tenemachtiliztli"
   }
 }
 
