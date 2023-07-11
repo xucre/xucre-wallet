@@ -9,6 +9,7 @@
 /* dapp-begin */
 if (typeof BigInt === 'undefined') global.BigInt = require('big-integer')
 const { Platform, LogBox } = require('react-native');
+require('unorm')
 
 if (Platform.OS !== 'web') {
   require('react-native-get-random-values');

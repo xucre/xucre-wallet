@@ -98,7 +98,7 @@ export default function CreateWallet({ navigation, route, storage }) {
       setTimeout(() => {
         console.log("generateMnemonics(" + language + ")");
         const _mnemonics = generateMnemonics(language);
-        console.log(_mnemonics);
+        //console.log(_mnemonics);
 
         setSteps(steps + 1);
         setMnemonics(_mnemonics);
