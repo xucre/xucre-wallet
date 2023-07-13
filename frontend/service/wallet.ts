@@ -17,6 +17,7 @@ export function generateMnemonics(language) {
     const wallet = Wallet.createRandom({ locale: wordlists.es })
     //const wallet = ethers.Wallet.fromMnemonic(newWallet.mnemonic.phrase, newWallet.mnemonic.path, ethers.wordlists[langVal]);
     return wallet.mnemonic.phrase.split(' ');
+    return []
   } catch (err) {
     return [];
   }

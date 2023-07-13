@@ -28,7 +28,7 @@ import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 
-export default function SendNotificationToken({ navigation, route }): void {
+export default function SendNotificationToken({ navigation, route }){
 
     console.log('route ', route)
 
