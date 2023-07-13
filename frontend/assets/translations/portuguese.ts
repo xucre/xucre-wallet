@@ -205,7 +205,7 @@ const values = {
   SupportPage: { 
     button_send: "Enviar e-mail",  
     describe_issue: "Descreva seu problema",  
-    introduction: "Se vocÃª tiver problemas com nosso aplicativo, entre em contato conosco em support@xsucre.com ou use o formulÃ¡rio abaixo",
+    introduction: "Se vocÃª tiver problemas com nosso aplicativo, entre em contato conosco em support@xucre.com ou use o formulÃ¡rio abaixo",
     subject_send: "Assunto",  
     title: "Suporte", 
     to_send: "De",  

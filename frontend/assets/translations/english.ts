@@ -204,7 +204,7 @@ const values = {
   SupportPage: {
     button_send: "Send Email",
     describe_issue: "Describe your issue",
-    introduction: "If you have problems with our app please contact us at support@xsucre.com or use the form below",
+    introduction: "If you have problems with our app please contact us at support@xucre.com or use the form below",
     subject_send: "Subject",
     title: "Support",
     to_send: "From",

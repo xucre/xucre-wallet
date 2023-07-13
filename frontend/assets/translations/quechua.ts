@@ -204,7 +204,7 @@ const values = {
   SupportPage: {  
       button_send: "E-mailta apachiy",  
       describe_issue: "Sasachakuyniykimanta willay",  
-      introduction: "Sichus appniykuwan sasachakuyniyuq kanki chayqa kaypi rimanakuy support@xsucre.com utaq uraypi formulariota llamk'achiy",
+      introduction: "Sichus appniykuwan sasachakuyniyuq kanki chayqa kaypi rimanakuy support@xucre.com utaq uraypi formulariota llamk'achiy",
       subject_send: "Rimana",  
       title: "Yanapakuy", 
       to_send: "Kaymanta",  
