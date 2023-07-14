@@ -64,6 +64,6 @@ export default function TransactionItem ({navigation, transaction}) {
           </Menu>
         </Tooltip>    
      </HStack>
-   </HStack>
+    </HStack>
   )
 }

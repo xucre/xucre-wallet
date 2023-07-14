@@ -145,6 +145,7 @@ const values = {
     qu: "Quechua"
   },
   SelectNetwork: {
+    delete_button: 'Delete Network',
     new_button: "Nueva Red",
     select_button: "Seleccione Red",
     select_button_tooltip: "Mas Opciones",
@@ -214,6 +215,7 @@ const values = {
     title: "Billetera"
   },
   TokenItem: {
+    delete_button: 'Delete Token',
     menu_accessiblity_label: "Menu más opciones",
     send_token_button: "Enviar"
   },

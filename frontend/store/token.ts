@@ -6,12 +6,15 @@ import { Token } from "../service/token";
 export const addToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
   const tokens = JSON.parse(_tokens) as readonly Token[];
+  console.log('current token list', tokens);
   if (Array.isArray(tokens)) {
-    const isSet = await EncryptedStorage.setItem(
-      "token_list",
-      JSON.stringify([...tokens, token])
-    );
-    console.log(isSet);
+    
+   
+      const isSet = await EncryptedStorage.setItem(
+        "token_list",
+        JSON.stringify([...tokens, token])
+      );
+    
   } else {
     const isSet = await EncryptedStorage.setItem(
       "token_list",
@@ -25,7 +28,7 @@ export const updateToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
   const tokens = JSON.parse(_tokens) as readonly Token[];
   if (Array.isArray(tokens)) {
-    tokens.map((_token) => {
+    const newTokens = tokens.map((_token) => {
       if (_token.address === token.address && _token.chainId === token.chainId) {
         return token;
       } else {
@@ -33,15 +36,33 @@ export const updateToken = async (token: Token) => {
       }
     });
 
-
     await EncryptedStorage.setItem(
       "token_list",
-      JSON.stringify([...tokens, token])
+      JSON.stringify([...newTokens])
     );
   } else {
     await EncryptedStorage.setItem(
       "token_list",
       JSON.stringify([token])
+    );
+  }
+};
+
+export const deleteToken = async (token: Token) => {
+  const _tokens = await EncryptedStorage.getItem("token_list");
+  const tokens = JSON.parse(_tokens);
+  if (Array.isArray(tokens)) {
+    const netTokenList = tokens.filter((_token) => {
+      return !(_token.chainId === token.chainId && _token.address === token.address) 
+    });
+    await EncryptedStorage.setItem(
+      "token_list",
+      JSON.stringify(netTokenList)
+    );
+  } else {
+    await EncryptedStorage.setItem(
+      "token_list",
+      JSON.stringify([])
     );
   }
 };
@@ -74,6 +95,7 @@ export const getTokenByChain = async (chainId) => {
   const tokens = await EncryptedStorage.getItem('token_list');
   const _tokens = JSON.parse(tokens) as readonly Token[];
   if (_tokens && Array.isArray(_tokens)) {
+    console.log('getting current tokens by filter', chainId);
     return _tokens.filter((token: Token) => {
       return token.chainId === chainId;
     })

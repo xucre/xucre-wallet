@@ -344,20 +344,7 @@ export default function WalletHistory() {
           <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>Total Balance</Text>
           <HStack paddingBottom={0} space={1}>
             <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >${formatCurrency(currentHoldings.y)}</Text></Heading>
-            <Menu w="160" marginTop={-1} shouldOverlapWithTrigger={false} trigger={triggerProps => {
-                return <Button alignSelf="center" variant="ghost" color={colorMode === 'dark' ? "darkText" : "lightText"} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={'darkText'} marginLeft={-1} />} {...triggerProps}>
-                        <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
-                      </Button>
-                      ;
-              }}>
-                {
-                  chainNames.map((cname, i) => {
-                    return (
-                      <Menu.Item onPress={() => {setChainName(cname)}} key={cname+i}><Text>{cname}</Text></Menu.Item>
-                    )
-                  })
-                }
-            </Menu>
+            <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
             
           </HStack>
           

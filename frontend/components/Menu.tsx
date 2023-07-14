@@ -265,7 +265,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
         
         <Pressable onPress={() => {setDrawerStatus(true)}}>
           <Avatar source={
-            require('../assets/images/example_avatar.png')
+            require('../assets/images/icon.png')
           } size="xs" m={1} ml={0} mr={3} mb={1}></Avatar>
         </Pressable>
       }
@@ -280,11 +280,11 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           _dark={{ bg: '#1b1e24' }}
           safeAreaTop
         >
-          <HStack justifyContent={'space-between'} py={4} pb={1}>
+          <HStack justifyContent={'space-between'} pt={4} pb={0}>
             <Pressable onPress={() => {setDrawerStatus(true)}}>
               <Avatar source={
-                require('../assets/images/example_avatar.png')
-              } size="xs" m={1} ml={2} mb={1}></Avatar>
+                require('../assets/images/icon.png')
+              } size="sm" m={1} ml={2} mb={1} mt={2}></Avatar>
             </Pressable>
             
             {/*<SelectLanguage />*/}
@@ -335,7 +335,7 @@ export const ToggleDarkMode = ({setScheme}) => {
   }, [colorMode]);
 
   return (
-    <Pressable onPress={() => colorMode === "light" ? setColorMode("dark") : setColorMode("light")} m={2}>
+    <Pressable onPress={() => colorMode === "light" ? setColorMode("dark") : setColorMode("light")} m={2} mt={3}>
       {useColorModeValue(<MoonIcon size={6} />, <SunIcon size={6} />)}
     </Pressable>
   )

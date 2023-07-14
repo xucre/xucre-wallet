@@ -126,8 +126,8 @@ export default function ViewNetwork ({navigation, route}) {
                 <Button onPress={() => {setIsEditing(true)}} ml={'auto'} px={8} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language].ViewNetwork.edit_button}</Text></Button>
                 <Text fontSize={28} fontWeight={'bold'}>{network.name}</Text>
                 <Text fontSize={20}>Chain Id: {network.chainId}</Text>
-                <Text fontSize={16}>Symbol: {network.symbol}</Text>
-                <Text fontSize={16}>RPC Url: {truncateString(network.rpcUrl, 30)}</Text>
+                <Text fontSize={20}>Symbol: {network.symbol}</Text>
+                <Text fontSize={20}>RPC Url: {truncateString(network.rpcUrl, 22)}</Text>
               </VStack>        
               
               {_activeNetwork.chainId === network.chainId ?             
