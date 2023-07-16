@@ -26,6 +26,7 @@ const values = {
   },
   Buttons_Header: {
     buy: "Tla-coohua",
+    connect: "Conectar",
     nft: "NFT",
     receive: "Tla-celia",
     send: "Ihuaa"
@@ -144,6 +145,7 @@ const values = {
     qu: 'Quechua',
   },
   SelectNetwork: {
+    delete_button: 'Delete Network',
     new_button: 'Yancuic Maatla-tl',
     select_button: 'Itlan Maatla-tl',
     select_button_tooltip: 'Mas Opciones',
@@ -213,6 +215,7 @@ const values = {
     title: 'Tlahcuiloolaamapetlaacaltoon-tli',
   },
   TokenItem: {
+    delete_button: 'Delete Token',
     menu_accessiblity_label: 'Menu okachi tlaihittaliz-tli',
     send_token_button: 'Ihuaa',
   },

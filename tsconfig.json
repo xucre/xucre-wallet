@@ -14,8 +14,7 @@
     "typeRoots": [
       "index.d.ts"
     ],
-    "types": [      
-      "jest",
+    "types": [     
       "node",
     ]
   },

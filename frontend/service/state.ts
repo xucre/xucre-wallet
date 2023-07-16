@@ -40,10 +40,10 @@ export const networkList = atom({
 export const activeNetwork = atom({
   default: {
     blockExplorer: 'https://etherscan.io',
-      chainId: 1,
-      name: 'Ethereum Mainnet',
-      rpcUrl: 'wss://eth-mainnet.g.alchemy.com/v2/JqOD3cdBDl50H65bk315fAE614CDHa9u',
-      symbol: 'ETH',
+    chainId: 1,
+    name: 'Ethereum Mainnet',
+    rpcUrl: 'wss://eth-mainnet.g.alchemy.com/v2/JqOD3cdBDl50H65bk315fAE614CDHa9u',
+    symbol: 'ETH',
   } as Network,
   key: 'activeNetwork'
 })
@@ -55,7 +55,7 @@ export const selectedNetwork = atom({
     name: '',
     rpcUrl: '',
     symbol: '',
-  },
+  } as Network,
   key: 'selectedNetwork'
 })
 

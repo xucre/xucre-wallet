@@ -26,9 +26,10 @@ const values = {
   },
   Buttons_Header: {
     buy: "Buy",
+    connect: "Connect",
     nft: "NFT",
     receive: "Receive",
-    send: "Send"
+    send: "Send",
   },
   ConnectionRequest: {
     approve_button: "Approve",
@@ -63,7 +64,7 @@ const values = {
     name_wallet: "Wallet name"
   },
   LanguagePage: {
-    menu_button: "LANGUAGE",
+    menu_button: "Language",
     select_language: "Select your Language",
   },
   LegacyEthSign: {
@@ -99,11 +100,11 @@ const values = {
     success_message: "Transaction Successful"
   },
   Menu: {
-    network_button: "NETWORKS",
-    nft_button: "NFTS",
-    password_button: "PASSWORD",
-    qr_scan_button: "QR SCAN",
-    wallet_button: "WALLETS"
+    network_button: "Networks",
+    nft_button: "Nfts",
+    password_button: "Password",
+    qr_scan_button: "QR Scan",
+    wallet_button: "Wallets"
   },
   NewWallet: {
     about: "Create a new wallet or if you already have one retrieve it through your security phrase",
@@ -144,6 +145,7 @@ const values = {
     qu: "Quechua"
   },
   SelectNetwork: {
+    delete_button: 'Delete Network',
     new_button: "New Network",
     select_button: "Select Network",
     select_button_tooltip: "More Options",
@@ -213,6 +215,7 @@ const values = {
     title: "Wallet"
   },
   TokenItem: {
+    delete_button: 'Delete Token',
     menu_accessiblity_label: "More options menu",
     send_token_button: "Send"
   },

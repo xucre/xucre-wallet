@@ -111,7 +111,7 @@ export default function ViewWallet ({navigation, route}) {
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
-      setIsComponentMounted(false);
+      //setIsComponentMounted(false);
     }
   }, []);
   const tabList = translations[language].ViewWallet.tab_list;
@@ -121,6 +121,7 @@ export default function ViewWallet ({navigation, route}) {
   const buttonReceive = translations[language].Buttons_Header.receive;
   const buttonBuy = translations[language].Buttons_Header.buy;
   const buttonNft = translations[language].Buttons_Header.nft;
+  const buttonConnect = translations[language].Buttons_Header.connect;
 
 
   // Transitions
@@ -128,7 +129,7 @@ export default function ViewWallet ({navigation, route}) {
   
   const syncTokens = async () => {
     const _tokens = await getTokenByChain(network.chainId);
-    console.log('tokens', _tokens);
+    //console.log('tokens', _tokens);
     const coinToken = {
       address : '',
       amount : ethers.utils.formatEther( 0 ),
@@ -136,6 +137,7 @@ export default function ViewWallet ({navigation, route}) {
       name: network.symbol,
       type: 'coin',
     };
+    console.log('mounted component', isComponentMounted)
     if (isComponentMounted) {
       setHoldings([coinToken, ..._tokens]);
     }
@@ -231,6 +233,10 @@ export default function ViewWallet ({navigation, route}) {
     navigation.navigate('BuyToken');
   }
 
+  const connectWallet = () => {
+    navigation.navigate('QRReader');
+  }
+
 
   useEffect(() => {
     //setNetwork(null)
@@ -257,6 +263,11 @@ export default function ViewWallet ({navigation, route}) {
         icon: "arrow-downward",
         text: buttonReceive,
     },
+    {
+      action: connectWallet,
+      icon: "qr-code-2",
+      text: buttonConnect,
+  },
   ];
 
   return (
@@ -326,7 +337,7 @@ export default function ViewWallet ({navigation, route}) {
                     _stack={{
                       flexDirection: 'column'
                     }}
-                    flex={.33}
+                    flex={.25}
                     startIcon={
                       <Icon
                         as={MaterialIcons}
@@ -338,7 +349,8 @@ export default function ViewWallet ({navigation, route}) {
                     _text={{
                       color: 'white'
                     }} 
-                    padding={4}
+                    paddingY={4}
+                    paddingX={3}
                     borderRadius={10}           
                     onPress={btn.action}
                   >
@@ -380,7 +392,7 @@ export default function ViewWallet ({navigation, route}) {
                     {
                       holdings.map((val, i) => {
                         return (                        
-                          <TokenItem key={val.name+i} token={val} navigation={navigation}/>                        
+                          <TokenItem key={val.name+i} token={val} navigation={navigation} refreshList={onRefresh}/>                        
                         )
                       })
                     }
