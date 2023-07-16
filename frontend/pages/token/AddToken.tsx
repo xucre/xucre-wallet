@@ -47,7 +47,7 @@ export default function AddToken ({navigation, route, storage}) {
   const [language, ] = useRecoilState(stateLanguage);
   const [tokens, setTokens] = useRecoilState(tokenList);
   const [loading, setLoading] = useState(false);
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState('0x7a9fc38ee723ce90cb8155b6ef04ef2c53a64124');
   const [chainId, setChainId] = useState('');
   const [name, setName] = useState('');
   const [type, setType] = useState('token');
@@ -137,7 +137,7 @@ export default function AddToken ({navigation, route, storage}) {
           </Select>
           <Input w="100%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].AddToken.address_placeholder}  />
         </Box>
-        <Button onPress={() => {saveToken();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || address.length === 0 || type.length === 0}><Text>{translations[language].AddToken.submit_button}</Text></Button>
+        <Button colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveToken();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || address.length === 0 || type.length === 0}><Text color={'white'}>{translations[language].AddToken.submit_button}</Text></Button>
       </>
     </ScrollView>
   );

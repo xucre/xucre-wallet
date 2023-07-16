@@ -145,6 +145,7 @@ const values = {
     qu: 'Runasimi'
   },
   SelectNetwork: {
+    delete_button: 'Delete Network',
     new_button: 'Musuq Llika', 
     select_button: 'Llika akllay', 
     select_button_tooltip: 'Aswan akllanakuna',
@@ -214,6 +215,7 @@ const values = {
     title: 'Chuspa'
   },
   TokenItem: {
+    delete_button: 'Delete Token',
     menu_accessiblity_label: "Aswan akllanakuna menÃº",
     send_token_button: 'Kachay'
   },
