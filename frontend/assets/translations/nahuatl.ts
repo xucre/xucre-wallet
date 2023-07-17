@@ -240,6 +240,9 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Ihuaa WhatsApp tenemachtiliztli"
+  },
+  totalBalance:{
+    title: "Tlalpochcalli"
   }
 }
 

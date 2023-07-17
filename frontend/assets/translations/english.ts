@@ -240,7 +240,11 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Send WhatsApp notification"
+  },
+  totalBalance:{
+    title: "Total Balance"
   }
+    
 };
 
 export default values;

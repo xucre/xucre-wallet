@@ -240,6 +240,9 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Enviar notificación de WhatsApp"
+  },
+  totalBalance:{
+    title: "Balance total"
   }
 };
 
