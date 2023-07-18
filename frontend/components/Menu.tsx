@@ -348,5 +348,3 @@ export const BackButton = ({setDrawerStatus}) => {
     </Pressable>
   )
 }
-
-

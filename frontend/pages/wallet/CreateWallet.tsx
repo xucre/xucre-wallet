@@ -147,7 +147,49 @@ export default function CreateWallet({ navigation, route, storage }) {
     );
   }
 
+  
+
   function MnemonicList() {
+    function ListItem({value, index}) {
+      return (
+        <Button
+          width={'100%'}
+          bg="Color.gray_100"
+          rounded="sm"
+          _text={{
+            alignContent: 'center',
+            color: Color.gray_200,
+            fontWeight: "medium",
+            justifyContent: 'center',
+          }}
+          variant={'unstyled'}
+          alignSelf={'center'}
+          margin={1}
+          alignItems={'center'}
+          justifyContent={'flex-start'}
+          shadow={"3"}
+          startIcon={
+            <Badge
+            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+            rounded="full"
+            zIndex={100}
+            variant="solid"
+            alignSelf="flex-start"
+            _text={{
+              fontSize: 12,
+            }}
+            margin={2}
+          >
+            <Text style={{
+              color : colorMode === 'dark' ? Color.black : Color.white,
+            }}>{index + 1}</Text>
+          </Badge>
+          }
+        >                      
+          <Text >{value}</Text>
+        </Button>
+      )
+    };
     return (
       <Box>
         <Text
@@ -162,134 +204,39 @@ export default function CreateWallet({ navigation, route, storage }) {
         >
           {translations[language].CreateWallet.mnemonic_instructions}
         </Text>
-        <Grid
+        <HStack
           style={{
             paddingBottom: 10,
           }}
         >
-          <Col>
+          <VStack space={4} alignItems="center">
             {mnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
-                  <VStack key={val}>
-                    <Badge
-                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-                      rounded="full"
-                      mb={-4}
-                      mr={11}
-                      zIndex={100}
-                      variant="solid"
-                      alignSelf="flex-start"
-                      _text={{
-                        fontSize: 12,
-                      }}
-                    >
-                      <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
-                    </Badge>
-                    <Button
-                      left={0}
-                      width={100}
-                      height={50}
-                      bg="Color.gray_100"
-                      rounded="sm"
-                      _text={{
-                        color: Color.gray_200,
-                        fontWeight: "medium",
-                      }}
-                      margin={1}
-                      shadow={"3"}
-                      key={val}
-                    >
-                      <Text>{val}</Text>
-                    </Button>
-                  </VStack>
+                  <ListItem value={val} index={i}/>
                 );
               }
             })}
-          </Col>
-          <Col></Col>
-          <Col>
+          </VStack>
+          <VStack space={4} alignItems="center">
             {mnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
-                  <VStack key={val}>
-                    <Badge
-                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-                      rounded="full"
-                      mb={-4}
-                      mr={11}
-                      zIndex={100}
-                      variant="solid"
-                      alignSelf="flex-start"
-                      _text={{
-                        fontSize: 12,
-                      }}
-                    >
-                      <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
-                    </Badge>
-                    <Button
-                      width={100}
-                      height={50}
-                      bg="Color.gray_100"
-                      rounded="sm"
-                      _text={{
-                        color: "warmGray.50",
-                        fontWeight: "medium",
-                      }}
-                      margin={1}
-                      shadow={"3"}
-                      key={val}
-                    >
-                      <Text>{val}</Text>
-                    </Button>
-                  </VStack>
+                  <ListItem value={val} index={i}/>
                 );
               }
             })}
-          </Col>
-          <Col></Col>
-          <Col>
+          </VStack>
+          <VStack space={4} alignItems="center">
             {mnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
-                  <VStack key={val}>
-                    <Badge
-                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-                      rounded="full"
-                      mb={-4}
-                      mr={11}
-                      zIndex={100}
-                      variant="solid"
-                      alignSelf="flex-start"
-                      _text={{
-                        fontSize: 12,
-                      }}
-                    >
-                      <Text style={{color : colorMode === 'dark' ? Color.black : Color.white}}>{i + 1}</Text>
-                    </Badge>
-                    <Button
-                      right={0}
-                      width={100}
-                      height={50}
-                      bg="Color.gray_100"
-                      rounded="sm"
-                      _text={{
-                        color: "warmGray.50",
-                        fontWeight: "medium",
-                      }}
-                      margin={1}
-                      shadow={"3"}
-                      key={val}
-                    >
-                      <Text>{val}</Text>
-                    </Button>
-                  </VStack>
+                  <ListItem value={val} index={i}/>
                 );
               }
             })}
-          </Col>
-          <Col></Col>
-        </Grid>
+          </VStack>
+        </HStack>
       </Box>
     );
   }
@@ -303,6 +250,69 @@ export default function CreateWallet({ navigation, route, storage }) {
         return val !== word;
       });
       setConfirmMnemonics(filteredList);
+    };
+    function ListItem({value, index}) {
+      return (
+        <Button
+          width={'100%'}
+          bg="Color.gray_100"
+          rounded="sm"
+          _text={{
+            alignContent: 'center',
+            color: Color.gray_200,
+            fontWeight: "medium",
+            justifyContent: 'center',
+          }}
+          variant={'unstyled'}
+          alignSelf={'center'}
+          margin={1}
+          alignItems={'center'}
+          justifyContent={'flex-start'}
+          shadow={"3"}
+          onPress={() => {
+            if (confirmMnemonics.includes(value) ) {
+              removeMnemonic(value);
+            } else {
+              selectMnemonic(value);
+            }            
+          }}
+          startIcon={
+            confirmMnemonics.includes(value) ? 
+              <Badge
+                colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+                rounded="full"
+                zIndex={100}
+                variant="solid"
+                alignSelf="flex-start"
+                _text={{
+                  fontSize: 12,
+                }}
+                margin={2}
+              >
+                <Text style={{
+                  color : colorMode === 'dark' ? Color.black : Color.white,
+                }}>{confirmMnemonics.indexOf(value) + 1}</Text>
+              </Badge> :
+              <Badge
+                backgroundColor={'transparent'}
+                rounded="full"
+                zIndex={100}
+                variant="solid"
+                alignSelf="flex-start"
+                _text={{
+                  fontSize: 12,
+                }}
+                margin={2}
+              >
+                <Text style={{
+                  color : 'transparent',
+                }}>{0}</Text>
+              </Badge>
+          }
+        >                      
+          <Text >{value}</Text>
+        </Button>
+      )
     };
     return (
       <>
@@ -319,242 +329,42 @@ export default function CreateWallet({ navigation, route, storage }) {
           {translations[language].CreateWallet.mnemonic_instructions}
         </Text>
 
-        <Grid
+        
+
+        
+        <HStack
           style={{
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 10,
             paddingBottom: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
           }}
         >
-          <Col>
+          <VStack space={4} alignItems="center" justifyItems={'center'}>
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
-                  <Box alignItems="center" key={val + i}>
-                    <VStack>
-                      {confirmMnemonics.includes(val) && (
-                        <Pressable
-                          onPress={() => {
-                            removeMnemonic(val);
-                          }}
-                          zIndex={1000}
-                        >
-                          <Badge
-                            colorScheme={colorMode === 'dark' ? 'warmGray' : 'coolGray'}
-                            rounded="full"
-                            mb={-4}
-                            mr={-1}
-                            zIndex={1000}
-                            variant="solid"
-                            alignSelf="flex-end"
-                            _text={{
-                              fontSize: 12,
-                            }}
-                          >
-                            <CloseIcon />
-                          </Badge>
-                        </Pressable>
-                      )}
-                      {confirmMnemonics.includes(val) && (
-                        <Badge
-                          colorScheme={colorMode === 'dark' ? "primary.400" : 'tertiary'}
-                          rounded="full"
-                          mb={-4}
-                          mr={11}
-                          zIndex={100}
-                          variant="solid"
-                          alignSelf="flex-start"
-                          _text={{
-                            fontSize: 12,
-                          }}
-                        >
-                          <Text color={colorMode === 'dark' ? Color.black : Color.white}>{confirmMnemonics.indexOf(val) + 1}</Text>
-                        </Badge>
-                      )}
-
-                      <Button
-                        width={100}
-                        height={50}
-                        colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-                        bg="Color.gray_100"
-                        rounded="sm"
-                        _text={{
-                          color: "warmGray.50",
-                          fontWeight: "medium",
-                        }}
-                        _hover={{
-                          color: "warmGray.800"
-                        }}
-                        margin={1}
-                        shadow={"3"}
-                        key={val}
-                        onPress={() => {
-                          selectMnemonic(val);
-                        }}
-                        disabled={confirmMnemonics.includes(val)}
-                      >
-                        <Text>{val}</Text>
-                      </Button>
-                    </VStack>
-                  </Box>
+                  <ListItem value={val} index={i}/>
                 );
               }
             })}
-          </Col>
-          <Col></Col>
-          <Col>
+          </VStack>
+          <VStack space={4} alignItems="center" justifyItems={'center'}>
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
-                  <Box alignItems="center" key={val + i}>
-                    <VStack>
-                      {confirmMnemonics.includes(val) && (
-                        <Pressable
-                          onPress={() => {
-                            removeMnemonic(val);
-                          }}
-                          zIndex={1000}
-                        >
-                          <Badge
-                            colorScheme={colorMode === 'dark' ? 'warmGray' : 'coolGray'}
-                            rounded="full"
-                            mb={-4}
-                            mr={-1}
-                            zIndex={10000}
-                            variant="solid"
-                            alignSelf="flex-end"
-                            _text={{
-                              fontSize: 12,
-                            }}
-                          >
-                            <CloseIcon />
-                          </Badge>
-                        </Pressable>
-                      )}
-                      {confirmMnemonics.includes(val) && (
-                        <Badge
-                          colorScheme={colorMode === 'dark' ? "primary.400" : 'tertiary'}
-                          rounded="full"
-                          mb={-4}
-                          mr={11}
-                          zIndex={100}
-                          variant="solid"
-                          alignSelf="flex-start"
-                          _text={{
-                            fontSize: 12,
-                          }}
-                        >
-                          <Text color={colorMode === 'dark' ? Color.black : Color.white}>{confirmMnemonics.indexOf(val) + 1}</Text>
-                        </Badge>
-                      )}
-
-                      <Button
-                        width={100}
-                        height={50}
-                        colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-                        bg="Color.gray_100"
-                        rounded="sm"
-                        _text={{
-                          color: "warmGray.50",
-                          fontWeight: "medium",
-                        }}
-                        _hover={{
-                          color: "warmGray.800"
-                        }}
-                        margin={1}
-                        shadow={"3"}
-                        key={val}
-                        onPress={() => {
-                          selectMnemonic(val);
-                        }}
-                      >
-                        <Text>{val}</Text>
-                      </Button>
-                    </VStack>
-                  </Box>
+                  <ListItem value={val} index={i} />
                 );
               }
             })}
-          </Col>
-          <Col></Col>
-          <Col>
+          </VStack>
+          <VStack space={4} alignItems="center" justifyItems={'center'}>
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
-                  <Box alignItems="center" key={val + i}>
-                    <VStack>
-                      {confirmMnemonics.includes(val) && (
-                        <Pressable
-                          onPress={() => {
-                            removeMnemonic(val);
-                          }}
-                          zIndex={1000}
-                        >
-                          <Badge
-                            colorScheme={colorMode === 'dark' ? 'warmGray' : 'coolGray'}
-                            rounded="full"
-                            mb={-4}
-                            mr={0}
-                            zIndex={10000}
-                            variant="solid"
-                            alignSelf="flex-end"
-                            _text={{
-                              fontSize: 12,
-                            }}
-                          >
-                            <CloseIcon />
-                          </Badge>
-                        </Pressable>
-                      )}
-                      {confirmMnemonics.includes(val) && (
-                        <Badge
-                          colorScheme={colorMode === 'dark' ? "primary.400" : 'tertiary'}
-                          rounded="full"
-                          mb={-4}
-                          mr={11}
-                          zIndex={100}
-                          variant="solid"
-                          alignSelf="flex-start"
-                          _text={{
-                            fontSize: 12,
-                          }}
-                        >
-                          <Text color={colorMode === 'dark' ? Color.black : Color.white}>{confirmMnemonics.indexOf(val) + 1}</Text>
-                        </Badge>
-                      )}
-
-                      <Button
-                        width={100}
-                        height={50}
-                        colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-                        bg="Color.gray_100"
-                        rounded="sm"
-                        _text={{
-                          color: "warmGray.50",
-                          fontWeight: "medium",
-                        }}
-                        _hover={{
-                          color: "warmGray.800"
-                        }}
-                        margin={1}
-                        shadow={"3"}
-                        key={val}
-                        onPress={() => {
-                          selectMnemonic(val);
-                        }}
-                      >
-                        <Text>{val}</Text>
-                      </Button>
-                    </VStack>
-                  </Box>
+                  <ListItem value={val} index={i} />
                 );
               }
             })}
-          </Col>
-        </Grid>
+          </VStack>
+        </HStack>
       </>
     );
   }
