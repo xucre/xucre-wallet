@@ -11,6 +11,28 @@ import { getNetworks } from "../store/network";
 
 import { AppWallet, language as stateLanguage, walletList } from "./state"
 
+function transformObject (
+  object,
+  oldKey,
+  newKey,
+  chainID
+) {
+  // eslint-disable-next-line functional/no-let, prefer-const
+  let newObject = { ...object };
+
+  if (oldKey in newObject) {
+    const value = newObject[oldKey];
+    // eslint-disable-next-line functional/immutable-data
+    delete newObject[oldKey];
+    // eslint-disable-next-line functional/immutable-data
+    newObject[newKey] = value;
+  }
+
+  // eslint-disable-next-line functional/immutable-data
+  newObject['chainId'] = chainID;
+  return newObject;
+}
+
 export function rejectEIP155Request(request) {
   const { id } = request
 
@@ -26,6 +48,8 @@ export async function approveEIP155Request(
   const walletAddresses = wallets.map((_wallet: AppWallet) => {
     return _wallet.address;
   })
+  //
+  //console.log(request);
   const matchedAddress = getWalletAddressFromParams(walletAddresses, params);
   const wallet = wallets.find((_wallet => {    
     return matchedAddress === _wallet.address;
@@ -35,7 +59,7 @@ export async function approveEIP155Request(
     //console.log(_network.chainId == chainId.split(':')[1]);
     return _network.chainId == chainId.split(':')[1];
   })
-
+  //console.log('network found!!', network);
   switch (request.method) {
     case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
     case EIP155_SIGNING_METHODS.ETH_SIGN:
@@ -54,14 +78,24 @@ export async function approveEIP155Request(
       return formatJsonRpcResult(id, signedData)
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
-      const provider = network ? getDefaultProvider(network.rpcUrl) : new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
-      //console.log(provider);
-      const sendTransaction = request.params[0];
-      console.log('connecting wallet');
-      const connectedWallet = wallet.wallet.connect(provider);
-      console.log('sending transaction');
-      const { hash } = await connectedWallet.sendTransaction(sendTransaction);
-      return formatJsonRpcResult(id, hash);
+      try {
+        const provider = network ? getDefaultProvider(network.rpcUrl) : new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
+      
+        const request2 = request.params[0];
+        console.log('connecting wallet');
+        const connectedWallet = wallet.wallet.connect(provider);
+        console.log('sending transaction');
+        const chainID = await connectedWallet.getChainId();
+        //console.log(request2);
+        const req = transformObject(request2, 'gas', 'gasLimit', chainID);
+        //console.log(req);
+        const { hash, error } = await connectedWallet.sendTransaction(req);
+        
+        return formatJsonRpcResult(id, hash);
+      } catch (err) {
+        console.log('error', err);
+        return formatJsonRpcError(id, err.message);
+      }   
 
     case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
       const signTransaction = request.params[0]
@@ -107,7 +141,7 @@ export function getWalletAddressFromParams(addresses: readonly string[], params)
   const paramsString = JSON.stringify(params);
 
   const address = addresses.reduce((prev, addr) => {
-    if (paramsString.toLowerCase().includes(addr.toLowerCase())) {
+    if (paramsString !== null && addr !== null && paramsString.toLowerCase().includes(addr.toLowerCase())) {
       return addr;
     } 
     return prev;   

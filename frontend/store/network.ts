@@ -1,6 +1,8 @@
 import { BigNumber } from "ethers";
 import EncryptedStorage from 'react-native-encrypted-storage';
 
+import { constructDefaultNetworks } from "../service/network";
+
 export const storeNetwork = async (network) => {
   const _networks = await EncryptedStorage.getItem("network_list");
   const networks = JSON.parse(_networks);
@@ -80,8 +82,9 @@ export const getActiveNetwork = async () => {
 }
 
 export const getNetworks = async () => {
-  const networks = await EncryptedStorage.getItem('network_list');
-  return JSON.parse(networks);
+  return constructDefaultNetworks();
+  //const networks = await EncryptedStorage.getItem('network_list');
+  //return JSON.parse(networks);
 }
 
 export const iconNames = {
