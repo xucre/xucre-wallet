@@ -77,11 +77,12 @@ export default function SignTransaction({navigation, route}) {
 
   const approve = async () => {
     const response = await approveEIP155Request(request, walletState);
-    await signClient.respond({
+    const clientResponse = await signClient.respond({
       response,
       topic: request['topic'],
     })
-    navigation.navigate('Home');
+    console.log(response, clientResponse);
+    navigation.navigate('ViewWallet');
   }
 
   const reject = async () => {
@@ -90,7 +91,7 @@ export default function SignTransaction({navigation, route}) {
       response,
       topic: request['topic'],
     })
-    navigation.navigate('Home');    
+    navigation.navigate('ViewWallet');    
   }
 
   return (
