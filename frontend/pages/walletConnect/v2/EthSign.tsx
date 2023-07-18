@@ -82,7 +82,7 @@ export default function EthSign({navigation, route}) {
       response,
       topic: request['topic'],
     })
-    navigation.navigate('Home');
+    navigation.navigate('ViewWallet');
   }
 
   const reject = async () => {
@@ -91,7 +91,7 @@ export default function EthSign({navigation, route}) {
       response,
       topic: request['topic'],
     })
-    navigation.navigate('Home');    
+    navigation.navigate('ViewWallet');    
   }
 
   return (

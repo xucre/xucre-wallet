@@ -145,6 +145,7 @@ const values = {
     qu: 'QuÃ­chua'
   },
   SelectNetwork: {
+    delete_button: 'Delete Network',
     new_button: 'Nova Rede',
     select_button: 'Selecionar rede',
     select_button_tooltip: 'Mais opÃ§Ãµes',
@@ -215,6 +216,7 @@ const values = {
     title: 'Carteira'
   },
   TokenItem: {
+    delete_button: 'Delete Token',
     menu_accessiblity_label: "Menu mais opÃ§Ãµes",
     send_token_button: 'Enviar'
   },

@@ -11,8 +11,9 @@ import { language as stateLanguage } from "../../service/state";
 import { Token } from "../../service/token";
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
+import { deleteToken } from "../../store/token";
 
-export default function TokenItem ({navigation, token}) {
+export default function TokenItem ({navigation, token, refreshList}) {
   const { colorMode } = useColorMode();
   const [network, ] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
@@ -73,6 +74,11 @@ export default function TokenItem ({navigation, token}) {
     runAsync();
   }, [wallet, provider])
 
+  const removeToken = async () => {
+    const result = await deleteToken(token);
+    refreshList();
+  }
+
   const TokenIcon = ({iname}) => {
     //console.log(iname);
     const icon_color = colorMode ==='dark'? 'white':'black';
@@ -117,7 +123,8 @@ export default function TokenItem ({navigation, token}) {
             </Pressable>;
             }}
           >                
-            <Menu.Item onPress={() => {sendToken()}}><Text>{translations[language].TokenItem.send_token_button}</Text></Menu.Item>                
+            <Menu.Item onPress={() => {sendToken()}}><Text>{translations[language].TokenItem.send_token_button}</Text></Menu.Item>   
+            <Menu.Item onPress={() => {removeToken()}}><Text>{translations[language].TokenItem.delete_button}</Text></Menu.Item>             
           </Menu>
        </Tooltip>
      </HStack>

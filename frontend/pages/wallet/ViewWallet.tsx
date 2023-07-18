@@ -111,7 +111,7 @@ export default function ViewWallet ({navigation, route}) {
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
-      setIsComponentMounted(false);
+      //setIsComponentMounted(false);
     }
   }, []);
   const tabList = translations[language].ViewWallet.tab_list;
@@ -129,7 +129,7 @@ export default function ViewWallet ({navigation, route}) {
   
   const syncTokens = async () => {
     const _tokens = await getTokenByChain(network.chainId);
-    console.log('tokens', _tokens);
+    //console.log('tokens', _tokens);
     const coinToken = {
       address : '',
       amount : ethers.utils.formatEther( 0 ),
@@ -137,6 +137,7 @@ export default function ViewWallet ({navigation, route}) {
       name: network.symbol,
       type: 'coin',
     };
+    console.log('mounted component', isComponentMounted)
     if (isComponentMounted) {
       setHoldings([coinToken, ..._tokens]);
     }
@@ -391,7 +392,7 @@ export default function ViewWallet ({navigation, route}) {
                     {
                       holdings.map((val, i) => {
                         return (                        
-                          <TokenItem key={val.name+i} token={val} navigation={navigation}/>                        
+                          <TokenItem key={val.name+i} token={val} navigation={navigation} refreshList={onRefresh}/>                        
                         )
                       })
                     }
