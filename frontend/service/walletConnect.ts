@@ -16,18 +16,23 @@ import { language as stateLanguage, walletList } from "./state";
 export let signClient: SignClient;
 
 export async function createSignClient() {
-  signClient = await SignClient.init({
-    metadata: {
-      description: 'Xucre Wallet',
-      icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
-      name: 'Xucre Wallet',
-      url: env.REACT_APP_XUCRE_WALLET_SCHEME,
-    },    
-    projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-    //relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
-  })
-  //console.log(signClient);
-  registerListeners();
+  try {
+    signClient = await SignClient.init({
+      metadata: {
+        description: 'Xucre Wallet',
+        icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
+        name: 'Xucre Wallet',
+        url: env.REACT_APP_XUCRE_WALLET_SCHEME,
+      },    
+      projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
+      //relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
+    })
+    //console.log(signClient);
+    registerListeners();
+  } catch (err) {
+    console.log('error creating sign client');
+  }
+  
 }
 
 export const registerListeners = () => {

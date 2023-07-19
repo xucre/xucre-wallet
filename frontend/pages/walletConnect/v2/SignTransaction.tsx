@@ -42,6 +42,7 @@ import { signClient } from "../../../service/walletConnect";
 
 export default function SignTransaction({navigation, route}) {
   const {requestDetails} = route.params;
+  const {colorMode} = useColorMode();
   const [request, setRequest] = useState({});
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
@@ -110,13 +111,13 @@ export default function SignTransaction({navigation, route}) {
               
               <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
                 <ScrollView height={'50%'} width={'100%'} >
-                  <Text>{JSON.stringify(value)}</Text>                    
+                  <Text>{JSON.stringify(value, null, 2)}</Text>                    
                 </ScrollView>
               </Box>
               
               
             </VStack>
-            <Button.Group isAttached colorScheme="blue" >
+            <Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} >
               <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignTransaction.approve_button}</Text></Button>
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignTransaction.reject_button}</Text></Button>
             </Button.Group>

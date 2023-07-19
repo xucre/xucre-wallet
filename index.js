@@ -7,6 +7,7 @@
 // this will help persist a known template for future migrations.
 
 /* dapp-begin */
+console.log('do i work');
 if (typeof BigInt === 'undefined') global.BigInt = require('big-integer')
 const { Platform, LogBox } = require('react-native');
 

@@ -17,23 +17,6 @@ const sendEmail = (to, subjectField, body, navigation, menssageEmail) => {
     
 
     const message = JSON.stringify({
-        personalizations:[
-            {
-            to:
-                [
-                    {
-                        email: 'support@xucre.io',
-                        name:'Support'
-                    }
-                ],
-            cc:[
-                {
-                    email: to
-                }
-            ],    
-            subject: subjectField
-            }
-        ],
         content: 
             [
                 {
@@ -46,14 +29,30 @@ const sendEmail = (to, subjectField, body, navigation, menssageEmail) => {
                 email:'support@xucre.io',
                 name:'Support'
             },
+        personalizations:[
+            {
+            cc:[
+                {
+                    email: to
+                }
+            ],    
+            subject: subjectField,
+            to: [
+                {
+                    email: 'support@xucre.io',
+                    name:'Support'
+                }
+            ],
+            },
+        ],
     });
 
     const requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
         body: message,
-        redirect: 'follow'
-    };
+        headers: myHeaders,
+        method: 'POST',
+        redirect: 'follow',
+    } as unknown as RequestInit;
 
     const emailCall = async () => {
         console.log('requestOptions1 ', requestOptions)

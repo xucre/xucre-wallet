@@ -82,9 +82,9 @@ export const getActiveNetwork = async () => {
 }
 
 export const getNetworks = async () => {
-  return constructDefaultNetworks();
-  //const networks = await EncryptedStorage.getItem('network_list');
-  //return JSON.parse(networks);
+  //return constructDefaultNetworks();
+  const networks = await EncryptedStorage.getItem('network_list');
+  return JSON.parse(networks);
 }
 
 export const iconNames = {

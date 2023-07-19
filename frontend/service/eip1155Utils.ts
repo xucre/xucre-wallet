@@ -89,7 +89,7 @@ export async function approveEIP155Request(
         //console.log(request2);
         const req = transformObject(request2, 'gas', 'gasLimit', chainID);
         //console.log(req);
-        const { hash, error } = await connectedWallet.sendTransaction(req);
+        const { hash } = await connectedWallet.sendTransaction(req);
         
         return formatJsonRpcResult(id, hash);
       } catch (err) {
