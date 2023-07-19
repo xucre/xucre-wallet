@@ -22,20 +22,15 @@ export default function TokenItem ({navigation, token, refreshList}) {
   const [amount, setAmount] = useState(BigNumber.from(0));
   const [language, ] = useRecoilState(stateLanguage);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
 
   useEffect(() => {
     if (_wallet.name != '' && network && network.rpcUrl !== '') {
+      //console.log('loading', _wallet)
       const _provider = getDefaultProvider(network.rpcUrl);
-      if (isComponentMounted) {
-        setProvider(_provider);
-      }      
+         
       const newWallet = _wallet.wallet.connect(_provider);
       if (isComponentMounted) {
+        setProvider(_provider);
         setWallet(newWallet);
       }
     }
@@ -44,25 +39,24 @@ export default function TokenItem ({navigation, token, refreshList}) {
   useEffect(() => {
     const runAsync = async () => {
       try {
-        //console.log('token onload', token);
+        console.log('token onload', token, wallet.address);
+        
+        const network2 = await wallet.provider.getNetwork();
+        console.log(network2);
         if (token.type === 'coin' && wallet.address) {
-          //console.log(typeof wallet.getBalance);
-          //console.log('what');
           const walletBalance = await wallet.getBalance();
           console.log('balance',walletBalance);
-          if (isComponentMounted) {
             setAmount(walletBalance);
-          }
-          
         } else if (token.type === 'token' && wallet.address) {
           const contract = new ethers.Contract(token.address, erc20Abi, provider);
           //console.log('token get balance', contract.balanceOf);
           const balance = await contract.balanceOf((wallet.address));
           console.log('token balance', token.name, balance);
-          if (isComponentMounted) {
-            setAmount(balance);
-          }
-        }        
+          setAmount(balance);
+          
+        } else {
+          console.log('nothing works getting balance', token, wallet);
+        }     
       } catch (e) {
         console.log('error getting balance')
         console.log(e);
@@ -70,8 +64,10 @@ export default function TokenItem ({navigation, token, refreshList}) {
         
       
     }
-
-    runAsync();
+    //console.log('tokenItem loading', wallet.address, typeof provider);
+    if (wallet.address && provider) {
+      runAsync();
+    }
   }, [wallet, provider])
 
   const removeToken = async () => {

@@ -15,7 +15,7 @@ import {
     VStack,
 } from "native-base";
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
-import { language as stateLanguage } from "./state";
+import { language as stateLanguage } from "../service/state";
 import { useRecoilState } from "recoil";
 import {
     FlatList,
@@ -28,7 +28,7 @@ import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 
-export default function SendNotificationToken({ navigation, route }): void {
+export default function SendNotificationToken({ navigation, route }) {
 
     console.log('route ', route)
 
@@ -56,7 +56,7 @@ export default function SendNotificationToken({ navigation, route }): void {
                         const filteredContacts = con.filter(
                             (item) => item.phoneNumbers.length
                         );
-                        filteredContacts.sort((a, b) => a.displayName > b.displayName);
+                        filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1);
                         setContactList(filteredContacts);
                     })
                     .catch((e) => {
@@ -76,19 +76,15 @@ export default function SendNotificationToken({ navigation, route }): void {
 
     const avatar = "https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png";
     return (
-        <ScrollView horizontal={false} style={{ flex: 1 }}>
+        <ScrollView horizontal={false}>
             <ScrollView
                 horizontal={true}
-                contentContainerStyle={{
-                    height: "100%",
-                    width: "100%",
-                }}
             >
-                <View style={{ backgroundColor: colorMode === 'dark' ? '#1b1e24' : '#fff', flex: 1 }}>
+                <Box backgroundColor={colorMode === 'dark' ? '#1b1e24' : '#fff'} flex={1}>
 
                     <VStack w="100%" space={5} alignSelf="center">
                         <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}
-                            onChangeText={(text) => { searchItem(text) }} onFocus={(event) => { eventFocus(event) }} />
+                            onChangeText={(text) => { console.log(text) /*searchItem(text)*/ }} onFocus={(event) => { /*eventFocus(event)*/ }} />
                     </VStack>
                     <FlatList
                         data={contactList}
@@ -96,18 +92,6 @@ export default function SendNotificationToken({ navigation, route }): void {
                         renderItem={({ item, index }) => {
                             return (
                                 <TouchableOpacity
-                                    style={{
-                                        alignItems: "center",
-                                        alignSelf: "center",
-                                        borderColor: colorMode === "dark" ? Color.white : Color.black,
-                                        borderRadius: 10,
-                                        borderWidth: 1,
-                                        flexDirection: "row",
-                                        height: 70,
-                                        justifyContent: "space-between",
-                                        marginTop: 10,
-                                        width: "90%",
-                                    }}
                                     onPress={() => {
                                         const amount = route.params.param1
                                         const walletA = route.params.param2
@@ -119,68 +103,54 @@ export default function SendNotificationToken({ navigation, route }): void {
                                       whatsapp(item, 'shareqrcode', 'en_US', {param1: 'www.google.com', param2: walletA}, translations[language].QRWallet.toast_send); */
                                     }}
                                 >
-                                    <View style={{ alignItems: "center", flexDirection: "row" }}>
+                                    <Box alignItems={'center'} flexDirection={'row'}>
                                         <Image
-                                            source={{
-                                                uri:
-                                                    "https://cdn-icons-png.flaticon.com/512/1177/1177568.png",
-                                            }}
-                                            style={{ height: 40, marginLeft: 15, width: 40 }}
+                                            source={{ uri: "https://cdn-icons-png.flaticon.com/512/1177/1177568.png"}}
+                                            height={40}
+                                            ml={15}
+                                            width={40}
                                             alt="logo"
                                         />
-                                        <View style={{ padding: 10 }}>
+                                        <Box p={10}>
                                             <Text
-                                                style={{
-                                                    color: colorMode === "dark" ? Color.white : Color.black,
-                                                }}
+                                                color={colorMode === "dark" ? Color.white : Color.black}
                                             >
                                                 {item.displayName}
                                             </Text>
                                             <Text
-                                                style={{
-                                                    color: colorMode === "dark" ? Color.white : Color.black,
-                                                    marginTop: 4,
-                                                }}
+                                                mt={4}
+                                                color={colorMode === "dark" ? Color.white : Color.black}
                                             >
                                                 {item.phoneNumbers[0].number}
                                             </Text>
-                                        </View>
-                                    </View>
-                                    <View style={{ flexDirection: "row", paddingRight: 15 }}>
+                                        </Box>
+                                    </Box>
+                                    <Box pr={15} flexDirection={'row'}>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                const url = Communications.text(
+                                                console.log('touched');
+                                                /*const url = Communications.text(
                                                     item.phoneNumbers[0].number
-                                                );
+                                                );*/
                                             }}
                                         >
                                             <Image
                                                 source={{
                                                     uri: avatar,
                                                 }}
-                                                style={{
-                                                    height: 40,
-                                                    marginRight: 20,
-                                                    width: 40,
-                                                }}
+                                                height={40}
+                                                mr={20}
+                                                width={40}
                                                 alt="logo"
                                             />
                                         </TouchableOpacity>
-                                        {/*                  <TouchableOpacity
-                  onPress={() => {
-                    Linking.openURL(`https://web.whatsapp.com/send?phone=${item.phoneNumbers[0].number}`);
-                  }}> 
-                   <Image
-                    source={require('../images/call.png')}
-                    style={{width: 20, height: 20, tintColor: '#fff'}}
-                  /> 
-                </TouchableOpacity> */}
-                                    </View>
+                                        
+                                    </Box>
                                 </TouchableOpacity>
                             );
                         }}
                     />
-                </View>
+                </Box>
             </ScrollView>
         </ScrollView>
     );

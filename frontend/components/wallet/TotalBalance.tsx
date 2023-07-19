@@ -189,42 +189,46 @@ export default function WalletHistory() {
   const [displayTooltip, setDisplayTooltip] = useState(false);
 
   const getData = async () => {
+    try {
+      const historyResults = await getWalletHistory(wallet.address, chainName);
+      //console.log(historyResults);
+      console.log('hsitory retrieved');
+      const outputData = processJsonData(historyResults);
+      //console.log(outputData)
+      //console.log(outputData.openQuotesByDay[0]);
 
-    const historyResults = await getWalletHistory(wallet.address, chainName);
-    //console.log(historyResults);
-    console.log('hsitory retrieved');
-    const outputData = processJsonData(historyResults);
-    //console.log(outputData)
-    //console.log(outputData.openQuotesByDay[0]);
-
-    // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
-    const isReady = outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
-    const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, i) => {
-      return  {
-        direction: finalVal.direction, 
-        quotes: [...finalVal.quotes, d]
-      };
-    }, {
-      direction: 'down',
-      quotes: []
-    })
-    console.log(openQuotes.quotes.length);
-    // END TESTING PORTION
-    const finalQuotes = openQuotes.quotes.map((d) => {
-      return {
-        meta: {
-          'date': d.date
-        },
-        x: moment(d.date).unix(),
-        y: Math.round((d.totalQuote + Number.EPSILON) * 100) / 100
-      }
-    });
-    setCurrentHoldings(finalQuotes[0]);
-    setSecondToLastHoldings({
-      percent: (((finalQuotes[1].y - finalQuotes[0].y)/finalQuotes[0].y) || 0).toFixed(0)+ '%' ,
-      trend: finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat',
-      y: (finalQuotes[1].y - finalQuotes[0].y).toFixed(2),
-    })
+      // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
+      //const isReady = outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
+      const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, i) => {
+        return  {
+          direction: finalVal.direction, 
+          quotes: [...finalVal.quotes, d]
+        };
+      }, {
+        direction: 'down',
+        quotes: []
+      })
+      console.log(openQuotes.quotes.length);
+      // END TESTING PORTION
+      const finalQuotes = openQuotes.quotes.map((d) => {
+        return {
+          meta: {
+            'date': d.date
+          },
+          x: moment(d.date).unix(),
+          y: Math.round((d.totalQuote + Number.EPSILON) * 100) / 100
+        }
+      });
+      setCurrentHoldings(finalQuotes[0]);
+      setSecondToLastHoldings({
+        percent: (((finalQuotes[1].y - finalQuotes[0].y)/finalQuotes[0].y) || 0).toFixed(0)+ '%' ,
+        trend: finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat',
+        y: (finalQuotes[1].y - finalQuotes[0].y).toFixed(2),
+      })
+    } catch (err) {
+      console.log(err);
+    }
+    
   }
 
   useEffect(() => {
@@ -286,7 +290,7 @@ export default function WalletHistory() {
       openQuotesByDay: [],
     };
 
-    if (jsonData.error) {
+    if (jsonData === null || jsonData.error) {
       //console.error(jsonData.error_message);
       return output;
     }
@@ -343,7 +347,7 @@ export default function WalletHistory() {
             
           <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>Total Balance</Text>
           <HStack paddingBottom={0} space={1}>
-            <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >${formatCurrency(currentHoldings.y)}</Text></Heading>
+            <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >${currentHoldings ? formatCurrency(currentHoldings.y) : '0.00'}</Text></Heading>
             <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
             
           </HStack>

@@ -36,6 +36,7 @@ import { v4 as uuidv4 } from 'uuid';
 import translations from "./assets/translations";
 import Menu from './components/Menu';
 import Notifications from './components/Notifications';
+import SendNotificationToken from './components/SendNotificationToken';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import LanguagePage from './pages/Language';
@@ -69,7 +70,6 @@ import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import CodeCountry from './service/CodeCountry';
 import { navigationRef } from './service/RootNavigation';
-import SendNotificationToken from './service/SendNotificationToken';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient, signClient} from './service/walletConnect';
 import whatsapp from './service/whatsapp';
@@ -166,7 +166,7 @@ export const AppWrapper = () => {
         await createSignClient();
         console.log('sign in created')
       } catch (err) {
-        console.log(err);
+        console.log('error creating sign client', err);
       }
     }
     
