@@ -1,5 +1,5 @@
 import { defaultPath, entropyToMnemonic, HDNode, Mnemonic } from "@ethersproject/hdnode";
-import { BigNumber, providers, utils, Wallet, wordlists } from 'ethers';
+import {  BigNumber, ethers, providers, utils, Wallet, wordlists } from 'ethers';
 const network = (process.env.NODE_ENV === 'production') ? 'mainnet' : 'rinkeby';
 
 const PROVIDER = providers.getDefaultProvider(network);
@@ -7,7 +7,21 @@ const PROVIDER = providers.getDefaultProvider(network);
 export function generateMnemonics(language) {
   //return entropyToMnemonic(utils.randomBytes(16)).split(' ');
   const langVal = language === 'en' ? language : 'es';
-  return Wallet.createRandom({ locale: wordlists[langVal] }).mnemonic.phrase.split(' ');
+  try {
+    //const nWallet = Wallet.createRandom({ locale: ethers.wordlists['es'] });
+    //console.log(nWallet.mnemonic);
+    const newWallet = Wallet.createRandom({ locale: wordlists.en });
+    if (langVal === 'en') {
+      return newWallet.mnemonic.phrase.split(' ');
+    } 
+    const wallet = Wallet.createRandom({ locale: wordlists.es })
+    //const wallet = ethers.Wallet.fromMnemonic(newWallet.mnemonic.phrase, newWallet.mnemonic.path, ethers.wordlists[langVal]);
+    return wallet.mnemonic.phrase.split(' ');
+    return []
+  } catch (err) {
+    return [];
+  }
+  
 }
 
 export function loadWalletFromMnemonics(mnemonics) {
