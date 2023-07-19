@@ -11,13 +11,13 @@ export function generateMnemonics(language) {
     //const nWallet = Wallet.createRandom({ locale: ethers.wordlists['es'] });
     //console.log(nWallet.mnemonic);
     const newWallet = Wallet.createRandom({ locale: wordlists.en });
-    if (langVal === 'en') {
+    //if (langVal === 'en') {
       return newWallet.mnemonic.phrase.split(' ');
-    } 
-    const wallet = Wallet.createRandom({ locale: wordlists.es })
+    //} 
+    //const wallet = Wallet.createRandom({ locale: wordlists.es })
     //const wallet = ethers.Wallet.fromMnemonic(newWallet.mnemonic.phrase, newWallet.mnemonic.path, ethers.wordlists[langVal]);
-    return wallet.mnemonic.phrase.split(' ');
-    return []
+    //eturn wallet.mnemonic.phrase.split(' ');
+    //return []
   } catch (err) {
     return [];
   }
