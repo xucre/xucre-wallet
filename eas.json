@@ -20,8 +20,7 @@
     "beta": {
         "distribution": "internal",
         "android" : {
-          "buildType" : "apk",
-          "gradleCommand": ":app:assembleDebug"
+          "buildType" : "apk"
         }
     },
     "production": {
