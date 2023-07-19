@@ -244,6 +244,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: "bold",
+    width: 300,
   },
 });
 
