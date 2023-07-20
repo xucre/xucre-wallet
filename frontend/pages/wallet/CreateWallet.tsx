@@ -213,7 +213,7 @@ export default function CreateWallet({ navigation, route, storage }) {
             {mnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
-                  <ListItem value={val} index={i}/>
+                  <ListItem value={val} index={i} key={i}/>
                 );
               }
             })}
@@ -222,7 +222,7 @@ export default function CreateWallet({ navigation, route, storage }) {
             {mnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
-                  <ListItem value={val} index={i}/>
+                  <ListItem value={val} index={i} key={i}/>
                 );
               }
             })}
@@ -231,7 +231,7 @@ export default function CreateWallet({ navigation, route, storage }) {
             {mnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
-                  <ListItem value={val} index={i}/>
+                  <ListItem value={val} index={i} key={i}/>
                 );
               }
             })}
@@ -341,7 +341,7 @@ export default function CreateWallet({ navigation, route, storage }) {
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
-                  <ListItem value={val} index={i}/>
+                  <ListItem value={val} index={i} key={i}/>
                 );
               }
             })}
@@ -350,7 +350,7 @@ export default function CreateWallet({ navigation, route, storage }) {
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
-                  <ListItem value={val} index={i} />
+                  <ListItem value={val} index={i} key={i}/>
                 );
               }
             })}
@@ -359,7 +359,7 @@ export default function CreateWallet({ navigation, route, storage }) {
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
-                  <ListItem value={val} index={i} />
+                  <ListItem value={val} index={i} key={i}/>
                 );
               }
             })}

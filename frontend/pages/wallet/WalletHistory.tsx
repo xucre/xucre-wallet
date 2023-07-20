@@ -213,7 +213,7 @@ export default function WalletHistory({ navigation, route }) {
     //console.log(outputData.openQuotesByDay[0]);
 
     // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
-    const isReady = outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
+    const isReady = outputData === null || outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
     const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, i) => {
       return  {
         direction: finalVal.direction, 
@@ -235,7 +235,9 @@ export default function WalletHistory({ navigation, route }) {
         y: Math.round((d.totalQuote + Number.EPSILON) * 100) / 100
       }
     });
-    setCurrentHoldings(finalQuotes[0])
+    setCurrentHoldings(finalQuotes[0] || {
+      y: '0.00'
+    })
     setChartData(finalQuotes);
     setIsZeroData(isReady);
     setRefreshing(false);
@@ -381,7 +383,7 @@ export default function WalletHistory({ navigation, route }) {
               <VStack>
                 <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} paddingTop={3} >Total Balance</Text>
                 <HStack paddingBottom={0} space={1}>
-                  <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >${currentHoldings.y}</Text></Heading>              
+                  <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >${currentHoldings ? currentHoldings.y : '0.00'}</Text></Heading>              
                 </HStack>  
               </VStack>
               <Menu w="160" shouldOverlapWithTrigger={false} trigger={triggerProps => {

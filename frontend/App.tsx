@@ -36,6 +36,7 @@ import { v4 as uuidv4 } from 'uuid';
 import translations from "./assets/translations";
 import Menu from './components/Menu';
 import Notifications from './components/Notifications';
+import SendNotificationToken from './components/SendNotificationToken';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import LanguagePage from './pages/Language';
@@ -166,7 +167,7 @@ export const AppWrapper = () => {
         await createSignClient();
         console.log('sign in created')
       } catch (err) {
-        console.log(err);
+        console.log('error creating sign client', err);
       }
     }
     

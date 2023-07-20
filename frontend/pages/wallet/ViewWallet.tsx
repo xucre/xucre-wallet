@@ -148,7 +148,7 @@ export default function ViewWallet ({navigation, route}) {
     console.log('loading transactions $$$');
     const _transactions = await getWalletTransactions(_wallet.wallet.address, chainIdToNameMap[network.chainId]);
     //console.log(_transactions.data.items[0]);
-    if (_transactions.data.items) {
+    if (_transactions && _transactions.data.items) {
       console.log('setting transactions');
       setTransactions(_transactions.data.items as readonly CovalentTransaction[]);
     }

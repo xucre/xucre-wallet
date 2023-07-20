@@ -19,7 +19,6 @@ import whatsapp from "./whatsapp";
 import { language as stateLanguage } from "../../frontend/service/state";
 import translations from "../assets/translations";
 import { useRecoilState } from "recoil";
-import QRWallet from "../pages/wallet/QRWallet";
 
 const CodeCountry = ({ navigation, route }) => {
 
