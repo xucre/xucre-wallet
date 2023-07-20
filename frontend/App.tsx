@@ -70,7 +70,6 @@ import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import CodeCountry from './service/CodeCountry';
 import { navigationRef } from './service/RootNavigation';
-import SendNotificationToken from './service/SendNotificationToken';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient, signClient} from './service/walletConnect';
 import whatsapp from './service/whatsapp';
