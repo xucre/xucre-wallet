@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 /* eslint-disable functional/no-loop-statement */
 /* eslint-disable prefer-const */
 /* eslint-disable import/order */
@@ -10,7 +11,6 @@ import {
   Alert,
   Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -19,6 +19,8 @@ import whatsapp from "./whatsapp";
 import { language as stateLanguage } from "../../frontend/service/state";
 import translations from "../assets/translations";
 import { useRecoilState } from "recoil";
+import { Border,Color } from "../../GlobalStyles";
+import { Button, useColorMode, Text } from "native-base";
 
 const CodeCountry = ({ navigation, route }) => {
 
@@ -37,10 +39,15 @@ const CodeCountry = ({ navigation, route }) => {
   const [phoneNumber, setphoneNumber] = useState("");
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(false);
+  const { colorMode } = useColorMode();
   let _final: any;
   const phoneInput = useRef(null);
 
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const QRWallet = () => {
+    navigation.navigate('QRWallet');
+  }
 
   if (route.params.param4 === "send") {
     const formaterNumberSend = () => {
@@ -103,8 +110,20 @@ const CodeCountry = ({ navigation, route }) => {
             formaterNumberSend();
           }}
         >
-          <Text>Send Whatsapp</Text>
+          <Text>{translations[language].SupportPage.Send_Button}</Text>
         </TouchableOpacity>
+
+        <Button
+          style={styles.buttonContainer}
+          mt={4}
+          width={"3/4"}
+          colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
+          onPress={QRWallet}
+        >
+          <Text color={colorMode === "dark" ? Color.black : Color.white}>
+          {translations[language].SupportPage.button_cancel}
+          </Text>
+        </Button>
       </View>
     );
   } else {
@@ -169,6 +188,19 @@ const CodeCountry = ({ navigation, route }) => {
         >
           <Text>Send Whatsapp</Text>
         </TouchableOpacity>
+
+        <Button
+          style={styles.buttonContainer}
+          mt={4}
+          width={"3/4"}
+          colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
+          onPress={QRWallet}
+        >
+          <Text color={colorMode === "dark" ? Color.black : Color.white}>
+          {translations[language].SupportPage.button_cancel}
+          </Text>
+        </Button>
+
       </View>
     );
   }
@@ -218,11 +250,13 @@ function veri(number: string, cCountry: string) {
     const myArray = [numeroSinCodigo,codeC];
     return myArray;
   }
-  }
-
-
+}
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    borderRadius: Border.br_sm,
+    fontWeight: "bold",
+  },
   container: {
     flex: 1,
     justifyContent: "center",

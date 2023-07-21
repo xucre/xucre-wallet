@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const values = {
   AddToken: {
     address_placeholder: "Enter Token Address",
@@ -203,6 +204,7 @@ const values = {
     title: "Sign Message"
   },
   SupportPage: {
+    button_cancel: "Cancel",
     button_send: "Send Email",
     describe_issue: "Describe your issue",
     introduction: "If you have problems with our app please contact us at support@xucre.com or use the form below",
@@ -241,7 +243,8 @@ const values = {
     title: "History"
   },
   WhatsAppNotification:{
-    button: "Send WhatsApp notification"
+    button: "Send WhatsApp notification",
+    Send_Button: "Send Whatsapp"
   },
   totalBalance:{
     title: "Total Balance"

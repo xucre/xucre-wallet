@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const values = {
   AddToken: {
     address_placeholder: 'Token direccionta qillqay',
@@ -203,6 +204,7 @@ const values = {
     title: 'Willakuy firma'
   },  
   SupportPage: {  
+    button_cancel: "Chantaq",
       button_send: "E-mailta apachiy",  
       describe_issue: "Sasachakuyniykimanta willay",  
       introduction: "Sichus appniykuwan sasachakuyniyuq kanki chayqa kaypi rimanakuy support@xucre.com utaq uraypi formulariota llamk'achiy",
@@ -241,7 +243,9 @@ const values = {
     title: "Willarina"  
   },
   WhatsAppNotification:{
-    button: "Kachay WhatsApp Willana"
+    button: "Kachay WhatsApp Willana",
+    Send_Button: "Kachay Whatsapp"
+
   },
   totalBalance:{
     title: "Allin pachapi"

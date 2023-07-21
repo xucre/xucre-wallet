@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const values = {
   AddToken: {
     address_placeholder: 'Ahaquiaa Token-ixti',
@@ -203,6 +204,7 @@ const values = {
     title: 'Aamamachiyootlahcuilooltzacua tee-tlatquiitiil-li',
   },
   SupportPage: {
+    button_cancel: "Tlahtoa",
     button_send: "Xitlatitlani email",
     describe_issue: "Caquiztliaa mo neyool-polooliz-tli",
     introduction: "If you have problems with our app please contact us at support@xucre.com or use the form below",
@@ -241,7 +243,8 @@ const values = {
     title: "Necocteentiaa"
   },
   WhatsAppNotification:{
-    button: "Ihuaa WhatsApp tenemachtiliztli"
+    button: "Ihuaa WhatsApp tenemachtiliztli",
+    Send_Button: "Ihuaa WhatsApp"
   },
   totalBalance:{
     title: "Tlalpochcalli"
