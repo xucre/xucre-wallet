@@ -245,6 +245,7 @@ const values = {
   WhatsAppNotification:{
     button: "Kachay WhatsApp Willana",
     Send_Button: "Kachay Whatsapp"
+
   },
   totalBalance:{
     title: "Allin pachapi"

@@ -49,7 +49,6 @@ const CodeCountry = ({ navigation, route }) => {
     navigation.navigate('QRWallet');
   }
 
-
   if (route.params.param4 === "send") {
     const formaterNumberSend = () => {
       console.log("entro");
@@ -251,8 +250,7 @@ function veri(number: string, cCountry: string) {
     const myArray = [numeroSinCodigo,codeC];
     return myArray;
   }
-  }
-  
+}
 
 const styles = StyleSheet.create({
   buttonContainer: {
