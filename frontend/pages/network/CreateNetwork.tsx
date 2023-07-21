@@ -124,16 +124,19 @@ export default function CreateWallet ({navigation, route, storage}) {
             base: "400px",
             lg: "auto"
           }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-            <VStack minW="300px" w="100%" alignItems="center" flex="1" justifyContent="flex-end" marginBottom={20} marginTop={20}>
-              <Heading mb={5} style={styles.titleLayout} fontWeight={'normal'}><Text>New Network</Text></Heading>
+            <VStack minW="300px" w="full" alignItems="center" flex="1" justifyContent={'center'} marginBottom={20} marginTop={20}>
+              <Heading mb={5} style={styles.titleLayout} fontWeight={'normal'}><Text color={colorMode === 'dark' ? Color.white : Color.black}>New Network</Text></Heading>
               <Input style={styles.textoImput} mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
               <Input style={styles.textoImput} mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
               <Input style={styles.textoImput} mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
               <Input style={styles.textoImput} mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
               <Input style={styles.textoImput} mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
-              <Button style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}>
-                <Text style={{color: colorMode === 'dark' ? Color.black : Color.white}}>{translations[language].CreateNetwork.submit_button}</Text>
-              </Button>
+              <Button.Group>
+                <Button w={'100%'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}>
+                  <Text fontWeight={'bold'} style={{color: colorMode === 'dark' ? Color.black : Color.white}}>{translations[language].CreateNetwork.submit_button}</Text>
+                </Button>
+              </Button.Group>
+              
             </VStack>
               
           </KeyboardAvoidingView>
@@ -142,14 +145,6 @@ export default function CreateWallet ({navigation, route, storage}) {
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    borderRadius: Border.br_sm,
-    borderStyle: "solid",
-    borderWidth: 1,
-    fontWeight: 'bold',
-    textAlign: "center",
-
-  }, 
   textoImput: {
     borderRadius: Border.br_xs,
     borderStyle: "solid",
