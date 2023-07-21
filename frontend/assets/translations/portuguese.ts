@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const values = {
   AddToken: {
     address_placeholder: 'Digite o endereÃ§o do token',
@@ -204,6 +205,7 @@ const values = {
     title: 'Mensagem de assinatura'
   },
   SupportPage: { 
+    button_cancel: "Cancelar",
     button_send: "Enviar e-mail",  
     describe_issue: "Descreva seu problema",  
     introduction: "Se vocÃª tiver problemas com nosso aplicativo, entre em contato conosco em support@xucre.com ou use o formulÃ¡rio abaixo",
@@ -242,7 +244,8 @@ const values = {
     title: "HistÃ³ria"   
   },  
   WhatsAppNotification:{
-    button: "Enviar notificação pelo WhatsApp"
+    button: "Enviar notificação pelo WhatsApp",
+    Send_Button: "Enviar Whatsapp"
   },
   totalBalance:{
     title: "Balanço total"
