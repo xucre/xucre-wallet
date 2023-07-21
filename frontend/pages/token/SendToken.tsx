@@ -254,7 +254,6 @@ export default function SendToken({ navigation, route, storage }) {
               );
             })}
           </Select>
-
           <Input
             style={
               colorMode === "dark" ? styles.textoImput : lightStyles.textoImput

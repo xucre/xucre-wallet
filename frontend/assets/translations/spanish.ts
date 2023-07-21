@@ -64,7 +64,7 @@ const values = {
     name_wallet: "Nombre de la Billetera"
   },
   LanguagePage: {
-    menu_button: 'Idioma',
+    menu_button: 'IDIOMA',
     select_language: "Seleccione su Idioma"
   },
   LegacyEthSign: {
@@ -205,7 +205,7 @@ const values = {
   SupportPage: {
     button_send: "Enviar correo",
     describe_issue: "Describe tu problema",
-    introduction: "Si tienes problemas con nuestra aplicacion, por favor contactanos a support@xsucre.com o usa el siguiente formulario",
+    introduction: "Si tienes problemas con nuestra aplicacion, por favor contactanos a support@xucre.com o usa el siguiente formulario",
     subject_send: "Asunto",
     title: "Contacto",
     to_send: "De",
@@ -242,6 +242,9 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Enviar notificación de WhatsApp"
+  },
+  totalBalance:{
+    title: "Balance total"
   }
 };
 

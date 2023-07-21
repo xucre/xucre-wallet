@@ -205,7 +205,7 @@ const values = {
   SupportPage: {
     button_send: "Xitlatitlani email",
     describe_issue: "Caquiztliaa mo neyool-polooliz-tli",
-    introduction: "If you have problems with our app please contact us at support@xsucre.com or use the form below",
+    introduction: "If you have problems with our app please contact us at support@xucre.com or use the form below",
     subject_send: "Tlatzohuaztlaalil-li",
     title: "Tlamaamalloo-tl",
     to_send: "Iuikpa",
@@ -242,6 +242,9 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Ihuaa WhatsApp tenemachtiliztli"
+  },
+  totalBalance:{
+    title: "Tlalpochcalli"
   }
 }
 

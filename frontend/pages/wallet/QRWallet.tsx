@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 /* eslint-disable react-native/split-platform-components */
@@ -31,14 +32,22 @@ import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getIconImage } from "../../service/api";
 import { activeWallet, language as stateLanguage } from "../../service/state";
+import Geolocation from 'react-native-geolocation-service';
+
 
 
 
 export default function QRWallet ({navigation, route}) {
+  const [local, setlocal] = useState(false);
+  const [location, setLocation] = useState(false);
+  const [lat, setlat]= useState(String);
+  const [lng, setlng]= useState(String);
   const { colorMode } = useColorMode();
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const initialFocusRef = React.useRef(null);
+
+
 
   useEffect(() => {
     if (_wallet.name === '') {
@@ -80,15 +89,79 @@ export default function QRWallet ({navigation, route}) {
           });
       }
     });
+    getLocation()
   };
 
-  const openPage = (pageName: string, param1: any, param2: any) => {
+
+  const getLocation = () => {
+    
+    const result = requestLocationPermission();
+    result.then(res => {
+      console.log('res is:', res);
+      if (res) {
+        Geolocation.getCurrentPosition(
+          position => {
+            console.log('coordenadas c', position);
+            setLocation(position);
+            setlat(position.coords.latitude)
+            setlng(position.coords.longitude)
+
+            setTimeout(getLocal,3000);    
+          },
+          error => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+            setLocation(false);
+          },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        );
+      }
+    });
+    console.log('location c',location);
+  };
+
+  const getLocal = () => {
+    const url = 'http://api.geonames.org/countryCodeJSON?lat='+lat+'&lng='+lng+'&username=carevalo123'
+    fetch(url).then((response) => response.json()).then((json) => {
+      setlocal(json)
+    console.log(json)
+    }).catch((error) => {
+        console.error(error);
+    });
+  }
+
+  const openPage = (pageName: string, param1: any, param2: any, param3: any) => {
     switch (pageName) {
       case 'CodeCountry':
-        navigation.navigate('CodeCountry',{param1,param2});
+        navigation.navigate('CodeCountry',{param1,param2,param3});
         break;
     }
   }
+
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Geolocation Permission',
+          message: 'Can we access your location?',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      console.log('granted', granted);
+      if (granted === 'granted') {
+        console.log('You can use Geolocation');
+        return true;
+      } else {
+        console.log('You cannot use Geolocation');
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  };
 
   // Transitions
   const [displayTooltip, setDisplayTooltip] = useState(false);
@@ -195,7 +268,7 @@ export default function QRWallet ({navigation, route}) {
               }}
               onPress={()=>{
                 const walletA = _wallet.wallet.address
-                openPage('CodeCountry', item, walletA)
+                openPage('CodeCountry', item, walletA, local)
                 //<CodeCountry navigation={navigation} route={item}/>
                /*  const walletA = _wallet.wallet.address
                 whatsapp(item, 'shareqrcode', 'en_US', {param1: 'www.google.com', param2: walletA}, translations[language].QRWallet.toast_send); */

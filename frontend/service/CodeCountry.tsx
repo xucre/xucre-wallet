@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-loop-statement */
 /* eslint-disable prefer-const */
 /* eslint-disable import/order */
 /* eslint-disable functional/no-let */
@@ -20,18 +21,28 @@ import translations from "../assets/translations";
 import { useRecoilState } from "recoil";
 
 const CodeCountry = ({ navigation, route }) => {
-    console.log('route ccodeCountry ',route )
+
+  console.log('route code country:', route)
+
+  console.log(
+    "route ccodeCountry ",
+    route.params.param1.phoneNumbers[0].number
+  );
+
+  const nn = veri(route.params.param1.phoneNumbers[0].number, route.params.param3.countryCode);
+
+  console.log("nn", nn);
+
   const [language] = useRecoilState(stateLanguage);
   const [phoneNumber, setphoneNumber] = useState("");
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(false);
-  let _final;
+  let _final: any;
   const phoneInput = useRef(null);
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   if (route.params.param4 === "send") {
-
     const formaterNumberSend = () => {
       console.log("entro");
       const checkValid = phoneInput.current?.isValidNumber(value);
@@ -58,7 +69,7 @@ const CodeCountry = ({ navigation, route }) => {
     };
 
     const buttonPressSend = async () => {
-      const amoutAndName =  route.params.param3 +" " + route.params.param5
+      const amoutAndName = route.params.param3 + " " + route.params.param5;
       whatsapp(
         _final,
         "shared_notification",
@@ -89,7 +100,6 @@ const CodeCountry = ({ navigation, route }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-
             formaterNumberSend();
           }}
         >
@@ -139,8 +149,8 @@ const CodeCountry = ({ navigation, route }) => {
       <View style={styles.container}>
         <PhoneInput
           ref={phoneInput}
-          defaultValue={route.params.param1.phoneNumbers[0].number}
-          defaultCode="EC"
+          defaultValue={nn[0]}
+          defaultCode={nn[1]}
           layout="first"
           withShadow
           //autoFocus
@@ -163,6 +173,54 @@ const CodeCountry = ({ navigation, route }) => {
     );
   }
 };
+
+function veri(number: string, cCountry: string) {
+
+  console.log('fuctio : ', number , 'cc', cCountry )
+
+  let data = [
+    { n: "+593", c: "EC" },
+    { n: "+55", c: "BR" },
+    { n: "+1", c: "US" },
+    { n: "+34", c: "ES" },
+  ];
+  let numeroSinCodigo = ""
+  let codeC = ""
+  if (number.includes("+")) {
+    console.log('entro +')
+    for (let i = 0; i < data.length; i++) {
+      let lc = data[i].n.length;
+      if (number.substring(0, lc) === data[i].n) {
+        numeroSinCodigo = number.substring(lc);
+        codeC = data[i].c
+        console.log(data[i].n, numeroSinCodigo, data[i].c);
+      }
+    }
+  const myArray = [numeroSinCodigo,codeC];
+  return myArray;
+  } else if(!number.includes("+")){
+    console.log('entro sin + ')
+    for (let i = 0; i < data.length; i++) {
+      let lc1 = data[i].n.slice(1);
+      let lc = lc1.length;
+      if (number.substring(0, lc) === lc1) {
+        numeroSinCodigo = number.substring(lc);
+        codeC = data[i].c
+        console.log('sin +', data[i].n, 'nSC', numeroSinCodigo, data[i].c);
+        const myArray = [numeroSinCodigo,codeC];
+        return myArray;
+      }else{
+        numeroSinCodigo = number
+        codeC = cCountry
+      }
+    }
+    console.log('salio for sin +')
+    const myArray = [numeroSinCodigo,codeC];
+    return myArray;
+  }
+  }
+
+
 
 const styles = StyleSheet.create({
   container: {
