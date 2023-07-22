@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-color-literals */
+/* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
@@ -53,6 +55,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
   const [language, ] = useRecoilState(stateLanguage);
   const [steps, setSteps] = useState(0);
   const [mnemonic, setMnemonic] = useState('');
+  const [confirmMnemonics, setConfirmMnemonics] = useState([]);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [mnemonicMatchComplete, setMnemonicMatchComplete] = useState(false);
@@ -68,23 +71,13 @@ export default function RecoverWallet ({navigation, route, storage}) {
 
   useEffect(() => {   
     // Add Whitespace trimming
-    const areValidEntries = mnemonic.split(' ').reduce((prev, curr) => {
-      if (curr.length > 0 && prev === 'true') {
-        return 'true';
-      } else {
-        return 'false';
-      }      
-    }, 'true');
-    const trimmedMnemonics = mnemonic.split(' ').filter((val, i) => {
-      return val !== '' && val !== ' ';
-    })
-    if ((trimmedMnemonics.length === 12) && areValidEntries === 'true') {
+    if ((confirmMnemonics.length === 12)) {
       setMnemonicMatchComplete(true); 
     } else {
       setMnemonicMatchComplete(false); 
     }
        
-  }, [mnemonic]);
+  }, [confirmMnemonics]);
 
   function Instructions() {
     
@@ -121,11 +114,129 @@ export default function RecoverWallet ({navigation, route, storage}) {
       </>
     )
   }
+
+  function ConfirmMnemonicList() {
+    const selectMnemonic = (word) => {
+      setConfirmMnemonics([...confirmMnemonics, word]);
+    };
+    const removeMnemonic = (word, n) => {
+      const filteredList = confirmMnemonics.filter((val, i) => {
+        return n !== i;
+      });
+      setConfirmMnemonics(filteredList);
+    };
+    function ListItem({value, index}) {
+      return (
+        <Button
+          width={'100%'}
+          bg="Color.gray_100"
+          rounded="sm"
+          _text={{
+            alignContent: 'center',
+            color: Color.gray_200,
+            fontWeight: "medium",
+            justifyContent: 'center',
+          }}
+          variant={'unstyled'}
+          alignSelf={'center'}
+          margin={1}
+          alignItems={'center'}
+          justifyContent={'flex-start'}
+          shadow={"3"}
+          
+          onPress={() => {
+            setTimeout(() => {
+              removeMnemonic(value, index);
+            }, 1)
+            
+          }}
+          startIcon={
+            confirmMnemonics.includes(value) ? 
+              <Badge
+                colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+                rounded="full"
+                zIndex={100}
+                variant="solid"
+                alignSelf="flex-start"
+                _text={{
+                  fontSize: 12,
+                }}
+                margin={2}
+              >
+                <Text style={{
+                  color : colorMode === 'dark' ? Color.black : Color.white,
+                }}>{confirmMnemonics.indexOf(value) + 1}</Text>
+              </Badge> :
+              <Badge
+                backgroundColor={'transparent'}
+                rounded="full"
+                zIndex={100}
+                variant="solid"
+                alignSelf="flex-start"
+                _text={{
+                  fontSize: 12,
+                }}
+                marginY={2}
+              >
+                <Text style={{
+                  color : 'transparent',
+                }}></Text>
+              </Badge>
+          }
+        >                      
+          <Text >{value}</Text>
+        </Button>
+      )
+    };
+    return (     
+        <HStack
+          style={{
+            paddingBottom: 10,
+          }}
+          maxW={'full'}
+        >
+          <VStack space={4} alignItems="center" justifyItems={'center'}>
+            {confirmMnemonics.map((val, i) => {
+              if (i % 3 === 0) {
+                return (
+                  <ListItem value={val} index={i} key={i}/>
+                );
+              }
+            })}
+          </VStack>
+          <VStack space={4} alignItems="center" justifyItems={'center'}>
+            {confirmMnemonics.map((val, i) => {
+              if (i % 3 === 1) {
+                return (
+                  <ListItem value={val} index={i} key={i}/>
+                );
+              }
+            })}
+          </VStack>
+          <VStack space={4} alignItems="center" justifyItems={'center'}>
+            {confirmMnemonics.map((val, i) => {
+              if (i % 3 === 2) {
+                return (
+                  <ListItem value={val} index={i} key={i}/>
+                );
+              }
+            })}
+          </VStack>
+        </HStack>
+    );
+  }
   
 
   const handleMnemonicChange = (text) => {
     //console.log(event.nativeEvent.text);
-    setMnemonic(text)
+    if(text.length > 3 && text.endsWith(' ')) {
+      if (confirmMnemonics.length < 12) {
+        setConfirmMnemonics([...confirmMnemonics, text.trim()])
+      }
+      setMnemonic('');
+    } else {
+      setMnemonic(text)
+    }
   }
   const handleNameChange = (event) => {
     setName(event.nativeEvent.text);
@@ -138,12 +249,9 @@ export default function RecoverWallet ({navigation, route, storage}) {
   const saveWallet = () => {
     const runAsync = async () => {
       try {
-        if (mnemonic.length > 0 ) {
+        if (confirmMnemonics.length > 0 ) {
           console.log('save your wallet');
-          const trimmedMnemonics = mnemonic.split(' ').filter((val, i) => {
-            return val !== '' && val !== ' ';
-          })
-          const _wallet = await loadWalletFromMnemonics(trimmedMnemonics);
+          const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
           //console.log(_wallet.privateKey, name);
           
           await storeWallet({name, wallet: _wallet.privateKey});
@@ -181,49 +289,45 @@ export default function RecoverWallet ({navigation, route, storage}) {
   };
 
   return (
-    <Center style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}} flex={1} px="3">          
+    <ScrollView style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}} flex={1} px="3">          
       <KeyboardAvoidingView h={{
-        base: "400px",
+        base: "auto",
         lg: "auto"
-      }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-     {/*  {steps === 0 && 
-        <Instructions></Instructions>
-      } */}
-
-      {steps === 0 && 
-        
-        <Center>
-          <VStack minW="300px" w="100%" alignItems="center" flex="1" justifyContent="flex-start">
-            <Heading mb={5} style={styles.recoverWallet} fontWeight={'normal'}><Text>Recover wallet</Text></Heading>
-            <Text style={[styles.pleaseEnterThe, styles.theLayout]}>
-              Please enter the name and the sequence of mnemonics from your original
-              wallet creation proces
-            </Text>
-            <Box py={3}>
-              <Text style={styles.walletName} textAlign={'center'}>
-                Wallet name
+      }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={-210}>
+        {steps === 0 && 
+          <Center>
+            <VStack minW="300px" w="full" alignItems="center" flex="1" justifyContent="flex-start">
+              <Heading mb={5} style={styles.recoverWallet} fontWeight={'normal'}><Text>Recover wallet</Text></Heading>
+              <Text style={[styles.pleaseEnterThe, styles.theLayout]}>
+                Please enter the name and the sequence of mnemonics from your original
+                wallet creation proces
               </Text>
+              <Box py={3}>
+                <Text style={styles.walletName} textAlign={'center'}>
+                  Wallet name
+                </Text>
 
-              <Input  w="90%" value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} />
-            </Box>
-            
-            <Box py={3}>
-              <Text style={ styles.walletName} textAlign={'center'}>
-                Mnemonic phrase
-              </Text>            
-              <TextArea totalLines={3} autoCompleteType={'off'} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="90%" />
-            </Box>
-              <Button w={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
-                <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].RecoverWallet.save_button}</Text>
-              </Button>        
-          </VStack>
-        
-        </Center>
-    
-      }
-    
+                <Input w="full" minH={12} value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} />
+              </Box>
+              
+              <Box py={3}>
+                <Text style={ styles.walletName} textAlign={'center'}>
+                  Mnemonic
+                </Text>            
+                <Input minH={12} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="full" />
+                <ConfirmMnemonicList />
+              </Box>
+              <Button.Group>
+                <Button w={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
+                  <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].RecoverWallet.save_button}</Text>
+                </Button>   
+              </Button.Group>     
+            </VStack>
+          
+          </Center>
+        }
       </KeyboardAvoidingView>
-    </Center>
+    </ScrollView>
   );
 }
 

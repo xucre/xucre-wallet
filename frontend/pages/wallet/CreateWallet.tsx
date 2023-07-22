@@ -269,6 +269,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           alignItems={'center'}
           justifyContent={'flex-start'}
           shadow={"3"}
+          
           onPress={() => {
             if (confirmMnemonics.includes(value) ) {
               removeMnemonic(value);
@@ -302,11 +303,11 @@ export default function CreateWallet({ navigation, route, storage }) {
                 _text={{
                   fontSize: 12,
                 }}
-                margin={2}
+                marginY={2}
               >
                 <Text style={{
                   color : 'transparent',
-                }}>{0}</Text>
+                }}></Text>
               </Badge>
           }
         >                      
@@ -388,6 +389,9 @@ export default function CreateWallet({ navigation, route, storage }) {
             </Text>
           </Button>
         )}
+        {!mnemonicMatchError && !mnemonicMatchComplete && 
+          <Box minH={15} my={4}></Box>
+        }
       </>
     );
   }
@@ -470,13 +474,13 @@ export default function CreateWallet({ navigation, route, storage }) {
               </Heading>
               <MnemonicList></MnemonicList>
               <Box>
-                <Stack >
+                <Button.Group >
                   <Button w={'full'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
                     <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
                       {translations[language].CreateWallet.mnemonic_confirm_button}
                     </Text>
                   </Button>
-                </Stack>
+                </Button.Group>
               </Box>
             </Center>
           </Box>
