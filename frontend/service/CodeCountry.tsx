@@ -21,6 +21,7 @@ import translations from "../assets/translations";
 import { useRecoilState } from "recoil";
 import { Border,Color } from "../../GlobalStyles";
 import { Button, useColorMode, Text } from "native-base";
+import codeCountry from "../assets/json/codeCountry.json"
 
 const CodeCountry = ({ navigation, route }) => {
 
@@ -47,6 +48,10 @@ const CodeCountry = ({ navigation, route }) => {
 
   const QRWallet = () => {
     navigation.navigate('QRWallet');
+  }
+
+  const SendNotificationToken = () => {
+    navigation.navigate('SendNotificationToken');
   }
 
   if (route.params.param4 === "send") {
@@ -92,8 +97,8 @@ const CodeCountry = ({ navigation, route }) => {
       <View style={styles.container}>
         <PhoneInput
           ref={phoneInput}
-          defaultValue={route.params.param1.phoneNumbers[0].number}
-          defaultCode="EC"
+          defaultValue={nn[0]}
+          defaultCode={nn[1]}
           layout="first"
           withShadow
           autoFocus
@@ -104,21 +109,27 @@ const CodeCountry = ({ navigation, route }) => {
           }}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            formaterNumberSend();
-          }}
-        >
-          <Text>{translations[language].SupportPage.Send_Button}</Text>
-        </TouchableOpacity>
 
         <Button
           style={styles.buttonContainer}
           mt={4}
           width={"3/4"}
           colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-          onPress={QRWallet}
+          onPress={() => {
+            formaterNumberSend();
+          }}
+        >
+          <Text color={colorMode === "dark" ? Color.black : Color.white}>
+          {translations[language].WhatsAppNotification.Send_Button}
+            </Text>
+        </Button>
+
+        <Button
+          style={styles.buttonContainer}
+          mt={4}
+          width={"3/4"}
+          colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
+          onPress={SendNotificationToken}
         >
           <Text color={colorMode === "dark" ? Color.black : Color.white}>
           {translations[language].SupportPage.button_cancel}
@@ -180,14 +191,19 @@ const CodeCountry = ({ navigation, route }) => {
           }}
         />
 
-        <TouchableOpacity
-          style={styles.button}
+        <Button
+          style={styles.buttonContainer}
+          mt={4}
+          width={"3/4"}
+          colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
           onPress={() => {
             formaterNumber();
           }}
         >
-          <Text>Send Whatsapp</Text>
-        </TouchableOpacity>
+          <Text color={colorMode === "dark" ? Color.black : Color.white}>
+          {translations[language].WhatsAppNotification.Send_Button}
+            </Text>
+        </Button>
 
         <Button
           style={styles.buttonContainer}
@@ -210,44 +226,47 @@ function veri(number: string, cCountry: string) {
 
   console.log('fuctio : ', number , 'cc', cCountry )
 
+  let countryCode = codeCountry
+
   let data = [
     { n: "+593", c: "EC" },
     { n: "+55", c: "BR" },
     { n: "+1", c: "US" },
     { n: "+34", c: "ES" },
   ];
-  let numeroSinCodigo = ""
-  let codeC = ""
+  let currentPhoneNumber = ""
+  let codeCountryIso2 = ""
   if (number.includes("+")) {
     console.log('entro +')
-    for (let i = 0; i < data.length; i++) {
-      let lc = data[i].n.length;
-      if (number.substring(0, lc) === data[i].n) {
-        numeroSinCodigo = number.substring(lc);
-        codeC = data[i].c
-        console.log(data[i].n, numeroSinCodigo, data[i].c);
+    let str = number.slice(1)
+    console.log('str', str)
+    for (let i = 0; i < countryCode.length; i++) {
+      let lc = countryCode[i].phone_code.length
+      if (str.substring(0, lc) === countryCode[i].phone_code) {
+        currentPhoneNumber = str.substring(lc);
+        codeCountryIso2 = countryCode[i].iso2
+        console.log(codeCountryIso2)
+        const myArray = [currentPhoneNumber,codeCountryIso2];
+        return myArray;
       }
     }
-  const myArray = [numeroSinCodigo,codeC];
-  return myArray;
+  
   } else if(!number.includes("+")){
     console.log('entro sin + ')
-    for (let i = 0; i < data.length; i++) {
-      let lc1 = data[i].n.slice(1);
-      let lc = lc1.length;
-      if (number.substring(0, lc) === lc1) {
-        numeroSinCodigo = number.substring(lc);
-        codeC = data[i].c
-        console.log('sin +', data[i].n, 'nSC', numeroSinCodigo, data[i].c);
-        const myArray = [numeroSinCodigo,codeC];
+    for (let i = 0; i < countryCode.length; i++) {
+      let lc = countryCode[i].phone_code.length
+      if (number.substring(0, lc) === countryCode[i].phone_code) {
+        currentPhoneNumber = number.substring(lc);
+        codeCountryIso2 = countryCode[i].iso2
+        const myArray = [currentPhoneNumber,codeCountryIso2];
         return myArray;
       }else{
-        numeroSinCodigo = number
-        codeC = cCountry
+        currentPhoneNumber = number
+        codeCountryIso2 = cCountry
       }
     }
     console.log('salio for sin +')
-    const myArray = [numeroSinCodigo,codeC];
+    const myArray = [currentPhoneNumber,codeCountryIso2];
     return myArray;
   }
 }
