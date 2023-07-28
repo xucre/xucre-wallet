@@ -776,14 +776,6 @@
         "phone_code": "353"
     },
     {
-        "nombre": "Isla Bouvet",
-        "name": "Bouvet Island",
-        "nom": "Bouvet Island",
-        "iso2": "BV",
-        "iso3": "BVT",
-        "phone_code": ""
-    },
-    {
         "nombre": "Isla de Man",
         "name": "Isle of Man",
         "nom": "Ile de Man",
@@ -870,14 +862,6 @@
         "iso2": "GS",
         "iso3": "SGS",
         "phone_code": "500"
-    },
-    {
-        "nombre": "Islas Heard y McDonald",
-        "name": "Heard Island and McDonald Islands",
-        "nom": "Les îles Heard et McDonald",
-        "iso2": "HM",
-        "iso3": "HMD",
-        "phone_code": ""
     },
     {
         "nombre": "Islas Maldivas",
@@ -1806,14 +1790,6 @@
         "iso2": "IO",
         "iso3": "IOT",
         "phone_code": "246"
-    },
-    {
-        "nombre": "Territorios Australes y Antárticas Franceses",
-        "name": "French Southern Territories",
-        "nom": "Terres australes françaises",
-        "iso2": "TF",
-        "iso3": "ATF",
-        "phone_code": ""
     },
     {
         "nombre": "Timor Oriental",

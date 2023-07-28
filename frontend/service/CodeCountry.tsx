@@ -25,7 +25,7 @@ import codeCountry from "../assets/json/codeCountry.json"
 
 const CodeCountry = ({ navigation, route }) => {
 
-  //console.log('route code country:', route)
+  console.log('route code country:', route)
 
 /*   console.log(
     "route ccodeCountry ",
@@ -221,10 +221,12 @@ const CodeCountry = ({ navigation, route }) => {
 };
 
 function veri(number: string, cCountry: string) {
-  //('fuctio : ', number , 'cc', cCountry )
+
   let countryCode = codeCountry
   let currentPhoneNumber = ""
   let codeCountryIso2 = ""
+  let myArray = []
+
   if (number.includes("+")) {
     let str = number.slice(1)
     for (let i = 0; i < countryCode.length; i++) {
@@ -232,7 +234,7 @@ function veri(number: string, cCountry: string) {
       if (str.substring(0, lc) === countryCode[i].phone_code) {
         currentPhoneNumber = str.substring(lc);
         codeCountryIso2 = countryCode[i].iso2
-        const myArray = [currentPhoneNumber,codeCountryIso2];
+        myArray = [currentPhoneNumber,codeCountryIso2];
         return myArray;
       }
     }
@@ -243,16 +245,16 @@ function veri(number: string, cCountry: string) {
       if (number.substring(0, lc) === countryCode[i].phone_code) {
         currentPhoneNumber = number.substring(lc);
         codeCountryIso2 = countryCode[i].iso2
-        const myArray = [currentPhoneNumber,codeCountryIso2];
-        return myArray;
-      }else{
-        currentPhoneNumber = number
-        codeCountryIso2 = cCountry
+        myArray = [currentPhoneNumber,codeCountryIso2];
+        return myArray; 
       }
     }
-    const myArray = [currentPhoneNumber,codeCountryIso2];
-    return myArray;
   }
+  currentPhoneNumber = number
+  codeCountryIso2 = cCountry
+  myArray = [currentPhoneNumber,codeCountryIso2];
+      return myArray;
+
 }
 
 const styles = StyleSheet.create({
