@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/split-platform-components */
 /* eslint-disable import/order */
 import { useIsFocused } from '@react-navigation/native';
@@ -75,13 +76,31 @@ export default function SendNotificationToken({ navigation, route }) {
         }
     }
 
+    // Define functions - TODO
+    const searchItem = (text) => {
+        //
+    }
+    const eventFocus = (event) => {
+        //
+    }
+
     const avatar = "https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png";
     return (
         <ScrollView horizontal={false} style={{ flex: 1 }}>
             <ScrollView
                 horizontal={true}
-            >
-                <Box backgroundColor={colorMode === 'dark' ? Color.black : Color.white} flex={1}>
+                contentContainerStyle={{
+                    height: '100%',
+                    width: '100%',
+                }}>
+                <DashboardLayout title={''}>
+                    <Box
+                        _light={{ backgroundColor: Color.white }}
+                        _dark={{ backgroundColor: Color.black }}
+                        height={'100%'}
+                        safeAreaBottom
+                    >
+                        <View style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white, flex: 1 }}>
 
                             <VStack w="100%" space={5} alignSelf="center">
                                 <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}
@@ -135,9 +154,10 @@ export default function SendNotificationToken({ navigation, route }) {
                                             <View style={{ flexDirection: 'row', paddingRight: 15 }}>
                                                 <TouchableOpacity
                                                     onPress={() => {
-                                                        const url = Communications.text(
+                                                        // Communications is not defined - TODO
+                                                        /*const url = Communications.text(
                                                             item.phoneNumbers[0].number,
-                                                        );
+                                                        );*/
                                                     }}>
                                                     <Image
                                                         source={{
