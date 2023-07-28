@@ -285,9 +285,8 @@ export default function QRWallet ({navigation, route}) {
               <View style={{flexDirection: 'row', paddingRight: 15}}>
                 <TouchableOpacity
                   onPress={() => {
-                    const url = Communications.text(
-                      item.phoneNumbers[0].number,
-                    );
+                    const walletA = _wallet.wallet.address
+                    openPage('CodeCountry', item, walletA, local)
                   }}>
                   <Image
                     source={{
