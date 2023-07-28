@@ -28,6 +28,8 @@ export async function createSignClient() {
       //relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
     })
     //console.log(signClient);
+    //const pairings = signClient.core.pairing.getPairings();
+    //console.log(pairings, 'pairings')
     registerListeners();
   } catch (err) {
     console.log('error creating sign client');
@@ -51,7 +53,7 @@ export const registerListeners = () => {
 
     signClient.on("session_request", (event) => {
       // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
-      
+      //console.log(event);
       if (
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
@@ -92,6 +94,40 @@ export const registerListeners = () => {
     signClient.on("session_delete", (event) => {
       // React to session delete event
       console.log('session_delete', event);
+
+    });
+
+    signClient.on("session_update", (event) => {
+      // React to session delete event
+      console.log('session_update', event);
+    });
+
+    signClient.on("session_extend", (event) => {
+      // React to session delete event
+      console.log('session_extend', event);
+    });
+
+    signClient.on("session_request_sent", (event) => {
+      // React to session delete event
+      console.log('session_request_sent', event);
+    });
+
+    signClient.on("proposal_expire", (event) => {
+      console.log('proposal_expire', event);
+      navigate('ViewWallet', {});
+
+    });
+
+    signClient.core.pairing.events.on("pairing_delete", ({ id, topic }) => {
+      console.log('pairing_delete', topic, id)
+    });
+
+    signClient.core.pairing.events.on("pairing_ping", ({ id, topic }) => {
+      console.log('pairing_ping', topic, id)
+    });
+
+    signClient.core.pairing.events.on("pairing_expire", ({ id, topic }) => {
+      console.log('pairing_expire', topic, id)
     });
   }
 }

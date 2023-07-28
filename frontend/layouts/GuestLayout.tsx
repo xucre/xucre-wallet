@@ -1,6 +1,8 @@
 
 import { Box, Center, Stack, StatusBar, useColorMode } from 'native-base';
 import React from 'react';
+
+import { Color } from '../../GlobalStyles';
 type GuestLayoutProps = {
   readonly children: React.ReactNode
 };
@@ -18,15 +20,15 @@ export default function GuestLayout(props: GuestLayoutProps) {
       />
       <Box
         safeAreaTop
-        _light={{ bg: 'white' }}
-        _dark={{ bg: '#1b1e24' }}
+        _light={{ bg: Color.white }}
+        _dark={{ bg: Color.black }}
       />
       <Center
         flex="1"
         my="auto"
         p={{ md: 8 }}
-        _dark={{ bg: '#1b1e24' }}
-        _light={{ bg: 'white' }}
+        _dark={{ bg: Color.black }}
+        _light={{ bg: Color.white }}
       >
         <Stack
           w="100%"

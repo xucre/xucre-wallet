@@ -27,8 +27,10 @@ import {
   VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
+import Svg, { Circle } from "react-native-svg";
 import { useRecoilState } from "recoil";
 
+import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { language as stateLanguage, walletList } from "../../../service/state";
@@ -42,6 +44,7 @@ export default function ConnectionRequest({navigation, route}) {
   const [selectedWallets, setSelectedWallets] = useState([]);
   const [page, setPage] = useState(0);
   const [language, ] = useRecoilState(stateLanguage);
+  const {colorMode} = useColorMode();
   //{translations[language].ConnectionRequest.}
   useEffect(() => {
     const runAsync = async () => {
@@ -97,15 +100,43 @@ export default function ConnectionRequest({navigation, route}) {
   const WalletItem = ({metadata}) => {
     const address = metadata.wallet.address;
     return (
-      <HStack alignItems="center" justifyContent="space-between" px={4} py={2} rounded={'full'} bgColor={'coolGray.200'}>        
-        <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-          <VStack space={1}>
-              <Text fontSize="md" bold>
-                {metadata.name}
-              </Text>
-          </VStack>
+      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>
           
-          <Text color="coolGray.500">{truncateString(metadata.wallet.address, 25)}</Text>     
+        <HStack alignItems="center" space={{ base: 3, md: 6 }}>
+          <Text fontSize="md" bold>
+            {metadata.name}
+          </Text>
+          <Text color="coolGray.500">{truncateString(metadata.wallet.address, 25)}</Text>
+        </HStack>
+      </HStack>
+    )
+  }
+
+  const SelectWallet2 = ({metadata}) => {
+    const address = metadata.wallet.address;
+    const selectWallet = () => {
+      setSelectedWallets([...selectedWallets, metadata])   
+    }
+    const unSelectWallet = () => {
+      setSelectedWallets(selectedWallets.filter((val) => {
+        return val.wallet.address !== address
+      }));
+    }
+
+    return (
+      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>
+        <HStack alignItems="center" space={{ base: 3, md: 6 }}>
+          <Checkbox value="test" isChecked={selectedWallets.includes(metadata)} onChange={(state) => {
+            if (state) {
+              selectWallet();
+            } else {
+              unSelectWallet();
+            }
+          }} accessibilityLabel="This is a dummy checkbox" />
+          <Text fontSize="md" bold>
+            {metadata.name}
+          </Text>
+          <Text color="coolGray.500">{truncateString(metadata.wallet.address, 25)}</Text>
         </HStack>
       </HStack>
     )
@@ -133,7 +164,7 @@ export default function ConnectionRequest({navigation, route}) {
     const session = await acknowledged();
     //const pairings = signClient.core.pairing.getPairings();
     //console.log(pairings);
-    navigation.navigate('Home');
+    navigation.navigate('ViewWallet');
   }
 
   const reject = async () => {
@@ -146,91 +177,87 @@ export default function ConnectionRequest({navigation, route}) {
     }
 
     await signClient.reject(payload);
-    navigation.navigate('Home');
+    navigation.navigate('ViewWallet');
   }
 
   return (
     <GuestLayout>
-      <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
+      <Center         
+        _light={{ backgroundColor: Color.white }}
+        _dark={{ backgroundColor: Color.black }}
         height={'100%'}
       >
         {page === 0 && walletState && 
-          <>
-            <VStack height={'90%'}>
-                <Center><Heading size="md" mb={2}><Text>{translations[language].ConnectionRequest.title}</Text></Heading></Center>
-                <Center><Heading size="sm"><Text>{translations[language].ConnectionRequest.wallet_select_instructions}</Text></Heading></Center>
-                {
-                  walletState.map((val, i) => {
-                    return (
-                      <Box key={val.name+i} px={4} py={2}>
-                        <SelectWallet metadata={val} /> 
-                        {(i+1) !== walletState.length && 
-                          <Divider orientation={'horizontal'} mt={4} _light={{
-                            bg: "muted.800"
-                          }} _dark={{
-                            bg: "muted.300"
-                          }} />
-                        }
-                        
-                      </Box>
-                    )              
-                  })
-                }
+          <VStack>
+            <VStack py={5}>
+                <Center><Heading size="md" mb={2} mt={3}><Text>{translations[language].ConnectionRequest.title}</Text></Heading></Center>
+                <Center><Heading size="sm"><Text color={'gray.500'}>{translations[language].ConnectionRequest.wallet_select_instructions}</Text></Heading></Center>
+                <VStack space={5} py={4}>
+                  {
+                    walletState.map((val, i) => {
+                      return (
+                          <SelectWallet2 metadata={val} key={val.name+i} />                 
+                      )              
+                    })
+                  }
+                </VStack>
             </VStack>
             
             {selectedWallets.length > 0 && 
-              <Button onPress={nextPage} position={'relative'} bottom={0}><Text>{translations[language].ConnectionRequest.next_button}</Text></Button>
+              <Button.Group>
+                <Button w={'full'} onPress={nextPage} position={'relative'} bottom={0} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text fontWeight={'bold'} color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].ConnectionRequest.next_button}</Text></Button>
+              </Button.Group>
             }
-          </>
+          </VStack>
         }
         {page === 1 && request && request['params'] && 
-          <Box>
-            <VStack height={'90%'}>
-              <Button onPress={previousPage} variant={'solid'} colorScheme={'coolGray'} rounded="none" mb={4}><Text color={'text.300'}>{'back'}</Text></Button>
-              <HStack space={3} justifyContent="center" alignContent={'center'} rounded="full" mx={8} p={4} py={2} borderStyle={'solid'} borderWidth={1} borderColor={'gray'}>
-                <Avatar bg="green.500" mr="1" source={{
+          <>
+            <VStack >
+              {/*<Button onPress={previousPage} variant={'solid'} colorScheme={'coolGray'} rounded="none" mb={4}><Text color={'text.300'}>{'back'}</Text></Button>*/}
+              
+              <Center><Heading size="md" mb={4}><Text>{translations[language].ConnectionRequest.title}</Text></Heading></Center>
+            
+              <HStack space={0} justifyContent="center" alignContent={'center'} rounded="full" mx={8} p={4} py={2} borderStyle={'solid'} borderWidth={1} borderColor={'gray'}>
+                <Avatar bg="gray.500" source={{
                   uri: request['params'].proposer.metadata.icons[0]
-                }}>
-                  <Text pb={0}>{request['params'].proposer.metadata.name || 'DA'}</Text>
-                </Avatar>
-                <Center>
-                  <Text >{request['params'].proposer.metadata.url}</Text>
-                </Center>
+                }}></Avatar>
+                <Svg width={'50%'} height={'100%'} viewBox="0 0 91 7" fill="none">
+                  <Circle cx="1.82" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="10.556" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="19.292" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="28.028" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="36.764" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="45.5" cy="3.5" r="3.5" fill="#D4E815"/>
+                  <Circle cx="54.236" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="62.972" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="71.708" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="80.444" cy="3.82" r="1.82" fill="#D4E815"/>
+                  <Circle cx="89.18" cy="3.82" r="1.82" fill="#D4E815"/>
+                </Svg>
+                <Avatar bg={Color.transparent} source={colorMode === 'dark' ? require('../../../assets/images/icon-white.png') : require('../../../assets/images/icon-black.png')}></Avatar>
               </HStack>
+              <Center>
+                <Text >{request['params'].proposer.metadata.url}</Text>
+              </Center>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>{translations[language].ConnectionRequest.title}</Text></Heading>
                 {
                   selectedWallets.map((metadata, i) => {                  
                     return (
                       <Box key={metadata.wallet.address}>
-                        {i <= 5 && 
-                          <>
-                            <WalletItem metadata={metadata}/>
-                            {(i+1) !== selectedWallets.length && 
-                              <Divider orientation={'horizontal'} mt={4} _light={{
-                                bg: "muted.800"
-                              }} _dark={{
-                                bg: "muted.300"
-                              }} />
-                            }
-                          </>
-                        }
-                        
+                        <WalletItem metadata={metadata}/>
                       </Box>
                     )
                   })
                 }
               </Center>
             </VStack>
-            <Button.Group isAttached colorScheme="blue" >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].ConnectionRequest.approve_button}</Text></Button>
+            <Button.Group isAttached  colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} >
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white } fontWeight={'bold'}>{translations[language].ConnectionRequest.approve_button}</Text></Button>
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].ConnectionRequest.reject_button}</Text></Button>
             </Button.Group>
-          </Box>
+          </>
         }        
-      </Box>
+      </Center>
     </GuestLayout>
   );
 }

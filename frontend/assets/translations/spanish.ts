@@ -40,6 +40,9 @@ const values = {
     title: "Solicitud de conexión",
     wallet_select_instructions: "Seleccionar Billetera(s)"
   },
+  Connections: {
+    delete_button: "Disconnect"
+  },
   CreateNetwork: {
     button_save: "Guardar",
     chainId_placeholder: "Ingrese Chain ID",
@@ -170,9 +173,11 @@ const values = {
     approve_button: "Aprobar",
     from: "De: ",
     header: "Firmar transacción",
+    hide_data: "Hide Data",
     reject_button: "Rechazar",
     title: "Enviar transacción",
-    to: "Para: "
+    to: "Para: ",
+    view_data: "View Data"
   },
   SetPassword: {
     form_confirmation: "Confirmar contraseña",

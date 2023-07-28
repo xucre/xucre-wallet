@@ -80,18 +80,8 @@ export default function SendNotificationToken({ navigation, route }) {
         <ScrollView horizontal={false} style={{ flex: 1 }}>
             <ScrollView
                 horizontal={true}
-                contentContainerStyle={{
-                    height: '100%',
-                    width: '100%',
-                }}>
-                <DashboardLayout>
-                    <Box
-                        _light={{ backgroundColor: 'white' }}
-                        _dark={{ backgroundColor: '#1b1e24' }}
-                        height={'100%'}
-                        safeAreaBottom
-                    >
-                        <View style={{ backgroundColor: colorMode === 'dark' ? '#1b1e24' : '#fff', flex: 1 }}>
+            >
+                <Box backgroundColor={colorMode === 'dark' ? Color.black : Color.white} flex={1}>
 
                             <VStack w="100%" space={5} alignSelf="center">
                                 <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}

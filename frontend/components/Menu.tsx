@@ -27,6 +27,7 @@ import { AppState } from "react-native";
 import { useRecoilState } from "recoil";
 
 
+import { Color } from "../../GlobalStyles";
 import translations from "../assets/translations";
 import { constructDefaultNetworks } from "../service/network";
 import { activeNetwork, language, networkList, walletList, } from "../service/state";
@@ -201,6 +202,23 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
     );
   }
 
+  function Connections() {
+    return (
+      <VStack space={4} mt={{ base: 0 }}>
+          <Button
+            variant="outline"
+            my={1} 
+            colorScheme={'yellow'} 
+            rounded={100} 
+            px={10}  
+            onPress={() => {navigate('Connections');}}          
+          >
+            <Text>{translations[_language].Menu.connections_button || 'Connections'}</Text>
+          </Button>
+      </VStack>
+    );
+  }
+
 
   function NetworkLink() {
     return (
@@ -254,19 +272,15 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   }
 
   return (
-    <>
+    <Box 
+      _light={{ bg: Color.white }}
+      _dark={{ bg: Color.black }}
+    >
       { !drawerStatus && 
-        /*<IconButton onPress={() => {setDrawerStatus(true)}} variant="ghost" 
-        colorScheme={colorMode === 'light'? 'coolGray': 'warmGray'}
-         _icon={{
-          as: MaterialIcons,
-          name: "menu"
-        }} />*/
-        
         <Pressable onPress={() => {setDrawerStatus(true)}}>
           <Avatar source={
-            require('../assets/images/icon.png')
-          } size="xs" m={1} ml={0} mr={3} mb={1}></Avatar>
+            colorMode === 'dark' ? require('../assets/images/icon-white.png') : require('../assets/images/icon-black.png')
+          } bg={Color.transparent} size="xs" m={1} ml={0} mr={3} mb={1}></Avatar>
         </Pressable>
       }
       <Drawer
@@ -276,15 +290,15 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       >
         <VStack 
           space={0} 
-          _light={{ bg: 'white' }}
-          _dark={{ bg: '#1b1e24' }}
+          _light={{ bg: Color.white }}
+          _dark={{ bg: Color.black }}
           safeAreaTop
         >
           <HStack justifyContent={'space-between'} pt={4} pb={0}>
             <Pressable onPress={() => {setDrawerStatus(true)}}>
               <Avatar source={
-                require('../assets/images/icon.png')
-              } size="sm" m={1} ml={2} mb={1} mt={2}></Avatar>
+                colorMode === 'dark' ? require('../assets/images/icon-white.png') : require('../assets/images/icon-black.png')
+              } size="sm" bg={Color.transparent} m={1} ml={2} mb={1} mt={2}></Avatar>
             </Pressable>
             
             {/*<SelectLanguage />*/}
@@ -301,6 +315,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             <SelectLanguageLink />
             <NetworkLink/>
             <WalletLink/>
+            <Connections />
             <QRScan />
             <SetPassword />
           </VStack>
@@ -313,7 +328,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       { authNeeded && 
         <PasswordPage navigation={navigation} route={route} validateAuth={validateAuth}></PasswordPage>
       }
-    </>
+    </Box>
   );
 }
 
