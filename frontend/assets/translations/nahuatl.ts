@@ -40,6 +40,9 @@ const values = {
     title: 'Teetlaihtlaniliz-tli tlanehnepanooliz-tli',
     wallet_select_instructions: 'Ihitta Tlahcuiloolaamapetlaacaltoon-tli(s)',
   },
+  Connections: {
+    delete_button: "Disconnect"
+  },
   CreateNetwork: {
     button_save: "Malhuiaa",
     chainId_placeholder: 'Ahaquiaa Chain ID',
@@ -170,9 +173,11 @@ const values = {
     approve_button: 'Ninocaqui',
     from: 'De: ',
     header: 'Aamamachiyootlahcuilooltzacua Nenahuatiliz-tli',
+    hide_data: "Hide Data",
     reject_button: 'Tlahueelcuepiliaa',
     title: 'Ihuaa Nenahuatiliz-tli',
     to: 'Para: ',
+    view_data: "View Data"
   },
   SetPassword: {
     form_confirmation: 'Tee-yooliuhtlamachtiaa Ichtacayooh',

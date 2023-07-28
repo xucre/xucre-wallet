@@ -24,6 +24,8 @@ import {
 } from 'native-base';
 import React from 'react';
 
+import { Color } from '../../GlobalStyles';
+
 
 type DashboardLayoutProps = {
   readonly scrollable?: boolean;
@@ -140,24 +142,24 @@ export default function DashboardLayout({
         barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'}
       />
       <Box
-        _light={{ bg: 'white' }}
-        _dark={{ bg: '#1b1e24' }}
+        _light={{ bg: Color.white }}
+        _dark={{ bg: Color.black }}
       />
       <VStack
         flex={1}
-        _light={{ bg: 'white' }}
-        _dark={{ bg: '#1b1e24' }}
+        _light={{ bg: Color.white }}
+        _dark={{ bg: Color.black }}
       >
         <Box
           flex={1}
           safeAreaBottom
           flexDirection={{ base: 'column', md: 'row' }}
           _light={{
-            bg: 'white',
+            bg: Color.white,
             borderTopColor: 'coolGray.200',
           }}
           _dark={{
-            bg: '#1b1e24',
+            bg: Color.black,
             borderTopColor: 'coolGray.700',
           }}
         >

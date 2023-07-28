@@ -32,6 +32,7 @@ import {
 import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
+import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
 import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data"; 
 import GuestLayout from "../../../layouts/GuestLayout";
@@ -97,8 +98,8 @@ export default function EthSign({navigation, route}) {
   return (
     <GuestLayout>
       <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
+        _light={{ backgroundColor: Color.white }}
+        _dark={{ backgroundColor: Color.black }}
         height={'100%'}
       >
         {request && request['params'] && 

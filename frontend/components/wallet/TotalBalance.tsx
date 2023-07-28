@@ -345,7 +345,7 @@ export default function WalletHistory() {
       {
         <Box bg={colorMode === 'dark' ? "primary.500" : "tertiary.500"} padding={3} borderRadius={10} marginX={2} >
             
-          <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>Total Balance</Text>
+          <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>{translations[language].totalBalance.title}</Text>
           <HStack paddingBottom={0} space={1}>
             <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >${currentHoldings ? formatCurrency(currentHoldings.y) : '0.00'}</Text></Heading>
             <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>

@@ -40,6 +40,9 @@ const values = {
     title: "T/'inkinakuy maÃ±akuy",
     wallet_select_instructions: 'Belletera(s) akllay'
   },
+  Connections: {
+    delete_button: "Disconnect"
+  },
   CreateNetwork: {
     button_save: 'Waqaychay',
     chainId_placeholder: 'Kadena ID nisqaman yaykuy', 
@@ -170,9 +173,11 @@ const values = {
     approve_button: 'Aprobay',
     from :'Kaymanta: ',
     header: 'TransacciÃ³n firma',
+    hide_data: "Hide Data",
     reject_button: 'Quipachay',
     title: 'TransacciÃ³n kachay',
-    to: 'Kay: '
+    to: 'Kay: ',
+    view_data: "View Data"
   },
   SetPassword: {
     form_confirmation: 'ContraseÃ±ata takyachiy',

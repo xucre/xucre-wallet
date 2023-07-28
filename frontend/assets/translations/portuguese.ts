@@ -40,6 +40,9 @@ const values = {
     title: 'SolicitaÃ§Ã£o de ConexÃ£o',
     wallet_select_instructions: 'Selecionar carteira(s)',
   },
+  Connections: {
+    delete_button: "Disconnect"
+  },
   CreateNetwork: {
     button_save: 'Salvar',
     chainId_placeholder: 'Digite o ID da cadeia',
@@ -150,7 +153,6 @@ const values = {
     new_button: 'Nova Rede',
     select_button: 'Selecionar rede',
     select_button_tooltip: 'Mais opÃ§Ãµes',
-    // eslint-disable-next-line sort-keys
     Select_network: 'Selecione ou crie uma nova rede',
     title: 'Redes',
   },
@@ -171,9 +173,11 @@ const values = {
     approve_button: 'Aprovar',
     from :'De: ',
     header: 'Assinar transaÃ§Ã£o',
+    hide_data: "Hide Data",
     reject_button: 'Rejeitar',
     title: 'Enviar transaÃ§Ã£o',
-    to: 'Para: '
+    to: 'Para: ',
+    view_data: "View Data"
   },
   SetPassword: {
     form_confirmation: 'Confirmar Senha',

@@ -95,6 +95,7 @@ export default function SendNotificationToken({ navigation, route }) {
         
       }
 
+
     const avatar = "https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png";
     return (
         <ScrollView horizontal={false} style={{ flex: 1 }}>
@@ -104,14 +105,14 @@ export default function SendNotificationToken({ navigation, route }) {
                     height: '100%',
                     width: '100%',
                 }}>
-                <DashboardLayout>
+                <DashboardLayout title={''}>
                     <Box
-                        _light={{ backgroundColor: 'white' }}
-                        _dark={{ backgroundColor: '#1b1e24' }}
+                        _light={{ backgroundColor: Color.white }}
+                        _dark={{ backgroundColor: Color.black }}
                         height={'100%'}
                         safeAreaBottom
                     >
-                        <View style={{ backgroundColor: colorMode === 'dark' ? '#1b1e24' : '#fff', flex: 1 }}>
+                        <View style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white, flex: 1 }}>
 
                             <VStack w="100%" space={5} alignSelf="center">
                                 <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}
@@ -170,6 +171,7 @@ export default function SendNotificationToken({ navigation, route }) {
                                                         const token = route.params.param3
                                                         const rqs = route.params.param4
                                                         openPage("CodeCountry", item, walletA,amount,rqs,token);
+
                                                     }}>
                                                     <Image
                                                         source={{

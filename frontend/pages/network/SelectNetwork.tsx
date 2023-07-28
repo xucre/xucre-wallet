@@ -168,11 +168,11 @@ export default function SelectNetwork ({navigation, route}) {
     <ScrollView height={'full'}>
       <Box         
          _light={{ backgroundColor: Color.white }}
-        _dark={{ backgroundColor: Color.gray_300 }}
+        _dark={{ backgroundColor: Color.black }}
         
         width={'100%'}
       >
-          <Text style={{color: colorMode === 'dark' ? '#fff' : '#000', textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={'md'} fontWeight={'bold'}>{translations[language].SelectNetwork.title}</Text>
+          <Text style={{color: colorMode === 'dark' ? Color.white : Color.black, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={'md'} fontWeight={'bold'}>{translations[language].SelectNetwork.title}</Text>
           <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={15} >{translations[language].SelectNetwork.select_network}</Text>
 
           <VStack space={3} py={4}>

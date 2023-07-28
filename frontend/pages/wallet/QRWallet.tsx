@@ -2,7 +2,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 /* eslint-disable react-native/split-platform-components */
-/* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
 import { Ionicons } from "@expo/vector-icons";
 import {useIsFocused} from '@react-navigation/native';
@@ -24,6 +23,7 @@ import React, {useEffect, useState} from "react";
 import { FlatList, PermissionsAndroid, TouchableOpacity, View } from "react-native";
 import Communications from 'react-native-communications';
 import Contact from 'react-native-contacts';
+import Geolocation from 'react-native-geolocation-service';
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
 
@@ -32,7 +32,6 @@ import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getIconImage } from "../../service/api";
 import { activeWallet, language as stateLanguage } from "../../service/state";
-import Geolocation from 'react-native-geolocation-service';
 
 
 
@@ -113,7 +112,7 @@ export default function QRWallet ({navigation, route}) {
             //console.log(error.code, error.message);
             setLocation(false);
           },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          {enableHighAccuracy: true, maximumAge: 10000, timeout: 15000},
         );
       }
     });
@@ -143,11 +142,11 @@ export default function QRWallet ({navigation, route}) {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Geolocation Permission',
-          message: 'Can we access your location?',
-          buttonNeutral: 'Ask Me Later',
           buttonNegative: 'Cancel',
+          buttonNeutral: 'Ask Me Later',
           buttonPositive: 'OK',
+          message: 'Can we access your location?',
+          title: 'Geolocation Permission',
         },
       );
       //console.log('granted', granted);
@@ -208,8 +207,8 @@ export default function QRWallet ({navigation, route}) {
         }}>
     <DashboardLayout title={_wallet.name} >
       <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
+        _light={{ backgroundColor: Color.white }}
+        _dark={{ backgroundColor: Color.black }}
         height={'100%'}
         safeAreaBottom
       >
@@ -230,7 +229,7 @@ export default function QRWallet ({navigation, route}) {
         </Center>
 
         
-        <View style={{backgroundColor: colorMode === 'dark' ? '#1b1e24' : '#fff', flex: 1}}>
+        <View style={{backgroundColor: colorMode === 'dark' ? Color.black : Color.white, flex: 1}}>
 
         <VStack w="100%" space={5} alignSelf="center">
         <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}  

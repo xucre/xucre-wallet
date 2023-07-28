@@ -326,7 +326,7 @@ export default function ViewWallet ({navigation, route}) {
               </Button.Group>
             </HStack>*/
           }
-          <HStack space="4" alignItems="center" justifyContent={'space-around'} marginTop={2} marginLeft={2} marginRight={2}>
+          <HStack space="2" alignItems="center" justifyContent={'space-around'} marginTop={2} marginLeft={2} marginRight={2}>
             {
               middleButtons.map((btn, i) => {
                 return (
@@ -354,7 +354,7 @@ export default function ViewWallet ({navigation, route}) {
                     borderRadius={10}           
                     onPress={btn.action}
                   >
-                    <Text color={'white'}>{btn.text}</Text>
+                    <Text color={'white'} fontSize={12}>{btn.text}</Text>
                   </Button> 
                 )
               })

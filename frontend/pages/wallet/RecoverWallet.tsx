@@ -289,7 +289,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
   };
 
   return (
-    <ScrollView style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}} flex={1} px="3">          
+    <ScrollView style={{backgroundColor: colorMode === 'dark' ? Color.black : Color.white}} flex={1} px="3">          
       <KeyboardAvoidingView h={{
         base: "auto",
         lg: "auto"

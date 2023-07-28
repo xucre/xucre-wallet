@@ -34,6 +34,7 @@ import React, {createRef, useEffect, useState} from "react";
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
+import { Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import GuestLayout from '../../layouts/GuestLayout';
 import { activeWallet, language as stateLanguage, walletList } from "../../service/state";
@@ -106,8 +107,8 @@ export default function SelectWallet ({navigation, route}) {
   return (
     <GuestLayout>
       <Box         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: '#1b1e24' }}
+        _light={{ backgroundColor: Color.white }}
+        _dark={{ backgroundColor: Color.black }}
         height={'100%'}
       >
         <VStack space={4} height={'90%'}>

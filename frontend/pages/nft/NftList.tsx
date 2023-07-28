@@ -36,6 +36,7 @@ import { RefreshControl } from "react-native";
 import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
+import { Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
 import NftCard from "../../components/nft/NftCard";
@@ -131,8 +132,8 @@ export default function NftList ({navigation, route}) {
 
   return (
     <Box         
-      _light={{ backgroundColor: 'white' }}
-      _dark={{ backgroundColor: '#1b1e24' }}
+      _light={{ backgroundColor: Color.white }}
+      _dark={{ backgroundColor: Color.black }}
       height={'100%'}
       safeAreaBottom
     >

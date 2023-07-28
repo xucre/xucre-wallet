@@ -33,6 +33,8 @@ import { v4 as uuidv4 } from 'uuid';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
 //import MobileFooter from './components/Footer';n
+import { Color } from '../GlobalStyles';
+
 import translations from "./assets/translations";
 import Menu from './components/Menu';
 import Notifications from './components/Notifications';
@@ -58,12 +60,8 @@ import RecoverWallet from './pages/wallet/RecoverWallet';
 import SelectWallet from './pages/wallet/SelectWallet';
 import ViewWallet from './pages/wallet/ViewWallet';
 import WalletHistory from './pages/wallet/WalletHistory';
-/*import LegacyConnectionRequest from './pages/walletConnect/v1/ConnectionRequest';
-import LegacyEthSign from './pages/walletConnect/v1/EthSign';
-import LegacySendTransaction from './pages/walletConnect/v1/SendTransaction';
-import LegacySignTransaction from './pages/walletConnect/v1/SignTransaction';
-import LegacySignTypedData from './pages/walletConnect/v1/SignTypedData';*/
 import ConnectionRequest from './pages/walletConnect/v2/ConnectionRequest';
+import Connections from './pages/walletConnect/v2/Connections';
 import EthSign from './pages/walletConnect/v2/EthSign';
 import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
@@ -89,7 +87,8 @@ const AppLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#FFFFFF',
+    background: Color.white,
+    card: Color.white,
     primary: '#1B1E3F',
   },
 };
@@ -98,7 +97,8 @@ const AppDarkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    background: '#1b1e24',
+    background: Color.black,
+    card: Color.black,
     primary: '#D4E815',
   },
 };
@@ -130,7 +130,7 @@ export const theme = extendTheme({
       700: '#1B1E3F',
       800: '#1B1E3F',
       900: '#1B1E3F',
-    }
+    },
   },
  });
 
@@ -199,6 +199,21 @@ export const AppWrapper = () => {
     
     runAsync();
   }, []);
+
+  const hideHeader = (name) => {
+    if (
+      name === 'Home' || 
+      name === 'Language' || 
+      name === 'ConnectionRequest' || 
+      name === 'SignTransaction' || 
+      name === 'SendTransaction' || 
+      name === 'SignEth' || 
+      name === 'SignTyped' 
+    ) {
+      return true;
+    }
+    return false;
+  }
   
   return (
     <SafeAreaProvider>
@@ -210,10 +225,10 @@ export const AppWrapper = () => {
             screenOptions={({navigation, route}) => ({        
               headerLeft: () => {                
                 //return route.name === 'Home' ? <></> : <Notifications />;
-                return route.name === 'Home' ? <></> : <Menu navigation={navigation} route={route} setScheme={setScheme} storage={null} />;
+                return hideHeader(route.name) ? <></> : <Menu navigation={navigation} route={route} setScheme={setScheme} storage={null} />;
               },
               headerRight: () => {
-                return route.name === 'Home' ? <></> : <Notifications />;
+                return hideHeader(route.name) ? <></> : <Notifications />;
                 //return route.name === 'Home' ? <></> : <HeaderComp navigation={navigation}/>;
               },
             })}
@@ -306,25 +321,29 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>
             <Stack.Screen name="QRReader" component={QRReader} options={{ 
               title: '', 
+            }} ></Stack.Screen>            
+            <Stack.Screen name="Connections" component={Connections} options={{ 
+              headerTitleAlign: 'left',
+              title: 'Connections', 
             }} ></Stack.Screen>
             <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
               title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SignTyped.title, 
+              title: ' '//translations[language].SignTyped.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SignEth" component={EthSign} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SignEth.title, 
+              title: ' '//translations[language].SignEth.title, 
             }} ></Stack.Screen>                  
             <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SignTransaction.title, 
+              title: translations[language].SignTransaction.header, 
             }} ></Stack.Screen>           
             <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SendTransaction.title, 
+              title: ' '//translations[language].SendTransaction.title, 
             }} ></Stack.Screen>    
             <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
               headerTitleAlign: 'left',

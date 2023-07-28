@@ -38,7 +38,10 @@ const values = {
     reject_button: "Reject",
     rejected: "rejected by user",
     title: "Connection Request",
-    wallet_select_instructions: "Select Wallet(s)"
+    wallet_select_instructions: "Select wallet(s) to connect"
+  },
+  Connections: {
+    delete_button: "Disconnect"
   },
   CreateNetwork: {
     button_save: "Save",
@@ -75,13 +78,13 @@ const values = {
     title: "Sign Message"
   },
   LegacySendTransaction: {
-    amount: "Amount: ",
+    amount: "Amount ",
     approve_button: "Approve",
-    from: "From: ",
+    from: "From ",
     header: "Sign Transaction",
     reject_button: "Reject",
     title: "Send Transaction",
-    to: "To: "
+    to: "To "
   },
   LegacySignTransaction: {
     approve_button: "Approve",
@@ -170,9 +173,11 @@ const values = {
     approve_button: "Approve",
     from: "From: ",
     header: "Sign Transaction",
+    hide_data: "Hide Data",
     reject_button: "Reject",
     title: "Send Transaction",
-    to: "To: "
+    to: "To: ",
+    view_data: "View Data"
   },
   SetPassword: {
     form_confirmation: "Confirm Password",
