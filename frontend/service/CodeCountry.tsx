@@ -25,16 +25,16 @@ import codeCountry from "../assets/json/codeCountry.json"
 
 const CodeCountry = ({ navigation, route }) => {
 
-  console.log('route code country:', route)
+  //console.log('route code country:', route)
 
-  console.log(
+/*   console.log(
     "route ccodeCountry ",
     route.params.param1.phoneNumbers[0].number
   );
-
+ */
   const nn = veri(route.params.param1.phoneNumbers[0].number, route.params.param3.countryCode);
 
-  console.log("nn", nn);
+  //console.log("nn", nn);
 
   const [language] = useRecoilState(stateLanguage);
   const [phoneNumber, setphoneNumber] = useState("");
@@ -56,25 +56,24 @@ const CodeCountry = ({ navigation, route }) => {
 
   if (route.params.param4 === "send") {
     const formaterNumberSend = () => {
-      console.log("entro");
       const checkValid = phoneInput.current?.isValidNumber(value);
-      console.log("checkValid", checkValid);
+      //console.log("checkValid", checkValid);
       if (!checkValid) {
         let character = "+";
         let phoneNumber = phoneInput.current.state.number;
         let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
-        console.log(
+        /* console.log(
           "getNumberAfterPossiblyEliminatingZero",
           getNumberAfterPossiblyEliminatingZero
-        );
+        ); */
         let newFormatterNumber = phoneNumber.includes(
           phoneInput.current.state.code
         )
           ? phoneNumber.replace(character + phoneInput.current.state.code, "")
           : getNumberAfterPossiblyEliminatingZero.number;
-        console.log("newFormatterNumber", newFormatterNumber);
+        //console.log("newFormatterNumber", newFormatterNumber);
         let newNumber = phoneNumber;
-        console.log("newNumber", newNumber);
+        //console.log("newNumber", newNumber);
         _final = phoneInput.current.state.code + newFormatterNumber;
         buttonPressSend();
       }
@@ -151,25 +150,24 @@ const CodeCountry = ({ navigation, route }) => {
     };
 
     const formaterNumber = () => {
-      console.log("entro");
       const checkValid = phoneInput.current?.isValidNumber(value);
-      console.log("checkValid", checkValid);
+      //console.log("checkValid", checkValid);
       if (!checkValid) {
         let character = "+";
         let phoneNumber = phoneInput.current.state.number;
         let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
-        console.log(
+        /* console.log(
           "getNumberAfterPossiblyEliminatingZero",
           getNumberAfterPossiblyEliminatingZero
-        );
+        ); */
         let newFormatterNumber = phoneNumber.includes(
           phoneInput.current.state.code
         )
           ? phoneNumber.replace(character + phoneInput.current.state.code, "")
           : getNumberAfterPossiblyEliminatingZero.number;
-        console.log("newFormatterNumber", newFormatterNumber);
+        //console.log("newFormatterNumber", newFormatterNumber);
         let newNumber = phoneNumber;
-        console.log("newNumber", newNumber);
+        //console.log("newNumber", newNumber);
         _final = phoneInput.current.state.code + newFormatterNumber;
         buttonPress();
       }
@@ -223,36 +221,23 @@ const CodeCountry = ({ navigation, route }) => {
 };
 
 function veri(number: string, cCountry: string) {
-
-  console.log('fuctio : ', number , 'cc', cCountry )
-
+  //('fuctio : ', number , 'cc', cCountry )
   let countryCode = codeCountry
-
-  let data = [
-    { n: "+593", c: "EC" },
-    { n: "+55", c: "BR" },
-    { n: "+1", c: "US" },
-    { n: "+34", c: "ES" },
-  ];
   let currentPhoneNumber = ""
   let codeCountryIso2 = ""
   if (number.includes("+")) {
-    console.log('entro +')
     let str = number.slice(1)
-    console.log('str', str)
     for (let i = 0; i < countryCode.length; i++) {
       let lc = countryCode[i].phone_code.length
       if (str.substring(0, lc) === countryCode[i].phone_code) {
         currentPhoneNumber = str.substring(lc);
         codeCountryIso2 = countryCode[i].iso2
-        console.log(codeCountryIso2)
         const myArray = [currentPhoneNumber,codeCountryIso2];
         return myArray;
       }
     }
   
   } else if(!number.includes("+")){
-    console.log('entro sin + ')
     for (let i = 0; i < countryCode.length; i++) {
       let lc = countryCode[i].phone_code.length
       if (number.substring(0, lc) === countryCode[i].phone_code) {
@@ -265,7 +250,6 @@ function veri(number: string, cCountry: string) {
         codeCountryIso2 = cCountry
       }
     }
-    console.log('salio for sin +')
     const myArray = [currentPhoneNumber,codeCountryIso2];
     return myArray;
   }

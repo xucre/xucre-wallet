@@ -31,8 +31,6 @@ import DashboardLayout from '../layouts/DashboardLayout';
 
 export default function SendNotificationToken({ navigation, route }) {
 
-    console.log('route ', route)
-
     const { colorMode } = useColorMode();
     const [language] = useRecoilState(stateLanguage);
     const [contactList, setContactList] = useState([]);
@@ -53,7 +51,6 @@ export default function SendNotificationToken({ navigation, route }) {
                 Contact.getAll()
                     .then((con) => {
                         // work with contacts
-                        console.log(con);
                         const filteredContacts = con.filter(
                             (item) => item.phoneNumbers.length
                         );
