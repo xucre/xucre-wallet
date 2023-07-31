@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-native/no-unused-styles */
 /* eslint-disable sort-imports */
 /* eslint-disable functional/no-loop-statement */
 /* eslint-disable prefer-const */
@@ -19,23 +21,14 @@ import whatsapp from "./whatsapp";
 import { language as stateLanguage } from "../../frontend/service/state";
 import translations from "../assets/translations";
 import { useRecoilState } from "recoil";
-import { Border,Color } from "../../GlobalStyles";
+import { Border, Color } from "../../GlobalStyles";
 import { Button, useColorMode, Text } from "native-base";
 import codeCountry from "../assets/json/codeCountry.json"
 
 const CodeCountry = ({ navigation, route }) => {
 
-  console.log('route code country:', route)
-
-/*   console.log(
-    "route ccodeCountry ",
-    route.params.param1.phoneNumbers[0].number
-  );
- */
   const nn = veri(route.params.param1.phoneNumbers[0].number, route.params.param3.countryCode);
-
-  //console.log("nn", nn);
-
+  
   const [language] = useRecoilState(stateLanguage);
   const [phoneNumber, setphoneNumber] = useState("");
   const [value, setValue] = useState("");
@@ -46,39 +39,21 @@ const CodeCountry = ({ navigation, route }) => {
 
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const QRWallet = () => {
-    navigation.navigate('QRWallet');
-  }
-
-  const SendNotificationToken = () => {
-    navigation.navigate('SendNotificationToken');
+  const navigationScreens = () => {
+    if (route.params.param4 === "send") {
+      navigation.navigate('SendNotificationToken');
+    }else{
+      navigation.navigate('QRWallet');
+    }
+    
   }
 
   if (route.params.param4 === "send") {
     const formaterNumberSend = () => {
       const checkValid = phoneInput.current?.isValidNumber(value);
-      //console.log("checkValid", checkValid);
-      if (!checkValid) {
-        let character = "+";
-        let phoneNumber = phoneInput.current.state.number;
-        let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
-        /* console.log(
-          "getNumberAfterPossiblyEliminatingZero",
-          getNumberAfterPossiblyEliminatingZero
-        ); */
-        let newFormatterNumber = phoneNumber.includes(
-          phoneInput.current.state.code
-        )
-          ? phoneNumber.replace(character + phoneInput.current.state.code, "")
-          : getNumberAfterPossiblyEliminatingZero.number;
-        //console.log("newFormatterNumber", newFormatterNumber);
-        let newNumber = phoneNumber;
-        //console.log("newNumber", newNumber);
-        _final = phoneInput.current.state.code + newFormatterNumber;
-        buttonPressSend();
-      }
+      _final = numberFormat(checkValid, phoneInput)
+      buttonPressSend();
     };
-
     const buttonPressSend = async () => {
       const amoutAndName = route.params.param3 + " " + route.params.param5;
       whatsapp(
@@ -92,50 +67,8 @@ const CodeCountry = ({ navigation, route }) => {
       navigation.navigate("ViewWallet");
     };
 
-    return (
-      <View style={styles.container}>
-        <PhoneInput
-          ref={phoneInput}
-          defaultValue={nn[0]}
-          defaultCode={nn[1]}
-          layout="first"
-          withShadow
-          autoFocus
-          containerStyle={styles.phoneContainer}
-          textContainerStyle={styles.textInput}
-          onChangeFormattedText={(text) => {
-            setphoneNumber(text);
-          }}
-        />
+    return componentsView(formaterNumberSend);
 
-
-        <Button
-          style={styles.buttonContainer}
-          mt={4}
-          width={"3/4"}
-          colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-          onPress={() => {
-            formaterNumberSend();
-          }}
-        >
-          <Text color={colorMode === "dark" ? Color.black : Color.white}>
-          {translations[language].WhatsAppNotification.Send_Button}
-            </Text>
-        </Button>
-
-        <Button
-          style={styles.buttonContainer}
-          mt={4}
-          width={"3/4"}
-          colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-          onPress={SendNotificationToken}
-        >
-          <Text color={colorMode === "dark" ? Color.black : Color.white}>
-          {translations[language].SupportPage.button_cancel}
-          </Text>
-        </Button>
-      </View>
-    );
   } else {
     const buttonPress = async () => {
       whatsapp(
@@ -148,31 +81,15 @@ const CodeCountry = ({ navigation, route }) => {
       await delay(3000);
       navigation.navigate("QRWallet");
     };
-
     const formaterNumber = () => {
       const checkValid = phoneInput.current?.isValidNumber(value);
-      //console.log("checkValid", checkValid);
-      if (!checkValid) {
-        let character = "+";
-        let phoneNumber = phoneInput.current.state.number;
-        let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
-        /* console.log(
-          "getNumberAfterPossiblyEliminatingZero",
-          getNumberAfterPossiblyEliminatingZero
-        ); */
-        let newFormatterNumber = phoneNumber.includes(
-          phoneInput.current.state.code
-        )
-          ? phoneNumber.replace(character + phoneInput.current.state.code, "")
-          : getNumberAfterPossiblyEliminatingZero.number;
-        //console.log("newFormatterNumber", newFormatterNumber);
-        let newNumber = phoneNumber;
-        //console.log("newNumber", newNumber);
-        _final = phoneInput.current.state.code + newFormatterNumber;
-        buttonPress();
-      }
+      _final = numberFormat(checkValid, phoneInput)
+      buttonPress();
     };
+    return componentsView(formaterNumber);
+  }
 
+  function componentsView(formaterNumber) {
     return (
       <View style={styles.container}>
         <PhoneInput
@@ -199,8 +116,8 @@ const CodeCountry = ({ navigation, route }) => {
           }}
         >
           <Text color={colorMode === "dark" ? Color.black : Color.white}>
-          {translations[language].WhatsAppNotification.Send_Button}
-            </Text>
+            {translations[language].WhatsAppNotification.Send_Button}
+          </Text>
         </Button>
 
         <Button
@@ -208,53 +125,68 @@ const CodeCountry = ({ navigation, route }) => {
           mt={4}
           width={"3/4"}
           colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-          onPress={QRWallet}
+          onPress={navigationScreens}
         >
           <Text color={colorMode === "dark" ? Color.black : Color.white}>
-          {translations[language].SupportPage.button_cancel}
+            {translations[language].SupportPage.button_cancel}
           </Text>
         </Button>
 
       </View>
     );
   }
+
 };
 
 function veri(number: string, cCountry: string) {
+  let currentPhoneNumber = ""
+  let codeCountryIso2 = ""
+  let myArray = []
+  if (number.includes("+")) {
+    let str = number.slice(1)
+    return myArray = getCountryCodenumber(str)
+  } else if (!number.includes("+")) {
+    myArray = getCountryCodenumber(number)
+    if (myArray === undefined) {
+      currentPhoneNumber = number
+      codeCountryIso2 = cCountry
+      myArray = [currentPhoneNumber, codeCountryIso2];
+      return myArray;
+    } else {
+      return myArray
+    }
+  }
+}
 
+function getCountryCodenumber(number: string) {
   let countryCode = codeCountry
   let currentPhoneNumber = ""
   let codeCountryIso2 = ""
   let myArray = []
-
-  if (number.includes("+")) {
-    let str = number.slice(1)
-    for (let i = 0; i < countryCode.length; i++) {
-      let lc = countryCode[i].phone_code.length
-      if (str.substring(0, lc) === countryCode[i].phone_code) {
-        currentPhoneNumber = str.substring(lc);
-        codeCountryIso2 = countryCode[i].iso2
-        myArray = [currentPhoneNumber,codeCountryIso2];
-        return myArray;
-      }
-    }
-  
-  } else if(!number.includes("+")){
-    for (let i = 0; i < countryCode.length; i++) {
-      let lc = countryCode[i].phone_code.length
-      if (number.substring(0, lc) === countryCode[i].phone_code) {
-        currentPhoneNumber = number.substring(lc);
-        codeCountryIso2 = countryCode[i].iso2
-        myArray = [currentPhoneNumber,codeCountryIso2];
-        return myArray; 
-      }
+  for (const country of countryCode) {
+    let lc = country.phone_code.length
+    if (number.startsWith(country.phone_code)) {
+      currentPhoneNumber = number.substring(lc).trim();
+      codeCountryIso2 = country.iso2
+      myArray = [currentPhoneNumber, codeCountryIso2];
+      return myArray;
     }
   }
-  currentPhoneNumber = number
-  codeCountryIso2 = cCountry
-  myArray = [currentPhoneNumber,codeCountryIso2];
-      return myArray;
+}
 
+function numberFormat(checkValid: any, phoneInput: React.MutableRefObject<any>) {
+  if (!checkValid) {
+    let numberfinal: any
+    let character = "+";
+    let phoneNumber = phoneInput.current.state.number;
+    let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
+    let newFormatterNumber = phoneNumber.includes(
+      phoneInput.current.state.code
+    )
+      ? phoneNumber.replace(character + phoneInput.current.state.code, "")
+      : getNumberAfterPossiblyEliminatingZero.number;
+    return numberfinal = phoneInput.current.state.code + newFormatterNumber;
+  }
 }
 
 const styles = StyleSheet.create({
