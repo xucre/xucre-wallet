@@ -33,11 +33,19 @@ import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
 import { getLanguage, storeLanguage } from "../store/language";
+import { hasSignedPrivacyPolicy } from "../store/setting";
 
 export default function LanguagePage ({navigation}) {
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [languageVal, setLanguageVal] = useState('');
+  const [hasSigned, setHasSigned] = useState(false);
   useEffect(() => {
+    const runAsync = async () => {
+      const _hasSigned = await hasSignedPrivacyPolicy();
+      setHasSigned(_hasSigned);
+    }
+    runAsync();
+    
     return () => {
       setIsComponentMounted(false);
     }
@@ -51,7 +59,12 @@ export default function LanguagePage ({navigation}) {
 
   const updateLanguage = async (_language) => {
     await storeLanguage(_language);
-    navigation.navigate('SelectWallet');
+    if (hasSigned) {
+      navigation.navigate('SelectWallet');
+    } else {
+      navigation.navigate('PrivacyPolicy');
+    }
+    
   }
 
   const setLanguage = (val) => {

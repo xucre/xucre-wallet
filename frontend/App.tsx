@@ -42,6 +42,7 @@ import SendNotificationToken from './components/SendNotificationToken';
 import Listener from './components/transaction/Listener';
 import LandingPage from './pages/Landing';
 import LanguagePage from './pages/Language';
+import PrivacyPolicy from './pages/Policies';
 import QRReader from './pages/QRReader';
 import SetPassword from './pages/SetPassword';
 import SupportPage from './pages/SupportPage';
@@ -67,7 +68,6 @@ import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import CodeCountry from './service/CodeCountry';
-import Policies from './service/Policies';
 import { navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient, signClient} from './service/walletConnect';
@@ -208,7 +208,8 @@ export const AppWrapper = () => {
       name === 'SignTransaction' || 
       name === 'SendTransaction' || 
       name === 'SignEth' || 
-      name === 'SignTyped' 
+      name === 'SignTyped' || 
+      name === 'PrivacyPolicy'
     ) {
       return true;
     }
@@ -303,7 +304,7 @@ export const AppWrapper = () => {
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>
-            <Stack.Screen name="Policies" component={Policies} options={{ 
+            <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{ 
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>

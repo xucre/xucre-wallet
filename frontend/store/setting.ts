@@ -72,3 +72,15 @@ export const storePassword = async (old, _password) => {
   
   return {message: 'success'};
 }
+
+export const storePrivacyPolicy = async () => {
+  await EncryptedStorage.setItem(
+    "privacy_policy",
+    'yes'
+  );
+};
+
+export const hasSignedPrivacyPolicy = async () => {
+  const value = await EncryptedStorage.getItem('privacy_policy')
+  return value === 'yes';
+}

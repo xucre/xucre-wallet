@@ -11,12 +11,14 @@ import GuestLayout from '../layouts/GuestLayout';
 import { activeWallet } from '../service/state';
 import { language as stateLanguage } from "../service/state";
 import { getLanguage, storeLanguage } from "../store/language";
+import { hasSignedPrivacyPolicy } from '../store/setting';
 
 export default function LandingPage({ navigation, route }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [languageDefault, setLanguageDefault] = useState(false);
   const [_wallet, ] = useRecoilState(activeWallet);
   const [languageState, setLanguageState] = useRecoilState(stateLanguage);
+  const [hasSigned, setHasSigned] = useState(false);
   const {
     colorMode
   } = useColorMode();
@@ -26,6 +28,8 @@ export default function LandingPage({ navigation, route }) {
     console.log('languageDefault',languageDefault)
     if (languageDefault) {
       navigation.navigate('Language');  
+    } else if (!hasSigned) {
+      navigation.navigate('PrivacyPolicy'); 
     } else if (_wallet.name !== '') {
       navigation.navigate('ViewWallet');  
     } else {
@@ -42,6 +46,7 @@ export default function LandingPage({ navigation, route }) {
       });
       const _language = await getLanguage();
       console.log('_language',_language);
+      const _hasSigned = await hasSignedPrivacyPolicy();
       if (isComponentMounted) {
         setFontsLoaded(true);
 
@@ -51,6 +56,7 @@ export default function LandingPage({ navigation, route }) {
           setLanguageState('en');
           setLanguageDefault(true);
         }
+        setHasSigned(_hasSigned);
       }     
     }
     if (isComponentMounted) {
