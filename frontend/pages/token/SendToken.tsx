@@ -84,7 +84,7 @@ export default function SendToken({ navigation, route, storage }) {
   useEffect(() => {
     const runAsync = async () => {
       const _tokens = await getTokenByChain(network.chainId);
-      console.log("sendToken", network, _tokens);
+      //console.log("sendToken", network, _tokens);
       const coinToken = {
         address: "",
         amount: ethers.utils.formatEther(0),
@@ -144,9 +144,9 @@ export default function SendToken({ navigation, route, storage }) {
 
   const send = () => {
     //console.log(address, selectedToken, amount);
-    if(checkValues){
+    /* if(checkValues){
       openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
-    }
+    } */
     const runAsync = async () => {
       try {
         if (address.length > 0) {
@@ -176,7 +176,7 @@ export default function SendToken({ navigation, route, storage }) {
             await addTransaction(_transaction);
             setTransactionList([...pendingTransactions, _submitted]);
             if (_transaction) {
-              console.log("transaction submitted", _submitted.hash);
+              //console.log("transaction submitted", _submitted.hash);
               //Whatsapp Integration
               if(checkValues){
                 openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
@@ -186,11 +186,11 @@ export default function SendToken({ navigation, route, storage }) {
             setLoading(false);
           }
         } else {
-          console.log("failed validation");
+          //console.log("failed validation");
           setLoading(false);
         }
       } catch (err) {
-        console.log(err);
+        //console.log(err);
         setLoading(false);
       }
     };

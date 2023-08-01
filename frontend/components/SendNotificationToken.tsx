@@ -28,11 +28,10 @@ import Contact from "react-native-contacts";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import DashboardLayout from '../layouts/DashboardLayout';
+import Communications from 'react-native-communications';
 
 
 export default function SendNotificationToken({ navigation, route }) {
-
-    console.log('route ', route)
 
     const { colorMode } = useColorMode();
     const [language] = useRecoilState(stateLanguage);
@@ -54,7 +53,6 @@ export default function SendNotificationToken({ navigation, route }) {
                 Contact.getAll()
                     .then((con) => {
                         // work with contacts
-                        console.log(con);
                         const filteredContacts = con.filter(
                             (item) => item.phoneNumbers.length
                         );
@@ -76,13 +74,27 @@ export default function SendNotificationToken({ navigation, route }) {
         }
     }
 
-    // Define functions - TODO
-    const searchItem = (text) => {
-        //
-    }
-    const eventFocus = (event) => {
-        //
-    }
+    const searchItem = (textSearch) => {
+        const data = contactList;
+        if(textSearch){
+          const newData = data.filter(item => {
+            const itemData = item.givenName ? item.givenName.toUpperCase() : ''.toUpperCase();
+            const textData = textSearch.toUpperCase();
+            return itemData.indexOf(textData) > -1
+          })
+          setContactList(newData);
+        }else{
+          getPermission();
+        }
+      }
+
+      const eventFocus = (event) => {
+        const eventFocus = event
+        //console.log('evento focus entro', event)
+    
+        
+      }
+
 
     const avatar = "https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png";
     return (
@@ -154,10 +166,12 @@ export default function SendNotificationToken({ navigation, route }) {
                                             <View style={{ flexDirection: 'row', paddingRight: 15 }}>
                                                 <TouchableOpacity
                                                     onPress={() => {
-                                                        // Communications is not defined - TODO
-                                                        /*const url = Communications.text(
-                                                            item.phoneNumbers[0].number,
-                                                        );*/
+                                                        const amount = route.params.param1
+                                                        const walletA = route.params.param2
+                                                        const token = route.params.param3
+                                                        const rqs = route.params.param4
+                                                        openPage("CodeCountry", item, walletA,amount,rqs,token);
+
                                                     }}>
                                                     <Image
                                                         source={{
@@ -171,15 +185,6 @@ export default function SendNotificationToken({ navigation, route }) {
                                                         alt="logo"
                                                     />
                                                 </TouchableOpacity>
-                                                {/*                  <TouchableOpacity
-                  onPress={() => {
-                    Linking.openURL(`https://web.whatsapp.com/send?phone=${item.phoneNumbers[0].number}`);
-                  }}> 
-                   <Image
-                    source={require('../images/call.png')}
-                    style={{width: 20, height: 20, tintColor: '#fff'}}
-                  /> 
-                </TouchableOpacity> */}
                                             </View>
                                         </TouchableOpacity>
 

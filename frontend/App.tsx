@@ -67,6 +67,7 @@ import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import CodeCountry from './service/CodeCountry';
+import Policies from './service/Policies';
 import { navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient, signClient} from './service/walletConnect';
@@ -299,6 +300,10 @@ export const AppWrapper = () => {
               title: translations[language].SwapToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SupportPage" component={SupportPage} options={{ 
+              headerTitleAlign: 'left',
+              title: ' ', 
+            }} ></Stack.Screen>
+            <Stack.Screen name="Policies" component={Policies} options={{ 
               headerTitleAlign: 'left',
               title: ' ', 
             }} ></Stack.Screen>
