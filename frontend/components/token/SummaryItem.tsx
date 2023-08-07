@@ -32,7 +32,7 @@ export default function SummaryItem ({token}) {
       try {
         if (token.contract.ticker_symbol) {
           const img = await getIconImage(token.contract.ticker_symbol.toLowerCase());
-          console.log('image retrieved', img);
+          //console.log('image retrieved', img);
           setTokenImage(img as string);
         }
         

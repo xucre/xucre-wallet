@@ -15,7 +15,7 @@ export default function CovalentItem ({navigation, transaction}) {
   const [network, ] = useRecoilState(activeNetwork);
   const openTransaction = () => {
     const blockUrl = network.blockExplorer.endsWith('/') ? network.blockExplorer+'tx/'+transaction.hash : network.blockExplorer+'/tx/'+transaction.hash;
-    console.log(blockUrl);
+    //console.log(blockUrl);
     Linking.openURL(blockUrl);
   }
 

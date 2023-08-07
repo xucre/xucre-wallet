@@ -95,7 +95,7 @@ export default function AddToken ({navigation, route, storage}) {
           name,
           type,
         };
-        console.log('token to insert', _token);
+        //console.log('token to insert', _token);
         await addToken(_token);
         setTokens([
           tokens,

@@ -20,7 +20,7 @@ export const addTransaction = async (item: Transaction) => {
 };
 
 export const updateTransaction = async (item: Transaction) => {
-  console.log('update transaction: ', item.hash);
+  //console.log('update transaction: ', item.hash);
   const _list = await EncryptedStorage.getItem("transaction_list");
   const list = JSON.parse(_list) as readonly Transaction[];
   if (Array.isArray(list)) {
@@ -53,7 +53,7 @@ export const storeTransactions = async (list: readonly Transaction[]) => {
 };
 
 export const storeActiveTransaction = async (item: Transaction) => {
-  console.log('store active item');
+  //console.log('store active item');
   await EncryptedStorage.setItem(
     "active_transaction",
     JSON.stringify(item)

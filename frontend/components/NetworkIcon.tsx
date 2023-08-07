@@ -46,7 +46,7 @@ export default function NetworkIcon({navigation, route}) {
     const runAsync = async () => {
       //
     }
-    console.log(_activeNetwork.symbol);
+    //console.log(_activeNetwork.symbol);
     if (_activeNetwork.symbol !== null && _activeNetwork.symbol !== '') {
       setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/'+ _activeNetwork.symbol.toLowerCase() +'.png');
       setSelectedNetwork(_activeNetwork as Network)
@@ -56,7 +56,7 @@ export default function NetworkIcon({navigation, route}) {
   }, [_activeNetwork, network])
 
   useEffect(() => {
-    console.log(avatar);
+    //console.log(avatar);
   }, [avatar])
   return (
     <>

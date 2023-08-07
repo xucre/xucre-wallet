@@ -74,9 +74,9 @@ export default function ConnectionRequest({navigation, route}) {
     //const address = metadata.wallet.address;
     useEffect(() => {
       const runAsync = async () => {
-        console.log('run async', metadata.topic);
+        //console.log('run async', metadata.topic);
         const res = await signClient.core.pairing.ping({ topic: metadata.topic })
-        console.log('ping pair', res);
+        //console.log('ping pair', res);
       }
       runAsync();
       //console.log('pairdata', metadata);

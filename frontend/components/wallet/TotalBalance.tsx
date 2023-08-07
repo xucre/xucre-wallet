@@ -192,7 +192,7 @@ export default function WalletHistory() {
     try {
       const historyResults = await getWalletHistory(wallet.address, chainName);
       //console.log(historyResults);
-      console.log('hsitory retrieved');
+      //console.log('hsitory retrieved');
       const outputData = processJsonData(historyResults);
       //console.log(outputData)
       //console.log(outputData.openQuotesByDay[0]);
@@ -208,7 +208,7 @@ export default function WalletHistory() {
         direction: 'down',
         quotes: []
       })
-      console.log(openQuotes.quotes.length);
+      //console.log(openQuotes.quotes.length);
       // END TESTING PORTION
       const finalQuotes = openQuotes.quotes.map((d) => {
         return {
@@ -235,12 +235,12 @@ export default function WalletHistory() {
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
     } else {
-      console.log(_wallet.wallet.address);
+      //console.log(_wallet.wallet.address);
       setWallet(_wallet.wallet);
     }
 
     if (network) {
-      console.log(network);
+      //console.log(network);
     }
 
     //console.log('ViewWallet', network.chainId);
@@ -262,7 +262,7 @@ export default function WalletHistory() {
   }, [])
 
   const copyToClipboard = () => {
-    console.log('copyToClipboard', wallet.address);
+    //console.log('copyToClipboard', wallet.address);
     Clipboard.setStringAsync(String(wallet.address));
     setDisplayTooltip(true);
     setTimeout(() => {

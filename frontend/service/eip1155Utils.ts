@@ -82,9 +82,9 @@ export async function approveEIP155Request(
         const provider = network ? getDefaultProvider(network.rpcUrl) : new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
       
         const request2 = request.params[0];
-        console.log('connecting wallet');
+        //console.log('connecting wallet');
         const connectedWallet = wallet.wallet.connect(provider);
-        console.log('sending transaction');
+        //console.log('sending transaction');
         const chainID = await connectedWallet.getChainId();
         //console.log(request2);
         const req = transformObject(request2, 'gas', 'gasLimit', chainID);

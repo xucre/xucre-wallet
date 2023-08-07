@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 //import env from '@env';
+import notifee, { EventType } from '@notifee/react-native';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import '@walletconnect/react-native-compat';
@@ -21,7 +22,8 @@ import {
   useColorMode,
   useColorModeValue,
 } from "native-base";
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useRef, useState} from 'react';
+import { AppState } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   atom,
@@ -35,11 +37,14 @@ import { v4 as uuidv4 } from 'uuid';
 //import MobileFooter from './components/Footer';n
 import { Color } from '../GlobalStyles';
 
+
 import translations from "./assets/translations";
 import Menu from './components/Menu';
 import Notifications from './components/Notifications';
 import SendNotificationToken from './components/SendNotificationToken';
 import Listener from './components/transaction/Listener';
+import Loader from './components/utils/Loader';
+import { EIP155_SIGNING_METHODS } from './data/EIP1155Data';
 import LandingPage from './pages/Landing';
 import LanguagePage from './pages/Language';
 import PrivacyPolicy from './pages/Policies';
@@ -68,11 +73,11 @@ import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import CodeCountry from './service/CodeCountry';
-import { navigationRef } from './service/RootNavigation';
+import { navigate, navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
 import {createSignClient, signClient} from './service/walletConnect';
 import whatsapp from './service/whatsapp';
-import { getTheme, storeTheme } from './store/setting';
+import { getNotification, getTheme, storeTheme } from './store/setting';
 
 
 
@@ -150,13 +155,26 @@ export default function App(): JSX.Element {
 }
 
 export const AppWrapper = () => {
-  //
   const [fontsLoaded] = useFonts({
     'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
   });
   const [scheme, setScheme] = useState('');
   const [routeState, setRouteState] = useState('');  
   const [language, ] = useRecoilState(stateLanguage);
+  useEffect(() => {
+    return notifee.onForegroundEvent(({ type, detail }) => {
+
+    console.log('notification foreground:', detail);
+      switch (type) {
+        case EventType.DISMISSED:
+          console.log('User dismissed notification', detail);
+          break;
+        case EventType.PRESS:
+          console.log('User pressed notification', detail);
+          break;
+      }
+    });
+  }, []);
   const {
     colorMode,
     setColorMode
@@ -175,7 +193,7 @@ export const AppWrapper = () => {
   }, []);
 
   useEffect(() => {
-    console.log('scheme',scheme);
+    //console.log('scheme',scheme);
     if (scheme) {
       setColorMode(scheme);
     }
@@ -185,7 +203,7 @@ export const AppWrapper = () => {
     const runAsync = async () => {
       const clientTheme = await getTheme();
       if (!clientTheme) {
-        console.log('setting default theme');
+        //console.log('setting default theme');
         await storeTheme('light');
         setColorMode(clientTheme);
         setScheme('light');
@@ -194,7 +212,6 @@ export const AppWrapper = () => {
         setColorMode(clientTheme);
         setScheme(clientTheme);
       }
-      
     }
     
     runAsync();
@@ -218,6 +235,7 @@ export const AppWrapper = () => {
   
   return (
     <SafeAreaProvider>
+      <Loader />
       <NavigationContainer 
         theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme} 
         ref={navigationRef}

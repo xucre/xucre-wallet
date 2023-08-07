@@ -423,7 +423,7 @@ export default function CreateWallet({ navigation, route, storage }) {
   const saveWallet = () => {
     const runAsync = async () => {
       if (confirmMnemonics.length > 0 && name.length > 0) {
-        console.log("save your wallet");
+        //console.log("save your wallet");
         const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
         //console.log(_wallet.privateKey, name);
 

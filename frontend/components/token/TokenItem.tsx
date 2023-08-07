@@ -39,23 +39,23 @@ export default function TokenItem ({navigation, token, refreshList}) {
   useEffect(() => {
     const runAsync = async () => {
       try {
-        console.log('token onload', token, wallet.address);
+        //console.log('token onload', token, wallet.address);
         
         const network2 = await wallet.provider.getNetwork();
-        console.log(network2);
+        //console.log(network2);
         if (token.type === 'coin' && wallet.address) {
           const walletBalance = await wallet.getBalance();
-          console.log('balance',walletBalance);
+          //console.log('balance',walletBalance);
             setAmount(walletBalance);
         } else if (token.type === 'token' && wallet.address) {
           const contract = new ethers.Contract(token.address, erc20Abi, provider);
           //console.log('token get balance', contract.balanceOf);
           const balance = await contract.balanceOf((wallet.address));
-          console.log('token balance', token.name, balance);
+          //console.log('token balance', token.name, balance);
           setAmount(balance);
           
         } else {
-          console.log('nothing works getting balance', token, wallet);
+          //console.log('nothing works getting balance', token, wallet);
         }     
       } catch (e) {
         console.log('error getting balance')

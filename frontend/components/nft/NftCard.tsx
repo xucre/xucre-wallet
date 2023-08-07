@@ -48,7 +48,7 @@ function NftCard({contract, token, chain}) {
   
 
   useEffect(() => {
-    console.log('chain', chain);
+    //console.log('chain', chain);
     retrieveMetadata();
   }, []);
 

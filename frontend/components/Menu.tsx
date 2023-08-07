@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import notifee, { EventType } from '@notifee/react-native';
 import { ethers } from 'ethers';
 import {
   AlertDialog,
@@ -29,13 +30,16 @@ import { useRecoilState } from "recoil";
 
 import { Color } from "../../GlobalStyles";
 import translations from "../assets/translations";
+import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
+//import { navigate } from '../service/RootNavigation';
 import { constructDefaultNetworks } from "../service/network";
 import { activeNetwork, language, networkList, walletList, } from "../service/state";
 import { loadWalletFromPrivateKey } from "../service/wallet";
 import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../store/network";
-import { getWCLegacyUrl } from "../store/setting";
+import { getNotification, getWCLegacyUrl } from "../store/setting";
 import { getTheme, storeTheme } from '../store/setting';
 import { getWallets } from "../store/wallet";
+
 
 import NetworkIcon from './NetworkIcon';
 import PasswordPage, { needsAuth } from "./Password";
@@ -47,24 +51,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   const [authNeeded, setAuthNeeded] = useState(false);
   const [_language, ] = useRecoilState(language);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", nextAppState => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
-      ) {
-        validateAuth();
-        console.log("App has come to the foreground!");
-      }
-      // eslint-disable-next-line functional/immutable-data
-      appState.current = nextAppState;
-      console.log("AppState", appState.current);
-    });
-    validateAuth();
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  
 
   useEffect(() => {
     return () => {
@@ -79,22 +66,11 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
 
   useEffect(() => {
     const runAsync = async () => {
-      /*const clientTheme = await getTheme();
-      if (!clientTheme) {
-        console.log('setting default theme');
-        await storeTheme('light');
-        setScheme('light');
-      } else {
-        //console.log('setting existing theme:', clientTheme);
-        setColorMode(clientTheme);
-        setScheme(clientTheme);
-      }*/
-      
-      //await storeTheme(colorMode);
+      //
     }
     
     runAsync();
-  }, []);
+  });
 
   const [, setWalletState] = useRecoilState(walletList);
   const [,setNetworkList] = useRecoilState(networkList);

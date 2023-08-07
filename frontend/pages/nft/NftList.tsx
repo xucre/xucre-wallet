@@ -108,7 +108,7 @@ export default function NftList ({navigation, route}) {
 
   useEffect(() => {
     const runAsync = async () => {
-      console.log('getActiveWallet2');
+      //console.log('getActiveWallet2');
       const _wallet = await getActiveWallet();
       //console.log(_wallet[0]);
       setActiveWallet(_wallet[0]);
@@ -119,7 +119,7 @@ export default function NftList ({navigation, route}) {
 
 
   const onRefresh = React.useCallback(async () => {
-    console.log('refreshing nfts');
+   //console.log('refreshing nfts');
     //setRefreshing(true);
     /*setTimeout(() => {
       syncNfts();

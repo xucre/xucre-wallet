@@ -123,7 +123,7 @@ export default function QRWallet ({navigation, route}) {
     const url = 'http://api.geonames.org/countryCodeJSON?lat='+lat+'&lng='+lng+'&username=carevalo123'
     fetch(url).then((response) => response.json()).then((json) => {
       setlocal(json)
-    console.log('getLocal',json)
+    //console.log('getLocal',json)
     }).catch((error) => {
         console.error(error);
     });

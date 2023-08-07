@@ -59,7 +59,7 @@ export default function SignTransaction({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        console.log(requestDetails);
+        //console.log(requestDetails);
         setRequest(requestDetails);
       }
     }
@@ -76,11 +76,11 @@ export default function SignTransaction({navigation, route}) {
       }
       setValue(request['params']['request']['params'][0]);
     }
-    console.log(request);
+    //console.log(request);
   }, [request])
   
   useEffect(() => {
-    console.log(request);
+    //console.log(request);
   }, [])
 
   const StyledItem = ({label, value}) => {
@@ -113,7 +113,7 @@ export default function SignTransaction({navigation, route}) {
       response,
       topic: request['topic'],
     })
-    console.log(response, clientResponse);
+    //console.log(response, clientResponse);
     navigation.navigate('ViewWallet');
   }
 

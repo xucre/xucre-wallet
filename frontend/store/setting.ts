@@ -84,3 +84,54 @@ export const hasSignedPrivacyPolicy = async () => {
   const value = await EncryptedStorage.getItem('privacy_policy')
   return value === 'yes';
 }
+
+export const addNotification = async (id, event) => {
+  const _events = await EncryptedStorage.getItem("connect_events");
+  const events = JSON.parse(_events);
+  if (events) {
+    if (events[id]) {
+      return;
+    }
+
+    await EncryptedStorage.setItem(
+      "connect_events",
+      JSON.stringify({...events, [id]: event})
+    );
+  } else {
+    await EncryptedStorage.setItem(
+      "connect_events",
+      JSON.stringify({[id] :event})
+    );
+  }
+}
+
+export const deleteNotification = async (id) => {
+  const _events = await EncryptedStorage.getItem("connect_events");
+  const events = JSON.parse(_events);
+  if (events) {
+    if (events[id]) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [id]: _, ...newEvents } = events;
+      await EncryptedStorage.setItem(
+        "connect_events",
+        JSON.stringify(newEvents)
+      );
+    }
+
+    return;
+  }
+};
+
+export const getNotification = async (id) => {
+  const _events = await EncryptedStorage.getItem("connect_events");
+  const events = JSON.parse(_events);
+  if (events) {
+    if (events[id]) {
+      return events[id];
+    }
+
+    return null;
+  }
+
+  return null;
+};

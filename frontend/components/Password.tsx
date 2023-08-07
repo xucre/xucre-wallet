@@ -33,7 +33,7 @@ import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
 import { getLastUnlock, validatePassword } from "../store/setting";
 
-import ErrorToast from "./ErrorToast";
+import ErrorToast from "./utils/ErrorToast";
 
 export default function PasswordPage({navigation, route, validateAuth}) {
   const [password, setPassword] = useState('');

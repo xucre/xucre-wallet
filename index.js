@@ -30,8 +30,22 @@ global.atob = global.atob || require('base-64').decode;
 
 process.version = 'v9.40';
 
+import notifee, { EventType } from '@notifee/react-native';
 const { registerRootComponent } = require('expo');
 const { default: App } = require('./frontend/App');
+
+notifee.onBackgroundEvent(async ({ type, detail }) => {
+  const { notification, pressAction } = detail;
+  console.log('background action', detail.pressAction.id);
+  // Check if the user pressed the "Mark as read" action
+  if (type === EventType.ACTION_PRESS ) {
+    // Update external API
+    //console.log('notification background:', detail);
+
+    // Remove the notification
+    await notifee.cancelNotification(notification.id);
+  }
+});
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in the Expo client or in a native build,

@@ -1,13 +1,18 @@
 import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
+import notifee, { AndroidLaunchActivityFlag, EventType } from '@notifee/react-native';
 import SignClient from '@walletconnect/sign-client';
 import { SignClientTypes } from '@walletconnect/types'
 import { getSdkError } from '@walletconnect/utils'
 import { providers, utils } from 'ethers'
+import { nanoid } from 'nanoid';
+import { useEffect } from 'react';
+import {AppState, StyleSheet, Text, View} from 'react-native';
 import { useRecoilState } from "recoil";
 
 
 import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
- 
+import { addNotification } from '../store/setting';
+
 import { navigate } from './RootNavigation';
 import { env } from './constants';
 import { language as stateLanguage, walletList } from "./state";
@@ -15,6 +20,34 @@ import { language as stateLanguage, walletList } from "./state";
 // eslint-disable-next-line functional/no-let
 export let signClient: SignClient;
 
+async function onDisplayNotification(id, type, title) {
+  // Request permissions (required for iOS)
+
+  // Create a channel (required for Android)
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+
+  // Display a notification
+  const notificationPayload = {
+    android: {
+      channelId,
+      largeIcon: require('../assets/images/icon.png'),
+      pressAction: {
+        id: id,
+        launchActivity: 'default',
+        launchActivityFlags: [AndroidLaunchActivityFlag.SINGLE_TOP], 
+      },
+      // TODO - Asset Hosting for icon
+      //smallIcon: 'notification_icon', 
+    },
+    body: type,
+    title: title,
+  };
+  console.log('sending notification ');
+  await notifee.displayNotification(notificationPayload);
+}
 export async function createSignClient() {
   try {
     signClient = await SignClient.init({
@@ -30,6 +63,7 @@ export async function createSignClient() {
     //console.log(signClient);
     //const pairings = signClient.core.pairing.getPairings();
     //console.log(pairings, 'pairings')
+    
     registerListeners();
   } catch (err) {
     console.log('error creating sign client');
@@ -38,12 +72,19 @@ export async function createSignClient() {
 }
 
 export const registerListeners = () => {
+  
   if (signClient) {
     signClient.on("session_proposal", (event) => {
       console.log('session_proposal');
-      navigate('ConnectionRequest', {
-        requestDetails: event
-      })
+      const id = nanoid();
+      if (AppState.currentState === 'active') {
+        navigate('ConnectionRequest', {
+          requestDetails: event
+        })
+      } else {
+        addNotification(String(event.id), event);
+        onDisplayNotification(String(event.id), 'session_proposal', 'Session Proposal');
+      }
     });
 
     signClient.on("session_event", (event) => {
@@ -54,6 +95,8 @@ export const registerListeners = () => {
     signClient.on("session_request", (event) => {
       // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
       //console.log(event);
+      console.log('session_request', event.params.request.method, event.id);
+      //const id = nanoid();
       if (
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
@@ -72,15 +115,28 @@ export const registerListeners = () => {
       } else if(
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
       ) {
-        navigate('SignTransaction', {
-          requestDetails: event
-        })
+        
+        if (AppState.currentState === 'active') {
+          navigate('SignTransaction', {
+            requestDetails: event
+          })
+        } else {
+          addNotification(String(event.id), event);
+          onDisplayNotification(String(event.id), 'session_request', 'Sign Transaction');
+        }
+        
       } else if(
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION
       ) {
-        navigate('SendTransaction', {
-          requestDetails: event
-        })
+        //console.log('current state', AppState.currentState)
+        if (AppState.currentState === 'active') {
+          navigate('SendTransaction', {
+            requestDetails: event
+          })
+        } else {
+          addNotification(String(event.id), event);
+          onDisplayNotification(String(event.id), 'session_request', 'Send Transaction');
+        }
       } else {
         console.log('session_request', event);
       }
@@ -94,7 +150,7 @@ export const registerListeners = () => {
     signClient.on("session_delete", (event) => {
       // React to session delete event
       console.log('session_delete', event);
-
+      signClient.core.pairing.disconnect({ topic: event.topic });
     });
 
     signClient.on("session_update", (event) => {
@@ -114,6 +170,7 @@ export const registerListeners = () => {
 
     signClient.on("proposal_expire", (event) => {
       console.log('proposal_expire', event);
+      
       navigate('ViewWallet', {});
 
     });
@@ -129,6 +186,8 @@ export const registerListeners = () => {
     signClient.core.pairing.events.on("pairing_expire", ({ id, topic }) => {
       console.log('pairing_expire', topic, id)
     });
+
+    
   }
 }
 

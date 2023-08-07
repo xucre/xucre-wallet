@@ -137,7 +137,7 @@ export default function ViewWallet ({navigation, route}) {
       name: network.symbol,
       type: 'coin',
     };
-    console.log('mounted component', isComponentMounted)
+    //console.log('mounted component', isComponentMounted)
     if (isComponentMounted) {
       setHoldings([coinToken, ..._tokens]);
     }
@@ -145,11 +145,11 @@ export default function ViewWallet ({navigation, route}) {
   
   const syncTransactions = async () => {
     //console.log(network.chainId, _wallet.wallet.address);
-    console.log('loading transactions $$$');
+    //console.log('loading transactions $$$');
     const _transactions = await getWalletTransactions(_wallet.wallet.address, chainIdToNameMap[network.chainId]);
     //console.log(_transactions.data.items[0]);
     if (_transactions && _transactions.data.items) {
-      console.log('setting transactions');
+      //console.log('setting transactions');
       setTransactions(_transactions.data.items as readonly CovalentTransaction[]);
     }
   }
@@ -168,7 +168,7 @@ export default function ViewWallet ({navigation, route}) {
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
     } else if (network) {
-      console.log(_wallet.wallet.address);
+      //console.log(_wallet.wallet.address);
       setWallet(_wallet.wallet);
     }
 
@@ -189,7 +189,7 @@ export default function ViewWallet ({navigation, route}) {
   }, [])
 
   const copyToClipboard = () => {
-    console.log('copyToClipboard', wallet.address);
+    //console.log('copyToClipboard', wallet.address);
     Clipboard.setStringAsync(String(wallet.address));
     setDisplayTooltip(true);
     setTimeout(() => {

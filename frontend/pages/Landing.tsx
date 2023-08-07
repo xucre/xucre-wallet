@@ -23,41 +23,43 @@ export default function LandingPage({ navigation, route }) {
     colorMode
   } = useColorMode();
   const [isComponentMounted, setIsComponentMounted] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const toWalletSelect = () => {
-    console.log('languageDefault',languageDefault)
-    if (languageDefault) {
-      navigation.navigate('Language');  
-    } else if (!hasSigned) {
-      navigation.navigate('PrivacyPolicy'); 
-    } else if (_wallet.name !== '') {
-      navigation.navigate('ViewWallet');  
-    } else {
-      navigation.navigate('SelectWallet');
+    //console.log('languageDefault',languageDefault);
+    //console.log('hasSigned', hasSigned);
+    if (route.name === 'Home') {
+      if (languageDefault) {
+        navigation.navigate('Language');  
+      } else if (!hasSigned) {
+        navigation.navigate('PrivacyPolicy'); 
+      } else if (_wallet.name !== '') {
+        navigation.navigate('ViewWallet');  
+      } else {
+        navigation.navigate('SelectWallet');
+      }
     }
+    
   }
 
   //Loading Fonts
   useEffect(() => {
     const callAsync = async () => {
-      await Font.loadAsync({
-        Montserrat_400Regular,
-        Montserrat_700Bold
-      });
       const _language = await getLanguage();
-      console.log('_language',_language);
       const _hasSigned = await hasSignedPrivacyPolicy();
       if (isComponentMounted) {
         setFontsLoaded(true);
 
+        setHasSigned(_hasSigned);
         if (_language) {
           setLanguageState(_language);
         } else {
           setLanguageState('en');
           setLanguageDefault(true);
         }
-        setHasSigned(_hasSigned);
-      }     
+
+        setLoading(false);
+      }   
     }
     if (isComponentMounted) {
       callAsync();
@@ -68,17 +70,7 @@ export default function LandingPage({ navigation, route }) {
     }
   }, [])
 
-  useEffect(() => {
-    if (fontsLoaded) {
-      setTimeout(() => {
-        toWalletSelect();
-      }, 4000)
-    }
-  }, [fontsLoaded, languageDefault])
-
-  if (!fontsLoaded) {
-    return null;
-  }
+  
   return (
     <>
       {
@@ -167,11 +159,3 @@ export default function LandingPage({ navigation, route }) {
       
   )
 }
-const customText = createStyle({
-  montserrat: {
-    fontFamily: 'Montserrat_400Regular'
-  },
-  montserratBold: {
-    fontFamily: 'Montserrat_700Bold'
-  },
-});

@@ -250,7 +250,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
     const runAsync = async () => {
       try {
         if (confirmMnemonics.length > 0 ) {
-          console.log('save your wallet');
+          //console.log('save your wallet');
           const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
           //console.log(_wallet.privateKey, name);
           

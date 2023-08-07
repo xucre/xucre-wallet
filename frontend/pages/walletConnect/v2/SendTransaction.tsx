@@ -62,7 +62,7 @@ export default function SendTransaction({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        console.log(requestDetails);
+        //console.log(requestDetails);
         setRequest(requestDetails);
       }
     }

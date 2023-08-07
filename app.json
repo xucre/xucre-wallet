@@ -30,6 +30,10 @@
     },
     "updates": {
       "url": "https://u.expo.dev/20ee0e7d-2104-47c1-87c5-f3d860714b80"
+    },
+    "notification" : {
+      "icon": "./icon.png",
+      "color": "#ffffff"
     }
   }
 }

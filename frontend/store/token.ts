@@ -6,7 +6,7 @@ import { Token } from "../service/token";
 export const addToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
   const tokens = JSON.parse(_tokens) as readonly Token[];
-  console.log('current token list', tokens);
+  //console.log('current token list', tokens);
   if (Array.isArray(tokens)) {
     
    
@@ -20,7 +20,7 @@ export const addToken = async (token: Token) => {
       "token_list",
       JSON.stringify([token])
     );
-    console.log(isSet);
+    //console.log(isSet);
   }
 };
 
