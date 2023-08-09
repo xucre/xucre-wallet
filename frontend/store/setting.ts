@@ -135,3 +135,21 @@ export const getNotification = async (id) => {
 
   return null;
 };
+
+export const getAllNotifications = async () => {
+  const _events = await EncryptedStorage.getItem("connect_events");
+  const events = JSON.parse(_events);
+  if (events) {  
+    return Object.values(events).sort((a : {readonly id: string},b: {readonly id: string}) => {
+      if ( a.id < b.id ){
+        return 1;
+      }
+      if ( a.id > b.id ){
+        return -1;
+      }
+      return 0;
+    });
+  }
+
+  return null;
+};

@@ -47,7 +47,7 @@ import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletTransactions } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
-import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
+import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList } from "../../service/state";
 import { CovalentTransaction, Transaction } from "../../service/transaction";
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
@@ -101,7 +101,8 @@ export default function ViewWallet ({navigation, route}) {
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
   const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
-  const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
+  const [_walletList, ] = useRecoilState(walletList);
+  const [_wallet, ] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
   const [network, ] = useRecoilState(activeNetwork);
@@ -165,15 +166,17 @@ export default function ViewWallet ({navigation, route}) {
   }
 
   useEffect(() => {
-    if (_wallet.name === '') {
-      //navigation.navigate('SelectWallet');
+    if (_wallet.name === '' && _walletList.length === 0) {
+      navigation.navigate('SelectWallet');
     } else if (network) {
-      //console.log(_wallet.wallet.address);
-      setWallet(_wallet.wallet);
+      if (_wallet.name === '') {
+        setWallet(_walletList[0].wallet);
+      } else {
+        setWallet(_wallet.wallet);
+      }
+      
     }
-
-    //console.log('ViewWallet', network.chainId);
-  }, [_wallet, network]);
+  }, [_wallet, _walletList, network]);
 
   useEffect(() => {    
     //setHoldings([]);

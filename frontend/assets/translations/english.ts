@@ -104,10 +104,12 @@ const values = {
     success_message: "Transaction Successful"
   },
   Menu: {
+    connections_button: 'Connections',
     network_button: "Networks",
     nft_button: "Nfts",
     password_button: "Password",
     qr_scan_button: "QR Scan",
+    requests_button: 'Requests',
     wallet_button: "Wallets"
   },
   NewWallet: {
@@ -140,6 +142,10 @@ const values = {
     name_entry_input_placeholder: "Set Wallet Name",
     save_button: "Save",
     save_button_loadingtext: "Submitting"
+  },
+  Requests: {
+    delete_button: 'Delete',
+    expired_text: 'Expired'
   },
   SelectLanguage: {
     en: "English",
@@ -243,6 +249,11 @@ const values = {
     ],
     title: "Wallet",
     transactions_placeholder: "Insert Transaction History"
+  },
+  WalletConnect : {
+    session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
+    session_request_sign_tx: ['Sign Transaction', 'Please approve or reject request'],
+    session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
     title: "History"

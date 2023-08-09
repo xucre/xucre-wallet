@@ -104,10 +104,12 @@ const values = {
     success_message: 'Nenahuatiliz-tli ahxiliz-tli',
   },
   Menu: {
+    connections_button: 'Connections',
     network_button: 'Maatla-tl',
     nft_button: 'NFTS',
     password_button: 'Ichtacayooh',
     qr_scan_button: 'QR Scan',
+    requests_button: 'Requests',
     wallet_button: 'Tlahcuiloolaamapetlaacaltoon-tli',
   },
   NewWallet: {
@@ -243,6 +245,11 @@ const values = {
     ],
     title: "Talhcuiloolaamapetlaacaltoon-tli",
     transactions_placeholder: "Ahaquiaa necocteentiaa tlapeepeehuiliz-tli"
+  },
+  WalletConnect : {
+    session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
+    session_request_sign_tx: ['Sign Transaction', 'Please approve or reject request'],
+    session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
     title: "Necocteentiaa"

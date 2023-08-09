@@ -104,10 +104,12 @@ const values = {
     success_message: 'TransaÃ§Ã£o bem-sucedida'
   },
   Menu: {
+    connections_button: 'Connections',
     network_button: 'REDES',
     nft_button: 'NFTS',
     password_button: 'SENHA',
     qr_scan_button: 'VERREDURA QR',
+    requests_button: 'Requests',
     wallet_button: 'CARTEIRAS',
   },
   NewWallet: {
@@ -243,6 +245,11 @@ const values = {
     ],
     title: "Carteira",
     transaction_placeholder: 'Inserir histÃ³rico de transaÃ§Ãµes',
+  },
+  WalletConnect : {
+    session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
+    session_request_sign_tx: ['Sign Transaction', 'Please approve or reject request'],
+    session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {  
     title: "HistÃ³ria"   

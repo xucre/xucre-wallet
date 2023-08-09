@@ -14,7 +14,7 @@ import { navigate, navigationRef } from '../../service/RootNavigation';
 import { activeWallet } from '../../service/state';
 import { language as stateLanguage } from "../../service/state";
 import { getLanguage, storeLanguage } from "../../store/language";
-import { getNotification, getTheme, storeTheme } from '../../store/setting';
+import { deleteNotification, getNotification, getTheme, storeTheme } from '../../store/setting';
 import { hasSignedPrivacyPolicy } from '../../store/setting';
 
 
@@ -74,7 +74,6 @@ export default function Loader() {
         nextAppState === "active"
       ) {
         console.log("App has come to the foreground!");
-        // TODO - consolidate UI decision making
         await bootstrap()
       }
       // eslint-disable-next-line functional/immutable-data
@@ -98,6 +97,7 @@ export default function Loader() {
       const event = await getNotification(initialNotification.pressAction.id);
       //console.log(event.params.request.method);
       if (event !== null && event.params.request.method !== null) {
+        //await deleteNotification(initialNotification.pressAction.id);
         if (
           event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
           event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||

@@ -104,10 +104,12 @@ const values = {
     success_message: "Transacción exitosa"
   },
   Menu: {
+    connections_button: 'Connections',
     network_button: "REDES",
     nft_button: "NFTS",
     password_button: "CONTRASEÑA",
     qr_scan_button: "ESCANER QR",
+    requests_button: 'Requests',
     wallet_button: "BILLETERAS"
   },
   NewWallet: {
@@ -243,6 +245,11 @@ const values = {
     ],
     title: "Billetera",
     transactions_placeholder: "Insertar historial de transacciones"
+  },
+  WalletConnect : {
+    session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
+    session_request_sign_tx: ['Sign Transaction', 'Please approve or reject request'],
+    session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
     title: "History"

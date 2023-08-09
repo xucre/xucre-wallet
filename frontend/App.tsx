@@ -69,6 +69,7 @@ import WalletHistory from './pages/wallet/WalletHistory';
 import ConnectionRequest from './pages/walletConnect/v2/ConnectionRequest';
 import Connections from './pages/walletConnect/v2/Connections';
 import EthSign from './pages/walletConnect/v2/EthSign';
+import Requests from './pages/walletConnect/v2/Requests';
 import SendTransaction from './pages/walletConnect/v2/SendTransaction';
 import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
@@ -344,7 +345,11 @@ export const AppWrapper = () => {
             <Stack.Screen name="Connections" component={Connections} options={{ 
               headerTitleAlign: 'left',
               title: 'Connections', 
-            }} ></Stack.Screen>
+            }} ></Stack.Screen>       
+            <Stack.Screen name="Requests" component={Requests} options={{ 
+              headerTitleAlign: 'left',
+              title: 'Requests', 
+            }} ></Stack.Screen>            
             <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
               title: '', 
             }} ></Stack.Screen>

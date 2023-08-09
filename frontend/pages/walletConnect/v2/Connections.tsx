@@ -55,21 +55,6 @@ export default function ConnectionRequest({navigation, route}) {
     setPairings(_pairings);
   }
 
-  const WalletItem = ({metadata}) => {
-    const address = metadata.wallet.address;
-    return (
-      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>
-          
-        <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-          <Text fontSize="md" bold>
-            {metadata.name}
-          </Text>
-          <Text color="coolGray.500">{truncateString(metadata.wallet.address, 25)}</Text>
-        </HStack>
-      </HStack>
-    )
-  }
-
   const Pair = ({metadata}) => {
     //const address = metadata.wallet.address;
     useEffect(() => {
@@ -119,61 +104,25 @@ export default function ConnectionRequest({navigation, route}) {
     )
   }
 
-  const approve = async () => {
-    /*const accountList = selectedWallets.map((wallet) => {
-      return request['params']['requiredNamespaces']['eip155']['chains'].map((chain) => {
-        return chain+ ':' + wallet.wallet.address;
-      })
-    })
-    const payload = {
-      id: request['params']['id'],
-      namespaces: {
-        eip155: {
-          accounts: accountList.flat(),
-          events: request['params']['requiredNamespaces']['eip155']['events'],
-          methods: request['params']['requiredNamespaces']['eip155']['methods'],
-        },
-      },
-    };
-    
-    //console.log(payload);
-    const { topic, acknowledged } = await signClient.approve(payload);
-    const session = await acknowledged();
-    //const pairings = signClient.core.pairing.getPairings();
-    //console.log(pairings);
-    navigation.navigate('ViewWallet');*/
-  }
-
-  const reject = async () => {
-    /*const payload = {
-      id: request['params']['id'],
-      reason: {
-        code: 1,
-        message: translations[language].ConnectionRequest.rejected,
-      },
-    }
-
-    await signClient.reject(payload);
-    navigation.navigate('ViewWallet');*/
-  }
-
   return (
     <GuestLayout>
-      <Center         
-        _light={{ backgroundColor: Color.white }}
-        _dark={{ backgroundColor: Color.black }}
-        minH={'100%'}
-      >
-        <VStack space={5} py={4}>
-          {
-            pairings.map((val, i) => {
-              return (
-                  <Pair metadata={val} key={'Pair'+i} />                 
-              )              
-            })
-          }
-        </VStack>
-      </Center>
+      <ScrollView>
+        <Center         
+          _light={{ backgroundColor: Color.white }}
+          _dark={{ backgroundColor: Color.black }}
+          minH={'100%'}
+        >
+          <VStack space={5} py={4}>
+            {
+              pairings.map((val, i) => {
+                return (
+                    <Pair metadata={val} key={'Pair'+i} />                 
+                )              
+              })
+            }
+          </VStack>
+        </Center>
+      </ScrollView>
     </GuestLayout>
   );
 }

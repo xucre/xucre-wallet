@@ -8,6 +8,7 @@ export function generateMnemonics(language) {
   //return entropyToMnemonic(utils.randomBytes(16)).split(' ');
   const langVal = language === 'en' ? language : 'es';
   try {
+    
     //const nWallet = Wallet.createRandom({ locale: ethers.wordlists['es'] });
     //console.log(nWallet.mnemonic);
     const newWallet = Wallet.createRandom({ locale: wordlists.en });

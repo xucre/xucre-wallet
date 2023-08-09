@@ -10,18 +10,19 @@ import {AppState, StyleSheet, Text, View} from 'react-native';
 import { useRecoilState } from "recoil";
 
 
+import translations from "../assets/translations";
 import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
-import { addNotification } from '../store/setting';
+import { getLanguage } from '../store/language';
+import { addNotification, deleteNotification } from '../store/setting';
 
 import { navigate } from './RootNavigation';
 import { env } from './constants';
-import { language as stateLanguage, walletList } from "./state";
 
 // eslint-disable-next-line functional/no-let
 export let signClient: SignClient;
 
-async function onDisplayNotification(id, type, title) {
-  // Request permissions (required for iOS)
+async function onDisplayNotification(id, translation_setting) {
+  const _language = await getLanguage();
 
   // Create a channel (required for Android)
   const channelId = await notifee.createChannel({
@@ -42,8 +43,8 @@ async function onDisplayNotification(id, type, title) {
       // TODO - Asset Hosting for icon
       //smallIcon: 'notification_icon', 
     },
-    body: type,
-    title: title,
+    body: translations[_language].WalletConnect[translation_setting][1],
+    title: translations[_language].WalletConnect[translation_setting][0],
   };
   console.log('sending notification ');
   await notifee.displayNotification(notificationPayload);
@@ -83,7 +84,7 @@ export const registerListeners = () => {
         })
       } else {
         addNotification(String(event.id), event);
-        onDisplayNotification(String(event.id), 'session_proposal', 'Session Proposal');
+        onDisplayNotification(String(event.id), 'session_proposal');
       }
     });
 
@@ -122,7 +123,7 @@ export const registerListeners = () => {
           })
         } else {
           addNotification(String(event.id), event);
-          onDisplayNotification(String(event.id), 'session_request', 'Sign Transaction');
+          onDisplayNotification(String(event.id), 'session_request_sign_tx');
         }
         
       } else if(
@@ -135,7 +136,7 @@ export const registerListeners = () => {
           })
         } else {
           addNotification(String(event.id), event);
-          onDisplayNotification(String(event.id), 'session_request', 'Send Transaction');
+          onDisplayNotification(String(event.id), 'session_request_send_tx');
         }
       } else {
         console.log('session_request', event);
@@ -170,9 +171,10 @@ export const registerListeners = () => {
 
     signClient.on("proposal_expire", (event) => {
       console.log('proposal_expire', event);
-      
-      navigate('ViewWallet', {});
-
+      deleteNotification(String(event.id))
+      if (AppState.currentState === 'active') {
+        navigate('ViewWallet', {});
+      } 
     });
 
     signClient.core.pairing.events.on("pairing_delete", ({ id, topic }) => {
@@ -186,8 +188,6 @@ export const registerListeners = () => {
     signClient.core.pairing.events.on("pairing_expire", ({ id, topic }) => {
       console.log('pairing_expire', topic, id)
     });
-
-    
   }
 }
 

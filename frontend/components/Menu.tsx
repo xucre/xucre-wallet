@@ -195,6 +195,22 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
     );
   }
 
+  function Requests() {
+    return (
+      <VStack space={4} mt={{ base: 0 }}>
+          <Button
+            variant="outline"
+            my={1} 
+            colorScheme={'yellow'} 
+            rounded={100} 
+            px={10}  
+            onPress={() => {navigate('Requests');}}          
+          >
+            <Text>{translations[_language].Menu.requests_button || 'Requests'}</Text>
+          </Button>
+      </VStack>
+    );
+  }
 
   function NetworkLink() {
     return (
@@ -292,6 +308,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             <NetworkLink/>
             <WalletLink/>
             <Connections />
+            <Requests />
             <QRScan />
             <SetPassword />
           </VStack>

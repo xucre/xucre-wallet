@@ -104,10 +104,12 @@ const values = {
     success_message: 'TransacciÃ³n Allinmi'
   },
   Menu: {
+    connections_button: 'Connections',
     network_button: 'LLIKAKUNA',
     nft_button: 'NFTS', 
     password_button: 'KICHANA',
     qr_scan_button: 'QR ESCANA',
+    requests_button: 'Requests',
     wallet_button: 'BALLEERAS'
   },
   NewWallet: { 
@@ -243,6 +245,11 @@ const values = {
     ],
     title: 'Belletera',
     transactions_placeholder: 'Ruranamanta willayta churay',
+  },
+  WalletConnect : {
+    session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
+    session_request_sign_tx: ['Sign Transaction', 'Please approve or reject request'],
+    session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {  
     title: "Willarina"  

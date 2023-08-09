@@ -9,7 +9,8 @@ module.exports = function(api) {
     plugins: [
       ['@babel/plugin-proposal-private-property-in-object', {loose: true}],
       ['module:react-native-dotenv'],
-      "@babel/plugin-syntax-bigint"
+      ["@babel/plugin-syntax-bigint", {loose: true}],
+      ["@babel/plugin-transform-private-methods", {loose: true}]
     ],
   };
 };
