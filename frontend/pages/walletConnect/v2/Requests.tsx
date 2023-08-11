@@ -161,11 +161,7 @@ export default function Requests({navigation, route}) {
   return (
     <GuestLayout>
       <ScrollView>
-        <Center         
-          _light={{ backgroundColor: Color.white }}
-          _dark={{ backgroundColor: Color.black }}
-          minH={'100%'}
-        >
+        
           <VStack space={5} py={4} w={'full'}>
             {
               requests.map((val, i) => {
@@ -177,7 +173,6 @@ export default function Requests({navigation, route}) {
               })
             }
           </VStack>
-        </Center>
       </ScrollView>
     </GuestLayout>
   );

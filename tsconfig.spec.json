@@ -1,0 +1,8 @@
+// tsconfig.spec.json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-native", // Switching to "react" throws "SyntaxError: Cannot use import statement outside a module"
+    "types": ["jest", "node"]
+  }
+}
