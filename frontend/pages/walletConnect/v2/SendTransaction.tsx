@@ -44,6 +44,7 @@ import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1
 import { language as stateLanguage, walletList } from "../../../service/state";
 import { truncateStringStart } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
+import { deleteNotification } from "../../../store/setting";
 
 export default function SendTransaction({navigation, route}) {
   const {colorMode} = useColorMode();
@@ -121,6 +122,11 @@ export default function SendTransaction({navigation, route}) {
       response,
       topic: request['topic'],
     })
+    try {
+      await deleteNotification(String(request['id']));
+    } catch (err) {
+      console.log('error deleting notification');
+    }
     navigation.navigate('ViewWallet');
   }
 
@@ -130,6 +136,11 @@ export default function SendTransaction({navigation, route}) {
       response,
       topic: request['topic'],
     })
+    try {
+      await deleteNotification(String(request['id']));
+    } catch (err) {
+      console.log('error deleting notification');
+    }
     navigation.navigate('ViewWallet');    
   }
 

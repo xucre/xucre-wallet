@@ -98,6 +98,8 @@ export const registerListeners = () => {
       //console.log(event);
       console.log('session_request', event.params.request.method, event.id);
       //const id = nanoid();
+      
+      addNotification(String(event.id), event);
       if (
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
@@ -116,13 +118,11 @@ export const registerListeners = () => {
       } else if(
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
       ) {
-        
         if (AppState.currentState === 'active') {
           navigate('SignTransaction', {
             requestDetails: event
           })
         } else {
-          addNotification(String(event.id), event);
           onDisplayNotification(String(event.id), 'session_request_sign_tx');
         }
         
@@ -135,7 +135,6 @@ export const registerListeners = () => {
             requestDetails: event
           })
         } else {
-          addNotification(String(event.id), event);
           onDisplayNotification(String(event.id), 'session_request_send_tx');
         }
       } else {

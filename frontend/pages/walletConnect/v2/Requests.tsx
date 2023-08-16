@@ -74,7 +74,8 @@ export default function Requests({navigation, route}) {
       }
       runAsync();
       //console.log('pairdata', metadata);
-    }, [metadata])
+      console.log(event);
+    }, [metadata, event])
 
     const deleteRequest = () => {
       setIsDeleted(true);
@@ -148,8 +149,7 @@ export default function Requests({navigation, route}) {
                 </Pressable>;
                 }}
               >                
-                <Menu.Item onPress={deleteRequest}><Text>{translations[language].Requests.delete_button}</Text></Menu.Item>
-                <Menu.Item onPress={deleteRequest}><Text>{translations[language].Requests.delete_button}</Text></Menu.Item>                
+                <Menu.Item onPress={deleteRequest}><Text>{translations[language].Requests.delete_button}</Text></Menu.Item>              
               </Menu>
             </Tooltip>    
           </HStack>
