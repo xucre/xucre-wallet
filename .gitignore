@@ -70,7 +70,7 @@ web-build/
 .snap
 
 # Package Managers
-
+package-lock.json
 
 # Hardhat
 artifacts/

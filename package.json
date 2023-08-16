@@ -171,6 +171,9 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "overrides": {
+    "@react-aria/interactions": "3.16.0"
+  },
   "husky": {},
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --fix --ext '.ts,.tsx,.js,.jsx' -c .eslintrc.json"
