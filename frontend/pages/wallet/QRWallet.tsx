@@ -10,6 +10,7 @@ import {
   Box,
   Button,
   Center,
+  FlatList,
   Icon,
   Image,
   Input,
@@ -20,7 +21,7 @@ import {
   VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
-import { FlatList, PermissionsAndroid, TouchableOpacity, View } from "react-native";
+import { PermissionsAndroid, TouchableOpacity, View } from "react-native";
 import Communications from 'react-native-communications';
 import Contact from 'react-native-contacts';
 import Geolocation from 'react-native-geolocation-service';
@@ -64,6 +65,7 @@ export default function QRWallet ({navigation, route}) {
   const [showModal, setShowModal] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
+
     getPermission();
   }, [isFocused]);
   const getPermission = () => {
@@ -78,10 +80,12 @@ export default function QRWallet ({navigation, route}) {
         Contact.getAll()
           .then(con => {
             // work with contacts
-            //console.log(con);
+            console.log(con);
             const filteredContacts = con.filter((item) => item.phoneNumbers.length)
             filteredContacts.sort((a,b) => a.displayName > b.displayName) 
+            console.log(filteredContacts);
             setContactList(filteredContacts);
+            
           })
           .catch(e => {
             //console.log(e);
@@ -237,83 +241,71 @@ export default function QRWallet ({navigation, route}) {
       </VStack>
 
       
-      <FlatList
-        data={contactList}
-        horizontal={false}
-        renderItem={({item, index}) => {
-          return (
-            <TouchableOpacity
-              style={{
-                alignItems: 'center',
-                alignSelf: 'center',
-                borderColor: colorMode === 'dark' ? Color.white : Color.black,
-                borderRadius: 10,
-                borderWidth: 1,
-                flexDirection: 'row',
-                height: 70,
-                justifyContent: 'space-between',
-                marginTop: 10,
-                width: '90%',
-              }}
-              onPress={()=>{
-                const walletA = _wallet.wallet.address
-                openPage('CodeCountry', item, walletA, local)
-                //<CodeCountry navigation={navigation} route={item}/>
-               /*  const walletA = _wallet.wallet.address
-                whatsapp(item, 'shareqrcode', 'en_US', {param1: 'www.google.com', param2: walletA}, translations[language].QRWallet.toast_send); */
-              }}
-              
-              >
+      {contactList.length > 0 && 
+        <FlatList
+          data={contactList}
+          horizontal={false}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity
+                style={{
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  borderColor: colorMode === 'dark' ? Color.white : Color.black,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  flexDirection: 'row',
+                  height: 70,
+                  justifyContent: 'space-between',
+                  marginTop: 10,
+                  width: '90%',
+                }}
+                onPress={()=>{
+                  const walletA = _wallet.wallet.address
+                  openPage('CodeCountry', item, walletA, local)                  
+                }}
+                >
 
-              <View style={{alignItems: 'center',flexDirection: 'row'}}>
+                <View style={{alignItems: 'center',flexDirection: 'row'}}>
 
-                <Image
-                  source={{
-                    uri:  'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
-                  }}
-                  style={{height: 40, marginLeft: 15, width: 40}}
-                  alt="logo"
-                />
-                <View style={{padding: 10}}>
-                  <Text style={{color: colorMode === 'dark' ? Color.white : Color.black}}>{item.displayName}</Text>
-                  <Text style={{color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4}}>
-                    {item.phoneNumbers[0].number}
-                  </Text>
-                </View>
-              </View>
-              <View style={{flexDirection: 'row', paddingRight: 15}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    const walletA = _wallet.wallet.address
-                    openPage('CodeCountry', item, walletA, local)
-                  }}>
                   <Image
                     source={{
-                  uri: avatar,
-                }}
-                    style={{
-                      height: 40,
-                      marginRight: 20,
-                      width: 40,
+                      uri:  'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
                     }}
+                    style={{height: 40, marginLeft: 15, width: 40}}
                     alt="logo"
                   />
-                </TouchableOpacity>
-{/*                  <TouchableOpacity
-                  onPress={() => {
-                    Linking.openURL(`https://web.whatsapp.com/send?phone=${item.phoneNumbers[0].number}`);
-                  }}> 
-                   <Image
-                    source={require('../images/call.png')}
-                    style={{width: 20, height: 20, tintColor: '#fff'}}
-                  /> 
-                </TouchableOpacity> */}
-              </View>
-            </TouchableOpacity>
-        
-          );
-        }}
-      />
+                  <View style={{padding: 10}}>
+                    <Text style={{color: colorMode === 'dark' ? Color.white : Color.black}}>{item.displayName}</Text>
+                    <Text style={{color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4}}>
+                      {item.phoneNumbers[0].number}
+                    </Text>
+                  </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingRight: 15}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      const walletA = _wallet.wallet.address
+                      openPage('CodeCountry', item, walletA, local)
+                    }}>
+                    <Image
+                      source={{
+                    uri: avatar,
+                  }}
+                      style={{
+                        height: 40,
+                        marginRight: 20,
+                        width: 40,
+                      }}
+                      alt="logo"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      }
       
     </View>
       </Box>
