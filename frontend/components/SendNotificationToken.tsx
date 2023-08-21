@@ -19,7 +19,6 @@ import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
 import { language as stateLanguage } from "../service/state";
 import { useRecoilState } from "recoil";
 import {
-    FlatList,
     PermissionsAndroid,
     TouchableOpacity,
     View,
@@ -28,7 +27,6 @@ import Contact from "react-native-contacts";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import DashboardLayout from '../layouts/DashboardLayout';
-import Communications from 'react-native-communications';
 
 
 export default function SendNotificationToken({ navigation, route }) {
@@ -76,24 +74,24 @@ export default function SendNotificationToken({ navigation, route }) {
 
     const searchItem = (textSearch) => {
         const data = contactList;
-        if(textSearch){
-          const newData = data.filter(item => {
-            const itemData = item.givenName ? item.givenName.toUpperCase() : ''.toUpperCase();
-            const textData = textSearch.toUpperCase();
-            return itemData.indexOf(textData) > -1
-          })
-          setContactList(newData);
-        }else{
-          getPermission();
+        if (textSearch) {
+            const newData = data.filter(item => {
+                const itemData = item.givenName ? item.givenName.toUpperCase() : ''.toUpperCase();
+                const textData = textSearch.toUpperCase();
+                return itemData.indexOf(textData) > -1
+            })
+            setContactList(newData);
+        } else {
+            getPermission();
         }
-      }
+    }
 
-      const eventFocus = (event) => {
+    const eventFocus = (event) => {
         const eventFocus = event
         //console.log('evento focus entro', event)
-    
-        
-      }
+
+
+    }
 
 
     const avatar = "https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png";
@@ -120,77 +118,69 @@ export default function SendNotificationToken({ navigation, route }) {
                             </VStack>
 
 
-                            <FlatList
-                                data={contactList}
-                                horizontal={false}
-                                renderItem={({ item, index }) => {
-                                    return (
+
+                            <ScrollView>
+                                {contactList.map((contactList) => (
+                                    <><TouchableOpacity style={{
+                                        alignItems: 'center',
+                                        alignSelf: 'center',
+                                        borderColor: colorMode === 'dark' ? Color.white : Color.black,
+                                        borderRadius: 10,
+                                        borderWidth: 1,
+                                        flexDirection: 'row',
+                                        height: 70,
+                                        justifyContent: 'space-between',
+                                        marginTop: 10,
+                                        width: '90%',
+                                    }}
+                                    >
+                                        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+
+                                            <Image
+                                                source={{
+                                                    uri: 'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
+                                                }}
+                                                style={{ height: 40, marginLeft: 15, width: 40 }}
+                                                alt="logo"
+                                            />
+                                            <View style={{ padding: 10 }}>
+                                                <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }} key={contactList.recordID}>{contactList.displayName}</Text>
+                                                <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
+                                                    {contactList.phoneNumbers[0].number}
+                                                </Text>
+                                            </View>
+                                        </View>
                                         <TouchableOpacity
-                                            style={{
-                                                alignItems: 'center',
-                                                alignSelf: 'center',
-                                                borderColor: colorMode === 'dark' ? Color.white : Color.black,
-                                                borderRadius: 10,
-                                                borderWidth: 1,
-                                                flexDirection: 'row',
-                                                height: 70,
-                                                justifyContent: 'space-between',
-                                                marginTop: 10,
-                                                width: '90%',
-                                            }}
                                             onPress={() => {
                                                 const amount = route.params.param1
                                                 const walletA = route.params.param2
                                                 const token = route.params.param3
                                                 const rqs = route.params.param4
-                                                openPage("CodeCountry", item, walletA,amount,rqs,token);
-                                            }}
+                                                openPage("CodeCountry", contactList, walletA,amount,rqs,token);
 
-                                        >
-
-                                            <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                                <Image
-                                                    source={{
-                                                        uri: 'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
-                                                    }}
-                                                    style={{ height: 40, marginLeft: 15, width: 40 }}
-                                                    alt="logo"
-                                                />
-                                                <View style={{ padding: 10 }}>
-                                                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{item.displayName}</Text>
-                                                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }}>
-                                                        {item.phoneNumbers[0].number}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                            <View style={{ flexDirection: 'row', paddingRight: 15 }}>
-                                                <TouchableOpacity
-                                                    onPress={() => {
-                                                        const amount = route.params.param1
-                                                        const walletA = route.params.param2
-                                                        const token = route.params.param3
-                                                        const rqs = route.params.param4
-                                                        openPage("CodeCountry", item, walletA,amount,rqs,token);
-
-                                                    }}>
-                                                    <Image
-                                                        source={{
-                                                            uri: avatar,
-                                                        }}
-                                                        style={{
-                                                            height: 40,
-                                                            marginRight: 20,
-                                                            width: 40,
-                                                        }}
-                                                        alt="logo"
-                                                    />
-                                                </TouchableOpacity>
-                                            </View>
+                                            }}>
+                                            <Image
+                                                source={{
+                                                    uri: avatar,
+                                                }}
+                                                style={{
+                                                    height: 40,
+                                                    marginRight: 20,
+                                                    width: 40,
+                                                }}
+                                                alt="logo"
+                                            />
                                         </TouchableOpacity>
 
-                                    );
-                                }}
-                            />
+                                    </TouchableOpacity>
+
+                                    </>
+
+                                ))}
+                            </ScrollView>
+
+
+                        
 
                         </View>
                     </Box>
