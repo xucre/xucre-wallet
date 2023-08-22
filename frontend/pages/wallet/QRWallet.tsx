@@ -27,6 +27,7 @@ import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
 
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import ContactIcon from '../../assets/images/contact-icon.png';
 import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getIconImage } from "../../service/api";
@@ -255,9 +256,7 @@ export default function QRWallet({ navigation, route }) {
                     <View style={{ alignItems: 'center', flexDirection: 'row' }}>
 
                       <Image
-                        source={{
-                          uri: 'https://cdn-icons-png.flaticon.com/512/1177/1177568.png',
-                        }}
+                        source={ContactIcon}
                         style={{ height: 40, marginLeft: 15, width: 40 }}
                         alt="logo"
                       />

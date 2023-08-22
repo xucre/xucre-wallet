@@ -280,7 +280,7 @@ export default function SendToken({ navigation, route, storage }) {
           <Box>
             <Box>
             <HStack space={6} my={4}>
-            <Checkbox onChange={setcheckValues} value={checkValues} >{translations[language].WhatsAppNotification.button}</Checkbox>
+            <Checkbox onChange={setcheckValues}  defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
             </HStack>
             </Box>
           </Box>
