@@ -93,6 +93,7 @@ export default function SendToken({ navigation, route, storage }) {
         type: "coin",
       };
       setTokens([coinToken, ..._tokens]);
+      //console.log([coinToken, ..._tokens]);
     };
 
     if (network) {
@@ -215,97 +216,100 @@ export default function SendToken({ navigation, route, storage }) {
         }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <VStack
-          minW="300px"
-          w="100%"
-          alignItems="center"
-          flex="1"
-          justifyContent="space-between"
-          marginBottom={20}
-          marginTop={20}
-        >
-          <Text fontSize="2xl" bold mb={"5"} pt={1}>
-            {translations[language].SendToken.title}
-          </Text>
-
-          <Select
-            selectedValue={selectedToken.address}
-            w="90%"
-            accessibilityLabel={
-              translations[language].SendToken.token_placeholder
-            }
-            placeholder={translations[language].SendToken.token_placeholder}
-            _selectedItem={{
-              bg: colorMode === "dark" ? "primary.600" : "info.600",
-              color: Color.white,
-              endIcon: <CheckIcon size="5" color={Color.white} />,
-            }}
-            mt={1}
-            onValueChange={(itemValue) => handleTokenChange(itemValue)}
-            mb={"2"}
+        {tokens.length > 0 && 
+          <VStack
+            minW="300px"
+            w="100%"
+            alignItems="center"
+            flex="1"
+            justifyContent="space-between"
+            marginBottom={20}
+            marginTop={20}
           >
-            {tokens.map((_token) => {
-              return (
-                <Select.Item
-                  key={_token.address}
-                  label={_token.name}
-                  value={_token.address}
-                />
-              );
-            })}
-          </Select>
-          <Input
-            style={
-              colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
-            }
-            fontSize={35}
-            keyboardType="numeric"
-            w="90%"
-            h="30%"
-            mb={2}
-            value={amount}
-            onChange={handleAmountChange}
-          />
-          <Input
-            style={
-              colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
-            }
-            w="90%"
-            mb={2}
-            value={address}
-            onChange={handleAddressChange}
-            placeholder={translations[language].SendToken.address_placeholder}
-          />
+            <Text fontSize="2xl" bold mb={"5"} pt={1}>
+              {translations[language].SendToken.title}
+            </Text>
 
-          <Box>
+            <Select
+              selectedValue={selectedToken.address}
+              w="90%"
+              accessibilityLabel={
+                translations[language].SendToken.token_placeholder
+              }
+              placeholder={translations[language].SendToken.token_placeholder}
+              _selectedItem={{
+                bg: colorMode === "dark" ? "primary.600" : "info.600",
+                color: Color.white,
+                endIcon: <CheckIcon size="5" color={Color.white} />,
+              }}
+              mt={1}
+              onValueChange={(itemValue) => handleTokenChange(itemValue)}
+              mb={"2"}
+            >
+              {tokens.map((_token) => {
+                return (
+                  <Select.Item
+                    key={_token.address}
+                    label={_token.name}
+                    value={_token.address}
+                  />
+                );
+              })}
+            </Select>
+            <Input
+              style={
+                colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
+              }
+              fontSize={35}
+              keyboardType="numeric"
+              w="90%"
+              h="30%"
+              mb={2}
+              value={amount}
+              onChange={handleAmountChange}
+            />
+            <Input
+              style={
+                colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
+              }
+              w="90%"
+              mb={2}
+              value={address}
+              onChange={handleAddressChange}
+              placeholder={translations[language].SendToken.address_placeholder}
+            />
+
             <Box>
-            <HStack space={6} my={4}>
-            <Checkbox onChange={setcheckValues}  defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
-            </HStack>
+              <Box>
+              <HStack space={6} my={4}>
+              <Checkbox onChange={setcheckValues} defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
+              </HStack>
+              </Box>
             </Box>
-          </Box>
-          <Box>
             <Box>
-              <Button
-                style={styles.buttonContainer}
-                w={"full"}
-                colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-                onPress={() => {
-                  send();
-                }}
-                isLoading={loading}
-                disabled={address.length === 0 || type.length === 0}
-              >
-                <Text
-                  color={colorMode === "dark" ? Color.black : Color.white}
-                  fontWeight={"bold"}
+              <Box>
+                <Button
+                  style={styles.buttonContainer}
+                  w={"full"}
+                  colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
+                  onPress={() => {
+                    send();
+                  }}
+                  isLoading={loading}
+                  disabled={address.length === 0 || type.length === 0}
                 >
-                  {translations[language].SendToken.submit_button}
-                </Text>
-              </Button>
+                  <Text
+                    color={colorMode === "dark" ? Color.black : Color.white}
+                    fontWeight={"bold"}
+                  >
+                    {translations[language].SendToken.submit_button}
+                  </Text>
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </VStack>
+          </VStack>
+        }
+        
       </KeyboardAvoidingView>
     </Center>
   );
