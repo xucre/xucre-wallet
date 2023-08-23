@@ -68,8 +68,9 @@ const values = {
     name_wallet: 'Belletera suti',    
   },
   LanguagePage: { 
-      menu_button: "Akllay", // NEEDS UPDATE
-      select_language: "Simiykita akllay"
+      menu_button: "AKLLAY", 
+      select_language: "QUECHUA",
+      title_language: "SIMIYKITA AKLLAY"
   },
   LegacyEthSign: {
     approve_button: 'Aprobay',
@@ -104,12 +105,12 @@ const values = {
     success_message: 'TransacciÃ³n Allinmi'
   },
   Menu: {
-    connections_button: 'Connections',
+    connections_button: 'CONNECTIONS',
     network_button: 'LLIKAKUNA',
     nft_button: 'NFTS', 
     password_button: 'KICHANA',
     qr_scan_button: 'QR ESCANA',
-    requests_button: 'Requests',
+    requests_button: 'REQUESTS',
     wallet_button: 'BALLEERAS'
   },
   NewWallet: { 

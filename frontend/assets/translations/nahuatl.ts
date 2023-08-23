@@ -68,8 +68,9 @@ const values = {
     name_wallet: "Toocaa tla Tlahcuiloolaamapetlaacaltoon-tli",
   },
   LanguagePage: {
-    menu_button: "Tlahtolli",
-    select_language: "Tlapepenalli Tlahtolli" // NEEDS UPDATE
+    menu_button: "TLAHTOLLI",
+    select_language: "NAHUATL", // NEEDS UPDATE
+    title_language: "TLAPEPENALLI TLAHTOLLI"
   },
   LegacyEthSign: {
     approve_button: 'Ninocaqui',
@@ -104,13 +105,13 @@ const values = {
     success_message: 'Nenahuatiliz-tli ahxiliz-tli',
   },
   Menu: {
-    connections_button: 'Connections',
-    network_button: 'Maatla-tl',
+    connections_button: 'CONNECTIONS',
+    network_button: 'MAATLA-TL',
     nft_button: 'NFTS',
-    password_button: 'Ichtacayooh',
-    qr_scan_button: 'QR Scan',
-    requests_button: 'Requests',
-    wallet_button: 'Tlahcuiloolaamapetlaacaltoon-tli',
+    password_button: 'ICHTACAYOOH',
+    qr_scan_button: 'QR SCAN',
+    requests_button: 'REQUESTS',
+    wallet_button: 'TLAHCUILOOLAAMAPETLAACALTOON-TLI',
   },
   NewWallet: {
     about: "Yoocaya cente-tl yancuic Tlahcuiloolaamapetlaacaltoon-tli ouh queemah ehqueh cente-tl tlacxitoc-tli la iihuaan teoonaappa tla neteentlahpaltiliz-tli",

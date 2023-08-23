@@ -92,7 +92,7 @@ export default function NewWallet ({navigation, route}) {
 const styles = StyleSheet.create({
   buttonBorder:{
     borderColor: "#fff",
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     borderStyle: "solid",
     borderWidth: 1,
   },
@@ -111,14 +111,16 @@ const styles = StyleSheet.create({
   rectangleGroup: {
     backgroundColor: Color.gray_300,
     borderColor: '#fff',
+    borderRadius: 100,
   },
   rectangleLayout: {
     borderColor: '#fff',
     height: 60,
+    borderRadius: 100,
   },
   rectangleParent: {
     backgroundColor: '#D4E815',
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     fontFamily: FontFamily.inter,
   },
   walletTypo: {
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
 const lightStyles = StyleSheet.create({
   buttonBorder:{
     borderColor: "#000",
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     borderStyle: "solid",
     borderWidth: 1,
   },
@@ -157,14 +159,16 @@ const lightStyles = StyleSheet.create({
   rectangleGroup: {
     backgroundColor: Color.gray_300,
     borderColor: '#fff',
+    borderRadius: 100,
   },
   rectangleLayout: {
     borderColor: '#fff',
+    borderRadius: 100,
     height: 60,
   },
   rectangleParent: {
     backgroundColor: '#D4E815',
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     fontFamily: FontFamily.inter,
   },
   walletTypo: {
