@@ -13,7 +13,6 @@ import {
   IIconProps,
   Image,
   Pressable,
-  ScrollView,
   Text,
   VStack,
 } from 'native-base';

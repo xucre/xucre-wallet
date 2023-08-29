@@ -80,11 +80,25 @@ export default function NftList ({navigation, route}) {
       if (wallet.name.length > 0) {
         //console.log(wallet);
         const _tokens = await getNfts(wallet.wallet.address);
-        const nftJson = await getNftJson();
         //console.log(nftJson.collections);
         if (isComponentMounted) {
           setChain(_tokens.chain);
           setHoldings(_tokens.results);
+          setRefreshing(false);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const syncTrendingNfts = async () => {
+    try {
+      if (wallet.name.length > 0) {
+        //console.log(wallet);
+        const nftJson = await getNftJson();
+        //console.log(nftJson.collections);
+        if (isComponentMounted) {
           setTrending(nftJson.trending);
           setCollections(nftJson.collections);
           setRefreshing(false);
@@ -93,14 +107,13 @@ export default function NftList ({navigation, route}) {
     } catch (err) {
       console.log(err);
     }
-    
-    
   }
 
   useEffect(() => {    
     //setHoldings([]);
     setTimeout(() => {
       if (wallet.name.length > 0 ) {
+        syncTrendingNfts();
         syncNfts();
       }      
     }, 1000)

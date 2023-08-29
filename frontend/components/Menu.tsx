@@ -271,7 +271,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       { !drawerStatus && 
         <Pressable onPress={() => {setDrawerStatus(true)}}>
           <Avatar source={
-            colorMode === 'dark' ? require('../assets/images/icon-white.png') : require('../assets/images/icon-black.png')
+            colorMode === 'dark' ? require('../assets/images/icon-green.png') : require('../assets/images/icon-green.png')
           } bg={Color.transparent} size="xs" m={1} ml={0} mr={3} mb={1}></Avatar>
         </Pressable>
       }
@@ -289,7 +289,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
           <HStack justifyContent={'space-between'} pt={4} pb={0}>
             <Pressable onPress={() => {setDrawerStatus(true)}}>
               <Avatar source={
-                colorMode === 'dark' ? require('../assets/images/icon-white.png') : require('../assets/images/icon-black.png')
+                colorMode === 'dark' ? require('../assets/images/icon-green.png') : require('../assets/images/icon-green.png')
               } size="sm" bg={Color.transparent} m={1} ml={2} mb={1} mt={2}></Avatar>
             </Pressable>
             

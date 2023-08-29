@@ -22,7 +22,6 @@ import {
   KeyboardAvoidingView,
   MoonIcon,
   Pressable,
-  ScrollView,
   SunIcon,
   Text,
   useColorMode,

@@ -24,7 +24,6 @@ import {
   Menu,
   MoonIcon,
   Pressable,
-  ScrollView,
   SunIcon,
   Text,
   Tooltip,

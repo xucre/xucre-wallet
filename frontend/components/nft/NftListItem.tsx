@@ -15,7 +15,6 @@ import {
   Image,
   Menu,
   Pressable,
-  ScrollView,
   Text,
   Tooltip,
   VStack,
