@@ -77,6 +77,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   const [_activeNetwork,setActiveNetwork] = useRecoilState(activeNetwork);
   useEffect(() => {
     const runAsync = async () => {
+      console.log('run async');
       const _networks = await getNetworks();
       //await storeNetworks([])
       if (!Array.isArray(_networks) || _networks.length === 0) {
@@ -331,15 +332,20 @@ export const ToggleDarkMode = ({setScheme}) => {
     setColorMode
   } = useColorMode();
 
+  const [lastValue, setLastValue] = useState(colorMode);
+
   useEffect(() => {
     const runAsync = async () => {
       await storeTheme(colorMode);
+      setLastValue(colorMode);
       setScheme(colorMode);
     }
     
-    console.log('setting from menu button', colorMode);
-    //setScheme(colorMode);
-    runAsync();
+    if (colorMode !== lastValue) {
+      console.log('setting from menu button', colorMode);
+      runAsync();
+    }
+    
   }, [colorMode]);
 
   return (
