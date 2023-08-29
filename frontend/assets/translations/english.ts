@@ -68,8 +68,9 @@ const values = {
     name_wallet: "Wallet name"
   },
   LanguagePage: {
-    menu_button: "Language",
-    select_language: "Select your Language",
+    menu_button: "LANGUAGE",
+    select_language: "ENGLISH",
+    title_language: "SELECT YOUR LANGUAGE"
   },
   LegacyEthSign: {
     approve_button: "Approve",
@@ -104,13 +105,13 @@ const values = {
     success_message: "Transaction Successful"
   },
   Menu: {
-    connections_button: 'Connections',
-    network_button: "Networks",
-    nft_button: "Nfts",
-    password_button: "Password",
-    qr_scan_button: "QR Scan",
-    requests_button: 'Requests',
-    wallet_button: "Wallets"
+    connections_button: 'CONNECTIONS',
+    network_button: "NETWORKS",
+    nft_button: "NFTS",
+    password_button: "PASSWORD",
+    qr_scan_button: "QR SCAN",
+    requests_button: 'REQUESTS',
+    wallet_button: "WALLETS"
   },
   NewWallet: {
     about: "Create a new wallet or if you already have one retrieve it through your security phrase",

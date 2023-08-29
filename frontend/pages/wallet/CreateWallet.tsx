@@ -568,6 +568,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: "bold",
+    rounded: 100 
   },
 
   createANew: {

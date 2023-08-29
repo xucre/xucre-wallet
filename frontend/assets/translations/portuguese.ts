@@ -69,7 +69,8 @@ const values = {
   },
   LanguagePage: {  
     menu_button: "IDIOMA",
-    select_language: "Selecione seu idioma" 
+    select_language: "PORTUGUESE",
+    title_language: "SELECIONE SUA LINGUA"
   },
   LegacyEthSign: {
     approve_button: 'Aprovar',
@@ -104,12 +105,12 @@ const values = {
     success_message: 'TransaÃ§Ã£o bem-sucedida'
   },
   Menu: {
-    connections_button: 'Connections',
+    connections_button: 'CONNECTIONS',
     network_button: 'REDES',
     nft_button: 'NFTS',
     password_button: 'SENHA',
     qr_scan_button: 'VERREDURA QR',
-    requests_button: 'Requests',
+    requests_button: 'REQUESTS',
     wallet_button: 'CARTEIRAS',
   },
   NewWallet: {
