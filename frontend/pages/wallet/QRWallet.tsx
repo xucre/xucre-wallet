@@ -253,7 +253,7 @@ export default function QRWallet({ navigation, route }) {
                     width: '90%',
                   }}
                   >
-                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                    <View style={{ alignItems: 'center', flexDirection: 'row' }} key={contactList.recordID}>
 
                       <Image
                         source={ContactIcon}
@@ -261,7 +261,7 @@ export default function QRWallet({ navigation, route }) {
                         alt="logo"
                       />
                       <View style={{ padding: 10 }}>
-                        <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }} key={contactList.recordID}>{contactList.displayName}</Text>
+                        <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{contactList.displayName}</Text>
                         <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
                           {contactList.phoneNumbers[0].number}
                         </Text>

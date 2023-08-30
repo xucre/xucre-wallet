@@ -185,7 +185,7 @@ export default function SelectNetwork ({navigation, route}) {
                 )              
               })
             }
-            <Button colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={createNetwork}><Text style={{color: colorMode === 'dark' ? '#fff' : '#fff'}}>{translations[language].SelectNetwork.new_button}</Text></Button>
+            <Button mx={5} width={'90%'} style={{ borderRadius: 100}} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={createNetwork}><Text style={{color: colorMode === 'dark' ? '#fff' : '#fff'}}>{translations[language].SelectNetwork.new_button}</Text></Button>
           </VStack>
             
         </Box>
