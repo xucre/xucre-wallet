@@ -133,7 +133,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           {translations[language].CreateWallet.instructions}
         </Text>
         <Button
-          w={'full'}
+          width={'90%'}
           style={styles.buttonContainer}
           colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
           onPress={createMnemonics}
@@ -383,7 +383,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           </Alert>
         )}
         {mnemonicMatchComplete && (
-          <Button w={'full'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
+          <Button width={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
             <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
               {translations[language].CreateWallet.mnemonic_error_button}
             </Text>
@@ -449,7 +449,7 @@ export default function CreateWallet({ navigation, route, storage }) {
   };
 
   return (
-    <Center style={{ backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white }} flex={1} px="3">
+    <Center style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white }} flex={1} px="3">
       <KeyboardAvoidingView h={{
         base: "auto",
         lg: "auto"
@@ -475,7 +475,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               <MnemonicList></MnemonicList>
               <Box>
                 <Button.Group >
-                  <Button w={'full'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
+                  <Button mx={5} width={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
                     <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
                       {translations[language].CreateWallet.mnemonic_confirm_button}
                     </Text>
@@ -545,7 +545,7 @@ export default function CreateWallet({ navigation, route, storage }) {
                   .name_entry_button_loadingtext
               }
               my={5}
-              w={'full'}
+              width={'90%'}
               disabled={
                 confirmMnemonics.length < mnemonics.length || name.length === 0
               }
@@ -564,11 +564,9 @@ export default function CreateWallet({ navigation, route, storage }) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     borderStyle: "solid",
-    borderWidth: 1,
     fontWeight: "bold",
-    rounded: 100 
   },
 
   createANew: {
@@ -590,7 +588,7 @@ const styles = StyleSheet.create({
   },
   rectangleParent: {
     backgroundColor: "#CEF213",
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     fontFamily: FontFamily['interSemibold'],
   },
   walletTypo: {
