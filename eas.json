@@ -29,7 +29,11 @@
         "buildType": "apk"
       },
       "prebuildCommand": "prebuild --npm"
+    },
+    "production_deploy": {
+      "prebuildCommand": "prebuild --npm"
     }
+    
   },
   "submit": {
     "production": {}
