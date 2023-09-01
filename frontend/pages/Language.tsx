@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   rectangleParent: {
     backgroundColor: '#D4E815',
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     fontFamily: FontFamily.inter,
     top: 250,
   },

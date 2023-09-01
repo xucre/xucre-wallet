@@ -341,8 +341,9 @@ export default function WalletHistory() {
       _dark={{ backgroundColor: 'black' }}
       safeAreaBottom
     >
+    
       {
-        <Box bg={colorMode === 'dark' ? "primary.500" : "tertiary.500"} padding={3} borderRadius={10} marginX={2} >
+        <Box bg={colorMode === 'dark' ? "primary.600" : "tertiary.500"} padding={3} borderRadius={10} marginX={2} >
             
           <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>{translations[language].totalBalance.title}</Text>
           <HStack paddingBottom={0} space={1}>

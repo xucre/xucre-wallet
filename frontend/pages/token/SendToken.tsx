@@ -316,7 +316,7 @@ export default function SendToken({ navigation, route, storage }) {
 const styles = StyleSheet.create({
   buttonContainer: {
     borderColor: Color.transparent,
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     borderStyle: "solid",
     borderWidth: 1,
     fontWeight: "bold",

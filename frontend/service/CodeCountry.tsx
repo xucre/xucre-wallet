@@ -191,7 +191,7 @@ function numberFormat(checkValid: any, phoneInput: React.MutableRefObject<any>) 
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    borderRadius: Border.br_sm,
+    borderRadius: 100,
     fontWeight: "bold",
   },
   container: {

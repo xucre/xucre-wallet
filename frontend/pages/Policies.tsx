@@ -108,7 +108,7 @@ export default function Policies({ navigation, route }) {
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        borderRadius: Border.br_sm,
+        borderRadius: 100,
         fontWeight: "bold",
     },
     support1: {
