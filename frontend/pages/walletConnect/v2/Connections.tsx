@@ -28,7 +28,6 @@ import {
   VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
-import Svg, { Circle } from "react-native-svg";
 import { useRecoilState } from "recoil";
 
 import { Color } from "../../../../GlobalStyles";

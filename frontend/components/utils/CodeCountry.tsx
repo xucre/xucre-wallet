@@ -16,14 +16,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import PhoneInput from "react-native-phone-number-input";
-import whatsapp from "./whatsapp";
-import { language as stateLanguage } from "../../frontend/service/state";
-import translations from "../assets/translations";
+//import PhoneInput from "react-native-phone-number-input";
+import PhoneInput from 'react-phone-number-input/react-native-input';
+import flags from 'react-phone-number-input/flags'
+import whatsapp from "../../service/whatsapp";
+import { language as stateLanguage } from "../../service/state";
+import translations from "../../assets/translations";
 import { useRecoilState } from "recoil";
-import { Border, Color } from "../../GlobalStyles";
+import { Border, Color } from "../../../GlobalStyles";
 import { Button, useColorMode, Text } from "native-base";
-import codeCountry from "../assets/json/codeCountry.json"
+import codeCountry from "../../assets/json/codeCountry.json"
 
 const CodeCountry = ({ navigation, route }) => {
 
@@ -92,18 +94,32 @@ const CodeCountry = ({ navigation, route }) => {
   function componentsView(formaterNumber) {
     return (
       <View style={styles.container}>
+        {
+          // Used with react-native-phone-number-input
+          /*<PhoneInput
+            ref={phoneInput}
+            defaultValue={nn[0]}
+            defaultCode={nn[1]}
+            layout="first"
+            withShadow
+            //autoFocus
+            containerStyle={styles.phoneContainer}
+            textContainerStyle={styles.textInput}
+            onChangeFormattedText={(text) => {
+              setphoneNumber(text);
+            }}
+          />*/
+        }
+
+
         <PhoneInput
-          ref={phoneInput}
-          defaultValue={nn[0]}
-          defaultCode={nn[1]}
-          layout="first"
-          withShadow
-          //autoFocus
-          containerStyle={styles.phoneContainer}
-          textContainerStyle={styles.textInput}
-          onChangeFormattedText={(text) => {
-            setphoneNumber(text);
-          }}
+          //style={styles.textInput}
+          defaultCountry={nn[1]}
+          value={phoneNumber}
+          onChange={setphoneNumber}
+          //ref={phoneInput}
+          //defaultValue={nn[0]}
+          //flags={flags}
         />
 
         <Button
