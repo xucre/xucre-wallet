@@ -10,6 +10,7 @@ import {
   Box,
   Button,
   Center,
+  FlatList,
   Icon,
   Image,
   Input,
@@ -47,18 +48,6 @@ export default function QRWallet({ navigation, route }) {
   const initialFocusRef = React.useRef(null);
 
 
-
-  useEffect(() => {
-    if (_wallet.name === '') {
-      //navigation.navigate('SelectWallet');
-    }
-  }, [_wallet]);
-
-  useEffect(() => {
-    //setNetwork(null)
-    //setAllNetworks([])
-  }, [])
-
   const [contactList, setContactList] = useState([]);
   const [viewWalletQR, setViewWalletQR] = useState(Boolean);
   const [showModal, setShowModal] = useState(false);
@@ -81,6 +70,7 @@ export default function QRWallet({ navigation, route }) {
             // work with contacts
             const filteredContacts = con.filter((item) => item.phoneNumbers.length)
             filteredContacts.sort((a, b) => a.displayName > b.displayName)
+            console.log(filteredContacts);
             setContactList(filteredContacts);
 
           })
@@ -237,61 +227,116 @@ export default function QRWallet({ navigation, route }) {
                 <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}
                   onChangeText={(text) => { searchItem(text) }} onFocus={(event) => { eventFocus(event) }} />
               </VStack>
+              {/* Replace ScrollView with FlatList */}
 
-              <ScrollView>
-                {contactList.map((contactList) => (
-                  <><TouchableOpacity style={{
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    borderColor: colorMode === 'dark' ? Color.white : Color.black,
-                    borderRadius: 10,
-                    borderWidth: 1,
-                    flexDirection: 'row',
-                    height: 70,
-                    justifyContent: 'space-between',
-                    marginTop: 10,
-                    width: '90%',
-                  }}
-                  >
-                    <View style={{ alignItems: 'center', flexDirection: 'row' }} key={contactList.recordID}>
+              <FlatList data={contactList} renderItem={({
+                  item
+                }) => <Box key={item.recordID} ><TouchableOpacity style={{
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  borderColor: colorMode === 'dark' ? Color.white : Color.gray_100,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  flexDirection: 'row',
+                  height: 70,
+                  justifyContent: 'space-between',
+                  marginTop: 10,
+                  width: '90%',
+                }}
+                >
+                  <View style={{ alignItems: 'center', flexDirection: 'row' }} key={item.recordID}>
 
-                      <Image
-                        source={ContactIcon}
-                        style={{ height: 40, marginLeft: 15, width: 40 }}
-                        alt="logo"
-                      />
-                      <View style={{ padding: 10 }}>
-                        <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{contactList.displayName}</Text>
-                        <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
-                          {contactList.phoneNumbers[0].number}
-                        </Text>
-                      </View>
+                    <Image
+                      source={ContactIcon}
+                      style={{ height: 40, marginLeft: 15, width: 40 }}
+                      alt="logo"
+                    />
+                    <View style={{ padding: 10 }}>
+                      <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{item?.displayName}</Text>
+                      <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
+                        {item?.phoneNumbers[0].number}
+                      </Text>
                     </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        const walletA = _wallet.wallet.address
-                        openPage('CodeCountry', contactList, walletA, local)
-                      }}>
-                      <Image
-                        source={{
-                          uri: avatar,
-                        }}
-                        style={{
-                          height: 40,
-                          marginRight: 20,
-                          width: 40,
-                        }}
-                        alt="logo"
-                      />
-                    </TouchableOpacity>
-
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      const walletA = _wallet.wallet.address
+                      openPage('CodeCountry', contact, walletA, local)
+                    }}>
+                    <Image
+                      source={{
+                        uri: avatar,
+                      }}
+                      style={{
+                        height: 40,
+                        marginRight: 20,
+                        width: 40,
+                      }}
+                      alt="logo"
+                    />
                   </TouchableOpacity>
 
-                  </>
+                </TouchableOpacity>
 
-                ))}
-              </ScrollView>
+                </Box>} 
+                keyExtractor={item => item.recordID} 
+              />
+              {
+                /*
+                  <ScrollView>
+                    {contactList.map((contactList) => (
+                      <Box key={contactList.recordID}><TouchableOpacity style={{
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        borderColor: colorMode === 'dark' ? Color.white : Color.gray_100,
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        flexDirection: 'row',
+                        height: 70,
+                        justifyContent: 'space-between',
+                        marginTop: 10,
+                        width: '90%',
+                      }}
+                      >
+                        <View style={{ alignItems: 'center', flexDirection: 'row' }} key={contactList.recordID}>
 
+                          <Image
+                            source={ContactIcon}
+                            style={{ height: 40, marginLeft: 15, width: 40 }}
+                            alt="logo"
+                          />
+                          <View style={{ padding: 10 }}>
+                            <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{contactList.displayName}</Text>
+                            <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
+                              {contactList.phoneNumbers[0].number}
+                            </Text>
+                          </View>
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => {
+                            const walletA = _wallet.wallet.address
+                            openPage('CodeCountry', contactList, walletA, local)
+                          }}>
+                          <Image
+                            source={{
+                              uri: avatar,
+                            }}
+                            style={{
+                              height: 40,
+                              marginRight: 20,
+                              width: 40,
+                            }}
+                            alt="logo"
+                          />
+                        </TouchableOpacity>
+
+                      </TouchableOpacity>
+
+                      </Box>
+                    ))}
+                  </ScrollView>
+                */
+              }
             </View>
           </Box>
         </DashboardLayout>

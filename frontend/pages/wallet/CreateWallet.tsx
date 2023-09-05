@@ -53,6 +53,7 @@ import {
   loadWalletFromMnemonics,
 } from "../../service/wallet";
 import { storeWallet } from "../../store/wallet";
+import { relative } from "path";
 
 export default function CreateWallet({ navigation, route, storage }) {
   const setWalletList = useSetRecoilState(walletList);
@@ -511,6 +512,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               style={{ color: colorMode === 'dark' ? Color.white : Color.black, fontWeight: "bold" }}
               fontSize={"lg"}
               mt={5}
+              
             >
               {translations[language].CreateWallet.name_wallet}
             </Text>
@@ -522,12 +524,14 @@ export default function CreateWallet({ navigation, route, storage }) {
                 textAlign: "center",
               }}
               fontSize={"md"}
-              my={5}
+              mt={5}
+              
             >
               {translations[language].CreateWallet.instructions_nameWallet}
             </Text>
             <Input
               w="full"
+              my={10}
               value={name}
               onChange={handleChange}
               placeholder={
@@ -544,8 +548,9 @@ export default function CreateWallet({ navigation, route, storage }) {
                 translations[language].CreateWallet
                   .name_entry_button_loadingtext
               }
-              my={5}
-              width={'90%'}
+              my={40}
+              
+              width={'100%'}
               disabled={
                 confirmMnemonics.length < mnemonics.length || name.length === 0
               }

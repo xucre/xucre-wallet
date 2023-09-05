@@ -366,9 +366,10 @@ export default function ViewWallet ({navigation, route}) {
           </HStack>
           <HStack
             mt={5}
+            mx={5}
             borderBottomWidth={1}
-            borderBottomColor={'gray.100'}
-            w="100%"
+            borderBottomColor={'gray.700'}
+            w="90%"
             justifyContent="space-around"
             borderRadius="sm"
           >

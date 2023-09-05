@@ -95,7 +95,7 @@ export default function MobileFooter({wallet: Wallet, navigation}) {
       <HStack
         justifyContent="space-between"
         safeAreaBottom
-        h="20"
+        h="8%"
         overflow={'visible'}
         width="96%"
         position="absolute"
