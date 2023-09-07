@@ -4,7 +4,6 @@ import { Text } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import React, { useEffect, useMemo, useState } from 'react';
 //import { renderToString } from 'react-dom/server';
-//import { WebView } from "react-native-webview";
 import { Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useRecoilState } from 'recoil';
