@@ -73,6 +73,7 @@
     "react-native-web": "0.17.7",
     "react-native-webview": "11.22.7",
     "react-navigation": "^4.4.4",
+    "react-phone-number-input": "^3.3.6",
     "react-qr-code": "^2.0.8",
     "react-redux": "^8.0.4",
     "recoil": "^0.7.6",
@@ -186,17 +187,41 @@
     "not dead",
     "not op_mini all"
   ],
-  "babel" : {
+  "babel": {
     "presets": [
       "babel-preset-expo",
-      ["@babel/preset-env", {"targets": {"node": "current"}}],
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
       "@babel/preset-typescript"
     ],
     "plugins": [
-      ["@babel/plugin-proposal-private-property-in-object", {"loose": true}],
-      ["module:react-native-dotenv"],
-      ["@babel/plugin-syntax-bigint", {"loose": true}],
-      ["@babel/plugin-transform-private-methods", {"loose": true}]
+      [
+        "@babel/plugin-proposal-private-property-in-object",
+        {
+          "loose": true
+        }
+      ],
+      [
+        "module:react-native-dotenv"
+      ],
+      [
+        "@babel/plugin-syntax-bigint",
+        {
+          "loose": true
+        }
+      ],
+      [
+        "@babel/plugin-transform-private-methods",
+        {
+          "loose": true
+        }
+      ]
     ]
   }
 }
