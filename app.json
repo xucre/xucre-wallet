@@ -15,7 +15,9 @@
     "android": {
       "package": "xucre.expo.client",
       "icon": "./icon.png",
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
     },
     "extra": {
       "eas": {
