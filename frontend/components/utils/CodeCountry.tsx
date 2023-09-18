@@ -17,7 +17,7 @@ import {
   View,
 } from "react-native";
 //import PhoneInput from "react-native-phone-number-input";
-import PhoneInput from 'react-phone-number-input/react-native-input';
+//import PhoneInput from 'react-phone-number-input/react-native-input';
 import flags from 'react-phone-number-input/flags'
 import whatsapp from "../../service/whatsapp";
 import { language as stateLanguage } from "../../service/state";
@@ -26,6 +26,7 @@ import { useRecoilState } from "recoil";
 import { Border, Color } from "../../../GlobalStyles";
 import { Button, useColorMode, Text } from "native-base";
 import codeCountry from "../../assets/json/codeCountry.json"
+import PhoneInput from 'react-phone-number-input'
 
 const CodeCountry = ({ navigation, route }) => {
 
