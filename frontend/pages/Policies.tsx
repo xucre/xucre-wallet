@@ -61,7 +61,7 @@ export default function Policies({ navigation, route }) {
         >
             <Box alignItems="center" my={10} w={"full"}>
                 <Text style={styles.support1}>
-                    Terms and Conditions
+                {translations[language].termsConditions.title}
                 </Text>
                 <VStack m={5}>
                     <ScrollView w={["300", "800"]}>
@@ -72,7 +72,7 @@ export default function Policies({ navigation, route }) {
 
                 <Box>
                     <HStack space={6} my={4}>
-                        <Checkbox onChange={change} defaultIsChecked={checkValues} value={"true"} ><Text>I accept the terms and conditions</Text></Checkbox>
+                        <Checkbox onChange={change} defaultIsChecked={checkValues} value={"true"} ><Text>{translations[language].termsConditions.accept_terms}</Text></Checkbox>
                     </HStack>
                 </Box>
 
@@ -85,7 +85,7 @@ export default function Policies({ navigation, route }) {
                     onPress={acceptPolicy}
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                    Accept
+                    {translations[language].termsConditions.button_Accept}
                     </Text>
                 </Button>
 
