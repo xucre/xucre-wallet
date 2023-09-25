@@ -74,18 +74,18 @@ export default function SuportPage({ navigation, route }) {
                     {translations[language].SupportPage.title}
                 </Text>
 
-                <Text style={styles.contactUsViaTypo}>
+                <Text style={styles.contactUsViaTypo} w='85%'>
                     <Text style={styles.ifYouHave}>
                         {translations[language].SupportPage.introduction}
                     </Text>
                 </Text>
-                <VStack m={3}>
+                <VStack m={2}>
                     <Text> {translations[language].SupportPage.to_send} </Text>
                     <Input
                         style={styles.textoImput}
                         value={toEmail}
                         onChange={handletoEmailChange}
-                        w={"3/4"}
+                        w='90%'
                         mb={2}
                         placeholder={translations[language].SupportPage.to_send}
                     />
@@ -98,7 +98,7 @@ export default function SuportPage({ navigation, route }) {
                         style={styles.textoImput}
                         value={name}
                         onChange={handleNameChange}
-                        w={"3/4"}
+                        w='90%'
                         mb={2}
                         placeholder={translations[language].SupportPage.subject_send}
                     />
@@ -114,7 +114,7 @@ export default function SuportPage({ navigation, route }) {
                         value={issue}
                         onChange={handleIssueChange}
                         placeholder={translations[language].SupportPage.describe_issue}
-                        w={"3/4"}
+                        w='90%'
                         minHeight={200}
                     />
                 </VStack>
