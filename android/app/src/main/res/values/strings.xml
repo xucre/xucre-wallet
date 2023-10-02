@@ -1,4 +1,4 @@
 <resources>
   <string name="app_name">XucreWallet</string>
-  <string name="expo_runtime_version">1.0.0</string>
+  <string name="expo_runtime_version">exposdk:45.0.0</string>
 </resources>

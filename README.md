@@ -48,6 +48,9 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 ## How to Build - Local - Production 
 - npx expo run:android --variant release
 
+## How to Build - Prod
+- eas build -p android --profile production_deploy
+
 ## How to run language translation validation
 - ts-node --esm ./scripts/compareLanguages.ts 
 - change the comparison by updating params in console.log

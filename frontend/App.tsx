@@ -1,10 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
+
+// If you have react native < 0.70, you need to polyfill BigInt. Run `yarn add big-integer` and uncomment the line below
+// eslint-disable-next-line functional/immutable-data
+if (typeof BigInt === 'undefined') global.BigInt = require('big-integer');
+
 //import env from '@env';
 import notifee, { EventType } from '@notifee/react-native';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import '@walletconnect/react-native-compat';
-import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import { useFonts } from 'expo-font';
 import { run } from 'jest';
 import {
@@ -399,7 +403,6 @@ export const ToggleDarkMode = ({setScheme}) => {
 
 
 export function HeaderComp({navigation}) {
-  const connector = useWalletConnect();
   const toLogin = () => {
     navigation.navigate('Home');
     //if (isComponentMounted) {

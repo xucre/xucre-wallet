@@ -1,5 +1,4 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { useWalletConnect, withWalletConnect } from '@walletconnect/react-native-dapp';
 import { ethers } from "ethers";
 import {
   Avatar,
