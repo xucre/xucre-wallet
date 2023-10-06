@@ -7,7 +7,7 @@
     "version": "1.0.1",
     "sdkVersion": "45.0.0",
     "scheme": "xucre",
-    "packagerOpts": { "config": "metro.config.js", "sourceExts": [ "js","jsx","svg","ts","tsx"] },
+    "packagerOpts": { "config": "metro.config.jscrashing wh", "sourceExts": [ "js","jsx","svg","ts","tsx"] },
     "platforms": [
       "ios",
       "android"

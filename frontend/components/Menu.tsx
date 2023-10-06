@@ -77,7 +77,6 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   const [_activeNetwork,setActiveNetwork] = useRecoilState(activeNetwork);
   useEffect(() => {
     const runAsync = async () => {
-      console.log('run async');
       const _networks = await getNetworks();
       //await storeNetworks([])
       if (!Array.isArray(_networks) || _networks.length === 0) {
@@ -95,7 +94,6 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
       }
       
       const _wallets = await getWallets();
-      //console.log('menu get wallets',_wallets);
       if (Array.isArray(_wallets) && _wallets.length > 0) {
         const loadedWallets = _wallets.map((val) => {
           const wallet = loadWalletFromPrivateKey(val.wallet);
@@ -121,10 +119,6 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
 
   const validateAuth = async () => {
     const _authNeeded = await needsAuth();
-    console.log('authNeeded:', _authNeeded);
-    if (_authNeeded) {
-      console.log('authorization needed'); 
-    }
     setAuthNeeded(_authNeeded);
   }
 
@@ -342,7 +336,6 @@ export const ToggleDarkMode = ({setScheme}) => {
     }
     
     if (colorMode !== lastValue) {
-      console.log('setting from menu button', colorMode);
       runAsync();
     }
     

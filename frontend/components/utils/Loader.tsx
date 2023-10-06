@@ -41,9 +41,7 @@ export default function Loader() {
         Montserrat_700Bold
       });
       const _language = await getLanguage();
-      console.log('_language',_language);
       const _hasSigned = await hasSignedPrivacyPolicy();
-      console.log('_hasSigned', _hasSigned);
       if (isComponentMounted) {
         setFontsLoaded(true);
 
@@ -73,12 +71,10 @@ export default function Loader() {
         appState.current.match(/inactive|background/) &&
         nextAppState === "active"
       ) {
-        console.log("App has come to the foreground!");
         await bootstrap()
       }
       // eslint-disable-next-line functional/immutable-data
       appState.current = nextAppState;
-      //console.log("AppState", appState.current);
     });
     return () => {
       subscription.remove();
@@ -86,16 +82,13 @@ export default function Loader() {
   }, []);
 
   const bootstrap = async () => {
-    console.log('bootstrapping');
     await notifee.requestPermission();
     const initialNotification = await notifee.getInitialNotification();
-    //console.log('initial message', initialNotification);
     if (initialNotification) {
       console.log('Notification caused application to open');
-      //console.log('Press action used to open the app', initialNotification.pressAction);
       // Add logic here that retrieves the event from storage and implements the WC Listener logic
       const event = await getNotification(initialNotification.pressAction.id);
-      //console.log(event.params.request.method);
+      
       if (event !== null && event.params.request.method !== null) {
         //await deleteNotification(initialNotification.pressAction.id);
         if (
@@ -126,19 +119,17 @@ export default function Loader() {
             requestDetails: event
           })
         } else {
-          console.log('session_request', event);
+          //
         }
       } else {
         await defaultRouting();
       }
-      //console.log(event);
     } else {
       await defaultRouting();
     }
   }
 
   const defaultRouting = async () => {
-    //console.log('default Routing');
     if (navigationRef.current.getCurrentRoute().name === 'Home') {
       if (languageDefault) {
         navigate('Language', {});  

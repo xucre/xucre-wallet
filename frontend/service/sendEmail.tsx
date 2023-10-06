@@ -6,15 +6,9 @@ const sendEmail = (to, subjectField, body, navigation, menssageEmail) => {
 
 
     //Main Params
-  /*   console.log('to', to);
-    console.log('subject', subjectField);
-    console.log('body', body); */
-
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", "Bearer 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");
-
-    
 
     const message = JSON.stringify({
         content: 
@@ -55,14 +49,13 @@ const sendEmail = (to, subjectField, body, navigation, menssageEmail) => {
     } as unknown as RequestInit;
 
     const emailCall = async () => {
-        //console.log('requestOptions1 ', requestOptions)
         try {
             await fetch(
                 'https://api.sendgrid.com/v3/mail/send', requestOptions)
                 .then(response => {
                     response.json()
                         .then(data => {
-                            //console.log('value: ' + JSON.stringify(response));
+                            //
                         });
                 })
                 navigation.navigate('ViewWallet');   
@@ -71,7 +64,7 @@ const sendEmail = (to, subjectField, body, navigation, menssageEmail) => {
                 
         }
         catch (error) {
-            console.error('error', error);
+            //
         }
     }
 

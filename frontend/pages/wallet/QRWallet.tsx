@@ -49,6 +49,7 @@ export default function QRWallet({ navigation, route }) {
 
 
   const [contactList, setContactList] = useState([]);
+  const [allContacts, setAllContacts] = useState([]);
   const [viewWalletQR, setViewWalletQR] = useState(Boolean);
   const [showModal, setShowModal] = useState(false);
   const isFocused = useIsFocused();
@@ -70,12 +71,11 @@ export default function QRWallet({ navigation, route }) {
             // work with contacts
             const filteredContacts = con.filter((item) => item.phoneNumbers.length)
             filteredContacts.sort((a, b) => a.displayName > b.displayName)
-            console.log(filteredContacts);
+            setAllContacts(filteredContacts);
             setContactList(filteredContacts);
-
           })
           .catch(e => {
-            //console.log(e);
+            //
           });
       }
     });
@@ -87,11 +87,9 @@ export default function QRWallet({ navigation, route }) {
 
     const result = requestLocationPermission();
     result.then(res => {
-      //console.log('res is:', res);
       if (res) {
         Geolocation.getCurrentPosition(
           position => {
-            //console.log('coordenadas c', position);
             setLocation(position);
             setlat(position.coords.latitude)
             setlng(position.coords.longitude)
@@ -100,23 +98,20 @@ export default function QRWallet({ navigation, route }) {
           },
           error => {
             // See error code charts below.
-            //console.log(error.code, error.message);
             setLocation(false);
           },
           { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 },
         );
       }
     });
-    //console.log('location c',location);
   };
 
   const getLocal = () => {
     const url = 'http://api.geonames.org/countryCodeJSON?lat=' + lat + '&lng=' + lng + '&username=carevalo123'
     fetch(url).then((response) => response.json()).then((json) => {
       setlocal(json)
-      //console.log('getLocal',json)
     }).catch((error) => {
-      console.error(error);
+      //
     });
   }
 
@@ -140,12 +135,9 @@ export default function QRWallet({ navigation, route }) {
           title: 'Geolocation Permission',
         },
       );
-      //console.log('granted', granted);
       if (granted === 'granted') {
-        //console.log('You can use Geolocation');
         return true;
       } else {
-        //console.log('You cannot use Geolocation');
         return false;
       }
     } catch (err) {
@@ -159,13 +151,12 @@ export default function QRWallet({ navigation, route }) {
 
   const eventFocus = (event) => {
     const eventFocus = event
-    //console.log('evento focus entro', event)
 
 
   }
 
   const searchItem = (textSearch) => {
-    const data = contactList;
+    const data = allContacts;
     if (textSearch) {
       const newData = data.filter(item => {
         const itemData = item.givenName ? item.givenName.toUpperCase() : ''.toUpperCase();
@@ -179,7 +170,6 @@ export default function QRWallet({ navigation, route }) {
   }
 
   const copyToClipboard = () => {
-    //console.log('copyToClipboard', _wallet.wallet.address);
     Clipboard.setStringAsync(String(_wallet.wallet.address));
     setDisplayTooltip(true);
     setTimeout(() => {

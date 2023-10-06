@@ -228,7 +228,6 @@ export default function RecoverWallet ({navigation, route, storage}) {
   
 
   const handleMnemonicChange = (text) => {
-    //console.log(event.nativeEvent.text);
     if(text.length > 3 && text.endsWith(' ')) {
       if (confirmMnemonics.length < 12) {
         setConfirmMnemonics([...confirmMnemonics, text.trim()])
@@ -250,9 +249,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
     const runAsync = async () => {
       try {
         if (confirmMnemonics.length > 0 ) {
-          //console.log('save your wallet');
           const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
-          //console.log(_wallet.privateKey, name);
           
           await storeWallet({name, wallet: _wallet.privateKey});
           setWalletList((oldWalletList) => [
@@ -272,7 +269,6 @@ export default function RecoverWallet ({navigation, route, storage}) {
           setLoading(false);
         }
       } catch (err) {
-        console.log(err);
         setLoading(false);
         toast.show({
           placement: "bottom",

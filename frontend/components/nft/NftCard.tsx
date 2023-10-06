@@ -46,13 +46,12 @@ function NftCard({contract, token, chain}) {
   
 
   useEffect(() => {
-    //console.log('chain', chain);
     retrieveMetadata();
   }, []);
 
   const retrieveMetadata = async () => {
     const result = await getMetadata(contract, token, chain);
-    //console.log(result);
+    
     setChannelMetadata({
       description: result.token_description,
       image: result.cached_images.small_250_250,

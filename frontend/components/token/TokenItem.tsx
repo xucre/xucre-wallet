@@ -25,7 +25,6 @@ export default function TokenItem ({navigation, token, refreshList}) {
 
   useEffect(() => {
     if (_wallet.name != '' && network && network.rpcUrl !== '') {
-      //console.log('loading', _wallet)
       const _provider = getDefaultProvider(network.rpcUrl);
          
       const newWallet = _wallet.wallet.connect(_provider);
@@ -39,32 +38,26 @@ export default function TokenItem ({navigation, token, refreshList}) {
   useEffect(() => {
     const runAsync = async () => {
       try {
-        //console.log('token onload', token, wallet.address);
         
         const network2 = await wallet.provider.getNetwork();
-        //console.log(network2);
         if (token.type === 'coin' && wallet.address) {
           const walletBalance = await wallet.getBalance();
-          //console.log('balance',walletBalance);
             setAmount(walletBalance);
         } else if (token.type === 'token' && wallet.address) {
           const contract = new ethers.Contract(token.address, erc20Abi, provider);
-          //console.log('token get balance', contract.balanceOf);
           const balance = await contract.balanceOf((wallet.address));
-          //console.log('token balance', token.name, balance);
           setAmount(balance);
           
         } else {
-          //console.log('nothing works getting balance', token, wallet);
+          //
         }     
       } catch (e) {
-        console.log('error getting balance')
-        console.log(e);
+        //
       }
         
       
     }
-    //console.log('tokenItem loading', wallet.address, typeof provider);
+
     if (wallet.address && provider) {
       runAsync();
     }
@@ -76,7 +69,6 @@ export default function TokenItem ({navigation, token, refreshList}) {
   }
 
   const TokenIcon = ({iname}) => {
-    //console.log(iname);
     const icon_color = colorMode ==='dark'? 'white':'black';
     return (
       <Avatar bg="primary.600" mr="1">

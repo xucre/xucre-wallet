@@ -68,19 +68,15 @@ export default function AddToken ({navigation, route, storage}) {
   } = useColorMode();
 
   const handleNameChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setName(event.nativeEvent.text)
   }
   const handleAddressChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setAddress(event.nativeEvent.text)
   }
   const handleChainIdChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setChainId(event.nativeEvent.text);
   }
   const handleTypeChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setType(event.nativeEvent.text)
   }
 
@@ -88,14 +84,13 @@ export default function AddToken ({navigation, route, storage}) {
   const saveToken = () => {
     const runAsync = async () => {
       if (name.length > 0 && address.length > 0 && type.length > 0 && Number.isInteger(chainId)) {
-        //console.log(_wallet.privateKey, name);
+        
         const _token : Token = {
           address,
           chainId : Number.parseInt(chainId),
           name,
           type,
         };
-        //console.log('token to insert', _token);
         await addToken(_token);
         setTokens([
           tokens,
@@ -107,7 +102,6 @@ export default function AddToken ({navigation, route, storage}) {
         }, 100);
         
       } else {
-        console.log('failed validation', name.length > 0 && address.length > 0 && type.length > 0 && Number.isInteger(chainId));
         setLoading(false);
       }
     };

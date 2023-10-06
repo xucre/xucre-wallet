@@ -69,7 +69,6 @@ export const storeNetworks = async (networks) => {
 };
 
 export const storeActiveNetwork = async (network) => {
-  //console.log('store active network');
   await EncryptedStorage.setItem(
     "active_network",
     JSON.stringify(network)

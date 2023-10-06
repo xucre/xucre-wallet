@@ -169,13 +169,13 @@ export const AppWrapper = () => {
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
 
-    console.log('notification foreground:', detail);
+    //console.log('notification foreground:', detail);
       switch (type) {
         case EventType.DISMISSED:
-          console.log('User dismissed notification', detail);
+          //console.log('User dismissed notification', detail);
           break;
         case EventType.PRESS:
-          console.log('User pressed notification', detail);
+          //console.log('User pressed notification', detail);
           break;
       }
     });
@@ -188,7 +188,7 @@ export const AppWrapper = () => {
     const runAsync = async () => {
       try {
         await createSignClient();
-        console.log('sign in created')
+        //console.log('sign in created')
       } catch (err) {
         console.log('error creating sign client', err);
       }

@@ -26,8 +26,6 @@ export default function LandingPage({ navigation, route }) {
   const [loading, setLoading] = useState(true);
 
   const toWalletSelect = () => {
-    //console.log('languageDefault',languageDefault);
-    //console.log('hasSigned', hasSigned);
     if (route.name === 'Home') {
       if (languageDefault) {
         navigation.navigate('Language');  

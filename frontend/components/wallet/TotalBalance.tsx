@@ -190,11 +190,7 @@ export default function WalletHistory() {
   const getData = async () => {
     try {
       const historyResults = await getWalletHistory(wallet.address, chainName);
-      //console.log(historyResults);
-      //console.log('hsitory retrieved');
       const outputData = processJsonData(historyResults);
-      //console.log(outputData)
-      //console.log(outputData.openQuotesByDay[0]);
 
       // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
       //const isReady = outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
@@ -207,7 +203,6 @@ export default function WalletHistory() {
         direction: 'down',
         quotes: []
       })
-      //console.log(openQuotes.quotes.length);
       // END TESTING PORTION
       const finalQuotes = openQuotes.quotes.map((d) => {
         return {
@@ -225,7 +220,7 @@ export default function WalletHistory() {
         y: (finalQuotes[1].y - finalQuotes[0].y).toFixed(2),
       })
     } catch (err) {
-      console.log(err);
+      //
     }
     
   }
@@ -234,15 +229,8 @@ export default function WalletHistory() {
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
     } else {
-      //console.log(_wallet.wallet.address);
       setWallet(_wallet.wallet);
     }
-
-    if (network) {
-      //console.log(network);
-    }
-
-    //console.log('ViewWallet', network.chainId);
   }, [_wallet, network]);
 
   useEffect(() => {
@@ -261,7 +249,6 @@ export default function WalletHistory() {
   }, [])
 
   const copyToClipboard = () => {
-    //console.log('copyToClipboard', wallet.address);
     Clipboard.setStringAsync(String(wallet.address));
     setDisplayTooltip(true);
     setTimeout(() => {
@@ -290,7 +277,6 @@ export default function WalletHistory() {
     };
 
     if (jsonData === null || jsonData.error) {
-      //console.error(jsonData.error_message);
       return output;
     }
 

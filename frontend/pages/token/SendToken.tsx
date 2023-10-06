@@ -84,7 +84,6 @@ export default function SendToken({ navigation, route, storage }) {
   useEffect(() => {
     const runAsync = async () => {
       const _tokens = await getTokenByChain(network.chainId);
-      //console.log("sendToken", network, _tokens);
       const coinToken = {
         address: "",
         amount: ethers.utils.formatEther(0),
@@ -93,7 +92,6 @@ export default function SendToken({ navigation, route, storage }) {
         type: "coin",
       };
       setTokens([coinToken, ..._tokens]);
-      //console.log([coinToken, ..._tokens]);
     };
 
     if (network) {
@@ -119,12 +117,10 @@ export default function SendToken({ navigation, route, storage }) {
   const { colorMode } = useColorMode();
 
   const handleAddressChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setAddress(event.nativeEvent.text);
   };
 
   const handleAmountChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setAmount(event.nativeEvent.text);
   };
 
@@ -144,7 +140,6 @@ export default function SendToken({ navigation, route, storage }) {
   }
 
   const send = () => {
-    //console.log(address, selectedToken, amount);
     /* if(checkValues){
       openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
     } */
@@ -162,7 +157,7 @@ export default function SendToken({ navigation, route, storage }) {
               ethers.utils.getAddress(address),
               ethers.utils.parseEther(amount)
             );
-            //console.log('submitted',_submitted);
+
             const _transaction = {
               chainId: _submitted.chainId,
               data: _submitted.data,
@@ -177,7 +172,6 @@ export default function SendToken({ navigation, route, storage }) {
             await addTransaction(_transaction);
             setTransactionList([...pendingTransactions, _submitted]);
             if (_transaction) {
-              //console.log("transaction submitted", _submitted.hash);
               //Whatsapp Integration
               if(checkValues){
                 openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
@@ -187,11 +181,9 @@ export default function SendToken({ navigation, route, storage }) {
             setLoading(false);
           }
         } else {
-          //console.log("failed validation");
           setLoading(false);
         }
       } catch (err) {
-        //console.log(err);
         setLoading(false);
       }
     };

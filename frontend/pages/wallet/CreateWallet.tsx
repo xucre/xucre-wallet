@@ -53,7 +53,6 @@ import {
   loadWalletFromMnemonics,
 } from "../../service/wallet";
 import { storeWallet } from "../../store/wallet";
-import { relative } from "path";
 
 export default function CreateWallet({ navigation, route, storage }) {
   const setWalletList = useSetRecoilState(walletList);
@@ -97,9 +96,7 @@ export default function CreateWallet({ navigation, route, storage }) {
     const runCreateAsync = async () => {
       // test
       setTimeout(() => {
-        console.log("generateMnemonics(" + language + ")");
         const _mnemonics = generateMnemonics(language);
-        //console.log(_mnemonics);
 
         setSteps(steps + 1);
         setMnemonics(_mnemonics);
@@ -413,7 +410,6 @@ export default function CreateWallet({ navigation, route, storage }) {
   }
 
   const handleChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setName(event.nativeEvent.text);
   };
 
@@ -424,9 +420,7 @@ export default function CreateWallet({ navigation, route, storage }) {
   const saveWallet = () => {
     const runAsync = async () => {
       if (confirmMnemonics.length > 0 && name.length > 0) {
-        //console.log("save your wallet");
         const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
-        //console.log(_wallet.privateKey, name);
 
         await storeWallet({ name, wallet: _wallet.privateKey });
         setWalletList((oldWalletList) => [

@@ -33,7 +33,6 @@ export default function SuportPage({ navigation, route }) {
     const [toEmail, setToEmail] = useState("");
 
     const handleNameChange = (event) => {
-        //console.log(event.nativeEvent.text);
         setName(event.nativeEvent.text);
     };
 
@@ -42,12 +41,10 @@ export default function SuportPage({ navigation, route }) {
     };
 
     const handleIssueChange = (event) => {
-        //console.log(event.nativeEvent.text);
         setIssue(event.nativeEvent.text);
     };
 
     const handletoEmailChange = (event) => {
-        //console.log(event.nativeEvent.text);
         setToEmail(event.nativeEvent.text);
     };
 
