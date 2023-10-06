@@ -31,6 +31,7 @@ import PhoneInput from 'react-phone-number-input/react-native-input';
 import {Country, isValidPhoneNumber, parsePhoneNumber, PhoneNumber} from 'react-phone-number-input';
 import { count } from "console";
 import {phone} from 'phone';
+import { color } from 'native-base/lib/typescript/theme/styled-system';
 
 const CodeCountry = ({ navigation, route }) => {
 
@@ -120,7 +121,8 @@ const CodeCountry = ({ navigation, route }) => {
             borderBottomWidth: 1,
             borderColor: '#ccc',
             minWidth: '33%',
-            textAlign: 'center'
+            textAlign: 'center',
+            color: colorMode === "dark" ? Color.white : Color.black
           }}
         />
 
