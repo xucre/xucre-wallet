@@ -58,7 +58,6 @@ export default function QRWallet({ navigation, route }) {
     getPermission();
   }, [isFocused]);
   const getPermission = () => {
-    console.log('_wallet :::', _wallet)
     PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
       title: 'Contacts',
       // eslint-disable-next-line sort-keys
