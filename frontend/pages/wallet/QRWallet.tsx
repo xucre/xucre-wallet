@@ -58,6 +58,7 @@ export default function QRWallet({ navigation, route }) {
     getPermission();
   }, [isFocused]);
   const getPermission = () => {
+    console.log('_wallet :::', _wallet)
     PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
       title: 'Contacts',
       // eslint-disable-next-line sort-keys
@@ -203,6 +204,7 @@ export default function QRWallet({ navigation, route }) {
                 viewBox={`0 0 256 256`}
               />
               <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
+              <Text variant={'lg'} mt={5}>{_wallet.name}</Text>
               <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
                 color: "#fff"
               }}>
