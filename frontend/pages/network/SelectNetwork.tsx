@@ -66,7 +66,6 @@ export default function SelectNetwork ({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       const _networks = await getNetworks();
-      //console.log('nectworks ', _networks)
       if (Array.isArray(_networks)) {
         setNetworks(_networks);
       }
@@ -86,12 +85,11 @@ export default function SelectNetwork ({navigation, route}) {
     try {
       if (metadata && metadata.symbol) {
         const img = await getIconImage(metadata.symbol.toLowerCase());
-        //console.log('data1', img)
         return img
       }
       
     } catch (err) {
-        console.log(err)
+        //
     }
 
 }
@@ -111,7 +109,6 @@ export default function SelectNetwork ({navigation, route}) {
     const removeNetwork = async () => {
       const result = await deleteNetwork(metadata);
       const _networks = await getNetworks();
-      //console.log('nectworks ', _networks)
       if (Array.isArray(_networks)) {
         setNetworks(_networks);
       } else {

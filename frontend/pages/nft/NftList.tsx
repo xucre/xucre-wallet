@@ -78,9 +78,7 @@ export default function NftList ({navigation, route}) {
   const syncNfts = async () => {
     try {
       if (wallet.name.length > 0) {
-        //console.log(wallet);
         const _tokens = await getNfts(wallet.wallet.address);
-        //console.log(nftJson.collections);
         if (isComponentMounted) {
           setChain(_tokens.chain);
           setHoldings(_tokens.results);
@@ -88,16 +86,14 @@ export default function NftList ({navigation, route}) {
         }
       }
     } catch (err) {
-      console.log(err);
+      //
     }
   }
 
   const syncTrendingNfts = async () => {
     try {
       if (wallet.name.length > 0) {
-        //console.log(wallet);
         const nftJson = await getNftJson();
-        //console.log(nftJson.collections);
         if (isComponentMounted) {
           setTrending(nftJson.trending);
           setCollections(nftJson.collections);
@@ -105,12 +101,11 @@ export default function NftList ({navigation, route}) {
         }
       }
     } catch (err) {
-      console.log(err);
+      //
     }
   }
 
   useEffect(() => {    
-    //setHoldings([]);
     setTimeout(() => {
       if (wallet.name.length > 0 ) {
         syncTrendingNfts();
@@ -121,9 +116,7 @@ export default function NftList ({navigation, route}) {
 
   useEffect(() => {
     const runAsync = async () => {
-      //console.log('getActiveWallet2');
       const _wallet = await getActiveWallet();
-      //console.log(_wallet[0]);
       setActiveWallet(_wallet[0]);
     }
     
@@ -132,11 +125,7 @@ export default function NftList ({navigation, route}) {
 
 
   const onRefresh = React.useCallback(async () => {
-   //console.log('refreshing nfts');
-    //setRefreshing(true);
-    /*setTimeout(() => {
-      syncNfts();
-    }, 1000)*/
+    //
   }, []);
   
   const addToken = () => {

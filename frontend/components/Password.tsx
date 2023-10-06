@@ -41,7 +41,6 @@ export default function PasswordPage({navigation, route, validateAuth}) {
   const [language, ] = useRecoilState(stateLanguage);
 
   const handleChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setPassword(event.nativeEvent.text);
   }
 
@@ -59,7 +58,7 @@ export default function PasswordPage({navigation, route, validateAuth}) {
   return (
     <ScrollView w={'full'} h={'full'} marginTop={5}>
   
-      <Modal isOpen={true} onClose={() => console.log('attemptedClose')} avoidKeyboard justifyContent="flex-end" bottom="4" size="lg">
+      <Modal isOpen={true} onClose={() => null} avoidKeyboard justifyContent="flex-end" bottom="4" size="lg">
         <Modal.Content>
           <Modal.Header>{translations[language].PasswordComponent.header}</Modal.Header>
           <Modal.Body>

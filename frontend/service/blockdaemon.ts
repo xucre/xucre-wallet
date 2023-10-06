@@ -17,10 +17,9 @@ export const getNfts = async (address) => {
       method: 'get',
       url: `nfts/owner/${address}`,
     });
-    //console.log(response);
+    
     return response.data;
   } catch (error) {
-    //console.error(error);
     return null;
   }
 }
@@ -31,10 +30,10 @@ export const getMetadata = async (contract, token, chain) => {
       method: 'get',
       url: `nfts/contract/${contract}/token/${token}?chain=${chain}`,
     });
-    //console.log(response);
+    
     return response.data;
   } catch (error) {
-    console.error(error);
+    //
     return {};
   }
 }

@@ -15,10 +15,6 @@ import { activeNetwork, activeWallet, networkList, language as stateLanguage, to
 //const lifi = new LIFI();
 
 export default function SwapToken({ navigation, route }) {
-
-  //console.log('route ', route);
-  //console.log('navigation ', navigation);
-
   const [network,] = useRecoilState(activeNetwork);
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet,] = useRecoilState(activeWallet);
@@ -37,13 +33,9 @@ export default function SwapToken({ navigation, route }) {
     const runAsync = async () => {
       //const chains = await lifi.getChains();
       const chains = [];
-      //console.log(chains[0]);
       const chain = chains.find((val) => {
-        //console.log(val.id, network.chainId);
         return val.id === network.chainId
       })
-      //console.log(chain);
-      //console.log(await lifi.getTokens({chains: [chains[0].id]}));
     }
     if (network) {
       runAsync();

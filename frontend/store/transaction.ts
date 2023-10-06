@@ -20,12 +20,10 @@ export const addTransaction = async (item: Transaction) => {
 };
 
 export const updateTransaction = async (item: Transaction) => {
-  //console.log('update transaction: ', item.hash);
   const _list = await EncryptedStorage.getItem("transaction_list");
   const list = JSON.parse(_list) as readonly Transaction[];
   if (Array.isArray(list)) {
     const newTransactionList = list.map((_item) => {
-      //console.log(_item.hash, item.hash);
       if (_item.hash === item.hash) {
         const mergeItem = {...item, submitDate: _item.submitDate};
         return mergeItem;
@@ -53,7 +51,6 @@ export const storeTransactions = async (list: readonly Transaction[]) => {
 };
 
 export const storeActiveTransaction = async (item: Transaction) => {
-  //console.log('store active item');
   await EncryptedStorage.setItem(
     "active_transaction",
     JSON.stringify(item)

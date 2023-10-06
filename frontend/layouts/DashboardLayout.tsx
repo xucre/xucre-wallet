@@ -76,7 +76,7 @@ function MainContent(props: MainContentProps) {
           <HStack mb="4" space={4}>
             <Pressable
               onPress={() => {
-                console.log('hello');
+                //
               }}
             >
               <Icon

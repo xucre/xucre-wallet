@@ -60,7 +60,6 @@ export default function SignTransaction({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        //console.log(requestDetails);
         setRequest(requestDetails);
       }
     }
@@ -77,11 +76,11 @@ export default function SignTransaction({navigation, route}) {
       }
       setValue(request['params']['request']['params'][0]);
     }
-    //console.log(request);
+    
   }, [request])
   
   useEffect(() => {
-    //console.log(request);
+    //
   }, [])
 
   const StyledItem = ({label, value}) => {
@@ -117,9 +116,8 @@ export default function SignTransaction({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
-    //console.log(response, clientResponse);
     navigation.navigate('ViewWallet');
   }
 
@@ -132,7 +130,7 @@ export default function SignTransaction({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
     navigation.navigate('ViewWallet');    
   }

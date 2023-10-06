@@ -67,7 +67,7 @@ export default function Listener () {
     const runAsync = async () => {
       if (_transactions.length > 0) {
         const transactionResult = await Promise.all(_transactions.map(async (transaction) => {
-          //console.log(transaction);
+          
           const result = await transaction.wait();
           if (result.status === 1) {
             const toastItem = {...successToast, description: transaction.hash, id:transaction.hash};
@@ -90,7 +90,7 @@ export default function Listener () {
               to: transaction.to,
               value: transaction.value,
             } as Transaction;
-            //console.log(_transaction, result);
+            
             await updateTransaction(_transaction);
             return _transaction;            
           } else if (result.status === 0) {
@@ -124,7 +124,6 @@ export default function Listener () {
   }, [_transactions]);
 
   useEffect(() => {
-    //console.log(transactions);
     setTransactions(transactions);
   }, [transactions])
 

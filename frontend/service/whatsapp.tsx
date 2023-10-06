@@ -53,13 +53,13 @@ import { getWhatsAppToken } from './api'
           .then(response => {
             response.json()
               .then(data => {
-                //console.log('value: ' + JSON.stringify(data));
+                //
               });
           })
           ToastAndroid.show(messageSend,ToastAndroid.TOP);
       }
       catch (error) {
-        console.error('error',error);
+        //
       }
     }
   

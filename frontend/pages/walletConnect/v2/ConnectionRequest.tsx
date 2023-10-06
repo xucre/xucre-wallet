@@ -49,7 +49,6 @@ export default function ConnectionRequest({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        //console.log(requestDetails);
         setRequest(requestDetails)
       }
     }
@@ -159,11 +158,9 @@ export default function ConnectionRequest({navigation, route}) {
       },
     };
     
-    //console.log(payload);
     const { topic, acknowledged } = await signClient.approve(payload);
     const session = await acknowledged();
     //const pairings = signClient.core.pairing.getPairings();
-    //console.log(pairings);
     navigation.navigate('ViewWallet');
   }
 

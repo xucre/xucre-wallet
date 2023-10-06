@@ -55,7 +55,6 @@ export default function SignTypedData({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        //console.log(requestDetails);
         setRequest(requestDetails);
       }
     }
@@ -68,7 +67,7 @@ export default function SignTypedData({navigation, route}) {
       setWalletAddress(request['params']['request']['params'][0]);
       const rawData = request['params']['request']['params'][1];
       const data = JSON.parse(rawData);
-      //console.log(data);
+      
       setDomain(data.domain);
       setTypes(data.types);
       setValue(data.message);
@@ -85,7 +84,7 @@ export default function SignTypedData({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
     navigation.navigate('ViewWallet');
   }
@@ -99,7 +98,7 @@ export default function SignTypedData({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
     navigation.navigate('ViewWallet');    
   }

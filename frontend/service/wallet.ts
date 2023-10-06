@@ -10,7 +10,6 @@ export function generateMnemonics(language) {
   try {
     
     //const nWallet = Wallet.createRandom({ locale: ethers.wordlists['es'] });
-    //console.log(nWallet.mnemonic);
     const newWallet = Wallet.createRandom({ locale: wordlists.en });
     //if (langVal === 'en') {
       return newWallet.mnemonic.phrase.split(' ');

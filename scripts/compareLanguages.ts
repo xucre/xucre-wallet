@@ -56,5 +56,5 @@ function compareJsonObjectsWithLodash(obj1, obj2): Differences {
 
 const obj1 = 'en';
 const obj2 = 'qu';
-console.log('obj1: '+ obj1, 'obj2: '+ obj2);
-console.log(compareJsonObjectsWithLodash(translations[obj1], translations[obj2]));
+console.debug('obj1: '+ obj1, 'obj2: '+ obj2);
+console.debug(compareJsonObjectsWithLodash(translations[obj1], translations[obj2]));
