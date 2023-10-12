@@ -25,17 +25,27 @@ import { language as stateLanguage } from "../../service/state";
 import translations from "../../assets/translations";
 import { useRecoilState } from "recoil";
 import { Border, Color } from "../../../GlobalStyles";
-import { Button, useColorMode, Text, Divider } from "native-base";
+import { Button, useColorMode, Text, Divider, Select} from "native-base";
 import codeCountry from "../../assets/json/codeCountry.json";
 import PhoneInput from 'react-phone-number-input/react-native-input';
 import {Country, isValidPhoneNumber, parsePhoneNumber, PhoneNumber} from 'react-phone-number-input';
 import { count } from "console";
 import {phone} from 'phone';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
+import { CountrySelectComponent } from 'react-phone-number-input'
+
+
+
 
 const CodeCountry = ({ navigation, route }) => {
+  
+  console.log('route ::::', route)
 
   const nn = veri(route.params.param1.phoneNumbers[0].number, route.params.param3.countryCode);
+
+  console.log('nn ::::', nn)
+
+  
 
   const [language] = useRecoilState(stateLanguage);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -47,11 +57,16 @@ const CodeCountry = ({ navigation, route }) => {
   const phoneInput = useRef(null);
   useEffect(() => {
     if (nn[0]){
-      const phone_2 = phone(nn[0]);
-      if (phone_2.isValid) {
-        setPhoneNumber(phone_2.phoneNumber);
-        setCountryCode(phone_2.countryIso2 as Country);
-      }
+      console.log('entro')
+      //const phone_2 = phone(nn[0]);
+      //console.log('phone_2 :::', phone_2)
+      //if (phone_2.isValid) {
+      //  setPhoneNumber(phone_2.phoneNumber);
+      //  setCountryCode(phone_2.countryIso2 as Country);
+      //}
+      setPhoneNumber(nn[0]);
+      setCountryCode(nn[1]);
+
       
     }
     
@@ -102,20 +117,32 @@ const CodeCountry = ({ navigation, route }) => {
       navigation.navigate("QRWallet");
     };
     const formaterNumber = () => {
+      console.log('phoneNumber ::::', phoneNumber)
+
       const checkValid = phoneInput.current?.isValidNumber(value);
-      _final = numberFormat(checkValid, phoneInput)
+      console.log('checkValid ::::', checkValid)
+      //_final = numberFormat(checkValid, phoneInput)
+      _final = phoneNumber
       buttonPress();
     };
     return componentsView(formaterNumber);
   }
 
+  
+
   function componentsView(formaterNumber) {
     return (
       <View style={styles.container}>
+        <Select
+        
+        />
         <PhoneInput
-          defaultCountry={countryCode}
-          value={phoneNumber}
+          //defaultCountry={countryCode}
+          //defaultCountry={nn[1]}
+          country="EC"
+          value={nn[0]}
           onChange={setPhoneNumber}
+          
           labels={{"phone": "Phone"}}
           style={{
             borderBottomWidth: 1,
@@ -187,13 +214,16 @@ function getCountryCodenumber(number: string) {
   let countryCode = codeCountry
   let currentPhoneNumber = ""
   let codeCountryIso2 = ""
+  let phoneC = ""
   let myArray = []
   for (const country of countryCode) {
     let lc = country.phone_code.length
     if (number.startsWith(country.phone_code)) {
       currentPhoneNumber = number.substring(lc).trim();
       codeCountryIso2 = country.iso2
-      myArray = [currentPhoneNumber, codeCountryIso2];
+      phoneC = country.phone_code
+      myArray = ['+' + phoneC + currentPhoneNumber, codeCountryIso2];
+      console.log('c212::: ',myArray)
       return myArray;
     }
   }
