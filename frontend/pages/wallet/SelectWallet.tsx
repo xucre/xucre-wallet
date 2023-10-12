@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from 'array-shuffle';
 import { ethers } from 'ethers';
@@ -38,7 +39,7 @@ import { Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import GuestLayout from '../../layouts/GuestLayout';
 import { activeWallet, language as stateLanguage, walletList } from "../../service/state";
-import { truncateString } from "../../service/utility";
+import { truncateStringStart } from "../../service/utility";
 import { getWallets, storeActiveWallet } from "../../store/wallet";
 
 export default function SelectWallet ({navigation, route}) {
@@ -79,7 +80,7 @@ export default function SelectWallet ({navigation, route}) {
                 </Text>
             </VStack>
             
-            <Text color="coolGray.500">{truncateString(metadata.wallet.address, 20)}</Text>     
+            <Text color="coolGray.500">{truncateStringStart(metadata.wallet.address, 20)}</Text>     
           </HStack>
         </Pressable>
         <HStack alignItems="center" space={{ base: 2 }}>       
@@ -131,7 +132,7 @@ export default function SelectWallet ({navigation, route}) {
           }
         </VStack>
         
-        <Button onPress={createWallet} style={{borderRadius: 100, marginRight:10, marginLeft:10}}  colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'darkText' : 'lightText'}>{translations[language].SelectWallet.new_button}</Text></Button>
+        <Button onPress={createWallet} style={{borderRadius: 100, marginLeft:10, marginRight:10}}  colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'darkText' : 'lightText'}>{translations[language].SelectWallet.new_button}</Text></Button>
       </Box>
     </GuestLayout>
   )

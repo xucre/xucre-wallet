@@ -169,13 +169,11 @@ export const AppWrapper = () => {
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
 
-    console.log('notification foreground:', detail);
+    //console.log('notification foreground:', detail);
       switch (type) {
         case EventType.DISMISSED:
-          console.log('User dismissed notification', detail);
           break;
         case EventType.PRESS:
-          console.log('User pressed notification', detail);
           break;
       }
     });
@@ -188,9 +186,8 @@ export const AppWrapper = () => {
     const runAsync = async () => {
       try {
         await createSignClient();
-        console.log('sign in created')
       } catch (err) {
-        console.log('error creating sign client', err);
+        //
       }
     }
     
@@ -198,7 +195,6 @@ export const AppWrapper = () => {
   }, []);
 
   useEffect(() => {
-    //console.log('scheme',scheme);
     if (scheme) {
       setColorMode(scheme);
     }
@@ -208,12 +204,10 @@ export const AppWrapper = () => {
     const runAsync = async () => {
       const clientTheme = await getTheme();
       if (!clientTheme) {
-        //console.log('setting default theme');
         await storeTheme('light');
         setColorMode(clientTheme);
         setScheme('light');
       } else {
-        //console.log('setting existing theme:', clientTheme);
         setColorMode(clientTheme);
         setScheme(clientTheme);
       }
@@ -258,7 +252,6 @@ export const AppWrapper = () => {
             })}
             screenListeners={{
               state: (e) => {
-                //console.log('state changed');
                 setRouteState(uuidv4());
               },
             }}

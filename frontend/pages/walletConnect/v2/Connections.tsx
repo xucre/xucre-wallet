@@ -50,7 +50,6 @@ export default function ConnectionRequest({navigation, route}) {
 
   const getPairs = async () => {
     const _pairings = signClient.core.pairing.getPairings();
-    //console.log(pairings, 'pairings')
     setPairings(_pairings);
   }
 
@@ -58,12 +57,9 @@ export default function ConnectionRequest({navigation, route}) {
     //const address = metadata.wallet.address;
     useEffect(() => {
       const runAsync = async () => {
-        //console.log('run async', metadata.topic);
         const res = await signClient.core.pairing.ping({ topic: metadata.topic })
-        //console.log('ping pair', res);
       }
       runAsync();
-      //console.log('pairdata', metadata);
     }, [metadata])
     const removePair = async () => {
       await signClient.core.pairing.disconnect({ topic: metadata.topic });

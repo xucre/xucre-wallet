@@ -64,23 +64,18 @@ export default function CreateWallet ({navigation, route, storage}) {
   const icon_color = colorMode ==='dark'? 'white':'black';
 
   const handleNameChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setName(event.nativeEvent.text)
   }
   const handleExplorerChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setBlockExplorer(event.nativeEvent.text)
   }
   const handleChainIdChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setChainId(event.nativeEvent.text);
   }
   const handleRpcUrlChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setRpcUrl(event.nativeEvent.text)
   }
   const handleSymbolChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setSymbol(event.nativeEvent.text)
   }
 
@@ -88,7 +83,7 @@ export default function CreateWallet ({navigation, route, storage}) {
   const saveNetwork = () => {
     const runAsync = async () => {
       if (name.length > 0 && chainId.length > 0 && rpcUrl.length > 0 && symbol.length > 0 && Number.isInteger(Number.parseInt(chainId))) {
-        //console.log(_wallet.privateKey, name);
+        
         const _network : Network = {
           blockExplorer,
           chainId : Number.parseInt(chainId),

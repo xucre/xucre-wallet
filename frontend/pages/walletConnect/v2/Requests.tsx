@@ -50,7 +50,6 @@ export default function Requests({navigation, route}) {
 
   const getRequests = async () => {
     const _requests = await getAllNotifications();
-    //console.log(_requests);
     if (_requests) {
       const _pairings = signClient.core.pairing.getPairings();
       const _pairingMap = _pairings.reduce((returnVal, val, i) => {
@@ -67,13 +66,9 @@ export default function Requests({navigation, route}) {
     const [isDeleted, setIsDeleted] = useState(false);
     useEffect(() => {
       const runAsync = async () => {
-        //console.log('run async', metadata.topic);
-        //const res = await signClient.core.pairing.ping({ topic: metadata.topic })
-        //console.log('ping pair', res);
+        //
       }
       runAsync();
-      //console.log('pairdata', metadata);
-      console.log(event);
     }, [metadata, event])
 
     const deleteRequest = () => {
@@ -165,7 +160,6 @@ export default function Requests({navigation, route}) {
             {
               requests.map((val, i) => {
                 const mdt = paringMap[val.topic];
-                //if (i === 0) console.log(paringMap['cad4d704a30a324806b2aaedb6e95e58fde39dbe0e3c061729935d06462a443c']);
                 return (
                     <Request event={val} metadata={mdt} key={'Request'+i} />                 
                 )              

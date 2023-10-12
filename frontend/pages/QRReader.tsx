@@ -26,13 +26,10 @@ export default function QRReader({navigation}) {
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     const { version, relay } = parseUri(data);
-    //console.log(type, data, version, relay);
-    //console.log('signClient', signClient);
-    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     try {
       signClient.pair({uri: data});
     } catch (e) {
-      console.log(e);
+      //
     }
   };
 

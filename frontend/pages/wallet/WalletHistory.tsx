@@ -179,7 +179,6 @@ export default function WalletHistory({ navigation, route }) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [chainName, setChainName] = useState('matic-mumbai');
   const handleNameChange = (event) => {
-    //console.log(event.nativeEvent.text);
     setChainName(event.nativeEvent.text)
   }
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
@@ -206,11 +205,7 @@ export default function WalletHistory({ navigation, route }) {
   const getData = async () => {
 
     const historyResults = await getWalletHistory(wallet.address, chainName);
-    //console.log(historyResults);
-    //console.log('history retrieved');
     const outputData = processJsonData(historyResults);
-    //console.log(outputData)
-    //console.log(outputData.openQuotesByDay[0]);
 
     // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
     const isReady = outputData === null || outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
@@ -223,7 +218,6 @@ export default function WalletHistory({ navigation, route }) {
       direction: 'down',
       quotes: []
     })
-    //console.log(openQuotes.quotes.length);
     // END TESTING PORTION
     setHoldings(outputData.itemsWithRecentOpenQuote);
     const finalQuotes = openQuotes.quotes.map((d) => {
@@ -247,11 +241,8 @@ export default function WalletHistory({ navigation, route }) {
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
     } else {
-      //console.log(_wallet.wallet.address);
       setWallet(_wallet.wallet);
     }
-
-    //console.log('ViewWallet', network.chainId);
   }, [_wallet, network]);
 
   useEffect(() => {
@@ -273,7 +264,6 @@ export default function WalletHistory({ navigation, route }) {
   }, [])
 
   const copyToClipboard = () => {
-    //console.log('copyToClipboard', wallet.address);
     Clipboard.setStringAsync(String(wallet.address));
     setDisplayTooltip(true);
     setTimeout(() => {
@@ -304,7 +294,6 @@ export default function WalletHistory({ navigation, route }) {
     };
 
     if (jsonData.error) {
-      //console.error(jsonData.error_message);
       return output;
     }
 

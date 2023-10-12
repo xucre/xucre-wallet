@@ -56,7 +56,6 @@ export default function EthSign({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        //console.log(requestDetails);
         setRequest(requestDetails);
       }
     }
@@ -87,7 +86,7 @@ export default function EthSign({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
     navigation.navigate('ViewWallet');
   }
@@ -101,7 +100,7 @@ export default function EthSign({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
     navigation.navigate('ViewWallet');    
   }

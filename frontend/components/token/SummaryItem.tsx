@@ -25,14 +25,14 @@ export default function SummaryItem ({token}) {
     }
   }, []);
   useEffect(() => {
-    //console.log(tokenImage);
+    //
   }, [tokenImage])
   useEffect(() => {
     const runAsync = async () => {
       try {
         if (token.contract.ticker_symbol) {
           const img = await getIconImage(token.contract.ticker_symbol.toLowerCase());
-          //console.log('image retrieved', img);
+
           setTokenImage(img as string);
         }
         
@@ -40,12 +40,11 @@ export default function SummaryItem ({token}) {
         //const fileReaderInstance = new FileReader();
         //fileReaderInstance.readAsDataURL(blob); 
         //fileReaderInstance.onload = () => {
-          //console.log(fileReaderInstance.result);
           //setTokenImage(fileReaderInstance.result as string);
         //}
         
       } catch (err) {
-        console.log('err', err);
+        //
       }
     }
     if (token.contract.ticker_symbol) {
@@ -54,7 +53,7 @@ export default function SummaryItem ({token}) {
   }, [token])
 
   const TokenIcon = ({iname}) => {
-    //console.log(iname);
+    
     if (
       iname.toLowerCase() === 'matic' ||
       iname.toLowerCase() === 'btc' || 

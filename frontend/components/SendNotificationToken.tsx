@@ -58,7 +58,7 @@ export default function SendNotificationToken({ navigation, route }) {
                         setContactList(filteredContacts);
                     })
                     .catch((e) => {
-                        console.log(e);
+                        //
                     });
             }
         });
@@ -87,10 +87,7 @@ export default function SendNotificationToken({ navigation, route }) {
     }
 
     const eventFocus = (event) => {
-        const eventFocus = event
-        //console.log('evento focus entro', event)
-
-
+        const eventFocus = event;
     }
 
 

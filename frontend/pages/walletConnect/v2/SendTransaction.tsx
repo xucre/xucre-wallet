@@ -63,7 +63,6 @@ export default function SendTransaction({navigation, route}) {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        //console.log(requestDetails);
         setRequest(requestDetails);
       }
     }
@@ -73,7 +72,6 @@ export default function SendTransaction({navigation, route}) {
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
-      console.log(request['params']['request']['method']);
       
       setMethod(request['params']['request']['method']);
       setWalletAddress(request['params']['request']['params'][0]['from']);
@@ -125,7 +123,7 @@ export default function SendTransaction({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
     navigation.navigate('ViewWallet');
   }
@@ -139,7 +137,7 @@ export default function SendTransaction({navigation, route}) {
     try {
       await deleteNotification(String(request['id']));
     } catch (err) {
-      console.log('error deleting notification');
+      //
     }
     navigation.navigate('ViewWallet');    
   }
