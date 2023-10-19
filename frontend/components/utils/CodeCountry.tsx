@@ -92,7 +92,7 @@ const CodeCountry = ({ navigation, route }) => {
         _final,
         "shareqrcode",
         "en_US",
-        { param1: "www.google.com", param2: route.params.param2 },
+        { param1: "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=xucre.expo.client", param2: route.params.param2 },
         translations[language].QRWallet.toast_send
       );
       await delay(3000);
