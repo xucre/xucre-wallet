@@ -151,7 +151,8 @@ export default function SelectNetwork ({navigation, route}) {
                 }}
               >                
                 <Menu.Item onPress={() => {selectNetwork()}}><Text>{translations[language].SelectNetwork.select_button}</Text></Menu.Item>
-                  <Menu.Item onPress={() => {removeNetwork()}}><Text>{translations[language].SelectNetwork.delete_button}</Text></Menu.Item>                
+                  <Menu.Item onPress={() => {removeNetwork()}}><Text>{translations[language].SelectNetwork.delete_button}</Text></Menu.Item> 
+                              
               </Menu>
             </Tooltip>    
         </HStack>

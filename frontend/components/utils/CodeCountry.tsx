@@ -33,18 +33,11 @@ import { count } from "console";
 import {phone} from 'phone';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import { CountrySelectComponent } from 'react-phone-number-input'
-
+import { ToastAndroid } from 'react-native';
 
 
 
 const CodeCountry = ({ navigation, route }) => {
-  
-  console.log('route ::::', route)
-
-  const nn = veri(route.params.param1.phoneNumbers[0].number, route.params.param3.countryCode);
-
-  console.log('nn ::::', nn)
-
   
 
   const [language] = useRecoilState(stateLanguage);
@@ -56,20 +49,7 @@ const CodeCountry = ({ navigation, route }) => {
   let _final: any;
   const phoneInput = useRef(null);
   useEffect(() => {
-    if (nn[0]){
-      console.log('entro')
-      //const phone_2 = phone(nn[0]);
-      //console.log('phone_2 :::', phone_2)
-      //if (phone_2.isValid) {
-      //  setPhoneNumber(phone_2.phoneNumber);
-      //  setCountryCode(phone_2.countryIso2 as Country);
-      //}
-      setPhoneNumber(nn[0]);
-      setCountryCode(nn[1]);
-
-      
-    }
-    
+      setPhoneNumber(route.params.param1.phoneNumbers[0].number);  
   },[])
 
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -85,9 +65,11 @@ const CodeCountry = ({ navigation, route }) => {
 
   if (route.params.param4 === "send") {
     const formaterNumberSend = () => {
-      const checkValid = phoneInput.current?.isValidNumber(value);
-      _final = numberFormat(checkValid, phoneInput)
-      buttonPressSend();
+
+      const regex = /^\+/;
+      const isValidNumber = regex.test(phoneNumber);
+
+      isValidNumber ? (_final = phoneNumber, buttonPressSend()) :  ToastAndroid.show(translations[language].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
     };
     const buttonPressSend = async () => {
       const amoutAndName = route.params.param3 + " " + route.params.param5;
@@ -117,32 +99,22 @@ const CodeCountry = ({ navigation, route }) => {
       navigation.navigate("QRWallet");
     };
     const formaterNumber = () => {
-      console.log('phoneNumber ::::', phoneNumber)
-
-      const checkValid = phoneInput.current?.isValidNumber(value);
-      console.log('checkValid ::::', checkValid)
-      //_final = numberFormat(checkValid, phoneInput)
-      _final = phoneNumber
-      buttonPress();
+      const regex = /^\+/;
+      const isValidNumber = regex.test(phoneNumber);
+      isValidNumber ? (_final = phoneNumber, buttonPress()) :  ToastAndroid.show(translations[language].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
     };
     return componentsView(formaterNumber);
   }
 
-  
-
   function componentsView(formaterNumber) {
     return (
       <View style={styles.container}>
-        <Select
         
-        />
         <PhoneInput
-          //defaultCountry={countryCode}
-          //defaultCountry={nn[1]}
-          country="EC"
-          value={nn[0]}
-          onChange={setPhoneNumber}
-          
+          international
+          withCountryCallingCode
+          value={route.params.param1.phoneNumbers[0].number}
+          onChange={setPhoneNumber}          
           labels={{"phone": "Phone"}}
           style={{
             borderBottomWidth: 1,
@@ -190,60 +162,6 @@ const CodeCountry = ({ navigation, route }) => {
 
 };
 
-function veri(number: string, cCountry: string) {
-  let currentPhoneNumber = ""
-  let codeCountryIso2 = ""
-  let myArray = []
-  if (number.includes("+")) {
-    let str = number.slice(1)
-    return myArray = getCountryCodenumber(str)
-  } else if (!number.includes("+")) {
-    myArray = getCountryCodenumber(number)
-    if (myArray === undefined) {
-      currentPhoneNumber = number
-      codeCountryIso2 = cCountry
-      myArray = [currentPhoneNumber, codeCountryIso2];
-      return myArray;
-    } else {
-      return myArray
-    }
-  }
-}
-
-function getCountryCodenumber(number: string) {
-  let countryCode = codeCountry
-  let currentPhoneNumber = ""
-  let codeCountryIso2 = ""
-  let phoneC = ""
-  let myArray = []
-  for (const country of countryCode) {
-    let lc = country.phone_code.length
-    if (number.startsWith(country.phone_code)) {
-      currentPhoneNumber = number.substring(lc).trim();
-      codeCountryIso2 = country.iso2
-      phoneC = country.phone_code
-      myArray = ['+' + phoneC + currentPhoneNumber, codeCountryIso2];
-      console.log('c212::: ',myArray)
-      return myArray;
-    }
-  }
-}
-
-function numberFormat(checkValid: any, phoneInput: React.MutableRefObject<any>) {
-  if (!checkValid) {
-    let numberfinal: any
-    let character = "+";
-    let phoneNumber = phoneInput.current.state.number;
-    let getNumberAfterPossiblyEliminatingZero = phoneInput.current?.getNumberAfterPossiblyEliminatingZero();
-    let newFormatterNumber = phoneNumber.includes(
-      phoneInput.current.state.code
-    )
-      ? phoneNumber.replace(character + phoneInput.current.state.code, "")
-      : getNumberAfterPossiblyEliminatingZero.number;
-    return numberfinal = phoneInput.current.state.code + newFormatterNumber;
-  }
-}
-
 const styles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 100,
@@ -271,6 +189,7 @@ const styles = StyleSheet.create({
   textInput: {
     paddingVertical: 0,
   },
+  
 });
 
 export default CodeCountry;

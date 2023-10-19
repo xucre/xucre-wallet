@@ -38,6 +38,7 @@ import { activeWallet, language as stateLanguage } from "../../service/state";
 
 
 export default function QRWallet({ navigation, route }) {
+  
   const [local, setlocal] = useState(false);
   const [location, setLocation] = useState(false);
   const [lat, setlat] = useState(String);
@@ -46,7 +47,7 @@ export default function QRWallet({ navigation, route }) {
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const initialFocusRef = React.useRef(null);
-
+  
 
   const [contactList, setContactList] = useState([]);
   const [allContacts, setAllContacts] = useState([]);

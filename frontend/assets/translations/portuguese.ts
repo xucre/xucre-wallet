@@ -131,8 +131,8 @@ const values = {
     permission_request: 'Solicitando permissÃ£o para cÃ¢mera',
     rescan: 'Toque para escanear novamente'
   },
-  Qrwallet: {
-    instructions: 'Compartilhe para receber fundos',
+  QRWallet: {
+    instructions: "Compartilhe para receber fundos",
     toast_send: "WhatsApp enviado com sucesso!"
   },
   RecoverWallet: {
@@ -161,6 +161,7 @@ const values = {
     select_button: 'Selecionar rede',
     select_button_tooltip: 'Mais opÃ§Ãµes',
     Select_network: 'Selecione ou crie uma nova rede',
+    select_network_default: "Selecione a rede padrão",
     title: 'Redes',
   },
   SelectWallet: {
@@ -261,7 +262,8 @@ const values = {
   },  
   WhatsAppNotification:{
     button: "Enviar notificação pelo WhatsApp",
-    Send_Button: "Enviar Whatsapp"
+    Send_Button: "Enviar Whatsapp",
+    notificationNumber: "Insira o código do país incluindo o sinal +"
   },
   totalBalance:{
     title: "Balanço total"

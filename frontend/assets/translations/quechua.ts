@@ -161,6 +161,7 @@ const values = {
     select_button: 'Llika akllay', 
     select_button_tooltip: 'Aswan akllanakuna',
     select_network: 'Akllay icha musuq llikata ruray',
+    select_network_default: "Ñawpaqmanta ruwasqa llika akllay",
     title: 'Llikakuna'
   },
   SelectWallet: {
@@ -261,8 +262,8 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Kachay WhatsApp Willana",
-    Send_Button: "Kachay Whatsapp"
-
+    Send_Button: "Kachay Whatsapp",
+    notificationNumber: "Ama hina kaspa, mama llaqtap chikuta + qillqawan qillqay"
   },
   totalBalance:{
     title: "Allin pachapi"

@@ -161,6 +161,7 @@ const values = {
     select_button: "Select Network",
     select_button_tooltip: "More Options",
     select_network: "Select or create a new network",
+    select_network_default: "Select Default Network",
     title: "Networks"
   },
   SelectWallet: {
@@ -261,7 +262,8 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Send WhatsApp notification",
-    Send_Button: "Send Whatsapp"
+    Send_Button: "Send Whatsapp",
+    notificationNumber: "Please enter the country code including the + sign"
   },
   totalBalance:{
     title: "Total Balance"

@@ -57,6 +57,7 @@ import QRReader from './pages/QRReader';
 import SetPassword from './pages/SetPassword';
 import SupportPage from './pages/SupportPage';
 import CreateNetwork from './pages/network/CreateNetwork';
+import NetworkDefault from './pages/network/NetworkDefault';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
 import NftList from './pages/nft/NftList';
@@ -290,6 +291,10 @@ export const AppWrapper = () => {
               title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
+              headerTitleAlign: 'left',
+              title: translations[language]?.SelectNetwork?.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="NetworkDefault" component={NetworkDefault} options={{ 
               headerTitleAlign: 'left',
               title: translations[language]?.SelectNetwork?.title, 
             }} ></Stack.Screen>
