@@ -161,6 +161,7 @@ const values = {
     select_button: 'Itlan Maatla-tl',
     select_button_tooltip: 'Mas Opciones',
     select_network: "Tlaihittal-li o tla-yoocoya a Yancuic Maatla-tl",
+    select_network_default: "Yolpaltic tlen miqui tlalticpac",
     title: 'Maatla-tl',
   },
   SelectWallet: {
@@ -261,7 +262,8 @@ const values = {
   },
   WhatsAppNotification:{
     button: "Ihuaa WhatsApp tenemachtiliztli",
-    Send_Button: "Ihuaa WhatsApp"
+    Send_Button: "Ihuaa WhatsApp",
+    notificationNumber: "Mak'ij nuk'uj che ri' jun b'anik'oj taq chi' ri' +"
   },
   totalBalance:{
     title: "Tlalpochcalli"
