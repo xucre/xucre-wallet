@@ -33,6 +33,7 @@ import { count } from "console";
 import {phone} from 'phone';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import { CountrySelectComponent } from 'react-phone-number-input'
+// eslint-disable-next-line react-native/split-platform-components
 import { ToastAndroid } from 'react-native';
 
 
@@ -53,6 +54,10 @@ const CodeCountry = ({ navigation, route }) => {
   },[])
 
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const verilanguage = VerificationLengaje(language);
+
+  console.log('verilanguage :::', verilanguage)
 
   const navigationScreens = () => {
     if (route.params.param4 === "send") {
@@ -76,7 +81,8 @@ const CodeCountry = ({ navigation, route }) => {
       whatsapp(
         _final,
         "shared_notification",
-        "en_US",
+        //"en_US",
+        verilanguage,
         { param1: route.params.param2, param2: amoutAndName },
         translations[language].QRWallet.toast_send
       );
@@ -88,10 +94,12 @@ const CodeCountry = ({ navigation, route }) => {
 
   } else {
     const buttonPress = async () => {
+      
       whatsapp(
         _final,
-        "shareqrcode",
-        "en_US",
+        "share_address",
+        //"es",
+        verilanguage,
         { param1: "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=xucre.expo.client", param2: route.params.param2 },
         translations[language].QRWallet.toast_send
       );
@@ -162,6 +170,17 @@ const CodeCountry = ({ navigation, route }) => {
 
 };
 
+function VerificationLengaje(vLengaje: string) {
+  console.log('vLengaje ::', vLengaje);
+  if(vLengaje === 'en' || vLengaje === 'nah' || vLengaje === 'qu'){
+    return 'en_US'
+  }else if(vLengaje === 'es'){
+    return 'es'
+  }else if(vLengaje === 'pt'){
+    return 'pt_BR'
+  }
+
+}
 const styles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 100,
