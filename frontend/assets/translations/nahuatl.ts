@@ -172,6 +172,7 @@ const values = {
   },
   SendToken: {
     address_placeholder: 'Ahaquiaa -ixti del Receptor',
+    not_enough_error: "Insufficient Balance",
     submit_button: 'Ihuaa',
     title: 'Ihuaa Token',
     token_placeholder: 'Ihitta Token',

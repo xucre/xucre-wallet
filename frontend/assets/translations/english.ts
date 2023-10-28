@@ -172,6 +172,7 @@ const values = {
   },
   SendToken: {
     address_placeholder: "Enter Receiver Address",
+    not_enough_error: "Insufficient Balance",
     submit_button: "Send",
     title: "Send Token",
     token_placeholder: "Select Token"
