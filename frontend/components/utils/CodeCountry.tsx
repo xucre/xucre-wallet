@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-unused-styles */
 /* eslint-disable sort-imports */
-/* eslint-disable functional/no-loop-statement */
-/* eslint-disable prefer-const */
 /* eslint-disable import/order */
 /* eslint-disable functional/no-let */
 /* eslint-disable sort-keys */
@@ -32,7 +30,7 @@ import {Country, isValidPhoneNumber, parsePhoneNumber, PhoneNumber} from 'react-
 import { count } from "console";
 import {phone} from 'phone';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
-import { CountrySelectComponent } from 'react-phone-number-input'
+//import { CountrySelectComponent } from 'react-phone-number-input'
 // eslint-disable-next-line react-native/split-platform-components
 import { ToastAndroid } from 'react-native';
 
@@ -57,7 +55,7 @@ const CodeCountry = ({ navigation, route }) => {
 
   const verilanguage = VerificationLengaje(language);
 
-  console.log('verilanguage :::', verilanguage)
+  //console.log('verilanguage :::', verilanguage)
 
   const navigationScreens = () => {
     if (route.params.param4 === "send") {
@@ -171,7 +169,7 @@ const CodeCountry = ({ navigation, route }) => {
 };
 
 function VerificationLengaje(vLengaje: string) {
-  console.log('vLengaje ::', vLengaje);
+  //console.log('vLengaje ::', vLengaje);
   if(vLengaje === 'en' || vLengaje === 'nah' || vLengaje === 'qu'){
     return 'en_US'
   }else if(vLengaje === 'es'){

@@ -1,7 +1,10 @@
 /* eslint-disable react-native/no-unused-styles */
+import { deflateRaw } from "zlib";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from "array-shuffle";
 import { BigNumber, ethers, getDefaultProvider, Wallet } from "ethers";
+import { isAddress } from "ethers/lib/utils";
 import {
   Alert,
   AlertDialog,
@@ -31,6 +34,7 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  useToast,
   VStack,
 } from "native-base";
 import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
@@ -57,6 +61,7 @@ import { addToken, getTokenByChain, updateToken } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
 
 export default function SendToken({ navigation, route, storage }) {
+  const toast = useToast();
   const [language] = useRecoilState(stateLanguage);
   const token = route.params?.token;
   const [selectedToken, setSelectedToken] = useState({} as Token);
@@ -67,10 +72,14 @@ export default function SendToken({ navigation, route, storage }) {
   );
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("0");
+  const [balance, setBalance] = useState(BigNumber.from(0))
+  const [notEnough, setNotEnough] = useState(false);
   const [address, setAddress] = useState("");
   const [type, setType] = useState("token");
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [checkValues, setcheckValues] = useState(false);
+  const [error, setError] = useState('');
+
   useEffect(() => {
     return () => {
       setIsComponentMounted(false);
@@ -103,7 +112,25 @@ export default function SendToken({ navigation, route, storage }) {
     if (token) {
       setSelectedToken(token);
     }
-  }, [token]);
+  }, [token, wallet]);
+
+  useEffect(() => {
+    const runAsync = async () => {
+      await wallet.provider.getNetwork();
+      if (selectedToken.type === 'coin' && wallet.address) {
+        const walletBalance = await wallet.getBalance();
+        //console.log('getbalances', wallet.address, walletBalance);
+        setBalance(walletBalance);
+      } else if (selectedToken.type === 'token' && wallet.address) {
+        const contract = new ethers.Contract(selectedToken.address, erc20Abi, provider);
+        const _balance = await contract.balanceOf((wallet.address));
+        setBalance(_balance);
+      }
+    }
+    if (selectedToken && wallet && wallet.address) {
+      runAsync();
+    }
+  }, [selectedToken, wallet])
 
   useEffect(() => {
     if (_wallet.name != "" && network) {
@@ -111,8 +138,31 @@ export default function SendToken({ navigation, route, storage }) {
       setProvider(_provider);
       const newWallet = _wallet.wallet.connect(_provider);
       setWallet(newWallet);
+    } else {
+      console.log('no wallets');
     }
   }, [_wallet, network]);
+
+  useEffect(() => { 
+    console.log('balance', balance);
+    console.log('amount', amount);
+    if (amount) {
+      try {
+        const isTooMuch = ethers.utils.parseEther(amount).gt(balance);
+        setNotEnough(isTooMuch);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [balance, amount])
+
+  useEffect(() => {
+    if (error.length > 0) {
+      toast.show({
+        render: () => <ToastMessage />
+      });
+    }
+  }, [error])
 
   const { colorMode } = useColorMode();
 
@@ -145,7 +195,7 @@ export default function SendToken({ navigation, route, storage }) {
     } */
     const runAsync = async () => {
       try {
-        if (address.length > 0) {
+        if (address.length > 0 && isAddress(address)) {
           if (selectedToken.type === "token" && wallet.address) {
             const _contract = new ethers.Contract(
               selectedToken.address,
@@ -179,12 +229,49 @@ export default function SendToken({ navigation, route, storage }) {
               navigation.navigate("ViewWallet");
             }
             setLoading(false);
+            setError('');
+          } else if (selectedToken.type === "coin" && wallet.address) {
+
+            const tx = {
+              to: address,
+              value: ethers.utils.parseEther(amount)
+            }
+            // Sending ether
+            const _submitted = await wallet.sendTransaction(tx)
+
+            const _transaction = {
+              chainId: _submitted.chainId,
+              data: _submitted.data,
+              from: _submitted.from,
+              hash: _submitted.hash,
+              nonce: _submitted.nonce,
+              status: "pending",
+              submitDate: new Date(),
+              to: _submitted.to,
+              value: _submitted.value,
+            } as Transaction;
+            await addTransaction(_transaction);
+            setTransactionList([...pendingTransactions, _submitted]);
+            if (_transaction) {
+              //Whatsapp Integration
+              if(checkValues){
+                openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
+              }
+              navigation.navigate("ViewWallet");
+            }
+            setLoading(false);
+            setError('');
+          } else {
+            setLoading(false);
+            setError('invalid token')
           }
         } else {
           setLoading(false);
+          setError('Invalid address');
         }
       } catch (err) {
         setLoading(false);
+        setError(err);
       }
     };
     setLoading(true);
@@ -192,6 +279,20 @@ export default function SendToken({ navigation, route, storage }) {
       runAsync();
     }, 100);
   };
+
+  const ToastMessage = () => {
+    return (
+      <Alert w="100%" status={'warning'}>
+        <VStack space={2} flexShrink={1} w="100%">
+          <Text 
+            color={colorMode === "dark" ? Color.black : Color.white}
+            fontWeight={"bold"}>
+              {error}
+          </Text>
+        </VStack>
+      </Alert>
+    )
+  }
 
   return (
     <Center
@@ -273,7 +374,20 @@ export default function SendToken({ navigation, route, storage }) {
 
             <Box>
             <HStack space={6} my={4}>
-            <Checkbox onChange={setcheckValues}  defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
+              {/*
+                <Checkbox onChange={setcheckValues}  defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
+              */}
+              {notEnough && 
+                <Alert w="100%" status={'error'}>
+                  <VStack space={2} flexShrink={1} w="100%">
+                    <Text 
+                      color={colorMode === "dark" ? Color.black : Color.white}
+                      fontWeight={"bold"}>
+                        {translations[language].SendToken.not_enough_error}
+                    </Text>
+                  </VStack>
+                </Alert>
+              }
             </HStack>
             </Box>
             <Box>
@@ -286,7 +400,7 @@ export default function SendToken({ navigation, route, storage }) {
                     send();
                   }}
                   isLoading={loading}
-                  disabled={address.length === 0 || type.length === 0}
+                  disabled={address.length === 0 || type.length === 0 || notEnough}
                 >
                   <Text
                     color={colorMode === "dark" ? Color.black : Color.white}

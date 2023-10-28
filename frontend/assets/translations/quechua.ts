@@ -172,6 +172,7 @@ const values = {
   }, 
   SendToken: { 
     address_placeholder: 'Chaskiqpa direccionninta qillqay', 
+    not_enough_error: "Insufficient Balance",
     submit_button: 'Kachay', 
     title: 'Kachay Token', 
     token_placeholder: 'Token akllay', 
