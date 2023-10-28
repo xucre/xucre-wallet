@@ -62,3 +62,9 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 - Run npm i
 - Delete node_modules and run npm i
 - Delete android/app/build directory
+
+## How to update version
+- package.json version
+- app.json version
+- android/app/build.gradle version
+Versions should all be the same value. 
