@@ -70,4 +70,6 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 - package.json version
 - app.json version
 - android/app/build.gradle version
+- android/app/build.gradle versionCode
 Versions should all be the same value. 
+VersionCode should increment by 1

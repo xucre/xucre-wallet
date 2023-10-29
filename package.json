@@ -138,7 +138,7 @@
     "web:deploy": "expo build:web && gh-pages -d web-build",
     "eas-build": "eas build -p android --profile production"
   },
-  "version": "1.0.4",
+  "version": "1.0.3",
   "private": true,
   "name": "xucre",
   "homepage": "https://cawfree.github.io/create-react-native-dapp",
