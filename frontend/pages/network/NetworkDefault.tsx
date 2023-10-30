@@ -97,7 +97,6 @@ export default function NetworkDefault({ navigation, route }) {
         }
 
         const openSelectNetwork = () => {
-            //console.log('metadata ::: ', metadata)
             setSelectedNetwork(metadata);
             setActiveNetwork(metadata);
             storeActiveNetwork(metadata);

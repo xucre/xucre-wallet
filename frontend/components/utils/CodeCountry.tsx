@@ -55,8 +55,6 @@ const CodeCountry = ({ navigation, route }) => {
 
   const verilanguage = VerificationLengaje(language);
 
-  //console.log('verilanguage :::', verilanguage)
-
   const navigationScreens = () => {
     if (route.params.param4 === "send") {
       navigation.navigate('SendNotificationToken');
@@ -169,7 +167,6 @@ const CodeCountry = ({ navigation, route }) => {
 };
 
 function VerificationLengaje(vLengaje: string) {
-  //console.log('vLengaje ::', vLengaje);
   if(vLengaje === 'en' || vLengaje === 'nah' || vLengaje === 'qu'){
     return 'en_US'
   }else if(vLengaje === 'es'){

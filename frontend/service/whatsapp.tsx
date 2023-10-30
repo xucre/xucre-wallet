@@ -54,7 +54,6 @@ import { getWhatsAppToken } from './api'
             response.json()
               .then(data => {
                 //
-                //console.log('data:::: ',data)
               });
           })
           ToastAndroid.show(messageSend,ToastAndroid.TOP);

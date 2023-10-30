@@ -1,4 +1,4 @@
-rootProject.name = 'XucreWallet'
+rootProject.name = 'Xucre Wallet'
 include ':@notifee_react-native'
 project(':@notifee_react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@notifee/react-native/android')
 

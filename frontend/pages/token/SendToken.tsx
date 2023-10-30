@@ -29,6 +29,7 @@ import {
   Pressable,
   ScrollView,
   Select,
+  Spinner,
   Stack,
   SunIcon,
   Text,
@@ -71,6 +72,7 @@ export default function SendToken({ navigation, route, storage }) {
     transactionList
   );
   const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState('');
   const [amount, setAmount] = useState("0");
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [notEnough, setNotEnough] = useState(false);
@@ -119,7 +121,6 @@ export default function SendToken({ navigation, route, storage }) {
       await wallet.provider.getNetwork();
       if (selectedToken.type === 'coin' && wallet.address) {
         const walletBalance = await wallet.getBalance();
-        //console.log('getbalances', wallet.address, walletBalance);
         setBalance(walletBalance);
       } else if (selectedToken.type === 'token' && wallet.address) {
         const contract = new ethers.Contract(selectedToken.address, erc20Abi, provider);
@@ -144,14 +145,12 @@ export default function SendToken({ navigation, route, storage }) {
   }, [_wallet, network]);
 
   useEffect(() => { 
-    console.log('balance', balance);
-    console.log('amount', amount);
     if (amount) {
       try {
         const isTooMuch = ethers.utils.parseEther(amount).gt(balance);
         setNotEnough(isTooMuch);
       } catch (err) {
-        console.log(err);
+        console.log('compare amounts error',err);
       }
     }
   }, [balance, amount])
@@ -196,6 +195,7 @@ export default function SendToken({ navigation, route, storage }) {
     const runAsync = async () => {
       try {
         if (address.length > 0 && isAddress(address)) {
+          setLoadingStage('send')
           if (selectedToken.type === "token" && wallet.address) {
             const _contract = new ethers.Contract(
               selectedToken.address,
@@ -203,10 +203,24 @@ export default function SendToken({ navigation, route, storage }) {
               provider
             );
             const contract = _contract.connect(wallet);
+            const gasEstimate = await contract.estimateGas.transfer(
+              ethers.utils.getAddress(address),
+              ethers.utils.parseEther(amount)              
+            )
+            console.log('gas estimate',gasEstimate);
+
             const _submitted = await contract.transfer(
               ethers.utils.getAddress(address),
-              ethers.utils.parseEther(amount)
+              ethers.utils.parseEther(amount),
+              {
+                gasLimit: gasEstimate, // Use the estimated gas
+                gasPrice: await provider.getGasPrice(),
+              }
             );
+            console.log('submittedhash',_submitted.hash);
+            setLoadingStage('confirm');
+            const result = await _submitted.wait();
+            console.log('confirmations',result.confirmations > 0);
 
             const _transaction = {
               chainId: _submitted.chainId,
@@ -214,7 +228,7 @@ export default function SendToken({ navigation, route, storage }) {
               from: _submitted.from,
               hash: _submitted.hash,
               nonce: _submitted.noonce,
-              status: "pending",
+              status: "complete",
               submitDate: new Date(),
               to: _submitted.to,
               value: _submitted.value,
@@ -230,6 +244,7 @@ export default function SendToken({ navigation, route, storage }) {
             }
             setLoading(false);
             setError('');
+            setLoadingStage('');
           } else if (selectedToken.type === "coin" && wallet.address) {
 
             const tx = {
@@ -238,6 +253,11 @@ export default function SendToken({ navigation, route, storage }) {
             }
             // Sending ether
             const _submitted = await wallet.sendTransaction(tx)
+            console.log('submittedhash',_submitted.hash);
+
+            setLoadingStage('confirm');
+            const result = await _submitted.wait();
+            console.log(result);
 
             const _transaction = {
               chainId: _submitted.chainId,
@@ -245,7 +265,7 @@ export default function SendToken({ navigation, route, storage }) {
               from: _submitted.from,
               hash: _submitted.hash,
               nonce: _submitted.nonce,
-              status: "pending",
+              status: "complete",
               submitDate: new Date(),
               to: _submitted.to,
               value: _submitted.value,
@@ -261,17 +281,22 @@ export default function SendToken({ navigation, route, storage }) {
             }
             setLoading(false);
             setError('');
+            setLoadingStage('');
           } else {
             setLoading(false);
             setError('invalid token')
+            setLoadingStage('')
           }
         } else {
           setLoading(false);
           setError('Invalid address');
+          setLoadingStage('')
         }
       } catch (err) {
+        console.log('error sending',err)
         setLoading(false);
         setError(err);
+        setLoadingStage('')
       }
     };
     setLoading(true);
@@ -319,98 +344,113 @@ export default function SendToken({ navigation, route, storage }) {
             marginBottom={20}
             marginTop={20}
           >
-            <Text fontSize="2xl" bold mb={"5"} pt={1}>
-              {translations[language].SendToken.title}
-            </Text>
+            {loading && 
+              <VStack>
 
-            <Select
-              selectedValue={selectedToken.address}
-              w="90%"
-              accessibilityLabel={
-                translations[language].SendToken.token_placeholder
-              }
-              placeholder={translations[language].SendToken.token_placeholder}
-              _selectedItem={{
-                bg: colorMode === "dark" ? "primary.600" : "info.600",
-                color: Color.white,
-                endIcon: <CheckIcon size="5" color={Color.white} />,
-              }}
-              mt={1}
-              onValueChange={(itemValue) => handleTokenChange(itemValue)}
-              mb={"2"}
-            >
-              {tokens.map((_token) => {
-                return (
-                  <Select.Item
-                    key={_token.address}
-                    label={_token.name}
-                    value={_token.address}
-                  />
-                );
-              })}
-            </Select>
-            <Input
-              style={
-                colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
-              }
-              fontSize={35}
-              keyboardType="numeric"
-              w="90%"
-              h="30%"
-              mb={2}
-              value={amount}
-              onChange={handleAmountChange}
-            />
-            <Input
-              style={
-                colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
-              }
-              w="90%"
-              mb={2}
-              value={address}
-              onChange={handleAddressChange}
-              placeholder={translations[language].SendToken.address_placeholder}
-            />
+                <Spinner accessibilityLabel="Loading transaction" />
+                <Text fontSize="2xl" bold mb={"5"} pt={1}>
+                  {loadingStage === 'send' && 'Sending Transaction'}
+                  {loadingStage === 'confirm' && 'Confirming Transaction'}
+                </Text>
+              </VStack>
+            } 
+            {!loading && 
+              <>
+                <Text fontSize="2xl" bold mb={"5"} pt={1}>
+                  {translations[language].SendToken.title}
+                </Text>
 
-            <Box>
-            <HStack space={6} my={4}>
-              {/*
-                <Checkbox onChange={setcheckValues}  defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
-              */}
-              {notEnough && 
-                <Alert w="100%" status={'error'}>
-                  <VStack space={2} flexShrink={1} w="100%">
-                    <Text 
-                      color={colorMode === "dark" ? Color.black : Color.white}
-                      fontWeight={"bold"}>
-                        {translations[language].SendToken.not_enough_error}
-                    </Text>
-                  </VStack>
-                </Alert>
-              }
-            </HStack>
-            </Box>
-            <Box>
-              <Box>
-                <Button
-                  style={styles.buttonContainer}
-                  w={"full"}
-                  colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-                  onPress={() => {
-                    send();
+                <Select
+                  selectedValue={selectedToken.address}
+                  w="90%"
+                  accessibilityLabel={
+                    translations[language].SendToken.token_placeholder
+                  }
+                  placeholder={translations[language].SendToken.token_placeholder}
+                  _selectedItem={{
+                    bg: colorMode === "dark" ? "primary.600" : "info.600",
+                    color: Color.white,
+                    endIcon: <CheckIcon size="5" color={Color.white} />,
                   }}
-                  isLoading={loading}
-                  disabled={address.length === 0 || type.length === 0 || notEnough}
+                  mt={1}
+                  onValueChange={(itemValue) => handleTokenChange(itemValue)}
+                  mb={"2"}
                 >
-                  <Text
-                    color={colorMode === "dark" ? Color.black : Color.white}
-                    fontWeight={"bold"}
-                  >
-                    {translations[language].SendToken.submit_button}
-                  </Text>
-                </Button>
-              </Box>
-            </Box>
+                  {tokens.map((_token) => {
+                    return (
+                      <Select.Item
+                        key={_token.address}
+                        label={_token.name}
+                        value={_token.address}
+                      />
+                    );
+                  })}
+                </Select>
+                <Input
+                  style={
+                    colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
+                  }
+                  fontSize={35}
+                  keyboardType="numeric"
+                  w="90%"
+                  h="30%"
+                  mb={2}
+                  value={amount}
+                  onChange={handleAmountChange}
+                />
+                <Input
+                  style={
+                    colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
+                  }
+                  w="90%"
+                  mb={2}
+                  value={address}
+                  onChange={handleAddressChange}
+                  placeholder={translations[language].SendToken.address_placeholder}
+                />
+
+                <Box>
+                <HStack space={6} my={4}>
+                  {/*
+                    <Checkbox onChange={setcheckValues}  defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
+                  */}
+                  {notEnough && 
+                    <Alert w="100%" status={'error'}>
+                      <VStack space={2} flexShrink={1} w="100%">
+                        <Text 
+                          color={colorMode === "dark" ? Color.black : Color.white}
+                          fontWeight={"bold"}>
+                            {translations[language].SendToken.not_enough_error}
+                        </Text>
+                      </VStack>
+                    </Alert>
+                  }
+                </HStack>
+                </Box>
+                <Box>
+                  <Box>
+                    <Button
+                      style={styles.buttonContainer}
+                      w={"full"}
+                      colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
+                      onPress={() => {
+                        send();
+                      }}
+                      isLoading={loading}
+                      disabled={address.length === 0 || type.length === 0 || notEnough}
+                    >
+                      <Text
+                        color={colorMode === "dark" ? Color.black : Color.white}
+                        fontWeight={"bold"}
+                      >
+                        {translations[language].SendToken.submit_button}
+                      </Text>
+                    </Button>
+                  </Box>
+                </Box>
+              </>
+            }
+            
           </VStack>
         }
         

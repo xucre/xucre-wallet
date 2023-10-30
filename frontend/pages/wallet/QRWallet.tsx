@@ -59,13 +59,10 @@ export default function QRWallet({ navigation, route }) {
     getPermission();
   }, [isFocused]);
   const getPermission = () => {
-    //console.log('_wallet :::', _wallet)
     PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-      title: 'Contacts',
-      // eslint-disable-next-line sort-keys
-      message: 'This app would like to view your contacts.',
-      // eslint-disable-next-line sort-keys
       buttonPositive: 'Please accept bare mortal',
+      message: 'This app would like to view your contacts.',
+      title: 'Contacts',
     }).then(res => {
       if (res == 'granted') {
         Contact.getAll()
