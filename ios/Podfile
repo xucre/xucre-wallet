@@ -5,14 +5,16 @@ require File.join(File.dirname(`node --print "require.resolve('@react-native-com
 require 'json'
 podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties.json'))) rescue {}
 
-platform :ios, podfile_properties['ios.deploymentTarget'] || '12.0'
+platform :ios, podfile_properties['ios.deploymentTarget'] || '15.8'
 install! 'cocoapods',
   :deterministic_uuids => false
+
+config = use_native_modules!
 
 target 'XucreWallet' do
   use_expo_modules!
   config = use_native_modules!
-
+  use_modular_headers!
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
 
   # Flags change depending on the env values.
@@ -21,7 +23,7 @@ target 'XucreWallet' do
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => flags[:hermes_enabled] || podfile_properties['expo.jsEngine'] == 'hermes',
-    :fabric_enabled => flags[:fabric_enabled],
+    :fabric_enabled => flags[:fabric_enabled] || false,
     # An absolute path to your application root.
     :app_path => "#{Dir.pwd}/.."
   )
@@ -34,8 +36,25 @@ target 'XucreWallet' do
   # end
 
   post_install do |installer|
-    react_native_post_install(installer)
+    react_native_post_install(
+      installer#,
+    #config[:reactNativePath],
+    #:mac_catalyst_enabled => false
+  )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+        if target.name == 'image-slider'
+           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.8'
+        end
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.8'
+        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'No'
+        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', '_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION']
+        config.build_settings["DEVELOPMENT_TEAM"] = "21123398809"
+      end
+    end
   end
 
   post_integrate do |installer|

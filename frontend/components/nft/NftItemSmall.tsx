@@ -16,7 +16,6 @@ import {
   VStack,
 } from 'native-base';
 import React, { useCallback , useEffect, useState } from 'react';
-//import Icon from "react-crypto-icons";
 import { Dimensions, ImageSourcePropType, Linking, TouchableWithoutFeedback } from 'react-native';
 import { Card, Paragraph, Title,  } from 'react-native-paper';
 //import SvgUri from 'react-native-svg-uri';

@@ -73,3 +73,7 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 - android/app/build.gradle versionCode
 Versions should all be the same value. 
 VersionCode should increment by 1
+
+## How to clear cache
+- npm i 
+- npx expo start -c
