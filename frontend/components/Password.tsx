@@ -1,32 +1,12 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import moment from "moment";
 import {
-  AlertDialog,
-  ArrowBackIcon,
-  Box,
   Button,
-  Center,
-  Divider,
-  Drawer,
   FormControl,
-  Hidden,
-  HStack,
-  Icon,
-  IconButton,
-  Image,
   Input,
   Modal,
-  MoonIcon,
-  Pressable,
   ScrollView,
-  SunIcon,
-  Text,
-  useColorMode,
-  useColorModeValue,
-  VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";

@@ -1,36 +1,20 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from "ethers";
 import {
   Avatar,
-  Badge,
-  Box,
-  Divider,
-  FlatList,
-  Hidden,
   HStack,
   Icon,
-  IconButton,
-  IIconProps,
-  Image,
   Menu,
   Pressable,
   Text,
   Tooltip,
   VStack,
 } from 'native-base';
-import React, { useCallback , useEffect, useState } from 'react';
-import { Dimensions, ImageSourcePropType, Linking, TouchableWithoutFeedback } from 'react-native';
-import { Card, Paragraph, Title,  } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { ImageSourcePropType, Linking } from 'react-native';
 //import SvgUri from 'react-native-svg-uri';
 
-import ArbLogo from '../../assets/images/arb_logo.png';
-import EthLogo from '../../assets/images/eth_logo.png';
-import OptLogo from '../../assets/images/op_logo.png';
-import PlyLogo from '../../assets/images/poly_logo.png';
-import translations from "../../assets/translations";
 import { getMetadata } from "../../service/blockdaemon";
-import { language } from "../../service/state";
-import { cleanImageUrl, truncateString } from '../../service/utility';
+import { truncateString } from '../../service/utility';
 
 type CarousalType = {
   readonly imageUri: ImageSourcePropType;

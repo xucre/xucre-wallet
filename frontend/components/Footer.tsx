@@ -1,43 +1,16 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers, getDefaultProvider, Wallet } from 'ethers';
-import * as Clipboard from 'expo-clipboard';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Avatar,
-  Badge,
-  Box,
   Button,
-  Center,
-  CloseIcon,
-  ColorMode,
-  Divider,
-  Drawer,
   Hidden,
   HStack,
   Icon,
-  IconButton,
-  Icon as IconElement,
-  Image,
-  Input,
-  Menu,
-  MoonIcon,
-  Pressable,
-  SunIcon,
-  Text,
-  Tooltip,
   useColorMode,
-  useColorModeValue,
-  VStack,
 } from "native-base";
-import React, {createRef, useEffect, useState} from "react";
-import { RefreshControl } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
+import React, {} from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
-import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../service/state";
+import { language as stateLanguage } from "../service/state";
 
 
 type IconType = {

@@ -1,38 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
-import arrayShuffle from 'array-shuffle';
-import { ethers } from 'ethers';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Badge,
   Box,
   Button,
-  Center,
-  CloseIcon,
   Divider,
-  Drawer,
-  Hidden,
   HStack,
   Icon,
-  IconButton,
-  Image,
-  Input,
   Menu,
-  MoonIcon,
   Pressable,
-  ScrollView,
-  SunIcon,
   Text,
   Tooltip,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, {createRef, useEffect, useState} from "react";
-import { Col, Grid, Row } from "react-native-easy-grid";
+import React, {} from "react";
 import { useRecoilState } from "recoil";
 
 import { Color } from "../../../GlobalStyles";
@@ -40,7 +21,7 @@ import translations from "../../assets/translations";
 import GuestLayout from '../../layouts/GuestLayout';
 import { activeWallet, language as stateLanguage, walletList } from "../../service/state";
 import { truncateStringStart } from "../../service/utility";
-import { getWallets, storeActiveWallet } from "../../store/wallet";
+import { storeActiveWallet } from "../../store/wallet";
 
 export default function SelectWallet ({navigation, route}) {
   const {

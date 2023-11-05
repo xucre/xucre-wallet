@@ -1,48 +1,25 @@
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
-import { MaterialIcons } from "@expo/vector-icons";
-import arrayShuffle from 'array-shuffle';
-import { ethers } from 'ethers';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
   Badge,
   Box,
   Button,
   Center,
-  CloseIcon,
-  Divider,
-  Drawer,
   Heading,
-  Hidden,
   HStack,
-  Icon,
-  IconButton,
-  Image,
   Input,
   KeyboardAvoidingView,
-  MoonIcon,
-  Pressable,
   ScrollView,
-  SunIcon,
   Text,
-  TextArea,
   useColorMode,
-  useColorModeValue,
-  useSafeArea,
   useToast,
-  View,
   VStack,
 } from "native-base";
-import { color } from "native-base/lib/typescript/theme/styled-system";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, {createRef, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Platform, StyleSheet} from 'react-native';
-import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import { language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromMnemonics} from '../../service/wallet'

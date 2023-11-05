@@ -9,27 +9,19 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Alert,
-  Pressable,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 //import PhoneInput from "react-native-phone-number-input";
 //import PhoneInput from 'react-phone-number-input/react-native-input';
-import flags from 'react-phone-number-input/flags'
 import whatsapp from "../../service/whatsapp";
 import { language as stateLanguage } from "../../service/state";
 import translations from "../../assets/translations";
 import { useRecoilState } from "recoil";
-import { Border, Color } from "../../../GlobalStyles";
-import { Button, useColorMode, Text, Divider, Select} from "native-base";
-import codeCountry from "../../assets/json/codeCountry.json";
+import { Color } from "../../../GlobalStyles";
+import { Button, useColorMode, Text} from "native-base";
 import PhoneInput from 'react-phone-number-input/react-native-input';
-import {Country, isValidPhoneNumber, parsePhoneNumber, PhoneNumber} from 'react-phone-number-input';
-import { count } from "console";
-import {phone} from 'phone';
-import { color } from 'native-base/lib/typescript/theme/styled-system';
+import {Country} from 'react-phone-number-input';
 //import { CountrySelectComponent } from 'react-phone-number-input'
 // eslint-disable-next-line react-native/split-platform-components
 import { ToastAndroid } from 'react-native';

@@ -3,46 +3,23 @@
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
-import { Entypo } from '@expo/vector-icons'; 
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, {createRef, useEffect, useState} from "react";
-import { position } from "native-base/lib/typescript/theme/styled-system";
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import React, {useEffect, useState} from "react";
+import { Color } from "../../../GlobalStyles";
 
-import arrayShuffle from 'array-shuffle';
-import { ethers } from 'ethers';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
   Avatar,
-  Badge,
   Box,
   Button,
-  Center,
-  CloseIcon,
-  Divider,
-  Drawer,
-  Hidden,
   HStack,
   Icon,
-  IconButton,
-  Image,
-  Input,
   Menu,
-  MoonIcon,
   Pressable,
   ScrollView,
-  SunIcon,
   Text,
   Tooltip,
   useColorMode,
-  useColorModeValue,
-  View,
   VStack,
 } from "native-base";
-import {StyleSheet} from 'react-native';
-import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 import { getIconImage } from "../../service/api";
 import translations from "../../assets/translations";
@@ -53,7 +30,6 @@ import {
   selectedNetwork,
   language as stateLanguage,
 } from "../../service/state";
-import { truncateString } from "../../service/utility";
 import { deleteNetwork, getNetworks, storeActiveNetwork } from "../../store/network";
 
 export default function SelectNetwork ({navigation, route}) {

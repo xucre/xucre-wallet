@@ -1,15 +1,12 @@
 /* eslint-disable no-case-declarations */
-import { formatJsonRpcError, formatJsonRpcResult, JsonRpcResponse, JsonRpcResult } from '@json-rpc-tools/utils'
-import SignClient from '@walletconnect/sign-client';
-import { SignClientTypes } from '@walletconnect/types'
+import { formatJsonRpcError, formatJsonRpcResult } from '@walletconnect/jsonrpc-utils'
 import { getSdkError } from '@walletconnect/utils'
 import { getDefaultProvider, providers, utils } from 'ethers'
-import { useRecoilState } from "recoil";
 
-import { EIP155_CHAINS, EIP155_SIGNING_METHODS, EIP155_TEST_CHAINS, TEIP155Chain } from '../data/EIP1155Data';
+import { EIP155_CHAINS, EIP155_SIGNING_METHODS, TEIP155Chain } from '../data/EIP1155Data';
 import { getNetworks } from "../store/network";
 
-import { AppWallet, language as stateLanguage, walletList } from "./state"
+import { AppWallet } from "./state"
 
 function transformObject (
   object,

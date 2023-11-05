@@ -1,55 +1,23 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { ethers, getDefaultProvider, Wallet } from 'ethers';
-import * as Clipboard from 'expo-clipboard';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Avatar,
-  Badge,
   Box,
-  Button,
-  Center,
-  CloseIcon,
-  ColorMode,
-  Divider,
-  Drawer,
-  Hidden,
   HStack,
-  IconButton,
-  Icon as IconElement,
-  Image,
-  Input,
-  Menu,
-  MoonIcon,
-  Pressable,
   ScrollView,
-  SunIcon,
   Text,
-  Tooltip,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
-import React, {createRef, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { RefreshControl } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
 import { Color } from "../../../GlobalStyles";
-import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
-import NftCard from "../../components/nft/NftCard";
 import NftItemLarge from "../../components/nft/NftItemLarge";
 import NftItemSmall from "../../components/nft/NftItemSmall";
 import NftListItem from "../../components/nft/NftListItem";
-import TokenItem from '../../components/token/TokenItem';
-import TransactionItem from "../../components/transaction/TransactionItem";
-import DashboardLayout from '../../layouts/DashboardLayout';
 import { getNftJson } from "../../service/api";
 import { getNfts } from "../../service/blockdaemon";
-import { activeNetwork, activeWallet, AppWallet, networkList, language as stateLanguage } from "../../service/state";
-import { truncateString } from "../../service/utility";
+import { AppWallet, language as stateLanguage } from "../../service/state";
 import { getActiveWallet } from "../../store/wallet";
 
 export default function NftList ({navigation, route}) {

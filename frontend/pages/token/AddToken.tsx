@@ -1,45 +1,22 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import arrayShuffle from 'array-shuffle';
-import { ethers } from 'ethers';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Badge,
   Box,
   Button,
-  Center,
   CheckIcon,
-  CloseIcon,
-  Divider,
-  Drawer,
-  Hidden,
-  HStack,
-  Icon,
-  IconButton,
-  Image,
   Input,
-  MoonIcon,
-  Pressable,
   ScrollView,
   Select,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
-  VStack,
 } from "native-base";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, {createRef, useEffect, useState} from "react";
-import { Col, Grid, Row } from "react-native-easy-grid";
-import { useRecoilState, useSetRecoilState, } from "recoil";
+import React, {useEffect, useState} from "react";
+import { useRecoilState, } from "recoil";
 
 
 import translations from "../../assets/translations";
-import { activeNetwork, networkList, language as stateLanguage, tokenList, walletList } from "../../service/state";
+import { language as stateLanguage, tokenList } from "../../service/state";
 import { Token } from "../../service/token";
 import { getNetworks } from "../../store/network";
-import { addToken, getTokens, updateToken } from "../../store/token";
+import { addToken } from "../../store/token";
 
 
 export default function AddToken ({navigation, route, storage}) {

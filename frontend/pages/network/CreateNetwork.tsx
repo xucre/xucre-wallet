@@ -1,46 +1,22 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import arrayShuffle from 'array-shuffle';
-import { ethers } from 'ethers';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Badge,
-  Box,
   Button,
   Center,
-  CloseIcon,
-  Divider,
-  Drawer,
   Heading,
-  Hidden,
-  HStack,
-  Icon,
-  IconButton,
-  Image,
   Input,
   KeyboardAvoidingView,
-  MoonIcon,
-  Pressable,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
-  View,
   VStack,
 } from "native-base";
-import { background } from "native-base/lib/typescript/theme/styled-system";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, {createRef, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Platform, StyleSheet} from 'react-native';
-import { Col, Grid, Row } from "react-native-easy-grid";
-import { useRecoilState, useSetRecoilState, } from "recoil";
+import { useRecoilState, } from "recoil";
 
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import { Border, Color, FontFamily } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
-import { constructDefaultNetworks, Network } from "../../service/network";
-import { activeNetwork, language, networkList, language as stateLanguage, walletList } from "../../service/state";
-import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetwork, } from "../../store/network";
+import { Network } from "../../service/network";
+import { networkList, language as stateLanguage } from "../../service/state";
+import { storeNetwork, } from "../../store/network";
 
 
 export default function CreateWallet ({navigation, route, storage}) {

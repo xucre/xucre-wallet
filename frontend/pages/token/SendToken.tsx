@@ -1,48 +1,26 @@
 /* eslint-disable react-native/no-unused-styles */
-import { deflateRaw } from "zlib";
 
-import { MaterialIcons } from "@expo/vector-icons";
-import arrayShuffle from "array-shuffle";
 import { BigNumber, ethers, getDefaultProvider, Wallet } from "ethers";
 import { isAddress } from "ethers/lib/utils";
 import {
   Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Badge,
   Box,
   Button,
   Center,
-  Checkbox,
   CheckIcon,
-  CloseIcon,
-  Divider,
-  Drawer,
-  Hidden,
   HStack,
-  Icon,
-  IconButton,
-  Image,
   Input,
   KeyboardAvoidingView,
-  MoonIcon,
-  Pressable,
-  ScrollView,
   Select,
   Spinner,
-  Stack,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
   useToast,
   VStack,
 } from "native-base";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, { createRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import erc20Abi from "../../../contracts/erc20.json";
@@ -50,15 +28,12 @@ import translations from "../../assets/translations";
 import {
   activeNetwork,
   activeWallet,
-  networkList,
   language as stateLanguage,
-  tokenList,
   transactionList,
-  walletList,
 } from "../../service/state";
 import { Token } from "../../service/token";
 import { Transaction } from "../../service/transaction";
-import { addToken, getTokenByChain, updateToken } from "../../store/token";
+import { getTokenByChain } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
 
 export default function SendToken({ navigation, route, storage }) {

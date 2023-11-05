@@ -1,47 +1,23 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import arrayShuffle from 'array-shuffle';
-import { ethers } from 'ethers';
 import {
   Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Badge,
   Box,
   Button,
   Center,
-  CloseIcon,
-  Divider,
-  Drawer,
-  Hidden,
-  HStack,
-  Icon,
-  IconButton,
-  Image,
   Input,
   KeyboardAvoidingView,
-  Menu,
-  MoonIcon,
-  Pressable,
-  SunIcon,
   Text,
-  Tooltip,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, {createRef, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Platform, StyleSheet} from 'react-native';
-import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import { Border, Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
-import DashboardLayout from '../../layouts/DashboardLayout';
-import { Network } from "../../service/network";
-import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../../service/state";
+import { activeNetwork, selectedNetwork, language as stateLanguage, } from "../../service/state";
 import { truncateString } from "../../service/utility";
-import { storeActiveNetwork, updateNetwork } from "../../store/network";
+import { updateNetwork } from "../../store/network";
 
 export default function ViewNetwork ({navigation, route}) {
   const [isEditing, setIsEditing] = useState(false);

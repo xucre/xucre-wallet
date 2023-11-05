@@ -1,62 +1,34 @@
 /* eslint-disable functional/immutable-data */
 /* eslint-disable functional/no-let */
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers, getDefaultProvider, Wallet } from 'ethers';
+import { Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 import moment from "moment";
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Avatar,
-  Badge,
   Box,
   Button,
-  Center,
-  CloseIcon,
-  ColorMode,
-  Divider,
-  Drawer,
   Heading,
-  Hidden,
   HStack,
   Icon,
-  IconButton,
-  Icon as IconElement,
-  Image,
-  Input,
   Menu,
-  MoonIcon,
   Pressable,
   ScrollView,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
-import { color } from "native-base/lib/typescript/theme/styled-system";
-import React, { createRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
-import { Area, Chart, HorizontalAxis, Line, Tooltip, VerticalAxis } from 'react-native-responsive-linechart';
+import { Area, Chart, HorizontalAxis, Line, Tooltip } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
 import SummaryItem from "../../components/token/SummaryItem";
-import TokenItem from '../../components/token/TokenItem';
-import TransactionItem from "../../components/transaction/TransactionItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletHistory } from "../../service/api";
 import { chainNames } from "../../service/constants";
-import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
-import { Transaction } from "../../service/transaction";
-import { truncateString } from "../../service/utility";
-import { iconNames } from '../../store/network';
-import { getTokenByChain } from '../../store/token';
-import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
-import NftList from "../nft/NftList";
+import { activeNetwork, activeWallet, language as stateLanguage } from "../../service/state";
 
 
 type Holding = {

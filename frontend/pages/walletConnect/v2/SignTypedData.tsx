@@ -1,32 +1,11 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { JsonRpcResponse, JsonRpcResult } from "@json-rpc-tools/utils";
-import { ethers } from 'ethers';
+
 import {
-  AlertDialog,
-  ArrowBackIcon,
-  Avatar,
   Box,
   Button,
   Center,
-  Checkbox,
-  Container,
-  Divider,
-  Drawer,
   Heading,
-  Hidden,
-  HStack,
-  Icon,
-  IconButton,
-  Image,
-  MoonIcon,
-  Pressable,
   ScrollView,
-  SunIcon,
   Text,
-  TextArea,
-  Tooltip,
-  useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
@@ -37,7 +16,6 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { truncateString } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 

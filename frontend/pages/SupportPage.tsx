@@ -1,23 +1,16 @@
 //import LIFI, {ChainId} from '@lifi/sdk';
-import sendgrid from "@sendgrid/mail";
-import { ethers, getDefaultProvider, providers, Wallet } from "ethers";
 import {
     Box,
-    Center,
     Input,
     KeyboardAvoidingView,
     Text,
     TextArea,
     useColorMode,
-    View,
     VStack,
 } from "native-base";
 import { Button } from "native-base";
-import { color } from "native-base/lib/typescript/theme/styled-system";
-import React, { useEffect, useMemo, useState } from "react";
-import { useRef } from "react";
+import React, { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
-import { TextInput } from "react-native-paper";
 import { useRecoilState } from "recoil";
 
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";

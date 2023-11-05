@@ -1,52 +1,27 @@
 /* eslint-disable react-native/no-unused-styles */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
-import { MaterialIcons } from "@expo/vector-icons";
 import arrayShuffle from "array-shuffle";
-import { ethers } from "ethers";
 import {
   Alert,
-  AlertDialog,
-  ArrowBackIcon,
   Badge,
   Box,
   Button,
   Center,
-  CloseIcon,
-  Divider,
-  Drawer,
   Heading,
-  Hidden,
   HStack,
-  Icon,
-  IconButton,
-  Image,
   Input,
   KeyboardAvoidingView,
-  MoonIcon,
-  Pressable,
-  ScrollView,
-  Stack,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
-  View,
   VStack,
 } from "native-base";
-import {
-  background,
-  color,
-} from "native-base/lib/typescript/theme/styled-system";
-import { convertRemToAbsolute } from "native-base/lib/typescript/theme/tools";
-import React, { createRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
-import DashboardLayout from "../../layouts/DashboardLayout";
 import { language as stateLanguage, walletList } from "../../service/state";
 import {
   generateMnemonics,

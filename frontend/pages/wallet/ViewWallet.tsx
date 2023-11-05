@@ -1,41 +1,20 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers, getDefaultProvider, Wallet } from 'ethers';
+import { ethers, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Avatar,
-  Badge,
   Box,
   Button,
   Center,
-  CloseIcon,
-  ColorMode,
-  Divider,
-  Drawer,
-  Heading,
-  Hidden,
   HStack,
   Icon,
-  IconButton,
-  Icon as IconElement,
-  Image,
-  Input,
-  Menu,
-  MoonIcon,
   Pressable,
   ScrollView,
-  SunIcon,
   Text,
-  Tooltip,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
-import React, {createRef, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { RefreshControl } from "react-native";
-import { Col, Grid, Row } from "react-native-easy-grid";
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
@@ -48,11 +27,8 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletTransactions } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList } from "../../service/state";
-import { CovalentTransaction, Transaction } from "../../service/transaction";
-import { truncateString } from "../../service/utility";
-import { iconNames } from '../../store/network';
+import { CovalentTransaction } from "../../service/transaction";
 import { getTokenByChain } from '../../store/token';
-import { getTransactionsByChainAndWallet, storeTransactions } from '../../store/transaction';
 import NftList from "../nft/NftList";
 
 function TabItem({

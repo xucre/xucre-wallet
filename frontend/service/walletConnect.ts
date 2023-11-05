@@ -1,13 +1,7 @@
-import { formatJsonRpcError, formatJsonRpcResult } from '@json-rpc-tools/utils'
-import notifee, { AndroidLaunchActivityFlag, EventType } from '@notifee/react-native';
+import notifee, { AndroidLaunchActivityFlag } from '@notifee/react-native';
 import SignClient from '@walletconnect/sign-client';
-import { SignClientTypes } from '@walletconnect/types'
-import { getSdkError } from '@walletconnect/utils'
-import { providers, utils } from 'ethers'
 import { nanoid } from 'nanoid';
-import { useEffect } from 'react';
-import {AppState, StyleSheet, Text, View} from 'react-native';
-import { useRecoilState } from "recoil";
+import {AppState} from 'react-native';
 
 
 import translations from "../assets/translations";
