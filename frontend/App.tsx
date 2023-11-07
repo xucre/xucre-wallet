@@ -170,7 +170,6 @@ export const AppWrapper = () => {
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
 
-    //console.log('notification foreground:', detail);
       switch (type) {
         case EventType.DISMISSED:
           break;

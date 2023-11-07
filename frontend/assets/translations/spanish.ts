@@ -174,6 +174,7 @@ const values = {
   },
   SendToken: {
     address_placeholder: "Ingrese direccion del Receptor",
+    not_enough_error: "Insufficient Balance",
     submit_button: "Enviar",
     title: "Enviar Token",
     token_placeholder: "Seleccionar Token"
