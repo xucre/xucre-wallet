@@ -18,7 +18,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "xucre.expo.client"
+      "bundleIdentifier": "xucre.expo.client",
+      "buildNumber": "1.0.5"
     },
     "android": {
       "icon": "./assets/icon.png",

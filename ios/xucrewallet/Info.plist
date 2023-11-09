@@ -33,7 +33,7 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>6</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -55,6 +55,12 @@
     <array>
       <string>armv7</string>
     </array>
+    <key>NSContactsUsageDescription</key>
+    <string>Contact access are needed for sending messages to WhatsApp.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Location services are used to identify country of origin.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Location services are used to identify country of origin.</string>
     <key>UIRequiresFullScreen</key>
     <false/>
     <key>UIStatusBarStyle</key>
