@@ -1,25 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import {
   Box,
-  Button,
-  Divider,
   Hidden,
   HStack,
   Icon,
-  IconButton,
-  Image,
-  Input,
-  Menu,
-  MoonIcon,
   Pressable,
   ScrollView,
   StatusBar,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from 'native-base';
 import React from 'react';

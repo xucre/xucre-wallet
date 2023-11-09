@@ -8,18 +8,18 @@ import { env } from './constants';
 export const ipfsGateway = env.REACT_APP_IPFS_GATEWAY || 'https://ipfs.io/ipfs/';
 //const contract = new Contract(wethContractAddress, wethInterface);
 
-export const formatString = function(args) {
+export const formatString = function(args: string[]) {
   const arg = Array.prototype.slice.call(args, 1);
-  return args[0].replace(/{(\d+)}/g, function(match, number) { 
-    return typeof arg[number] != 'undefined'
-      ? arg[number] 
+  return args[0].replace(/{(\d+)}/g, function(match: any, number: string | number) { 
+    return typeof arg[number  as keyof typeof arg] != 'undefined'
+      ? arg[number as keyof typeof arg] 
       : match
     ;
   });
   
 }
 
-export const cleanImageUrl = async (uri) => {
+export const cleanImageUrl = async (uri: string) => {
   if (uri.includes('ipfs') && uri.includes('/image')) {
     const imageResponse = await fetch(ipfsGateway+uri.replace('ipfs://', ''));
     const image = await imageResponse.text();
@@ -35,7 +35,7 @@ export const cleanImageUrl = async (uri) => {
   }  
 }
 
-export const fetchIPNS = async (metadataUri) => {
+export const fetchIPNS = async (metadataUri: string | string[]) => {
   if (metadataUri !== 'ipfs:///metadata.json') {
     if (metadataUri && !metadataUri.includes('ipns')) {
       const metadataRequest = await fetch("https://ipfs.io"+metadataUri);
@@ -46,13 +46,13 @@ export const fetchIPNS = async (metadataUri) => {
   }
 }
 
-export const urlCheck = (websiteUrl) => { 
+export const urlCheck = (websiteUrl: any) => { 
   const urlRegEx = new RegExp(
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/);
     return urlRegEx.test(String(websiteUrl).toLowerCase());
 }
 
-export const truncateString = (str, num, addDots = true) => {
+export const truncateString = (str: string, num: number, addDots = true) => {
   // If the length of str is less than or equal to num
   // just return str--don't truncate it.
   if (str) {
@@ -70,7 +70,7 @@ export const truncateString = (str, num, addDots = true) => {
   
 }
 
-export const truncateStringStart = (str, num) => {
+export const truncateStringStart = (str: string, num: number) => {
   // If the length of str is less than or equal to num
   // just return str--don't truncate it.
   if (str.length <= num) {
@@ -80,11 +80,11 @@ export const truncateStringStart = (str, num) => {
   return '...' + str.slice(-num) 
 }
 
-export const PromiseHelperAllSettled = (promises) => {
-  return Promise.all(promises.map(function (promise) {
-      return promise.then(function (value) {
+export const PromiseHelperAllSettled = (promises: any[]) => {
+  return Promise.all(promises.map(function (promise: Promise<any>) {
+      return promise.then(function (value: any) {
           return { state: 'fulfilled', value: value };
-      }).catch(function (reason) {
+      }).catch(function (reason: any) {
           return { reason: reason, state: 'rejected'};
       });
   }));

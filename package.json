@@ -1,226 +1,75 @@
 {
-  "dependencies": {
-    "@babel/plugin-syntax-bigint": "^7.8.3",
-    "@expo-google-fonts/inter": "^0.2.2",
-    "@expo-google-fonts/montserrat": "^0.2.2",
-    "@json-rpc-tools/utils": "^1.7.6",
-    "@notifee/react-native": "^5.7.0",
-    "@react-native-async-storage/async-storage": "~1.17.3",
-    "@react-native-clipboard/clipboard": "^1.11.1",
-    "@react-native-community/netinfo": "8.2.0",
-    "@react-native-masked-view/masked-view": "0.2.6",
-    "@react-navigation/native": "^6.0.13",
-    "@react-navigation/native-stack": "^6.7.0",
-    "@sendgrid/mail": "^7.7.0",
-    "@types/lodash": "^4.14.194",
-    "@usedapp/core": "^1.1.4",
-    "@walletconnect/jsonrpc-types": "^1.0.1",
-    "@walletconnect/jsonrpc-utils": "^1.0.8",
-    "@walletconnect/react-native-compat": "^2.1.2",
-    "@walletconnect/sign-client": "^2.8.6",
-    "@walletconnect/types": "^2.1.2",
-    "@walletconnect/utils": "^2.1.4",
-    "@walletconnect/web3-provider": "^1.8.0",
-    "array-shuffle": "^3.0.0",
-    "axios": "^0.27.2",
-    "base-64": "1.0.0",
-    "big-integer": "^1.6.51",
-    "buffer": "6.0.3",
-    "ethers": "^5.6.9",
-    "expo": "^45.0.0",
-    "expo-app-loading": "~2.0.0",
-    "expo-barcode-scanner": "~11.3.0",
-    "expo-clipboard": "~3.0.1",
-    "expo-font": "~10.1.0",
-    "expo-linking": "~3.1.0",
-    "expo-modules-core": "~0.9.2",
-    "expo-notifications": "~0.15.4",
-    "expo-splash-screen": "~0.15.1",
-    "expo-status-bar": "~1.3.0",
-    "expo-updates": "~0.13.4",
-    "moment": "^2.29.4",
-    "nanoid": "^4.0.2",
-    "native-base": "^3.4.12",
-    "node-libs-browser": "2.2.1",
-    "patch-package": "^8.0.0",
-    "path-browserify": "1.0.0",
-    "phone": "^3.1.41",
-    "promise.allsettled": "^1.0.5",
-    "qs": "^6.11.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-native": "0.68.2",
-    "react-native-communications": "^2.2.1",
-    "react-native-contacts": "^7.0.5",
-    "react-native-dotenv": "2.4.3",
-    "react-native-easy-grid": "^0.2.2",
-    "react-native-encrypted-storage": "^4.0.2",
-    "react-native-geolocation-service": "^5.3.1",
-    "react-native-gesture-handler": "~2.2.1",
-    "react-native-get-random-values": "~1.8.0",
-    "react-native-keychain": "^8.1.1",
-    "react-native-localhost": "1.0.0",
-    "react-native-modal": "^13.0.1",
-    "react-native-paper": "^4.12.4",
-    "react-native-reanimated": "~2.8.0",
-    "react-native-responsive-linechart": "^5.7.1",
-    "react-native-safe-area-context": "4.7.4",
-    "react-native-screens": "~3.11.1",
-    "react-native-stream": "0.1.9",
-    "react-native-svg": "12.3.0",
-    "react-native-switch-with-icons": "^2.0.1",
-    "react-native-theming": "^1.0.21",
-    "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "0.17.7",
-    "react-native-webview": "11.18.1",
-    "react-navigation": "^4.4.4",
-    "react-phone-number-input": "^3.3.6",
-    "react-qr-code": "^2.0.8",
-    "react-redux": "^8.0.4",
-    "recoil": "^0.7.6",
-    "styled-components": "^5.3.5",
-    "web3": "1.8.1"
-  },
-  "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@babel/plugin-proposal-private-property-in-object": "7.15.4",
-    "@babel/plugin-transform-private-methods": "^7.22.5",
-    "@babel/preset-env": "7.15.6",
-    "@babel/preset-typescript": "^7.15.0",
-    "@nomiclabs/hardhat-ethers": "^2.0.1",
-    "@openzeppelin/contracts": "^4.3.0",
-    "@types/jest": "^29.5.3",
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^14.18.54",
-    "@types/pino": "^7.0.5",
-    "@types/react": "^17.0.52",
-    "@types/react-native": "~0.67.6",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
-    "app-root-path": "3.0.0",
-    "chai": "^4.2.0",
-    "chokidar": "3.5.1",
-    "commitizen": "^4.2.5",
-    "cz-conventional-changelog": "^3.2.0",
-    "dotenv": "8.2.0",
-    "eslint": "^7.8.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-functional": "^3.0.2",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-react": "7.22.0",
-    "eslint-plugin-react-native": "3.10.0",
-    "ethereum-waffle": "^4.0.7",
-    "gh-pages": "^3.2.3",
-    "hardhat": "^2.12.2",
-    "husky": "4.3.8",
-    "jest": "29.0.0",
-    "lint-staged": "10.5.3",
-    "lodash": "^4.17.21",
-    "lodash-es": "^4.17.21",
-    "platform-detect": "3.0.1",
-    "prettier": "2.2.1",
-    "ts-jest": "^29.1.1",
-    "ts-node": "9.1.1",
-    "typescript": "~4.7.3"
-  },
+  "name": "xucre-wallet",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "start2": "npx expo start --dev-client",
-    "start": "expo start --dev-client",
-    "manual": "npx react-native run-android",
-    "ios": "expo run:ios",
-    "web": "node_modules/.bin/ts-node scripts/web",
-    "audit": "npx yarn-audit-fix",
-    "postinstall_nomore": "node_modules/.bin/ts-node scripts/postinstall",
-    "test": "jest",
-    "web:deploy": "expo build:web && gh-pages -d web-build",
-    "eas-build": "eas build -p android --profile production",
+    "start": "expo start",
     "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
     "postinstall": "patch-package"
   },
-  "version": "1.0.3",
+  "dependencies": {
+    "@babel/plugin-syntax-bigint": "^7.8.3",
+    "@expo-google-fonts/inter": "^0.2.3",
+    "@expo-google-fonts/montserrat": "^0.2.3",
+    "@notifee/react-native": "^7.8.0",
+    "@react-native-async-storage/async-storage": "^1.19.4",
+    "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-community/netinfo": "^10.0.0",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/native-stack": "^6.9.16",
+    "@walletconnect/jsonrpc-utils": "^1.0.8",
+    "@walletconnect/react-native-compat": "^2.10.4",
+    "@walletconnect/sign-client": "^2.10.4",
+    "@walletconnect/utils": "^2.10.4",
+    "array-shuffle": "^3.0.0",
+    "axios": "^1.6.0",
+    "base-64": "^1.0.0",
+    "big-integer": "^1.6.51",
+    "buffer": "^6.0.3",
+    "ethers": "^5.6.9",
+    "expo": "~49.0.13",
+    "expo-app-loading": "^2.1.1",
+    "expo-barcode-scanner": "~12.5.3",
+    "expo-clipboard": "~4.3.1",
+    "expo-font": "~11.4.0",
+    "expo-splash-screen": "~0.20.5",
+    "expo-status-bar": "~1.6.0",
+    "moment": "^2.29.4",
+    "nanoid": "^5.0.2",
+    "native-base": "^3.4.28",
+    "node-libs-browser": "^2.2.1",
+    "patch-package": "^8.0.0",
+    "react": "18.2.0",
+    "react-native": "0.72.5",
+    "react-native-contacts": "^7.0.7",
+    "react-native-encrypted-storage": "^4.0.3",
+    "react-native-geolocation-service": "^5.3.1",
+    "react-native-gesture-handler": "^2.13.4",
+    "react-native-get-random-values": "^1.9.0",
+    "react-native-keychain": "^8.1.2",
+    "react-native-reanimated": "^3.5.4",
+    "react-native-responsive-linechart": "^5.7.1",
+    "react-native-safe-area-context": "^4.7.4",
+    "react-native-screens": "^3.27.0",
+    "react-native-svg": "^13.14.0",
+    "react-native-theming": "^1.0.21",
+    "react-native-webview": "^13.6.2",
+    "react-phone-number-input": "^3.3.7",
+    "react-qr-code": "^2.0.12",
+    "recoil": "^0.7.7",
+    "styled-components": "^5.3.11",
+    "uuid": "^9.0.1",
+    "expo-build-properties": "~0.8.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.2.14",
+    "@types/uuid": "^9.0.6",
+    "react-native-dotenv": "^3.4.9",
+    "typescript": "^5.1.3"
+  },
   "private": true,
-  "name": "xucre",
-  "homepage": "https://cawfree.github.io/create-react-native-dapp",
-  "license": "MIT",
-  "contributors": [],
-  "keywords": [
-    "react",
-    "react-native",
-    "blockchain",
-    "dapp",
-    "ethereum",
-    "web3",
-    "starter",
-    "react-native-web"
-  ],
-  "react-native": {
-    "stream": "react-native-stream",
-    "path": "path-browserify",
-    "process": "node-libs-browser/mock/process"
-  },
-  "jest": {
-    "preset": "jest-expo",
-    "testMatch": [
-      "**/__tests__/frontend/**/*.[jt]s?(x)"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "overrides": {
-    "@react-aria/interactions": "3.16.0"
-  },
-  "husky": {},
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": "eslint --fix --ext '.ts,.tsx,.js,.jsx' -c .eslintrc.json"
-  },
-  "resolutions": {
-    "@types/react": "17.0.2"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
-  ],
-  "babel": {
-    "presets": [
-      "babel-preset-expo",
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ],
-      "@babel/preset-typescript"
-    ],
-    "plugins": [
-      [
-        "@babel/plugin-proposal-private-property-in-object",
-        {
-          "loose": true
-        }
-      ],
-      [
-        "module:react-native-dotenv"
-      ],
-      [
-        "@babel/plugin-syntax-bigint",
-        {
-          "loose": true
-        }
-      ],
-      [
-        "@babel/plugin-transform-private-methods",
-        {
-          "loose": true
-        }
-      ],
-      "react-native-reanimated/plugin"
-    ]
-  }
+  "react-native": {}
 }

@@ -22,16 +22,16 @@ type IconType = {
 
 
 
-export default function MobileFooter({wallet: Wallet, navigation}) {
+export default function MobileFooter({navigation}: {navigation: {navigate: Function}}) {
 
   const [language,] = useRecoilState(stateLanguage);
   const {colorMode} = useColorMode();
-  const homeButton = translations[language].Buttons_Footer.home;
-  const historyButton = translations[language].Buttons_Footer.history;
-  const buttonNft = translations[language].Buttons_Header.nft; 
-  const swapButton = translations[language].Buttons_Footer.buttonswap;
-  const supportButton = translations[language].Buttons_Footer.support;
-  const profileButton = translations[language].Buttons_Footer.profile;
+  const homeButton = translations[language as keyof typeof translations].Buttons_Footer.home;
+  const historyButton = translations[language as keyof typeof translations].Buttons_Footer.history;
+  const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft; 
+  const swapButton = translations[language as keyof typeof translations].Buttons_Footer.buttonswap;
+  const supportButton = translations[language as keyof typeof translations].Buttons_Footer.support;
+  const profileButton = translations[language as keyof typeof translations].Buttons_Footer.profile;
 
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: homeButton },

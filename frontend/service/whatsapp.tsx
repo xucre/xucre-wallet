@@ -2,7 +2,7 @@
 import { ToastAndroid } from 'react-native';
 
 import { getWhatsAppToken } from './api'
-  const whatsapp = (phone, template, templateLang, options = { param1 : '', param2: '' }, messageSend) => {
+  const whatsapp = (phone: any, template: string, templateLang: string | undefined, options = { param1 : '', param2: '' }, messageSend: string) => {
 
       //Main Params
     const phoneNumber = phone //TODO: Create validation for country code

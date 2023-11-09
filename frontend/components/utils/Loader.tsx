@@ -5,7 +5,6 @@ import * as Font from 'expo-font';
 import {Box, Center, Hidden, HStack, Image, Pressable, Stack, StatusBar, Text, useColorMode, VStack} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
 import { AppState, Dimensions,  TouchableWithoutFeedback } from 'react-native';
-import Theme, {createStyle} from 'react-native-theming';
 import { useRecoilState } from 'recoil';
 
 import { EIP155_SIGNING_METHODS } from '../../data/EIP1155Data';
@@ -130,7 +129,7 @@ export default function Loader() {
   }
 
   const defaultRouting = async () => {
-    if (navigationRef.current.getCurrentRoute().name === 'Home') {
+    if (navigationRef.current?.getCurrentRoute()?.name === 'Home') {
       if (languageDefault) {
         navigate('Language', {});  
       } else if (!hasSigned) {

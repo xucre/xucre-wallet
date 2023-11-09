@@ -12,8 +12,6 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-//import PhoneInput from "react-native-phone-number-input";
-//import PhoneInput from 'react-phone-number-input/react-native-input';
 import whatsapp from "../../service/whatsapp";
 import { language as stateLanguage } from "../../service/state";
 import translations from "../../assets/translations";
@@ -22,13 +20,13 @@ import { Color } from "../../../GlobalStyles";
 import { Button, useColorMode, Text} from "native-base";
 import PhoneInput from 'react-phone-number-input/react-native-input';
 import {Country} from 'react-phone-number-input';
-//import { CountrySelectComponent } from 'react-phone-number-input'
 // eslint-disable-next-line react-native/split-platform-components
 import { ToastAndroid } from 'react-native';
+import { RouteProp, ParamListBase, RouteConfigComponent } from "@react-navigation/native";
 
 
 
-const CodeCountry = ({ navigation, route }) => {
+const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, route: any}) => {
   
 
   const [language] = useRecoilState(stateLanguage);
@@ -62,7 +60,7 @@ const CodeCountry = ({ navigation, route }) => {
       const regex = /^\+/;
       const isValidNumber = regex.test(phoneNumber);
 
-      isValidNumber ? (_final = phoneNumber, buttonPressSend()) :  ToastAndroid.show(translations[language].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
+      isValidNumber ? (_final = phoneNumber, buttonPressSend()) :  ToastAndroid.show(translations[language as keyof typeof translations].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
     };
     const buttonPressSend = async () => {
       const amoutAndName = route.params.param3 + " " + route.params.param5;
@@ -72,7 +70,7 @@ const CodeCountry = ({ navigation, route }) => {
         //"en_US",
         verilanguage,
         { param1: route.params.param2, param2: amoutAndName },
-        translations[language].QRWallet.toast_send
+        translations[language as keyof typeof translations].QRWallet.toast_send
       );
       await delay(3000);
       navigation.navigate("ViewWallet");
@@ -89,7 +87,7 @@ const CodeCountry = ({ navigation, route }) => {
         //"es",
         verilanguage,
         { param1: "https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=xucre.expo.client", param2: route.params.param2 },
-        translations[language].QRWallet.toast_send
+        translations[language as keyof typeof translations].QRWallet.toast_send
       );
       await delay(3000);
       navigation.navigate("QRWallet");
@@ -97,12 +95,12 @@ const CodeCountry = ({ navigation, route }) => {
     const formaterNumber = () => {
       const regex = /^\+/;
       const isValidNumber = regex.test(phoneNumber);
-      isValidNumber ? (_final = phoneNumber, buttonPress()) :  ToastAndroid.show(translations[language].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
+      isValidNumber ? (_final = phoneNumber, buttonPress()) :  ToastAndroid.show(translations[language as keyof typeof translations].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
     };
     return componentsView(formaterNumber);
   }
 
-  function componentsView(formaterNumber) {
+  function componentsView(formaterNumber: Function) {
     return (
       <View style={styles.container}>
         
@@ -110,7 +108,7 @@ const CodeCountry = ({ navigation, route }) => {
           international
           withCountryCallingCode
           value={route.params.param1.phoneNumbers[0].number}
-          onChange={setPhoneNumber}          
+          onChange={(val) => {setPhoneNumber(val as string)}}          
           labels={{"phone": "Phone"}}
           style={{
             borderBottomWidth: 1,
@@ -133,7 +131,7 @@ const CodeCountry = ({ navigation, route }) => {
             }}
           >
             <Text color={colorMode === "dark" ? Color.black : Color.white}>
-              {translations[language].WhatsAppNotification.Send_Button}
+              {translations[language as keyof typeof translations].WhatsAppNotification.Send_Button}
             </Text>
           </Button>
 
@@ -146,7 +144,7 @@ const CodeCountry = ({ navigation, route }) => {
             onPress={navigationScreens}
           >
             <Text color={colorMode === "dark" ? Color.black : Color.white}>
-              {translations[language].SupportPage.button_cancel}
+              {translations[language as keyof typeof translations].SupportPage.button_cancel}
             </Text>
           </Button>
         </Button.Group>

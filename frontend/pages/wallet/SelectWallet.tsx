@@ -19,11 +19,11 @@ import { useRecoilState } from "recoil";
 import { Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import GuestLayout from '../../layouts/GuestLayout';
-import { activeWallet, language as stateLanguage, walletList } from "../../service/state";
+import { activeWallet, AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { truncateStringStart } from "../../service/utility";
-import { storeActiveWallet } from "../../store/wallet";
+import { storeActiveWallet, WalletInternal } from "../../store/wallet";
 
-export default function SelectWallet ({navigation, route}) {
+export default function SelectWallet ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const {
     colorMode
   } = useColorMode();
@@ -39,15 +39,19 @@ export default function SelectWallet ({navigation, route}) {
     navigation.navigate('ViewWallet');
   }
 
-  const WalletItem = ({metadata}) => {
+  const WalletItem = ({metadata} : {metadata: AppWallet}) => {
     const selectWallet = () => {
-      setActiveWallet(metadata);   
-      storeActiveWallet(metadata);  
+      setActiveWallet(metadata);
+      const walletInternal = new WalletInternal(metadata.wallet.privateKey);
+      walletInternal.name = metadata.name;
+      storeActiveWallet(walletInternal);  
     }
 
     const openWallet = () => {      
       setActiveWallet(metadata);   
-      storeActiveWallet(metadata);
+      const walletInternal = new WalletInternal(metadata.wallet.privateKey);
+      walletInternal.name = metadata.name;
+      storeActiveWallet(walletInternal);
       viewWallet();
     }
     return (
@@ -65,7 +69,7 @@ export default function SelectWallet ({navigation, route}) {
           </HStack>
         </Pressable>
         <HStack alignItems="center" space={{ base: 2 }}>       
-          <Tooltip label={translations[language].SelectWallet.select_button_tooltip} openDelay={500}>
+          <Tooltip label={translations[language as keyof typeof translations].SelectWallet.select_button_tooltip} openDelay={500}>
             <Menu w="190" trigger={triggerProps => {
               return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
                 <Icon
@@ -77,7 +81,7 @@ export default function SelectWallet ({navigation, route}) {
               </Pressable>;
               }}
             >                
-              <Menu.Item onPress={() => {selectWallet()}}><Text>{translations[language].SelectWallet.select_button}</Text></Menu.Item>                
+              <Menu.Item onPress={() => {selectWallet()}}><Text>{translations[language as keyof typeof translations].SelectWallet.select_button}</Text></Menu.Item>                
             </Menu>
           </Tooltip>
           
@@ -113,7 +117,7 @@ export default function SelectWallet ({navigation, route}) {
           }
         </VStack>
         
-        <Button onPress={createWallet} style={{borderRadius: 100, marginLeft:10, marginRight:10}}  colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'darkText' : 'lightText'}>{translations[language].SelectWallet.new_button}</Text></Button>
+        <Button onPress={createWallet} style={{borderRadius: 100, marginLeft:10, marginRight:10}}  colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'darkText' : 'lightText'}>{translations[language as keyof typeof translations].SelectWallet.new_button}</Text></Button>
       </Box>
     </GuestLayout>
   )

@@ -23,16 +23,16 @@ import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import { language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromMnemonics} from '../../service/wallet'
-import { storeWallet } from "../../store/wallet";
+import { storeWallet, WalletInternal } from "../../store/wallet";
 
 
-export default function RecoverWallet ({navigation, route, storage}) {
+export default function RecoverWallet ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const toast = useToast();
   const setWalletList = useSetRecoilState(walletList);
   const [language, ] = useRecoilState(stateLanguage);
   const [steps, setSteps] = useState(0);
   const [mnemonic, setMnemonic] = useState('');
-  const [confirmMnemonics, setConfirmMnemonics] = useState([]);
+  const [confirmMnemonics, setConfirmMnemonics] = useState([] as string[]);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [mnemonicMatchComplete, setMnemonicMatchComplete] = useState(false);
@@ -66,7 +66,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
 
     return (
       <VStack space={4} mt={{ base: 0 }}>
-        <Text>{translations[language].RecoverWallet.instructions}</Text>
+        <Text>{translations[language as keyof typeof translations].RecoverWallet.instructions}</Text>
         <Button
           variant="outline"
           my={4} 
@@ -75,7 +75,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
           onPress={createMnemonics}       
           isLoading={loading}  
         >
-          <Text>{translations[language].RecoverWallet.instructions_button}</Text>
+          <Text>{translations[language as keyof typeof translations].RecoverWallet.instructions_button}</Text>
         </Button>
       </VStack>
     );
@@ -86,23 +86,20 @@ export default function RecoverWallet ({navigation, route, storage}) {
     return (
       <>
         {(!mnemonicMatchComplete) && 
-          <Text my={2} color={'danger.400'}>{translations[language].RecoverWallet.mnemonic_not_complete}</Text>
+          <Text my={2} color={'danger.400'}>{translations[language as keyof typeof translations].RecoverWallet.mnemonic_not_complete}</Text>
         }
       </>
     )
   }
 
   function ConfirmMnemonicList() {
-    const selectMnemonic = (word) => {
-      setConfirmMnemonics([...confirmMnemonics, word]);
-    };
-    const removeMnemonic = (word, n) => {
+    const removeMnemonic = (word: any, n: number) => {
       const filteredList = confirmMnemonics.filter((val, i) => {
         return n !== i;
       });
       setConfirmMnemonics(filteredList);
     };
-    function ListItem({value, index}) {
+    function ListItem({value, index}: {value: string, index: number}) {
       return (
         <Button
           width={'100%'}
@@ -204,7 +201,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
   }
   
 
-  const handleMnemonicChange = (text) => {
+  const handleMnemonicChange = (text: string) => {
     if(text.length > 3 && text.endsWith(' ')) {
       if (confirmMnemonics.length < 12) {
         setConfirmMnemonics([...confirmMnemonics, text.trim()])
@@ -214,7 +211,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
       setMnemonic(text)
     }
   }
-  const handleNameChange = (event) => {
+  const handleNameChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setName(event.nativeEvent.text);
   }
 
@@ -227,8 +224,9 @@ export default function RecoverWallet ({navigation, route, storage}) {
       try {
         if (confirmMnemonics.length > 0 ) {
           const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
-          
-          await storeWallet({name, wallet: _wallet.privateKey});
+          const walletInternal = new WalletInternal(_wallet.privateKey);
+          walletInternal.name = name;
+          await storeWallet(walletInternal);
           setWalletList((oldWalletList) => [
             ...oldWalletList,
             {
@@ -249,7 +247,7 @@ export default function RecoverWallet ({navigation, route, storage}) {
         setLoading(false);
         toast.show({
           placement: "bottom",
-          title: err.message,
+          title: 'Error saving wallet',
         })
       }
       
@@ -280,19 +278,19 @@ export default function RecoverWallet ({navigation, route, storage}) {
                   Wallet name
                 </Text>
 
-                <Input w="full" minH={12} value={name} onChange={handleNameChange} placeholder={translations[language].RecoverWallet.name_entry_input_placeholder} />
+                <Input w="full" minH={12} value={name} onChange={handleNameChange} placeholder={translations[language as keyof typeof translations].RecoverWallet.name_entry_input_placeholder} />
               </Box>
               
               <Box py={3}>
                 <Text style={ styles.walletName} textAlign={'center'}>
                   Mnemonic
                 </Text>            
-                <Input minH={12} value={mnemonic} placeholder={translations[language].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="full" />
+                <Input minH={12} value={mnemonic} placeholder={translations[language as keyof typeof translations].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="full" />
                 <ConfirmMnemonicList />
               </Box>
               <Button.Group>
-                <Button w={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
-                  <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].RecoverWallet.save_button}</Text>
+                <Button w={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveWallet();}} isLoading={loading} isLoadingText={translations[language as keyof typeof translations].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400'}}>
+                  <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language as keyof typeof translations].RecoverWallet.save_button}</Text>
                 </Button>   
               </Button.Group>     
             </VStack>

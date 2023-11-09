@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { formatJsonRpcError, formatJsonRpcResult } from '@walletconnect/jsonrpc-utils'
 import { getSdkError } from '@walletconnect/utils'
-import { getDefaultProvider, providers, utils } from 'ethers'
+import { Wallet, getDefaultProvider, providers, utils } from 'ethers'
 
 import { EIP155_CHAINS, EIP155_SIGNING_METHODS, TEIP155Chain } from '../data/EIP1155Data';
 import { getNetworks } from "../store/network";
@@ -9,10 +9,10 @@ import { getNetworks } from "../store/network";
 import { AppWallet } from "./state"
 
 function transformObject (
-  object,
-  oldKey,
-  newKey,
-  chainID
+  object: any,
+  oldKey: string,
+  newKey: string,
+  chainID: any
 ) {
   // eslint-disable-next-line functional/no-let, prefer-const
   let newObject = { ...object };
@@ -30,15 +30,15 @@ function transformObject (
   return newObject;
 }
 
-export function rejectEIP155Request(request) {
+export function rejectEIP155Request(request: { id?: any; }) {
   const { id } = request
 
   return formatJsonRpcError(id, getSdkError('USER_REJECTED_METHODS').message)
 }
 
 export async function approveEIP155Request(
-  requestEvent,
-  wallets
+  requestEvent: { params?: any; id?: any; },
+  wallets: AppWallet[]
 ) {
   const { params, id } = requestEvent;
   const { chainId, request } = params;
@@ -47,18 +47,18 @@ export async function approveEIP155Request(
   })
   //
   const matchedAddress = getWalletAddressFromParams(walletAddresses, params);
-  const wallet = wallets.find((_wallet => {    
+  const wallet = wallets.find(((_wallet: { address: string; }) => {    
     return matchedAddress === _wallet.address;
   }))
   const _networks = await getNetworks();
-  const network = _networks.find((_network) => {
+  const network = _networks.find((_network: { chainId: any; }) => {
     return _network.chainId == chainId.split(':')[1];
   })
   switch (request.method) {
     case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
     case EIP155_SIGNING_METHODS.ETH_SIGN:
       const message = getSignParamsMessage(request.params)
-      const signedMessage = await wallet.wallet.signMessage(message)
+      const signedMessage = await wallet?.wallet.signMessage(message)
       return formatJsonRpcResult(id, signedMessage)
 
     case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
@@ -68,7 +68,7 @@ export async function approveEIP155Request(
       // https://github.com/ethers-io/ethers.js/issues/687#issuecomment-714069471
       // eslint-disable-next-line functional/immutable-data
       delete types.EIP712Domain
-      const signedData = await wallet.wallet._signTypedData(domain, types, data)
+      const signedData = await wallet?.wallet._signTypedData(domain, types, data)
       return formatJsonRpcResult(id, signedData)
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
@@ -76,19 +76,20 @@ export async function approveEIP155Request(
         const provider = network ? getDefaultProvider(network.rpcUrl) : new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
       
         const request2 = request.params[0];
-        const connectedWallet = wallet.wallet.connect(provider);
-        const chainID = await connectedWallet.getChainId();
+        const connectedWallet = wallet?.wallet.connect(provider);
+        const chainID = await (connectedWallet as Wallet).getChainId();
         const req = transformObject(request2, 'gas', 'gasLimit', chainID);
-        const { hash } = await connectedWallet.sendTransaction(req);
+        const { hash } = await (connectedWallet as Wallet).sendTransaction(req);
         
         return formatJsonRpcResult(id, hash);
       } catch (err) {
-        return formatJsonRpcError(id, err.message);
+        const {message} = err as {message: string}
+        return formatJsonRpcError(id, message);
       }   
 
     case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
       const signTransaction = request.params[0]
-      const signature = await wallet.wallet.signTransaction(signTransaction)
+      const signature = await wallet?.wallet.signTransaction(signTransaction)
       return formatJsonRpcResult(id, signature)
 
     default:
@@ -101,8 +102,8 @@ export async function approveEIP155Request(
  * a value that is not an address (thus is a message).
  * If it is a hex string, it gets converted to utf8 string
  */
- export function getSignParamsMessage(params) {
-  const message = params.filter(p => !utils.isAddress(p))[0]
+ export function getSignParamsMessage(params: any[]) {
+  const message = params.filter((p: string) => !utils.isAddress(p))[0]
 
   return convertHexToUtf8(message)
 }
@@ -112,8 +113,8 @@ export async function approveEIP155Request(
  * a value that is not an address (thus is data).
  * If data is a string convert it to object
  */
-export function getSignTypedDataParamsData(params) {
-  const data = params.filter(p => !utils.isAddress(p))[0];
+export function getSignTypedDataParamsData(params: any[]) {
+  const data = params.filter((p: string) => !utils.isAddress(p))[0];
 
   if (typeof data === 'string') {
     return JSON.parse(data);
@@ -126,7 +127,7 @@ export function getSignTypedDataParamsData(params) {
  * Get our address from params checking if params string contains one
  * of our wallet addresses
  */
-export function getWalletAddressFromParams(addresses: readonly string[], params) {
+export function getWalletAddressFromParams(addresses: readonly string[], params: any) {
   const paramsString = JSON.stringify(params);
 
   const address = addresses.reduce((prev, addr) => {

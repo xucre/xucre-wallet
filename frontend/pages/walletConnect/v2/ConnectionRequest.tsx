@@ -1,29 +1,13 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import {
-  AlertDialog,
-  ArrowBackIcon,
   Avatar,
   Box,
   Button,
   Center,
   Checkbox,
-  Divider,
-  Drawer,
   Heading,
-  Hidden,
   HStack,
-  Icon,
-  IconButton,
-  Image,
-  MoonIcon,
-  Pressable,
-  ScrollView,
-  SunIcon,
   Text,
-  Tooltip,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
@@ -33,15 +17,15 @@ import { useRecoilState } from "recoil";
 import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
-import { language as stateLanguage, walletList } from "../../../service/state";
+import { AppWallet, language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
 
-export default function ConnectionRequest({navigation, route}) {
+export default function ConnectionRequest({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const {requestDetails} = route.params;
-  const [request, setRequest] = useState({});
+  const [request, setRequest] = useState({} as any);
   const [walletState, ] = useRecoilState(walletList);
-  const [selectedWallets, setSelectedWallets] = useState([]);
+  const [selectedWallets, setSelectedWallets] = useState([] as AppWallet[]);
   const [page, setPage] = useState(0);
   const [language, ] = useRecoilState(stateLanguage);
   const {colorMode} = useColorMode();
@@ -64,7 +48,7 @@ export default function ConnectionRequest({navigation, route}) {
     setPage(page-1);
   }
 
-  const SelectWallet = ({metadata}) => {
+  const SelectWallet = ({metadata}: {metadata : AppWallet}) => {
     const address = metadata.wallet.address;
     const selectWallet = () => {
       setSelectedWallets([...selectedWallets, metadata])   
@@ -96,7 +80,7 @@ export default function ConnectionRequest({navigation, route}) {
     )
   }
 
-  const WalletItem = ({metadata}) => {
+  const WalletItem = ({metadata} : {metadata : AppWallet}) => {
     const address = metadata.wallet.address;
     return (
       <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>
@@ -111,7 +95,7 @@ export default function ConnectionRequest({navigation, route}) {
     )
   }
 
-  const SelectWallet2 = ({metadata}) => {
+  const SelectWallet2 = ({metadata} : {metadata: AppWallet}) => {
     const address = metadata.wallet.address;
     const selectWallet = () => {
       setSelectedWallets([...selectedWallets, metadata])   
@@ -143,7 +127,7 @@ export default function ConnectionRequest({navigation, route}) {
 
   const approve = async () => {
     const accountList = selectedWallets.map((wallet) => {
-      return request['params']['requiredNamespaces']['eip155']['chains'].map((chain) => {
+      return request['params']['requiredNamespaces']['eip155']['chains'].map((chain: string) => {
         return chain+ ':' + wallet.wallet.address;
       })
     })
@@ -169,7 +153,7 @@ export default function ConnectionRequest({navigation, route}) {
       id: request['params']['id'],
       reason: {
         code: 1,
-        message: translations[language].ConnectionRequest.rejected,
+        message: translations[language as keyof typeof translations].ConnectionRequest.rejected,
       },
     }
 
@@ -187,8 +171,8 @@ export default function ConnectionRequest({navigation, route}) {
         {page === 0 && walletState && 
           <VStack>
             <VStack py={5}>
-                <Center><Heading size="md" mb={2} mt={3}><Text>{translations[language].ConnectionRequest.title}</Text></Heading></Center>
-                <Center><Heading size="sm"><Text color={'gray.500'}>{translations[language].ConnectionRequest.wallet_select_instructions}</Text></Heading></Center>
+                <Center><Heading size="md" mb={2} mt={3}><Text>{translations[language as keyof typeof translations].ConnectionRequest.title}</Text></Heading></Center>
+                <Center><Heading size="sm"><Text color={'gray.500'}>{translations[language as keyof typeof translations].ConnectionRequest.wallet_select_instructions}</Text></Heading></Center>
                 <VStack space={5} py={4}>
                   {
                     walletState.map((val, i) => {
@@ -202,7 +186,7 @@ export default function ConnectionRequest({navigation, route}) {
             
             {selectedWallets.length > 0 && 
               <Button.Group>
-                <Button w={'full'} onPress={nextPage} position={'relative'} bottom={0} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text fontWeight={'bold'} color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language].ConnectionRequest.next_button}</Text></Button>
+                <Button w={'full'} onPress={nextPage} position={'relative'} bottom={0} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text fontWeight={'bold'} color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language as keyof typeof translations].ConnectionRequest.next_button}</Text></Button>
               </Button.Group>
             }
           </VStack>
@@ -212,7 +196,7 @@ export default function ConnectionRequest({navigation, route}) {
             <VStack >
               {/*<Button onPress={previousPage} variant={'solid'} colorScheme={'coolGray'} rounded="none" mb={4}><Text color={'text.300'}>{'back'}</Text></Button>*/}
               
-              <Center><Heading size="md" mb={4}><Text>{translations[language].ConnectionRequest.title}</Text></Heading></Center>
+              <Center><Heading size="md" mb={4}><Text>{translations[language as keyof typeof translations].ConnectionRequest.title}</Text></Heading></Center>
             
               <HStack space={0} justifyContent="center" alignContent={'center'} rounded="full" mx={8} p={4} py={2} borderStyle={'solid'} borderWidth={1} borderColor={'gray'}>
                 <Avatar bg="gray.500" source={{
@@ -249,8 +233,8 @@ export default function ConnectionRequest({navigation, route}) {
               </Center>
             </VStack>
             <Button.Group isAttached  colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white } fontWeight={'bold'}>{translations[language].ConnectionRequest.approve_button}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].ConnectionRequest.reject_button}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white } fontWeight={'bold'}>{translations[language as keyof typeof translations].ConnectionRequest.approve_button}</Text></Button>
+              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].ConnectionRequest.reject_button}</Text></Button>
             </Button.Group>
           </>
         }        

@@ -1,28 +1,10 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import {
   Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Box,
-  Button,
-  Center,
   CloseIcon,
-  Divider,
-  Drawer,
-  Hidden,
   HStack,
-  Icon,
   IconButton,
-  Image,
-  Menu,
-  MoonIcon,
-  Pressable,
-  Select,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
   useToast,
   VStack,
 } from "native-base";
@@ -49,24 +31,24 @@ export default function Listener () {
 
   const [language, ] = useRecoilState(stateLanguage);
   const [transactions, setTransactionList] = useRecoilState(transactionList);
-  const [_transactions, setTransactions] = useState([]);
+  const [_transactions, setTransactions] = useState([] as any[]);
   const successToast = {
     isClosable: true,
     status: 'success',
-    title: translations[language].Listener.success_message,
+    title: translations[language as keyof typeof translations].Listener.success_message,
     variant: "solid",
   };
 
   const failureToast = {
     isClosable: true,
     status: 'error',
-    title: translations[language].Listener.failure_message,
+    title: translations[language as keyof typeof translations].Listener.failure_message,
     variant: "solid",
   };
   useEffect(() => {
     const runAsync = async () => {
       if (_transactions.length > 0) {
-        const transactionResult = await Promise.all(_transactions.map(async (transaction) => {
+        await Promise.all(_transactions.map(async (transaction) => {
           
           const result = await transaction.wait();
           if (result.status === 1) {
@@ -75,7 +57,7 @@ export default function Listener () {
               render: ({
                 id
               }) => {
-                return <ToastAlert id={id} {...toastItem} />;
+                return <ToastAlert {...toastItem} />;
               }
             });
             const _transaction = {
@@ -99,7 +81,7 @@ export default function Listener () {
               render: ({
                 id
               }) => {
-                return <ToastAlert id={id} {...toastItem} />;
+                return <ToastAlert {...toastItem} />;
               }
             });
             const _transaction = {
@@ -133,9 +115,16 @@ export default function Listener () {
     variant,
     title,
     description,
-    isClosable,
-    ...rest
-  }) => <Alert maxWidth="100%" alignSelf="center" flexDirection="row" status={status ? status : "info"} variant={variant} {...rest}>
+    isClosable
+  } : {
+    id: any;
+    status: string | (string & {}) | undefined;
+    variant: string | ("solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | null)[] | { base?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; sm?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; md?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; lg?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; xl?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; '2xl'?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; } | null | undefined;
+    title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined;
+    description: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined;
+    isClosable: any;
+  }
+  ) => <Alert maxWidth="100%" alignSelf="center" flexDirection="row" status={status ? status : "info"} variant={variant}>
       <VStack space={1} flexShrink={1} w="100%">
         <HStack flexShrink={1} alignItems="center" justifyContent="space-between">
           <HStack space={2} flexShrink={1} alignItems="center">

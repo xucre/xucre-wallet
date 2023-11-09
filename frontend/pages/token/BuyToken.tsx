@@ -13,7 +13,7 @@ import { activeNetwork, activeWallet, networkList, language as stateLanguage, to
 
 //const lifi = new LIFI();
 
-export default function BuyToken({ navigation, route }) {
+export default function BuyToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
 
 
   const [network,] = useRecoilState(activeNetwork);
@@ -33,10 +33,6 @@ export default function BuyToken({ navigation, route }) {
   useEffect(() => {
     const runAsync = async () => {
       //const chains = await lifi.getChains();
-      const chains = [];
-      const chain = chains.find((val) => {
-        return val.id === network.chainId
-      })
     }
     if (network) {
       runAsync();

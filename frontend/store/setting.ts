@@ -1,11 +1,12 @@
+import { Verify, SignClientTypes, ProposalTypes } from "@walletconnect/types";
 import { BigNumber } from "ethers";
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
 
-export const storeTheme = async (mode) => {
+export const storeTheme = async (mode: string | null | undefined) => {
   await EncryptedStorage.setItem(
     "theme_mode",
-    mode
+    mode as string
   );
 };
 
@@ -14,7 +15,7 @@ export const getTheme = async () => {
   return theme;
 }
  
-export const storeWCLegacyUrl = async (url) => {
+export const storeWCLegacyUrl = async (url: string) => {
   await EncryptedStorage.setItem(
     "wc_legacy_url",
     url
@@ -42,7 +43,7 @@ export const getLastUnlock = async () => {
   return null;
 }
 
-export const validatePassword = async (_password) => {
+export const validatePassword = async (_password: string) => {
   const credentials = await Keychain.getGenericPassword();
   if (credentials) {
     if (credentials.password === _password) {
@@ -55,7 +56,7 @@ export const validatePassword = async (_password) => {
   return true;
 }
 
-export const storePassword = async (old, _password) => {
+export const storePassword = async (old: string, _password: string) => {
   const credentials = await Keychain.getGenericPassword();
   const unlockDate = Date();
   if (credentials) {
@@ -85,9 +86,9 @@ export const hasSignedPrivacyPolicy = async () => {
   return value === 'yes';
 }
 
-export const addNotification = async (id, event) => {
+export const addNotification = async (id: string, event: ({ verifyContext: Verify.Context; } & Omit<SignClientTypes.BaseEventArgs<ProposalTypes.Struct>, "topic">) | ({ verifyContext: Verify.Context; } & SignClientTypes.BaseEventArgs<{ request: { method: string; params: any; }; chainId: string; }>)) => {
   const _events = await EncryptedStorage.getItem("connect_events");
-  const events = JSON.parse(_events);
+  const events = JSON.parse(_events as string);
   if (events) {
     if (events[id]) {
       return;
@@ -105,9 +106,9 @@ export const addNotification = async (id, event) => {
   }
 }
 
-export const deleteNotification = async (id) => {
+export const deleteNotification = async (id: string) => {
   const _events = await EncryptedStorage.getItem("connect_events");
-  const events = JSON.parse(_events);
+  const events = JSON.parse(_events as string);
   if (events) {
     if (events[id]) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -122,9 +123,9 @@ export const deleteNotification = async (id) => {
   }
 };
 
-export const getNotification = async (id) => {
+export const getNotification = async (id: string) => {
   const _events = await EncryptedStorage.getItem("connect_events");
-  const events = JSON.parse(_events);
+  const events = JSON.parse(_events as string);
   if (events) {
     if (events[id]) {
       return events[id];
@@ -138,9 +139,9 @@ export const getNotification = async (id) => {
 
 export const getAllNotifications = async () => {
   const _events = await EncryptedStorage.getItem("connect_events");
-  const events = JSON.parse(_events);
+  const events = JSON.parse(_events as string);
   if (events) {  
-    return Object.values(events).sort((a : {readonly id: string},b: {readonly id: string}) => {
+    return Object.values(events).sort((a : any,b: any) => {
       if ( a.id < b.id ){
         return 1;
       }

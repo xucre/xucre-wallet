@@ -1,30 +1,16 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import {
-  AlertDialog,
-  ArrowBackIcon,
   Avatar,
   Box,
-  Button,
-  Center,
-  Checkbox,
-  Divider,
-  Drawer,
-  Heading,
-  Hidden,
   HStack,
   Icon,
   IconButton,
-  Image,
   Menu,
-  MoonIcon,
   Pressable,
   ScrollView,
-  SunIcon,
   Text,
   Tooltip,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
@@ -33,14 +19,13 @@ import { useRecoilState } from "recoil";
 import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
-import { language as stateLanguage, walletList } from "../../../service/state";
-import { truncateString, truncateStringStart } from "../../../service/utility";
+import { language as stateLanguage } from "../../../service/state";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification, getAllNotifications } from "../../../store/setting";
 
-export default function Requests({navigation, route}) {
-  const [requests, setRequests] = useState([]);
-  const [paringMap, setParingMap] = useState({});
+export default function Requests({navigation, route}: {navigation: {navigate: Function}, route: any}) {
+  const [requests, setRequests] = useState([] as any[]);
+  const [paringMap, setParingMap] = useState({} as any);
   const [language, ] = useRecoilState(stateLanguage);
   const {colorMode} = useColorMode();
   //{translations[language].ConnectionRequest.}
@@ -61,7 +46,7 @@ export default function Requests({navigation, route}) {
     
   }
 
-  const Request = ({event, metadata}) => {
+  const Request = ({event, metadata} : {event: any, metadata: any}) => {
     //const address = metadata.wallet.address;
     const [isDeleted, setIsDeleted] = useState(false);
     useEffect(() => {
@@ -102,7 +87,7 @@ export default function Requests({navigation, route}) {
               }} />
               <VStack>
                 <Text color={colorMode === 'dark' ? Color.white : Color.black}>{event.id}</Text>
-                <Text color={'danger.500'}>{translations[language].Requests.expired_text}</Text>
+                <Text color={'danger.500'}>{translations[language as keyof typeof translations].Requests.expired_text}</Text>
               </VStack>
             </HStack>
             <HStack alignItems="center" space={{ base: 2 }}> 
@@ -127,7 +112,7 @@ export default function Requests({navigation, route}) {
             }} />
             <VStack>
               <Text color={colorMode === 'dark' ? Color.white : Color.black}>{event.id}</Text>
-              <Text color={'danger.500'}>{translations[language].Requests.expired_text}</Text>
+              <Text color={'danger.500'}>{translations[language as keyof typeof translations].Requests.expired_text}</Text>
             </VStack>
           </HStack>
           <HStack alignItems="center" space={{ base: 2 }}> 
@@ -143,7 +128,7 @@ export default function Requests({navigation, route}) {
                 </Pressable>;
                 }}
               >                
-                <Menu.Item onPress={deleteRequest}><Text>{translations[language].Requests.delete_button}</Text></Menu.Item>              
+                <Menu.Item onPress={deleteRequest}><Text>{translations[language as keyof typeof translations].Requests.delete_button}</Text></Menu.Item>              
               </Menu>
             </Tooltip>    
           </HStack>

@@ -12,8 +12,9 @@ import { Token } from "../../service/token";
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
 import { deleteToken } from "../../store/token";
+import { NavigationState } from "@react-navigation/native";
 
-export default function TokenItem ({navigation, token, refreshList}) {
+export default function TokenItem ({navigation, token, refreshList}: {navigation: { navigate: Function }, token: Token, refreshList: Function}) {
   const { colorMode } = useColorMode();
   const [network, ] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
@@ -68,7 +69,7 @@ export default function TokenItem ({navigation, token, refreshList}) {
     refreshList();
   }
 
-  const TokenIcon = ({iname}) => {
+  const TokenIcon = ({iname} : {iname: string}) => {
     const icon_color = colorMode ==='dark'? 'white':'black';
     return (
       <Avatar bg="primary.600" mr="1">
@@ -84,7 +85,7 @@ export default function TokenItem ({navigation, token, refreshList}) {
   return (
     <HStack alignItems="center" justifyContent="space-between">
      <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-      <TokenIcon iname={token.type == 'coin' ? iconNames[network.chainId] : truncateString(token.address, 3)}/>
+      <TokenIcon iname={token.type == 'coin' ? iconNames[network.chainId as keyof typeof iconNames] : truncateString(token.address, 3) as string}/>
        
        <VStack>
          <Pressable>
@@ -101,7 +102,7 @@ export default function TokenItem ({navigation, token, refreshList}) {
            fontWeight="normal">{ethers.utils.formatEther(amount)}</Text>
        <Tooltip label="More Options" openDelay={500}>
           <Menu w="190" trigger={triggerProps => {
-            return <Pressable accessibilityLabel={translations[language].TokenItem.menu_accessiblity_label} {...triggerProps}>
+            return <Pressable accessibilityLabel={translations[language as keyof typeof translations].TokenItem.menu_accessiblity_label} {...triggerProps}>
               <Icon
                 as={MaterialIcons}
                 name="more-vert"
@@ -111,8 +112,8 @@ export default function TokenItem ({navigation, token, refreshList}) {
             </Pressable>;
             }}
           >                
-            <Menu.Item onPress={() => {sendToken()}}><Text>{translations[language].TokenItem.send_token_button}</Text></Menu.Item>   
-            <Menu.Item onPress={() => {removeToken()}}><Text>{translations[language].TokenItem.delete_button}</Text></Menu.Item>             
+            <Menu.Item onPress={() => {sendToken()}}><Text>{translations[language as keyof typeof translations].TokenItem.send_token_button}</Text></Menu.Item>   
+            <Menu.Item onPress={() => {removeToken()}}><Text>{translations[language as keyof typeof translations].TokenItem.delete_button}</Text></Menu.Item>             
           </Menu>
        </Tooltip>
      </HStack>

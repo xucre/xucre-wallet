@@ -15,12 +15,12 @@ import { getLastUnlock, validatePassword } from "../store/setting";
 
 import ErrorToast from "./utils/ErrorToast";
 
-export default function PasswordPage({navigation, route, validateAuth}) {
+export default function PasswordPage({navigation, route, validateAuth} : {navigation: {navigate: Function}, route: any, validateAuth: Function}) {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [language, ] = useRecoilState(stateLanguage);
 
-  const handleChange = (event) => {
+  const handleChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setPassword(event.nativeEvent.text);
   }
 
@@ -29,7 +29,7 @@ export default function PasswordPage({navigation, route, validateAuth}) {
     if (_isValid) {
       validateAuth();
     } else {
-      setErrorMessage(translations[language].PasswordComponent.error_message);
+      setErrorMessage(translations[language as keyof typeof translations].PasswordComponent.error_message);
       setTimeout(() => {
         setErrorMessage('');
       }, 2000);
@@ -40,19 +40,19 @@ export default function PasswordPage({navigation, route, validateAuth}) {
   
       <Modal isOpen={true} onClose={() => null} avoidKeyboard justifyContent="flex-end" bottom="4" size="lg">
         <Modal.Content>
-          <Modal.Header>{translations[language].PasswordComponent.header}</Modal.Header>
+          <Modal.Header>{translations[language as keyof typeof translations].PasswordComponent.header}</Modal.Header>
           <Modal.Body>
           
             <FormControl mt="3">
-              <FormControl.Label>{translations[language].PasswordComponent.form_label}</FormControl.Label>
-              <Input w="100%" value={password} onChange={handleChange} placeholder={translations[language].PasswordComponent.form_placeholder}  />
+              <FormControl.Label>{translations[language as keyof typeof translations].PasswordComponent.form_label}</FormControl.Label>
+              <Input w="100%" value={password} onChange={handleChange} placeholder={translations[language as keyof typeof translations].PasswordComponent.form_placeholder}  />
             </FormControl>
           </Modal.Body>
           <Modal.Footer>
             <Button flex="1" onPress={() => {
             savePassword();
           }}>
-              {translations[language].PasswordComponent.submit_button}
+              {translations[language as keyof typeof translations].PasswordComponent.submit_button}
             </Button>
           </Modal.Footer>
         </Modal.Content>

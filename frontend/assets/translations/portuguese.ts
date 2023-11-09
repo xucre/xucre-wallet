@@ -1,5 +1,6 @@
+import { TranslationType } from ".";
 /* eslint-disable sort-keys */
-const values = {
+const values : TranslationType  = {
   AddToken: {
     address_placeholder: 'Digite o endereÃ§o do token',
     chain_placeholder: 'Selecionar cadeia',
@@ -251,7 +252,7 @@ const values = {
         "TransaÃ§Ãµes"
     ],
     title: "Carteira",
-    transaction_placeholder: 'Inserir histÃ³rico de transaÃ§Ãµes',
+    transactions_placeholder: 'Inserir histÃ³rico de transaÃ§Ãµes',
   },
   WalletConnect : {
     session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],

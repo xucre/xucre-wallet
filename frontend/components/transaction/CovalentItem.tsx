@@ -8,13 +8,14 @@ import { useRecoilState } from "recoil";
 
 import { activeNetwork } from "../../service/state";
 import { truncateString } from "../../service/utility";
+import { CovalentTransaction } from "../../service/transaction";
 
-export default function CovalentItem ({navigation, transaction}) {
+export default function CovalentItem ({navigation, transaction}: {navigation: { navigate: Function }, transaction: CovalentTransaction}) {
   const { colorMode } = useColorMode();
 
   const [network, ] = useRecoilState(activeNetwork);
   const openTransaction = () => {
-    const blockUrl = network.blockExplorer.endsWith('/') ? network.blockExplorer+'tx/'+transaction.hash : network.blockExplorer+'/tx/'+transaction.hash;
+    const blockUrl = network?.blockExplorer?.endsWith('/') ? network.blockExplorer+'tx/'+transaction.hash : network.blockExplorer+'/tx/'+transaction.hash;
     
     Linking.openURL(blockUrl);
   }
@@ -29,7 +30,7 @@ export default function CovalentItem ({navigation, transaction}) {
        <VStack>
          <Pressable onPress={() => {openTransaction()}}>
            <Text fontSize="md" bold>
-              { transaction.block_signed_at && transaction.block_signed_at !== '' && 
+              { transaction.block_signed_at && 
                 <>{moment(transaction.block_signed_at).fromNow()}</>}
               {!transaction.block_signed_at &&
                 <>{truncateString(transaction.tx_hash, 15)}</>}

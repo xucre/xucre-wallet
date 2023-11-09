@@ -25,8 +25,9 @@ import {
     language as stateLanguage,
 } from "../../service/state";
 import { getNetworks, storeActiveNetwork } from "../../store/network";
+import { Network } from "../../service/network";
 
-export default function NetworkDefault({ navigation, route }) {
+export default function NetworkDefault({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
     const [language,] = useRecoilState(stateLanguage);
     const { colorMode } = useColorMode();
     const [, setSelectedNetwork] = useRecoilState(selectedNetwork);
@@ -60,7 +61,7 @@ export default function NetworkDefault({ navigation, route }) {
 
     }
 
-    const NetworkItem = ({ metadata }) => {
+    const NetworkItem = ({ metadata }: {metadata : Network}) => {
         const selectNetwork = () => {
             setActiveNetwork(metadata);
             storeActiveNetwork(metadata);
@@ -109,8 +110,8 @@ export default function NetworkDefault({ navigation, route }) {
 
                     width={'100%'}
                 >
-                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} fontWeight={'bold'}>{translations[language].SelectNetwork.title}</Text>
-                    <Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={15} >{translations[language].SelectNetwork.select_network_default}</Text>
+                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} fontWeight={'bold'}>{translations[language as keyof typeof translations].SelectNetwork.title}</Text>
+                    <Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={15} >{translations[language as keyof typeof translations].SelectNetwork.select_network_default}</Text>
 
                     <VStack space={3} py={4}>
                         {

@@ -1,29 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-color-literals */
-import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import {
-  AlertDialog,
-  ArrowBackIcon,
   Box,
   Button,
-  Center,
-  Divider,
-  Drawer,
-  Hidden,
-  HStack,
-  Icon,
-  IconButton,
-  Image,
-  Menu,
-  MoonIcon,
-  Pressable,
-  Select,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
-  VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
 import {StyleSheet} from 'react-native';
@@ -32,10 +13,10 @@ import { useRecoilState } from "recoil";
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
-import { getLanguage, storeLanguage } from "../store/language";
+import { storeLanguage } from "../store/language";
 import { hasSignedPrivacyPolicy } from "../store/setting";
 
-export default function LanguagePage ({navigation}) {
+export default function LanguagePage ({navigation}: {navigation: {navigate: Function}}) {
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [languageVal, setLanguageVal] = useState('');
   const [hasSigned, setHasSigned] = useState(false);
@@ -57,7 +38,7 @@ export default function LanguagePage ({navigation}) {
 
   const [languageState, setLanguageState] = useRecoilState(stateLanguage);
 
-  const updateLanguage = async (_language) => {
+  const updateLanguage = async (_language: string) => {
     await storeLanguage(_language);
     if (hasSigned) {
       navigation.navigate('SelectWallet');
@@ -67,15 +48,15 @@ export default function LanguagePage ({navigation}) {
     
   }
 
-  const setLanguage = (val) => {
+  const setLanguage = (val: React.SetStateAction<string>) => {
     setLanguageState(val);
     setLanguageVal(val);
-    updateLanguage(val);
+    updateLanguage(val as string);
   }
 
   return (
     <>
-        <Text color={colorMode === 'dark' ? Color.white : Color.black} style={[styles.yourWallet, styles.walletTypo]} fontSize={'lg'} mt={5}>{translations[languageState].LanguagePage.title_language}</Text>
+        <Text color={colorMode === 'dark' ? Color.white : Color.black} style={[styles.yourWallet, styles.walletTypo]} fontSize={'lg'} mt={5}>{translations[languageState as keyof typeof translations].LanguagePage.title_language}</Text>
           
         <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
               <Button style={[styles.rectangleParent, styles.rectangleSibling]} onPress={() => {setLanguage('es')}} width={'1/2'} py={3}><Text style={{color: '#000', fontWeight: 'bold'}}>{translations['es'].LanguagePage.select_language || 'select your language : es'}</Text></Button>

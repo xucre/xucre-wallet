@@ -31,8 +31,9 @@ import {
   language as stateLanguage,
 } from "../../service/state";
 import { deleteNetwork, getNetworks, storeActiveNetwork } from "../../store/network";
+import { Network } from "../../service/network";
 
-export default function SelectNetwork ({navigation, route}) {
+export default function SelectNetwork ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
   const [, setSelectedNetwork] = useRecoilState(selectedNetwork);
@@ -70,7 +71,7 @@ export default function SelectNetwork ({navigation, route}) {
 
 }
 
-  const NetworkItem = ({metadata}) => {
+  const NetworkItem = ({metadata}: {metadata: Network}) => {
     const selectNetwork= () => {
       setActiveNetwork(metadata);
       storeActiveNetwork(metadata);
@@ -126,8 +127,8 @@ export default function SelectNetwork ({navigation, route}) {
                 </Pressable>;
                 }}
               >                
-                <Menu.Item onPress={() => {selectNetwork()}}><Text>{translations[language].SelectNetwork.select_button}</Text></Menu.Item>
-                  <Menu.Item onPress={() => {removeNetwork()}}><Text>{translations[language].SelectNetwork.delete_button}</Text></Menu.Item> 
+                <Menu.Item onPress={() => {selectNetwork()}}><Text>{translations[language as keyof typeof translations].SelectNetwork.select_button}</Text></Menu.Item>
+                  <Menu.Item onPress={() => {removeNetwork()}}><Text>{translations[language as keyof typeof translations].SelectNetwork.delete_button}</Text></Menu.Item> 
                               
               </Menu>
             </Tooltip>    
@@ -146,8 +147,8 @@ export default function SelectNetwork ({navigation, route}) {
         
         width={'100%'}
       >
-          <Text style={{color: colorMode === 'dark' ? Color.white : Color.black, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={'md'} fontWeight={'bold'}>{translations[language].SelectNetwork.title}</Text>
-          <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={15} >{translations[language].SelectNetwork.select_network}</Text>
+          <Text style={{color: colorMode === 'dark' ? Color.white : Color.black, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={'md'} fontWeight={'bold'}>{translations[language as keyof typeof translations].SelectNetwork.title}</Text>
+          <Text style={{color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15}} fontSize={15} >{translations[language as keyof typeof translations].SelectNetwork.select_network}</Text>
 
           <VStack space={3} py={4}>
             {
@@ -159,7 +160,9 @@ export default function SelectNetwork ({navigation, route}) {
                 )              
               })
             }
-            <Button mx={5} width={'90%'} style={{ borderRadius: 100}} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={createNetwork}><Text style={{color: colorMode === 'dark' ? '#fff' : '#fff'}}>{translations[language].SelectNetwork.new_button}</Text></Button>
+            <Button mx={5} width={'90%'} style={{ borderRadius: 100}} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={createNetwork}>
+              <Text style={{color: colorMode === 'dark' ? '#fff' : '#fff'}}>{translations[language as keyof typeof translations].SelectNetwork.new_button}</Text>
+            </Button>
           </VStack>
             
         </Box>

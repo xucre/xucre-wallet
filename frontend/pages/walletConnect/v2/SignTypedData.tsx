@@ -19,12 +19,12 @@ import { language as stateLanguage, walletList } from "../../../service/state";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 
-export default function SignTypedData({navigation, route}) {
+export default function SignTypedData({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const {requestDetails} = route.params;
-  const [request, setRequest] = useState({});
-  const [domain, setDomain] = useState({});
+  const [request, setRequest] = useState({} as any);
+  const [domain, setDomain] = useState({} as any);
   const [types, setTypes] = useState({});
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState({} as any);
   const [walletAddress, setWalletAddress] = useState('');
   const [walletState, ] = useRecoilState(walletList);
   const [selectedWallets, setSelectedWallets] = useState([]);
@@ -92,8 +92,8 @@ export default function SignTypedData({navigation, route}) {
           <Box>
             <VStack height={'90%'}>
               <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>{translations[language].SignTyped.header}</Text></Heading>
-                <Heading size="sm" mb={4}><Text>{translations[language].SignTyped.header_origin}{domain['name']}</Text></Heading>                
+                <Heading size="md" mb={4}><Text>{translations[language as keyof typeof translations].SignTyped.header}</Text></Heading>
+                <Heading size="sm" mb={4}><Text>{translations[language as keyof typeof translations].SignTyped.header_origin}{domain['name']}</Text></Heading>                
               </Center>
               
                 <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
@@ -105,8 +105,8 @@ export default function SignTypedData({navigation, route}) {
               
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignTyped.approve_button}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignTyped.reject_button}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignTyped.approve_button}</Text></Button>
+              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignTyped.reject_button}</Text></Button>
             </Button.Group>
           </Box>
         }        

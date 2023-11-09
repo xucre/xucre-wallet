@@ -1,5 +1,6 @@
+import { TranslationType } from ".";
 /* eslint-disable sort-keys */
-const values = {
+const values : TranslationType  = {
   AddToken: {
     address_placeholder: 'Ahaquiaa Token-ixti',
     chain_placeholder: 'Itlan Chain',

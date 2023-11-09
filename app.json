@@ -1,42 +1,48 @@
 {
   "expo": {
-    "name": "Xucre Wallet",
+    
+    "name": "xucre-wallet",
     "slug": "xucre-mobile",
-    "owner": "the18thwarrior",
-    "icon": "./icon.png",
-    "version": "1.0.3",
-    "sdkVersion": "45.0.0",
     "scheme": "xucre",
-    "packagerOpts": { "config": "metro.config.jscrashing wh", "sourceExts": [ "js","jsx","svg","ts","tsx"] },
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "android": {
-      "package": "xucre.expo.client",
-      "icon": "./icon.png",
-      "runtimeVersion": {
-        "policy": "sdkVersion"
-      }
-    },
+    "version": "1.0.5",
+    "orientation": "portrait",
+    "icon": "./assets/image/icon.png",
+    "userInterfaceStyle": "light",
     "extra": {
       "eas": {
         "projectId": "20ee0e7d-2104-47c1-87c5-f3d860714b80"
       }
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "bundleIdentifier": "xucre.expo.client",
-      "icon": "./icon.png",
-      "runtimeVersion": {
-        "policy": "sdkVersion"
-      }
+      "supportsTablet": true,
+      "bundleIdentifier": "xucre.expo.client"
+    },
+    "android": {
+      "icon": "./assets/icon.png",
+      "package": "xucre.expo.client"
     },
     "updates": {
       "url": "https://u.expo.dev/20ee0e7d-2104-47c1-87c5-f3d860714b80"
     },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
     "notification" : {
       "icon": "./icon.png",
       "color": "#ffffff"
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": ["../node_modules/@notifee/react-native/android/libs"]
+          }
+        }
+      ]
+    ]
   }
 }

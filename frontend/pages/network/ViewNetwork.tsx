@@ -19,7 +19,7 @@ import { activeNetwork, selectedNetwork, language as stateLanguage, } from "../.
 import { truncateString } from "../../service/utility";
 import { updateNetwork } from "../../store/network";
 
-export default function ViewNetwork ({navigation, route}) {
+export default function ViewNetwork ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
@@ -32,19 +32,19 @@ export default function ViewNetwork ({navigation, route}) {
   const [blockExplorer, setExplorer] = useState('');
   const {colorMode} = useColorMode();
 
-  const handleNameChange = (event) => {
+  const handleNameChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setName(event.nativeEvent.text)
   }
-  const handleChainIdChange = (event) => {
+  const handleChainIdChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setChainId(event.nativeEvent.text)
   }
-  const handleRpcUrlChange = (event) => {
+  const handleRpcUrlChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setRpcUrl(event.nativeEvent.text)
   }
-  const handleSymbolChange = (event) => {
+  const handleSymbolChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setSymbol(event.nativeEvent.text)
   }
-  const handleExplorerChange = (event) => {
+  const handleExplorerChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setExplorer(event.nativeEvent.text)
   }
 
@@ -53,7 +53,7 @@ export default function ViewNetwork ({navigation, route}) {
     setChainId(String(network.chainId));
     setRpcUrl(network.rpcUrl);
     setSymbol(network.symbol);
-    setExplorer(network.blockExplorer);
+    setExplorer(network.blockExplorer as string);
   }, [network]);
 
   const _setActiveNetwork = async () => {
@@ -98,7 +98,7 @@ export default function ViewNetwork ({navigation, route}) {
           }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <Box>
               <VStack space={4} px={2} py={4} >
-                <Button onPress={() => {setIsEditing(true)}} ml={'auto'} px={8} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language].ViewNetwork.edit_button}</Text></Button>
+                <Button onPress={() => {setIsEditing(true)}} ml={'auto'} px={8} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewNetwork.edit_button}</Text></Button>
                 <Text fontSize={28} fontWeight={'bold'}>{network.name}</Text>
                 <Text fontSize={20}>Chain Id: {network.chainId}</Text>
                 <Text fontSize={20}>Symbol: {network.symbol}</Text>
@@ -108,12 +108,12 @@ export default function ViewNetwork ({navigation, route}) {
               {_activeNetwork.chainId === network.chainId ?             
                 <Alert maxW="400" status="info" colorScheme="info">
                   <Center>
-                    <Text color={'black'} fontWeight={'bold'}>{translations[language].ViewNetwork.active_network} </Text>
+                    <Text color={'black'} fontWeight={'bold'}>{translations[language as keyof typeof translations].ViewNetwork.active_network} </Text>
                   </Center>              
                 </Alert>
                 : 
                 <Box alignItems="center" marginBottom={20} h={'full'} w ={'full'}>
-                  <Button onPress={() => {_setActiveNetwork();}} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language].ViewNetwork.use_network}</Text></Button>
+                  <Button onPress={() => {_setActiveNetwork();}} colorScheme={colorMode === 'dark' ? 'primary': 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewNetwork.use_network}</Text></Button>
                 </Box>
               } 
               
@@ -132,15 +132,17 @@ export default function ViewNetwork ({navigation, route}) {
                 <Text style={styles.editTextTop} fontSize={'md'}  >Edit this network</Text>
               </VStack>
               <VStack space={2} px={2} alignItems='center'>
-                <Input style={styles.textoImput} w="full" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].CreateNetwork.name_placeholder}  />
-                <Input style={styles.textoImput} w="full" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language].CreateNetwork.chainId_placeholder}  />
-                <Input style={styles.textoImput} w="full" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language].CreateNetwork.rpcUrl_placeholder}  />
-                <Input style={styles.textoImput} w="full" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language].CreateNetwork.symbol_placeholder}  />
-                <Input  style={styles.textoImput}  w="full" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language].CreateNetwork.explorer_placeholder}  />
+                <Input style={styles.textoImput} w="full" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.name_placeholder}  />
+                <Input style={styles.textoImput} w="full" mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.chainId_placeholder}  />
+                <Input style={styles.textoImput} w="full" mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.rpcUrl_placeholder}  />
+                <Input style={styles.textoImput} w="full" mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.symbol_placeholder}  />
+                <Input  style={styles.textoImput}  w="full" mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.explorer_placeholder}  />
               </VStack>        
                       
               <Box alignItems="center" marginBottom={20} w ={'full'}>
-                <Button w={'full'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={saveNetwork} isLoading={loading}><Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language].CreateNetwork.button_save}</Text></Button>
+                <Button w={'full'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={saveNetwork} isLoading={loading}>
+                  <Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language as keyof typeof translations].CreateNetwork.button_save}</Text>
+                </Button>
                 {/* <Button onPress={() => {setIsEditing(false)}} variant="outline"><Text>{'Cancel'}</Text></Button>   */}
               </Box>
             </Box>

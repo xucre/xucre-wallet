@@ -4,7 +4,6 @@ import * as Font from 'expo-font';
 import {Box, Center, Hidden, HStack, Image, Pressable, Stack, StatusBar, Text, useColorMode, VStack} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
 import { Dimensions,  TouchableWithoutFeedback } from 'react-native';
-import Theme, {createStyle} from 'react-native-theming';
 import { useRecoilState } from 'recoil';
 
 import GuestLayout from '../layouts/GuestLayout';
@@ -13,7 +12,7 @@ import { language as stateLanguage } from "../service/state";
 import { getLanguage, storeLanguage } from "../store/language";
 import { hasSignedPrivacyPolicy } from '../store/setting';
 
-export default function LandingPage({ navigation, route }) {
+export default function LandingPage({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [languageDefault, setLanguageDefault] = useState(false);
   const [_wallet, ] = useRecoilState(activeWallet);

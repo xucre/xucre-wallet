@@ -20,11 +20,11 @@ export const getNftJson = async () => {
   }
 }
 
-export const getIconImageUrl = (iconName) => {
+export const getIconImageUrl = (iconName: string) => {
   return BASEURL + 'icon?icon='+iconName;
 }
 
-export const getIconImage = async (iconName) => {
+export const getIconImage = async (iconName: any) => {
   try {
     const instance = axios.create({
       baseURL: BASEURL,
@@ -43,7 +43,7 @@ export const getIconImage = async (iconName) => {
   }
 }
 
-export const getWalletHistory = async (wallet, chainName) => {
+export const getWalletHistory = async (wallet: string, chainName: string) => {
   try {
     const instance = axios.create({
       baseURL: BASEURL,
@@ -63,7 +63,7 @@ export const getWalletHistory = async (wallet, chainName) => {
   }
 }
 
-export const getWalletTransactions = async (wallet, chainName) => {
+export const getWalletTransactions = async (wallet: string, chainName: any) => {
   try {
     const instance = axios.create({
       baseURL: BASEURL,
@@ -83,7 +83,7 @@ export const getWalletTransactions = async (wallet, chainName) => {
   }
 }
 
-export const callWhatsApp = async (payload) => {
+export const callWhatsApp = async (payload: any) => {
   try {
     const instance = axios.create({
       baseURL: BASEURL,

@@ -6,6 +6,7 @@ import {
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
+import { NFT } from '../../pages/nft/NftList';
 //import SvgUri from 'react-native-svg-uri';
 
 
@@ -14,7 +15,7 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftItemSmall({item}) {
+function NftItemSmall({item}: {item: NFT}) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : ''});
   const [url, setUrl] = useState('');
@@ -41,7 +42,7 @@ function NftItemSmall({item}) {
     }
   }
 
-  const BetterCard = ({image, title, subtitle, projectName }) => {
+  const BetterCard = ({image, title, subtitle, projectName } : {image : string, title : string, subtitle : string, projectName : string }) => {
     return (
       <Pressable 
         borderRadius="sm"

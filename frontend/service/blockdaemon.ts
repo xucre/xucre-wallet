@@ -11,7 +11,7 @@ const instance = axios.create({
   timeout: 1000,
 });
 
-export const getNfts = async (address) => {
+export const getNfts = async (address: string) => {
   try {
     const response = await instance({
       method: 'get',
@@ -24,7 +24,7 @@ export const getNfts = async (address) => {
   }
 }
 
-export const getMetadata = async (contract, token, chain) => {
+export const getMetadata = async (contract: any, token: any, chain: any) => {
   try {
     const response = await instance({
       method: 'get',

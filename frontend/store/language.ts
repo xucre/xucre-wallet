@@ -1,7 +1,7 @@
 import { BigNumber } from "ethers";
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-export const storeLanguage = async (language) => {
+export const storeLanguage = async (language: string) => {
   await EncryptedStorage.setItem(
     "language",
     language

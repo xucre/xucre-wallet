@@ -5,7 +5,7 @@ import { Transaction } from "../service/transaction";
 
 export const addTransaction = async (item: Transaction) => {
   const _list = await EncryptedStorage.getItem("transaction_list");
-  const list = JSON.parse(_list) as readonly Transaction[];
+  const list = JSON.parse(_list as string) as readonly Transaction[];
   if (Array.isArray(list)) {
     await EncryptedStorage.setItem(
       "transaction_list",
@@ -21,7 +21,7 @@ export const addTransaction = async (item: Transaction) => {
 
 export const updateTransaction = async (item: Transaction) => {
   const _list = await EncryptedStorage.getItem("transaction_list");
-  const list = JSON.parse(_list) as readonly Transaction[];
+  const list = JSON.parse(_list as string) as readonly Transaction[];
   if (Array.isArray(list)) {
     const newTransactionList = list.map((_item) => {
       if (_item.hash === item.hash) {
@@ -59,17 +59,17 @@ export const storeActiveTransaction = async (item: Transaction) => {
 
 export const getActiveTransaction = async () => {
   const item = await EncryptedStorage.getItem('active_transaction');
-  return JSON.parse(item) as Transaction;
+  return JSON.parse(item as string) as Transaction;
 }
 
 export const getTransactions = async () => {
   const list = await EncryptedStorage.getItem('transaction_list');
-  return JSON.parse(list) as readonly Transaction[];
+  return JSON.parse(list as string) as readonly Transaction[];
 }
 
-export const getTransactionsByChainAndWallet = async (chainId, address) => {
+export const getTransactionsByChainAndWallet = async (chainId: number, address: string) => {
   const list = await EncryptedStorage.getItem('transaction_list');
-  const _list = JSON.parse(list) as readonly Transaction[];
+  const _list = JSON.parse(list as string) as readonly Transaction[];
   if (_list && Array.isArray(_list)) {
     return _list.filter((_transaction: Transaction) => {
       return _transaction.chainId === chainId && _transaction.from === address;

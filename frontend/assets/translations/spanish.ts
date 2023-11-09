@@ -1,5 +1,6 @@
+import { TranslationType } from ".";
 /* eslint-disable sort-keys */
-const values = {
+const values : TranslationType = {
   AddToken: {
     address_placeholder: "Ingrese dirección del Token",
     chain_placeholder: "Seleccione Chain",

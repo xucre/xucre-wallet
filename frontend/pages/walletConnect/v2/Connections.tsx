@@ -1,30 +1,15 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import {
-  AlertDialog,
-  ArrowBackIcon,
   Avatar,
-  Box,
-  Button,
   Center,
-  Checkbox,
-  Divider,
-  Drawer,
-  Heading,
-  Hidden,
   HStack,
   Icon,
-  IconButton,
-  Image,
   Menu,
-  MoonIcon,
   Pressable,
   ScrollView,
-  SunIcon,
   Text,
   Tooltip,
   useColorMode,
-  useColorModeValue,
   VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
@@ -33,14 +18,13 @@ import { useRecoilState } from "recoil";
 import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
-import { language as stateLanguage, walletList } from "../../../service/state";
-import { truncateString, truncateStringStart } from "../../../service/utility";
+import { language as stateLanguage } from "../../../service/state";
+import { truncateStringStart } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
 
-export default function ConnectionRequest({navigation, route}) {
-  const [request, setRequest] = useState({});
-  const [pairings, setPairings] = useState([]);
-  const [selectedPairing, setSelectedPairing] = useState({});
+export default function ConnectionRequest({navigation, route}: {navigation: {navigate: Function}, route: any}) {
+  const [request, setRequest] = useState({} as any);
+  const [pairings, setPairings] = useState([] as any[]);
   const [language, ] = useRecoilState(stateLanguage);
   const {colorMode} = useColorMode();
   //{translations[language].ConnectionRequest.}
@@ -53,7 +37,7 @@ export default function ConnectionRequest({navigation, route}) {
     setPairings(_pairings);
   }
 
-  const Pair = ({metadata}) => {
+  const Pair = ({metadata} : {metadata: any}) => {
     //const address = metadata.wallet.address;
     useEffect(() => {
       const runAsync = async () => {
@@ -91,7 +75,7 @@ export default function ConnectionRequest({navigation, route}) {
                 </Pressable>;
                 }}
               >                
-                <Menu.Item onPress={() => {removePair()}}><Text>{translations[language].Connections.delete_button}</Text></Menu.Item>                
+                <Menu.Item onPress={() => {removePair()}}><Text>{translations[language as keyof typeof translations].Connections.delete_button}</Text></Menu.Item>                
               </Menu>
             </Tooltip>    
         </HStack>

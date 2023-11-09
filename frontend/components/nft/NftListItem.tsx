@@ -21,7 +21,7 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftListItem({contract, token, chain}) {
+function NftListItem({contract, token, chain}: {contract: string, token: string, chain: string}) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : '', subtitle: ''});
   const [url, setUrl] = useState('');
@@ -60,7 +60,7 @@ function NftListItem({contract, token, chain}) {
     }
   }
 
-  const ListItem = ({image, title, subtitle, contract }) => {
+  const ListItem = ({image, title, subtitle, contract }: {image: string, title: string, subtitle: string, contract: string}) => {
     return (
       <HStack alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" space={{ base: 3, md: 6 }}>

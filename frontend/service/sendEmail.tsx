@@ -2,7 +2,7 @@
 import { ToastAndroid } from 'react-native';
 
 
-const sendEmail = (to, subjectField, body, navigation, menssageEmail) => {
+const sendEmail = (to: string, subjectField: string, body: string, navigation: { navigate: Function }, menssageEmail: string) => {
 
 
     //Main Params

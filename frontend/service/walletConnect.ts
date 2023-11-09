@@ -15,7 +15,7 @@ import { env } from './constants';
 // eslint-disable-next-line functional/no-let
 export let signClient: SignClient;
 
-async function onDisplayNotification(id, translation_setting) {
+async function onDisplayNotification(id: string, translation_setting: string) {
   const _language = await getLanguage();
 
   // Create a channel (required for Android)
@@ -37,8 +37,9 @@ async function onDisplayNotification(id, translation_setting) {
       // TODO - Asset Hosting for icon
       //smallIcon: 'notification_icon', 
     },
-    body: translations[_language].WalletConnect[translation_setting][1],
-    title: translations[_language].WalletConnect[translation_setting][0],
+    body: translations[_language as keyof typeof translations].WalletConnect[translation_setting][1],
+    
+    title: translations[_language as keyof typeof translations].WalletConnect[translation_setting][0],
   };
   
   await notifee.displayNotification(notificationPayload);

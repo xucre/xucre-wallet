@@ -5,7 +5,7 @@ import { Token } from "../service/token";
 
 export const addToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
-  const tokens = JSON.parse(_tokens) as readonly Token[];
+  const tokens = JSON.parse(_tokens as string) as readonly Token[];
   
   if (Array.isArray(tokens)) {
       const isSet = await EncryptedStorage.setItem(
@@ -23,7 +23,7 @@ export const addToken = async (token: Token) => {
 
 export const updateToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
-  const tokens = JSON.parse(_tokens) as readonly Token[];
+  const tokens = JSON.parse(_tokens as string) as readonly Token[];
   if (Array.isArray(tokens)) {
     const newTokens = tokens.map((_token) => {
       if (_token.address === token.address && _token.chainId === token.chainId) {
@@ -48,7 +48,7 @@ export const updateToken = async (token: Token) => {
 
 export const deleteToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
-  const tokens = JSON.parse(_tokens);
+  const tokens = JSON.parse(_tokens as string);
   if (Array.isArray(tokens)) {
     const netTokenList = tokens.filter((_token) => {
       return !(_token.chainId === token.chainId && _token.address === token.address) 
@@ -82,17 +82,17 @@ export const storeActiveToken = async (token: Token) => {
 
 export const getActivetoken = async () => {
   const token = await EncryptedStorage.getItem('active_token');
-  return JSON.parse(token) as Token;
+  return JSON.parse(token as string) as Token;
 }
 
 export const getTokens = async () => {
   const tokens = await EncryptedStorage.getItem('token_list');
-  return JSON.parse(tokens) as readonly Token[];
+  return JSON.parse(tokens as string) as readonly Token[];
 }
 
-export const getTokenByChain = async (chainId) => {
+export const getTokenByChain = async (chainId: number) => {
   const tokens = await EncryptedStorage.getItem('token_list');
-  const _tokens = JSON.parse(tokens) as readonly Token[];
+  const _tokens = JSON.parse(tokens as string) as readonly Token[];
   if (_tokens && Array.isArray(_tokens)) {
     return _tokens.filter((token: Token) => {
       return token.chainId === chainId;

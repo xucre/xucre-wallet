@@ -20,7 +20,6 @@ import { useRecoilState } from "recoil";
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
-//import TransactionItem from "../../components/transaction/TransactionItem";
 import CovalentItem from "../../components/transaction/CovalentItem";
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
@@ -30,11 +29,16 @@ import { activeNetwork, activeWallet, networkList, language as stateLanguage, wa
 import { CovalentTransaction } from "../../service/transaction";
 import { getTokenByChain } from '../../store/token';
 import NftList from "../nft/NftList";
+import { Token } from "../../service/token";
 
 function TabItem({
   tabName,
   currentTab,
   handleTabChange,
+}: {
+  tabName : string,
+  currentTab:string,
+  handleTabChange: Function
 }) {
   return (
     <Pressable onPress={() => handleTabChange(tabName)} px="4" pt="2">
@@ -71,19 +75,19 @@ function TabItem({
   );
 }
 
-export default function ViewWallet ({navigation, route}) {
+export default function ViewWallet ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [currentTab, setCurrentTab] = useState(translations[language].ViewWallet.tab_list[0]);
+  const [currentTab, setCurrentTab] = useState(translations[language as keyof typeof translations].ViewWallet.tab_list[0]);
   const [_walletList, ] = useRecoilState(walletList);
   const [_wallet, ] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
   const [network, ] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
-  const [holdings, setHoldings] = useState([]);
+  const [holdings, setHoldings] = useState([] as Token[]);
   const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
@@ -91,14 +95,14 @@ export default function ViewWallet ({navigation, route}) {
       //setIsComponentMounted(false);
     }
   }, []);
-  const tabList = translations[language].ViewWallet.tab_list;
+  const tabList = translations[language as keyof typeof translations].ViewWallet.tab_list;
   //Buttons
 
-  const buttonSend = translations[language].Buttons_Header.send;
-  const buttonReceive = translations[language].Buttons_Header.receive;
-  const buttonBuy = translations[language].Buttons_Header.buy;
-  const buttonNft = translations[language].Buttons_Header.nft;
-  const buttonConnect = translations[language].Buttons_Header.connect;
+  const buttonSend = translations[language as keyof typeof translations].Buttons_Header.send;
+  const buttonReceive = translations[language as keyof typeof translations].Buttons_Header.receive;
+  const buttonBuy = translations[language as keyof typeof translations].Buttons_Header.buy;
+  const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
+  const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
 
 
   // Transitions
@@ -121,7 +125,7 @@ export default function ViewWallet ({navigation, route}) {
   }
   
   const syncTransactions = async () => {
-    const _transactions = await getWalletTransactions(_wallet.wallet.address, chainIdToNameMap[network.chainId]);
+    const _transactions = await getWalletTransactions(_wallet.wallet.address, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
 
     if (_transactions && _transactions.data.items) {
       setTransactions(_transactions.data.items as readonly CovalentTransaction[]);
@@ -216,7 +220,7 @@ export default function ViewWallet ({navigation, route}) {
     //setAllNetworks([])
   }, [])
 
-  const handleTabChange = (newTab) => {
+  const handleTabChange = (newTab: React.SetStateAction<string>) => {
     setCurrentTab(newTab);
   }
 
@@ -260,7 +264,7 @@ export default function ViewWallet ({navigation, route}) {
             base: 200,
             lg: 250
           }}>
-              <Text fontSize="md" _light={{color: 'lightText'}} _dark={{color: 'darkText'}} bold={true}>{translations[language].ViewWallet.no_network_error}</Text>
+              <Text fontSize="md" _light={{color: 'lightText'}} _dark={{color: 'darkText'}} bold={true}>{translations[language as keyof typeof translations].ViewWallet.no_network_error}</Text>
             </Center>
         </Center>
       }
@@ -360,7 +364,7 @@ export default function ViewWallet ({navigation, route}) {
             }
           >
             <VStack space="5" px={2} mb={10}>
-              {currentTab == translations[language].ViewWallet.tab_list[0] && wallet.address !== '' &&
+              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&
                 <Box m={6} >
                   <VStack space={2} >
                     {
@@ -371,11 +375,11 @@ export default function ViewWallet ({navigation, route}) {
                       })
                     }
                   </VStack>
-                  <Button onPress={addToken} mt={4} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language].ViewWallet.new_button}</Text></Button>
+                  <Button onPress={addToken} mt={4} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>
                 </Box>
               }
 
-              {currentTab == translations[language].ViewWallet.tab_list[1] &&
+              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] &&
                 <Box m={6} >
                   <VStack space={2} direction={'column-reverse'}>
                     {
@@ -389,7 +393,7 @@ export default function ViewWallet ({navigation, route}) {
                 </Box>
               }
 
-              {currentTab == translations[language].ViewWallet.tab_list[2] &&
+              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[2] &&
                 <Box my={6} >
                   <NftList navigation={navigation} route={route}/>
                 </Box>
@@ -397,10 +401,10 @@ export default function ViewWallet ({navigation, route}) {
             </VStack>
           </ScrollView>
           
-          {false && currentTab == translations[language].ViewWallet.tab_list[1] && transactions.length > 0 &&
-            <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language].ViewWallet.clear_button}</Text></Button>
+          {false && currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && transactions.length > 0 &&
+            <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language as keyof typeof translations].ViewWallet.clear_button}</Text></Button>
           }
-          <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
+          <MobileFooter navigation={navigation}></MobileFooter>
         </Box>
       }
 

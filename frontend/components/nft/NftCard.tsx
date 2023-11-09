@@ -15,13 +15,15 @@ import EthLogo from '../../assets/images/eth_logo.png';
 import OptLogo from '../../assets/images/op_logo.png';
 import PlyLogo from '../../assets/images/poly_logo.png';
 import { getMetadata } from "../../service/blockdaemon";
+import { InterfaceAvatarProps } from 'native-base/lib/typescript/components/composites/Avatar/types';
+import { ThemeComponentSizeType, ColorSchemeType } from 'native-base/lib/typescript/components/types';
 
 type CarousalType = {
   readonly imageUri: ImageSourcePropType;
   readonly name: string;
 };
 
-function NftCard({contract, token, chain}) {
+function NftCard({contract, token, chain}: {contract : string, token : string, chain : string}) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : ''});
   const [url, setUrl] = useState('');
@@ -59,7 +61,7 @@ function NftCard({contract, token, chain}) {
     }
   }
 
-  const AvatarImage = (props) =>  {
+  const AvatarImage = (props: React.JSX.IntrinsicAttributes & InterfaceAvatarProps & Partial<{}> & { variant?: unknown; size?: ThemeComponentSizeType<"Avatar">; colorScheme?: ColorSchemeType; } & { ref?: React.MutableRefObject<any> | undefined; }) =>  {
     if (!chain) {
       return (
         <>
@@ -88,7 +90,7 @@ function NftCard({contract, token, chain}) {
       )
     }
   };
-  const BetterCard = ({image, title, subtitle }) => {
+  const BetterCard = ({image, title, subtitle }: {image: string, title: string, subtitle: string}) => {
     return (
       <Pressable 
         borderRadius="sm"

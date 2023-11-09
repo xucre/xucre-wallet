@@ -17,10 +17,11 @@ import { language as stateLanguage, tokenList } from "../../service/state";
 import { Token } from "../../service/token";
 import { getNetworks } from "../../store/network";
 import { addToken } from "../../store/token";
+import { Network } from "../../service/network";
 
 
-export default function AddToken ({navigation, route, storage}) {
-  const [networks, setNetworks] = useState([]);
+export default function AddToken ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
+  const [networks, setNetworks] = useState([] as Network[]);
   const [language, ] = useRecoilState(stateLanguage);
   const [tokens, setTokens] = useRecoilState(tokenList);
   const [loading, setLoading] = useState(false);
@@ -44,16 +45,16 @@ export default function AddToken ({navigation, route, storage}) {
     colorMode
   } = useColorMode();
 
-  const handleNameChange = (event) => {
+  const handleNameChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setName(event.nativeEvent.text)
   }
-  const handleAddressChange = (event) => {
+  const handleAddressChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setAddress(event.nativeEvent.text)
   }
-  const handleChainIdChange = (event) => {
+  const handleChainIdChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setChainId(event.nativeEvent.text);
   }
-  const handleTypeChange = (event) => {
+  const handleTypeChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setType(event.nativeEvent.text)
   }
 
@@ -70,8 +71,8 @@ export default function AddToken ({navigation, route, storage}) {
         };
         await addToken(_token);
         setTokens([
-          tokens,
-          _token
+          ...tokens as never[],
+          _token as never
         ]);
         setLoading(false);
         setTimeout(() => {
@@ -93,22 +94,24 @@ export default function AddToken ({navigation, route, storage}) {
     <ScrollView w={'full'} h={'full'} marginTop={5}>
       <>
         <Box alignItems="center" marginBottom={3}>
-          <Input w="100%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language].AddToken.name_placeholder}  />
-          <Select selectedValue={chainId} w="100%" accessibilityLabel={translations[language].AddToken.chain_placeholder} placeholder={translations[language].AddToken.chain_placeholder} _selectedItem={{
+          <Input w="100%" mb={2} value={name} onChange={handleNameChange} placeholder={translations[language as keyof typeof translations].AddToken.name_placeholder}  />
+          <Select selectedValue={chainId} w="100%" accessibilityLabel={translations[language as keyof typeof translations].AddToken.chain_placeholder} placeholder={translations[language as keyof typeof translations].AddToken.chain_placeholder} _selectedItem={{
             bg: "teal.600",
             endIcon: <CheckIcon size="5" />
           }} mt={1} onValueChange={itemValue => setChainId(itemValue)}>
             {
               networks.map((_network) => {
                 return (
-                  <Select.Item key={_network.chainId} label={_network.name} value={_network.chainId} />
+                  <Select.Item key={_network.chainId} label={_network.name} value={_network.chainId.toString()} />
                 )
               }) 
             }              
           </Select>
-          <Input w="100%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language].AddToken.address_placeholder}  />
+          <Input w="100%" mb={2} value={address} onChange={handleAddressChange} placeholder={translations[language as keyof typeof translations].AddToken.address_placeholder}  />
         </Box>
-        <Button colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveToken();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || address.length === 0 || type.length === 0}><Text color={'white'}>{translations[language].AddToken.submit_button}</Text></Button>
+        <Button colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveToken();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || address.length === 0 || type.length === 0}>
+          <Text color={'white'}>{translations[language as keyof typeof translations].AddToken.submit_button}</Text>
+        </Button>
       </>
     </ScrollView>
   );

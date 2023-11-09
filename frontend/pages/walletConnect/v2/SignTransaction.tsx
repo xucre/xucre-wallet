@@ -20,10 +20,10 @@ import { language as stateLanguage, walletList } from "../../../service/state";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 
-export default function SignTransaction({navigation, route}) {
+export default function SignTransaction({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const {requestDetails} = route.params;
   const {colorMode} = useColorMode();
-  const [request, setRequest] = useState({});
+  const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
   const [method, setMethod] = useState('');
@@ -59,7 +59,7 @@ export default function SignTransaction({navigation, route}) {
     //
   }, [])
 
-  const StyledItem = ({label, value}) => {
+  const StyledItem = ({label, value} : {label : string, value: string}) => {
     return (
       <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>   
         <VStack space={0}>
@@ -72,7 +72,7 @@ export default function SignTransaction({navigation, route}) {
     );
   }
 
-  const CustomTextAreaOverlay = ({ data }) => {
+  const CustomTextAreaOverlay = ({ data } : {data : string}) => {
     return (
       <Box borderRadius={'md'} w={'full'} borderColor={'gray.300'} borderStyle={'solid'} h={'1/4'} borderWidth={1}> 
         <ScrollView w={'full'} maxH={'full'}>
@@ -127,10 +127,10 @@ export default function SignTransaction({navigation, route}) {
               <Box mx={2} px={2} >
                 <HStack alignItems={'flex-end'}>
                   {!viewData && 
-                    <Button variant={'ghost'} onPress={() => setViewData(true)}>{translations[language].SendTransaction.view_data}</Button>
+                    <Button variant={'ghost'} onPress={() => setViewData(true)}>{translations[language as keyof typeof translations].SendTransaction.view_data}</Button>
                   }
                   {viewData && 
-                    <Button variant={'ghost'} onPress={() => setViewData(false)}>{translations[language].SendTransaction.hide_data}</Button>
+                    <Button variant={'ghost'} onPress={() => setViewData(false)}>{translations[language as keyof typeof translations].SendTransaction.hide_data}</Button>
                   }
                 </HStack>
                 {viewData && 
@@ -144,12 +144,12 @@ export default function SignTransaction({navigation, route}) {
                 </ScrollView>
               </Box>*/}
               <VStack m={2} p={2} space={2}>
-                <StyledItem label={translations[language].SendTransaction.from} value={walletAddress} />
+                <StyledItem label={translations[language as keyof typeof translations].SendTransaction.from} value={walletAddress} />
               </VStack>
             </VStack>
             <Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}  >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white } fontWeight={'bold'}>{translations[language].SignTransaction.approve_button}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language].SignTransaction.reject_button}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white } fontWeight={'bold'}>{translations[language as keyof typeof translations].SignTransaction.approve_button}</Text></Button>
+              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignTransaction.reject_button}</Text></Button>
             </Button.Group>
           </VStack>
         }        

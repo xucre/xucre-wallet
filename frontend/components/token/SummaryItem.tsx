@@ -4,16 +4,17 @@ import { Avatar, HStack, Icon,  IconButton, Menu, Pressable, Text, Tooltip, useC
 import React, {createRef, useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 
-import erc20Abi from '../../../contracts/erc20.json';
 import translations from "../../assets/translations";
 import { getIconImage } from "../../service/api";
 import { activeNetwork, activeWallet } from "../../service/state";
 import { language as stateLanguage } from "../../service/state";
-import { Token } from "../../service/token";
+
 import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
+import { Token } from '../../service/token';
+import { ItemsWithOpenQuote } from "../../types/history";
 
-export default function SummaryItem ({token}) {
+export default function SummaryItem ({token}: {token: ItemsWithOpenQuote}) {
   const { colorMode } = useColorMode();
   const [amount, setAmount] = useState(BigNumber.from(0));
   const [tokenImage, setTokenImage] = useState('');
@@ -52,7 +53,7 @@ export default function SummaryItem ({token}) {
     }
   }, [token])
 
-  const TokenIcon = ({iname}) => {
+  const TokenIcon = ({iname} : {iname: string}) => {
     
     if (
       iname.toLowerCase() === 'matic' ||

@@ -33,7 +33,7 @@ export const language = atom({
 });
 
 export const networkList = atom({
-  default: [],
+  default: [] as Network[],
   key: 'networkList'
 });
 

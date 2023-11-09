@@ -23,7 +23,7 @@ import {
 } from "native-base";
 import React, { useEffect, useRef, useState} from 'react';
 
-export default function SettingsDrawer ({setScheme}) {
+export default function SettingsDrawer ({setScheme}: {setScheme: Function}) {
   const {
     colorMode
   } = useColorMode();
@@ -36,7 +36,7 @@ export default function SettingsDrawer ({setScheme}) {
   );
 }
 
-export const ToggleDarkMode = ({setScheme}) => {
+export const ToggleDarkMode = ({setScheme} : {setScheme: Function}) => {
   const {
     colorMode,
     setColorMode

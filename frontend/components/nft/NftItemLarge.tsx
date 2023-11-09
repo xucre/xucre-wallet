@@ -14,7 +14,7 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftItemLarge({item}) {
+function NftItemLarge({item}: {item: {description : string, image: string, key: string, name : string, url: string}}) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : ''});
   const [url, setUrl] = useState('');
@@ -41,7 +41,7 @@ function NftItemLarge({item}) {
     }
   }
 
-  const BetterCard = ({image, title, subtitle, projectName }) => {
+  const BetterCard = ({image, title, subtitle, projectName } : {image : string, title : string, subtitle : string, projectName : string }) => {
     return (
       <Pressable 
         borderRadius="sm"

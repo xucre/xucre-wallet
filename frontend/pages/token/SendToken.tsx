@@ -36,7 +36,7 @@ import { Transaction } from "../../service/transaction";
 import { getTokenByChain } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
 
-export default function SendToken({ navigation, route, storage }) {
+export default function SendToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
   const toast = useToast();
   const [language] = useRecoilState(stateLanguage);
   const token = route.params?.token;
@@ -140,19 +140,19 @@ export default function SendToken({ navigation, route, storage }) {
 
   const { colorMode } = useColorMode();
 
-  const handleAddressChange = (event) => {
+  const handleAddressChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setAddress(event.nativeEvent.text);
   };
 
-  const handleAmountChange = (event) => {
+  const handleAmountChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setAmount(event.nativeEvent.text);
   };
 
-  const handleTokenChange = (tokenAddress) => {
+  const handleTokenChange = (tokenAddress: string) => {
     const _selectedToken = tokens.find((_token) => {
       return _token.address === tokenAddress;
     });
-    setSelectedToken(_selectedToken);
+    setSelectedToken(_selectedToken as Token);
   };
 
   const openPage = (pageName: string, param1: any, param2: any, param3: any, param4: any) => {
@@ -209,7 +209,7 @@ export default function SendToken({ navigation, route, storage }) {
               value: _submitted.value,
             } as Transaction;
             await addTransaction(_transaction);
-            setTransactionList([...pendingTransactions, _submitted]);
+            setTransactionList([...pendingTransactions as never[], _submitted as never]);
             if (_transaction) {
               //Whatsapp Integration
               if(checkValues){
@@ -246,7 +246,7 @@ export default function SendToken({ navigation, route, storage }) {
               value: _submitted.value,
             } as Transaction;
             await addTransaction(_transaction);
-            setTransactionList([...pendingTransactions, _submitted]);
+            setTransactionList([...pendingTransactions as never[], _submitted as never]);
             if (_transaction) {
               //Whatsapp Integration
               if(checkValues){
@@ -270,7 +270,7 @@ export default function SendToken({ navigation, route, storage }) {
       } catch (err) {
         console.log('error sending',err)
         setLoading(false);
-        setError(err);
+        setError('Error Processing');
         setLoadingStage('')
       }
     };
@@ -332,16 +332,16 @@ export default function SendToken({ navigation, route, storage }) {
             {!loading && 
               <>
                 <Text fontSize="2xl" bold mb={"5"} pt={1}>
-                  {translations[language].SendToken.title}
+                  {translations[language as keyof typeof translations].SendToken.title}
                 </Text>
 
                 <Select
                   selectedValue={selectedToken.address}
                   w="90%"
                   accessibilityLabel={
-                    translations[language].SendToken.token_placeholder
+                    translations[language as keyof typeof translations].SendToken.token_placeholder
                   }
-                  placeholder={translations[language].SendToken.token_placeholder}
+                  placeholder={translations[language as keyof typeof translations].SendToken.token_placeholder}
                   _selectedItem={{
                     bg: colorMode === "dark" ? "primary.600" : "info.600",
                     color: Color.white,
@@ -381,7 +381,7 @@ export default function SendToken({ navigation, route, storage }) {
                   mb={2}
                   value={address}
                   onChange={handleAddressChange}
-                  placeholder={translations[language].SendToken.address_placeholder}
+                  placeholder={translations[language as keyof typeof translations].SendToken.address_placeholder}
                 />
 
                 <Box>
@@ -395,7 +395,7 @@ export default function SendToken({ navigation, route, storage }) {
                         <Text 
                           color={colorMode === "dark" ? Color.black : Color.white}
                           fontWeight={"bold"}>
-                            {translations[language].SendToken.not_enough_error}
+                            {translations[language as keyof typeof translations].SendToken.not_enough_error}
                         </Text>
                       </VStack>
                     </Alert>
@@ -418,7 +418,7 @@ export default function SendToken({ navigation, route, storage }) {
                         color={colorMode === "dark" ? Color.black : Color.white}
                         fontWeight={"bold"}
                       >
-                        {translations[language].SendToken.submit_button}
+                        {translations[language as keyof typeof translations].SendToken.submit_button}
                       </Text>
                     </Button>
                   </Box>

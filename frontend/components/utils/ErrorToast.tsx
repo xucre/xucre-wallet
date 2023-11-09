@@ -1,7 +1,7 @@
 import { Box, Button, Center, Text, useToast } from "native-base";
 import React, { useEffect } from "react";
 
-export default function ErrorToast({errorMessage}) {
+export default function ErrorToast({errorMessage} : {errorMessage: string}) {
   const toast = useToast();
   return (
     <Center>

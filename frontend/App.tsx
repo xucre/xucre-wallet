@@ -10,7 +10,6 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import '@walletconnect/react-native-compat';
 import { useFonts } from 'expo-font';
-import { run } from 'jest';
 import {
   Box,
   Container,
@@ -216,7 +215,7 @@ export const AppWrapper = () => {
     runAsync();
   }, []);
 
-  const hideHeader = (name) => {
+  const hideHeader = (name: string) => {
     if (
       name === 'Home' || 
       name === 'Language' || 
@@ -242,12 +241,10 @@ export const AppWrapper = () => {
           <Stack.Navigator initialRouteName="Home"
             screenOptions={({navigation, route}) => ({        
               headerLeft: () => {                
-                //return route.name === 'Home' ? <></> : <Notifications />;
-                return hideHeader(route.name) ? <></> : <Menu navigation={navigation} route={route} setScheme={setScheme} storage={null} />;
+                return hideHeader(route.name) ? <></> : <Menu navigation={navigation} route={route} setScheme={setScheme} />;
               },
               headerRight: () => {
                 return hideHeader(route.name) ? <></> : <Notifications />;
-                //return route.name === 'Home' ? <></> : <HeaderComp navigation={navigation}/>;
               },
             })}
             screenListeners={{
@@ -276,49 +273,49 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>                  
             <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.SelectWallet?.title, 
+              title: translations[language as keyof typeof translations]?.SelectWallet?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.ViewWallet?.title, 
+              title: translations[language as keyof typeof translations]?.ViewWallet?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="WalletHistory" component={WalletHistory} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.WalletHistory?.title, 
+              title: translations[language as keyof typeof translations]?.WalletHistory?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
               title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.SelectNetwork?.title, 
+              title: translations[language as keyof typeof translations]?.SelectNetwork?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="NetworkDefault" component={NetworkDefault} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.SelectNetwork?.title, 
+              title: translations[language as keyof typeof translations]?.SelectNetwork?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.ViewNetwork?.title,  
+              title: translations[language as keyof typeof translations]?.ViewNetwork?.title,  
             }} ></Stack.Screen>
             <Stack.Screen name="AddToken" component={AddToken} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.AddToken?.title, 
+              title: translations[language as keyof typeof translations]?.AddToken?.title, 
             }} ></Stack.Screen>                  
             <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
               title: '', 
             }} ></Stack.Screen>      
             <Stack.Screen name="SendToken" component={SendToken} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.SendToken?.title, 
+              title: translations[language as keyof typeof translations]?.SendToken?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language]?.SwapToken?.title, 
+              title: translations[language as keyof typeof translations]?.SwapToken?.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="BuyToken" component={BuyToken} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SwapToken.title, 
+              title: translations[language as keyof typeof translations].SwapToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="SupportPage" component={SupportPage} options={{ 
               headerTitleAlign: 'left',
@@ -338,7 +335,7 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>
             <Stack.Screen name="NFT" component={NftList} options={{
               headerTitleAlign: 'left',
-              title: translations[language].SwapToken.title, 
+              title: translations[language as keyof typeof translations].SwapToken.title, 
             }} ></Stack.Screen>
             <Stack.Screen name="QRReader" component={QRReader} options={{ 
               title: '', 
@@ -364,7 +361,7 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>                  
             <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SignTransaction.header, 
+              title: translations[language as keyof typeof translations].SignTransaction.header, 
             }} ></Stack.Screen>           
             <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
               headerTitleAlign: 'left',
@@ -372,7 +369,7 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>    
             <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
               headerTitleAlign: 'left',
-              title: translations[language].SetPassword.title, 
+              title: translations[language as keyof typeof translations].SetPassword.title, 
             }} ></Stack.Screen>
           </Stack.Navigator>
       </NavigationContainer>
@@ -381,7 +378,7 @@ export const AppWrapper = () => {
   )
 }
 
-export const ToggleDarkMode = ({setScheme}) => {
+export const ToggleDarkMode = ({setScheme} : {setScheme: Function}) => {
   const {
     colorMode,
     setColorMode
@@ -396,47 +393,6 @@ export const ToggleDarkMode = ({setScheme}) => {
       {useColorModeValue(<MoonIcon size="6" />, <SunIcon size="6" />)}
     </Pressable>
   )
-}
-
-
-export function HeaderComp({navigation}) {
-  const toLogin = () => {
-    navigation.navigate('Home');
-    //if (isComponentMounted) {
-      /*if (connector.connected) {
-        navigation.navigate('Channels', {artistId: null, type: 'all'})
-      } else {
-        navigation.navigate('Connect');
-      }*/
-    //} 
-  }
-  return (
-    <Pressable onPressIn={() => {toLogin()}}>
-      <Container paddingY={1} >
-        <HStack>
-          <Hidden colorMode="dark">
-            <Box >
-              <Image
-                style={{ height: 35, width: 65 }}
-                source={require('./assets/images/icon-black.png')}
-                alt="XucreWallet"
-              />
-            </Box>
-          </Hidden>
-
-          <Hidden colorMode="light">
-            <Box >
-              <Image
-                style={{ height: 35, width: 65 }}
-                source={require('./assets/images/icon-white.png')}
-                alt="XucreWallet"
-              />
-            </Box>
-          </Hidden>
-        </HStack>
-      </Container>
-    </Pressable>
-  );
 }
 
 /**

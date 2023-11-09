@@ -27,17 +27,18 @@ import {
   generateMnemonics,
   loadWalletFromMnemonics,
 } from "../../service/wallet";
-import { storeWallet } from "../../store/wallet";
+import { storeWallet, WalletInternal } from '../../store/wallet';
+import { Wallet } from "ethers";
 
-export default function CreateWallet({ navigation, route, storage }) {
+export default function CreateWallet({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
   const setWalletList = useSetRecoilState(walletList);
   const [language] = useRecoilState(stateLanguage);
   const [steps, setSteps] = useState(0);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [mnemonics, setMnemonics] = useState([]);
-  const [scrambledMnemonics, setScrambledMnemonics] = useState([]);
-  const [confirmMnemonics, setConfirmMnemonics] = useState([]);
+  const [mnemonics, setMnemonics] = useState([] as string[]);
+  const [scrambledMnemonics, setScrambledMnemonics] = useState([] as string[]);
+  const [confirmMnemonics, setConfirmMnemonics] = useState([] as string[]);
   const [mnemonicMatchError, setMnemonicMatchError] = useState(false);
   const [mnemonicMatchComplete, setMnemonicMatchComplete] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
@@ -93,7 +94,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
           py={2}
         >
-          {translations[language].CreateWallet.instructions_newWwallet}
+          {translations[language as keyof typeof translations].CreateWallet.instructions_newWwallet}
         </Heading>
         <Text
           style={{
@@ -103,7 +104,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           fontSize={"md"}
           py={5}
         >
-          {translations[language].CreateWallet.instructions}
+          {translations[language as keyof typeof translations].CreateWallet.instructions}
         </Text>
         <Button
           width={'90%'}
@@ -113,7 +114,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           isLoading={loading}
         >
           <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>
-            {translations[language].CreateWallet.instructions_button}
+            {translations[language as keyof typeof translations].CreateWallet.instructions_button}
           </Text>
         </Button>
       </Center>
@@ -123,7 +124,7 @@ export default function CreateWallet({ navigation, route, storage }) {
   
 
   function MnemonicList() {
-    function ListItem({value, index}) {
+    function ListItem({value, index} : {value :string, index:number}) {
       return (
         <Button
           width={'100%'}
@@ -175,7 +176,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           fontSize={"md"}
           my={2}
         >
-          {translations[language].CreateWallet.mnemonic_instructions}
+          {translations[language as keyof typeof translations].CreateWallet.mnemonic_instructions}
         </Text>
         <HStack
           style={{
@@ -215,16 +216,16 @@ export default function CreateWallet({ navigation, route, storage }) {
   }
 
   function ConfirmMnemonicList() {
-    const selectMnemonic = (word) => {
+    const selectMnemonic = (word: string) => {
       setConfirmMnemonics([...confirmMnemonics, word]);
     };
-    const removeMnemonic = (word) => {
+    const removeMnemonic = (word: string) => {
       const filteredList = confirmMnemonics.filter((val) => {
         return val !== word;
       });
       setConfirmMnemonics(filteredList);
     };
-    function ListItem({value, index}) {
+    function ListItem({value, index} : {value :string, index:number}) {
       return (
         <Button
           width={'100%'}
@@ -300,7 +301,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           fontSize={"md"}
           mt={5}
         >
-          {translations[language].CreateWallet.mnemonic_instructions}
+          {translations[language as keyof typeof translations].CreateWallet.mnemonic_instructions}
         </Text>
 
         
@@ -350,7 +351,7 @@ export default function CreateWallet({ navigation, route, storage }) {
           <Alert w="100%" status={"error"}>
             <Center>
               <Text color="coolGray.800">
-                {translations[language].CreateWallet.mnemonic_error}
+                {translations[language as keyof typeof translations].CreateWallet.mnemonic_error}
               </Text>
             </Center>
           </Alert>
@@ -358,7 +359,7 @@ export default function CreateWallet({ navigation, route, storage }) {
         {mnemonicMatchComplete && (
           <Button width={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
             <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
-              {translations[language].CreateWallet.mnemonic_error_button}
+              {translations[language as keyof typeof translations].CreateWallet.mnemonic_error_button}
             </Text>
           </Button>
         )}
@@ -384,7 +385,7 @@ export default function CreateWallet({ navigation, route, storage }) {
     );
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setName(event.nativeEvent.text);
   };
 
@@ -396,8 +397,9 @@ export default function CreateWallet({ navigation, route, storage }) {
     const runAsync = async () => {
       if (confirmMnemonics.length > 0 && name.length > 0) {
         const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
-
-        await storeWallet({ name, wallet: _wallet.privateKey });
+        const walletInternal = new WalletInternal(_wallet.privateKey);
+        walletInternal.name = name;
+        await storeWallet(walletInternal);
         setWalletList((oldWalletList) => [
           ...oldWalletList,
           {
@@ -440,14 +442,14 @@ export default function CreateWallet({ navigation, route, storage }) {
                 style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
                 py={2}
               >
-                {translations[language].CreateWallet.mnemonic_confirm_instructions}
+                {translations[language as keyof typeof translations].CreateWallet.mnemonic_confirm_instructions}
               </Heading>
               <MnemonicList></MnemonicList>
               <Box>
                 <Button.Group >
                   <Button mx={5} width={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
                     <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
-                      {translations[language].CreateWallet.mnemonic_confirm_button}
+                      {translations[language as keyof typeof translations].CreateWallet.mnemonic_confirm_button}
                     </Text>
                   </Button>
                 </Button.Group>
@@ -465,7 +467,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
               py={2}
             >
-              {translations[language].CreateWallet.mnemonic_confirm_instructions}
+              {translations[language as keyof typeof translations].CreateWallet.mnemonic_confirm_instructions}
             </Heading>
             <ConfirmMnemonicList></ConfirmMnemonicList>
             <MnemonicError></MnemonicError>
@@ -483,7 +485,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               mt={5}
               
             >
-              {translations[language].CreateWallet.name_wallet}
+              {translations[language as keyof typeof translations].CreateWallet.name_wallet}
             </Text>
             <Text
               style={{
@@ -496,7 +498,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               mt={5}
               
             >
-              {translations[language].CreateWallet.instructions_nameWallet}
+              {translations[language as keyof typeof translations].CreateWallet.instructions_nameWallet}
             </Text>
             <Input
               w="full"
@@ -504,7 +506,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               value={name}
               onChange={handleChange}
               placeholder={
-                translations[language].CreateWallet.name_entry_input_placeholder
+                translations[language as keyof typeof translations].CreateWallet.name_entry_input_placeholder
               }
             />
             <Button
@@ -514,7 +516,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               }}
               isLoading={loading}
               isLoadingText={
-                translations[language].CreateWallet
+                translations[language as keyof typeof translations].CreateWallet
                   .name_entry_button_loadingtext
               }
               my={40}
@@ -526,7 +528,7 @@ export default function CreateWallet({ navigation, route, storage }) {
               colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
             >
               <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }} textAlign={'center'}>
-                {translations[language].CreateWallet.name_entry_button}
+                {translations[language as keyof typeof translations].CreateWallet.name_entry_button}
               </Text>
             </Button>
           </Center>
@@ -545,7 +547,7 @@ const styles = StyleSheet.create({
 
   createANew: {
     color: Color.darkgray_100,
-    fontFamily: FontFamily['interRegular'],
+    fontFamily: FontFamily['interRegular' as keyof typeof FontFamily],
     fontSize: FontSize.size_base,
     letterSpacing: -0.2,
     lineHeight: 21,
@@ -563,11 +565,11 @@ const styles = StyleSheet.create({
   rectangleParent: {
     backgroundColor: "#CEF213",
     borderRadius: 100,
-    fontFamily: FontFamily['interSemibold'],
+    fontFamily: FontFamily['interSemibold' as keyof typeof FontFamily],
   },
   walletTypo: {
     color: Color.white,
-    fontFamily: FontFamily['interSemibold'],
+    fontFamily: FontFamily['interSemibold' as keyof typeof FontFamily],
     fontWeight: "600",
   },
   yourWallet: {

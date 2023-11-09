@@ -1,20 +1,11 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import notifee, { EventType } from '@notifee/react-native';
-import { ethers } from 'ethers';
 import {
-  AlertDialog,
   ArrowBackIcon,
   Avatar,
   Box,
   Button,
-  Center,
   Divider,
   Drawer,
-  Hidden,
   HStack,
-  Icon,
-  IconButton,
-  Image,
   MoonIcon,
   Pressable,
   SunIcon,
@@ -30,22 +21,19 @@ import { useRecoilState } from "recoil";
 
 import { Color } from "../../GlobalStyles";
 import translations from "../assets/translations";
-import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
 //import { navigate } from '../service/RootNavigation';
 import { constructDefaultNetworks } from "../service/network";
 import { activeNetwork, language, networkList, walletList, } from "../service/state";
 import { loadWalletFromPrivateKey } from "../service/wallet";
 import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../store/network";
-import { getNotification, getWCLegacyUrl } from "../store/setting";
-import { getTheme, storeTheme } from '../store/setting';
+import { storeTheme } from '../store/setting';
 import { getWallets } from "../store/wallet";
 
 
 import NetworkIcon from './NetworkIcon';
 import PasswordPage, { needsAuth } from "./Password";
-import SelectLanguage from "./SelectLanguage";
 
-export default function SideBar ({navigation, route, setScheme, storage}) {
+export default function SideBar ({navigation, route, setScheme}: {navigation: {navigate: Function}, route: any, setScheme: Function}) {
   const appState = useRef(AppState.currentState);
   const [drawerStatus, setDrawerStatus] = useState(false);
   const [authNeeded, setAuthNeeded] = useState(false);
@@ -110,7 +98,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
     runAsync();
   }, [])
 
-  const navigate = (_location) => {
+  const navigate = (_location: string) => {
     //if (isComponentMounted) {
       setDrawerStatus(false);
       navigation.navigate(_location);
@@ -133,7 +121,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('SelectWallet');}}          
           >
-            <Text>{translations[_language].Menu.wallet_button}</Text>
+            <Text>{translations[_language as keyof typeof translations].Menu.wallet_button}</Text>
           </Button>
       </VStack>
     );
@@ -150,7 +138,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('QRReader');}}          
           >
-            <Text>{translations[_language].Menu.qr_scan_button}</Text>
+            <Text>{translations[_language as keyof typeof translations].Menu.qr_scan_button}</Text>
           </Button>
       </VStack>
     );
@@ -167,7 +155,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('NFTs');}}          
           >
-            <Text>{translations[_language].Menu.nft_button}</Text>
+            <Text>{translations[_language as keyof typeof translations].Menu.nft_button}</Text>
           </Button>
       </VStack>
     );
@@ -184,7 +172,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('Connections');}}          
           >
-            <Text>{translations[_language].Menu.connections_button || 'Connections'}</Text>
+            <Text>{translations[_language as keyof typeof translations].Menu.connections_button || 'Connections'}</Text>
           </Button>
       </VStack>
     );
@@ -201,7 +189,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('Requests');}}          
           >
-            <Text>{translations[_language].Menu.requests_button || 'Requests'}</Text>
+            <Text>{translations[_language as keyof typeof translations].Menu.requests_button || 'Requests'}</Text>
           </Button>
       </VStack>
     );
@@ -218,7 +206,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('SelectNetwork');}}          
           >
-            <Text>{translations[_language].Menu.network_button}</Text>
+            <Text>{translations[_language as keyof typeof translations].Menu.network_button}</Text>
           </Button>
       </VStack>
     );
@@ -235,7 +223,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('Language');}}          
           >
-            <Text>{translations[_language].LanguagePage.menu_button}</Text>
+            <Text>{translations[_language as keyof typeof translations].LanguagePage.menu_button}</Text>
           </Button>
       </VStack>
     );
@@ -252,7 +240,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             px={10}  
             onPress={() => {navigate('SetPassword');}}          
           >
-            <Text>{translations[_language].Menu.password_button}</Text>
+            <Text>{translations[_language as keyof typeof translations].Menu.password_button}</Text>
           </Button>
       </VStack>
     );
@@ -289,7 +277,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
             </Pressable>
             
             {/*<SelectLanguage />*/}
-            {<NetworkIcon navigation={navigation} route={route}/>}
+            {<NetworkIcon navigation={navigation} />}
             {<ToggleDarkMode setScheme={setScheme} />}
             {/*<BackButton setDrawerStatus={setDrawerStatus}/>*/}
           </HStack>
@@ -320,7 +308,7 @@ export default function SideBar ({navigation, route, setScheme, storage}) {
   );
 }
 
-export const ToggleDarkMode = ({setScheme}) => {
+export const ToggleDarkMode = ({setScheme} : {setScheme: Function}) => {
   const {
     colorMode,
     setColorMode
@@ -348,7 +336,7 @@ export const ToggleDarkMode = ({setScheme}) => {
   )
 }
 
-export const BackButton = ({setDrawerStatus}) => {
+export const BackButton = ({setDrawerStatus} : {setDrawerStatus: Function}) => {
   return (
     <Pressable onPressIn={() => {setDrawerStatus(false)}} pr={2}>
       {<ArrowBackIcon size={6}></ArrowBackIcon>}

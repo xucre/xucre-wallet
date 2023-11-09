@@ -14,6 +14,7 @@ export type Transaction = {
 }
 
 export type CovalentTransaction = {
+  hash: string;
   readonly block_height: number,
   readonly block_signed_at: number,
   readonly fees_paid: string,

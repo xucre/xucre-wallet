@@ -1,27 +1,9 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import {
-  AlertDialog,
-  ArrowBackIcon,
-  Box,
-  Button,
-  Center,
-  Divider,
-  Drawer,
-  Hidden,
-  HStack,
-  Icon,
-  IconButton,
-  Image,
   Menu,
-  MoonIcon,
   Pressable,
-  Select,
-  SunIcon,
   Text,
   useColorMode,
-  useColorModeValue,
-  VStack,
 } from "native-base";
 import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
@@ -59,14 +41,14 @@ export default function SelectLanguage () {
     runAsync();
   }, []);
 
-  const updateLanguage = async (_language) => {
+  const updateLanguage = async (_language: string) => {
     await storeLanguage(_language);
   }
 
-  const setLanguage = (val) => {
+  const setLanguage = (val: React.SetStateAction<string>) => {
     setLanguageState(val);
     setLanguageVal(val);
-    updateLanguage(val);
+    updateLanguage(val as string);
   }
 
   return (
@@ -77,11 +59,11 @@ export default function SelectLanguage () {
               <MaterialIcons name="language" size={24} color={'gray'} />
             </Pressable>;
           }}>
-            <Menu.Item onPress={() => {setLanguage('es')}}><Text>{translations[languageVal].SelectLanguage.es}</Text></Menu.Item>
-            <Menu.Item onPress={() => {setLanguage('pt')}}><Text>{translations[languageVal].SelectLanguage.pt}</Text></Menu.Item>
-            <Menu.Item onPress={() => {setLanguage('qu')}}><Text>{translations[languageVal].SelectLanguage.qu}</Text></Menu.Item>
-            <Menu.Item onPress={() => {setLanguage('nah')}}><Text>{translations[languageVal].SelectLanguage.nah}</Text></Menu.Item>
-            <Menu.Item onPress={() => {setLanguage('en')}}><Text>{translations[languageVal].SelectLanguage.en}</Text></Menu.Item>
+            <Menu.Item onPress={() => {setLanguage('es')}}><Text>{translations[languageVal as keyof typeof translations].SelectLanguage.es}</Text></Menu.Item>
+            <Menu.Item onPress={() => {setLanguage('pt')}}><Text>{translations[languageVal as keyof typeof translations].SelectLanguage.pt}</Text></Menu.Item>
+            <Menu.Item onPress={() => {setLanguage('qu')}}><Text>{translations[languageVal as keyof typeof translations].SelectLanguage.qu}</Text></Menu.Item>
+            <Menu.Item onPress={() => {setLanguage('nah')}}><Text>{translations[languageVal as keyof typeof translations].SelectLanguage.nah}</Text></Menu.Item>
+            <Menu.Item onPress={() => {setLanguage('en')}}><Text>{translations[languageVal as keyof typeof translations].SelectLanguage.en}</Text></Menu.Item>
         </Menu>    
       }
     </>

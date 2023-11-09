@@ -4,36 +4,42 @@
 import { useIsFocused } from '@react-navigation/native';
 import {
     Box,
-    Button,
-    Center,
     Icon,
     Image,
     Input,
     ScrollView,
     Text,
-    Tooltip,
     useColorMode,
     VStack,
 } from "native-base";
-import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
+import { Color } from '../../GlobalStyles';
 import { language as stateLanguage } from "../service/state";
 import { useRecoilState } from "recoil";
 import {
+    NativeSyntheticEvent,
     PermissionsAndroid,
+    TextInputFocusEventData,
     TouchableOpacity,
     View,
 } from "react-native";
 import Contact from "react-native-contacts";
-import { useEffect, useState } from "react";
+import { Key, ReactNode, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import DashboardLayout from '../layouts/DashboardLayout';
 
+type ContactType = {
+    givenName: any;
+    recordID: Key | null | undefined;
+    displayName: ReactNode;
+    phoneNumbers: any;
 
-export default function SendNotificationToken({ navigation, route }) {
+}
+
+export default function SendNotificationToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
 
     const { colorMode } = useColorMode();
     const [language] = useRecoilState(stateLanguage);
-    const [contactList, setContactList] = useState([]);
+    const [contactList, setContactList] = useState([] as ContactType[]);
     const isFocused = useIsFocused();
     useEffect(() => {
         getPermission();
@@ -72,7 +78,7 @@ export default function SendNotificationToken({ navigation, route }) {
         }
     }
 
-    const searchItem = (textSearch) => {
+    const searchItem = (textSearch: string) => {
         const data = contactList;
         if (textSearch) {
             const newData = data.filter(item => {
@@ -86,7 +92,7 @@ export default function SendNotificationToken({ navigation, route }) {
         }
     }
 
-    const eventFocus = (event) => {
+    const eventFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
         const eventFocus = event;
     }
 

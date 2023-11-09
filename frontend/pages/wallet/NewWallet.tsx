@@ -1,51 +1,21 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-color-literals */
-import { MaterialIcons } from "@expo/vector-icons";
-import { ethers, getDefaultProvider, Wallet } from 'ethers';
-import * as Clipboard from 'expo-clipboard';
 import {
-  Alert,
-  AlertDialog,
-  ArrowBackIcon,
-  Avatar,
-  Badge,
-  Box,
   Button,
   Center,
-  CloseIcon,
-  ColorMode,
-  Divider,
-  Drawer,
-  Hidden,
-  HStack,
-  IconButton,
-  Icon as IconElement,
-  Image,
-  Input,
-  Menu,
-  MoonIcon,
-  Pressable,
-  ScrollView,
-  SunIcon,
   Text,
-  Tooltip,
   useColorMode,
-  useColorModeValue,
-  View,
-  VStack,
 } from "native-base";
-import React, {createRef, useEffect, useState} from "react";
+import React, {} from "react";
 import {StyleSheet} from 'react-native';
-import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
 
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
-import DashboardLayout from '../../layouts/DashboardLayout';
-import { activeWallet, language as stateLanguage } from "../../service/state";
+import { language as stateLanguage } from "../../service/state";
 
 
-export default function NewWallet ({navigation, route}) {
+export default function NewWallet ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const { colorMode } = useColorMode();
 
   const [language,] = useRecoilState(stateLanguage);
@@ -65,23 +35,23 @@ export default function NewWallet ({navigation, route}) {
           <Text  style={[
             colorMode === 'dark' ? styles.yourWallet : lightStyles.yourWallet, 
             colorMode === 'dark' ? styles.walletTypo : lightStyles.walletTypo,
-          ]} fontSize={'lg'} mt={10}>{translations[language].NewWallet.instructions}</Text>
+          ]} fontSize={'lg'} mt={10}>{translations[language as keyof typeof translations].NewWallet.instructions}</Text>
           <Text style={[
             colorMode === 'dark' ? styles.createANew : lightStyles.createANew,
             colorMode === 'dark' ? styles.createFlexBox : lightStyles.createFlexBox,
-          ]} fontSize={'md'} py={5} px={5}>{translations[language].NewWallet.about}</Text>
+          ]} fontSize={'md'} py={5} px={5}>{translations[language as keyof typeof translations].NewWallet.about}</Text>
      
             <Button style={[
               colorMode === 'dark' ? styles.rectangleParent : lightStyles.rectangleParent,
               colorMode === 'dark' ? styles.rectangleLayout : lightStyles.rectangleLayout,
-            ]} my={3} w={'90%'} onPress={createWallet} py={3}><Text style={{color: colorMode === 'dark' ? 'black' : 'black', fontWeight: 'bold'}}>{translations[language].NewWallet.create_button}</Text></Button>
+            ]} my={3} w={'90%'} onPress={createWallet} py={3}><Text style={{color: colorMode === 'dark' ? 'black' : 'black', fontWeight: 'bold'}}>{translations[language as keyof typeof translations].NewWallet.create_button}</Text></Button>
         
             <Button style={[
               colorMode === 'dark' ? styles.rectangleGroup : lightStyles.rectangleGroup,
               colorMode === 'dark' ? styles.rectangleLayout : lightStyles.rectangleLayout,
               colorMode === 'dark' ? styles.buttonBorder : lightStyles.buttonBorder,
             ]} width={'90%'} py={3} colorScheme="primary" onPress={recoverWallet} >
-              <Text color={colorMode === 'dark' ? 'white' : 'white'} textAlign={'center'}>{translations[language].NewWallet.recover_button}</Text>
+              <Text color={colorMode === 'dark' ? 'white' : 'white'} textAlign={'center'}>{translations[language as keyof typeof translations].NewWallet.recover_button}</Text>
             </Button>
   
               

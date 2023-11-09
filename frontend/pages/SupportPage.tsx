@@ -18,14 +18,14 @@ import { language as stateLanguage } from "../../frontend/service/state";
 import translations from "../assets/translations";
 import sendEmail from "../service/sendEmail";
 
-export default function SuportPage({ navigation, route }) {
+export default function SuportPage({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
     const [language] = useRecoilState(stateLanguage);
     const { colorMode } = useColorMode();
     const [name, setName] = useState("");
     const [issue, setIssue] = useState("");
     const [toEmail, setToEmail] = useState("");
 
-    const handleNameChange = (event) => {
+    const handleNameChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
         setName(event.nativeEvent.text);
     };
 
@@ -33,11 +33,11 @@ export default function SuportPage({ navigation, route }) {
         navigation.navigate("ViewWallet");
     };
 
-    const handleIssueChange = (event) => {
+    const handleIssueChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
         setIssue(event.nativeEvent.text);
     };
 
-    const handletoEmailChange = (event) => {
+    const handletoEmailChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
         setToEmail(event.nativeEvent.text);
     };
 
@@ -47,7 +47,7 @@ export default function SuportPage({ navigation, route }) {
             name,
             issue,
             navigation,
-            translations[language].SupportPage.toast_send
+            translations[language as keyof typeof translations].SupportPage.toast_send
         );
     };
 
@@ -61,28 +61,28 @@ export default function SuportPage({ navigation, route }) {
         >
             <Box alignItems="center" my={10} w={"full"}>
                 <Text style={styles.support1}>
-                    {translations[language].SupportPage.title}
+                    {translations[language as keyof typeof translations].SupportPage.title}
                 </Text>
 
                 <Text style={styles.contactUsViaTypo} w='85%'>
                     <Text style={styles.ifYouHave}>
-                        {translations[language].SupportPage.introduction}
+                        {translations[language as keyof typeof translations].SupportPage.introduction}
                     </Text>
                 </Text>
                 <VStack m={2}>
-                    <Text> {translations[language].SupportPage.to_send} </Text>
+                    <Text> {translations[language as keyof typeof translations].SupportPage.to_send} </Text>
                     <Input
                         style={styles.textoImput}
                         value={toEmail}
                         onChange={handletoEmailChange}
                         w='90%'
                         mb={2}
-                        placeholder={translations[language].SupportPage.to_send}
+                        placeholder={translations[language as keyof typeof translations].SupportPage.to_send}
                     />
                 </VStack>
 
                 <VStack m={3}>
-                    <Text>{translations[language].SupportPage.subject_send}</Text>
+                    <Text>{translations[language as keyof typeof translations].SupportPage.subject_send}</Text>
 
                     <Input
                         style={styles.textoImput}
@@ -90,20 +90,19 @@ export default function SuportPage({ navigation, route }) {
                         onChange={handleNameChange}
                         w='90%'
                         mb={2}
-                        placeholder={translations[language].SupportPage.subject_send}
+                        placeholder={translations[language as keyof typeof translations].SupportPage.subject_send}
                     />
                 </VStack>
 
                 <VStack m={3}>
-                    <Text>{translations[language].SupportPage.describe_issue}</Text>
+                    <Text>{translations[language as keyof typeof translations].SupportPage.describe_issue}</Text>
 
-                    {/*  <Input style={styles.textoImputArea} value={issue} onChange={handleIssueChange} placeholderTextColor={'white'} w="105%" mb={2}  placeholder="Suggestions and / or report problems" /> */}
                     <TextArea
                         autoCompleteType={"off"}
                         style={styles.textoImputArea}
                         value={issue}
                         onChange={handleIssueChange}
-                        placeholder={translations[language].SupportPage.describe_issue}
+                        placeholder={translations[language as keyof typeof translations].SupportPage.describe_issue}
                         w='90%'
                         minHeight={200}
                     />
@@ -117,7 +116,7 @@ export default function SuportPage({ navigation, route }) {
                     onPress={send}
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                        {translations[language].SupportPage.button_send}
+                        {translations[language as keyof typeof translations].SupportPage.button_send}
                     </Text>
                 </Button>
 
@@ -129,7 +128,7 @@ export default function SuportPage({ navigation, route }) {
                     onPress={viewWallet}
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                        {translations[language].SupportPage.button_cancel}
+                        {translations[language as keyof typeof translations].SupportPage.button_cancel}
                     </Text>
                 </Button>
             </Box>

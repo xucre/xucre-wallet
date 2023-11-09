@@ -20,7 +20,10 @@ import { getNfts } from "../../service/blockdaemon";
 import { AppWallet, language as stateLanguage } from "../../service/state";
 import { getActiveWallet } from "../../store/wallet";
 
-export default function NftList ({navigation, route}) {
+export type NFT = {description : string, image: string, key: string, name : string, url: string}
+export type NFTHolding = {contract_address: string, id: string}
+
+export default function NftList ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
@@ -31,9 +34,9 @@ export default function NftList ({navigation, route}) {
     wallet: {}
   } as AppWallet);
   //const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
-  const [holdings, setHoldings] = useState([]);
-  const [trending, setTrending] = useState([]);
-  const [collections, setCollections] = useState([]);
+  const [holdings, setHoldings] = useState([] as NFTHolding[]);
+  const [trending, setTrending] = useState([] as NFT[]);
+  const [collections, setCollections] = useState([] as NFT[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -182,7 +185,7 @@ export default function NftList ({navigation, route}) {
           </ScrollView>
         }
         
-        <MobileFooter wallet={wallet} navigation={navigation}></MobileFooter>
+        <MobileFooter navigation={navigation}></MobileFooter>
     </Box>
   )
 }

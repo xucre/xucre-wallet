@@ -1,5 +1,5 @@
 import { parseUri } from '@walletconnect/utils'
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BarCodeScanner, PermissionStatus } from 'expo-barcode-scanner';
 import { Box, Center, Text } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet,  View } from 'react-native';
@@ -9,21 +9,21 @@ import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
 import { createSignClient, signClient } from '../service/walletConnect';
 
-export default function QRReader({navigation}) {
-  const [hasPermission, setHasPermission] = useState(null);
+export default function QRReader({navigation}: {navigation: {navigate: Function}}) {
+  const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [language, ] = useRecoilState(stateLanguage);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === PermissionStatus.GRANTED);
     };
     setScanned(false);
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = async ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data } : {type: any, data: string}) => {
     setScanned(true);
     const { version, relay } = parseUri(data);
     try {
@@ -34,10 +34,10 @@ export default function QRReader({navigation}) {
   };
 
   if (hasPermission === null) {
-    return <Center><Text colorScheme={'primary'}>{translations[language].QRReader.permission_request}</Text></Center>;
+    return <Center><Text colorScheme={'primary'}>{translations[language as keyof typeof translations].QRReader.permission_request}</Text></Center>;
   }
   if (hasPermission === false) {
-    return <Center><Text colorScheme={'primary'}>{translations[language].QRReader.permission_denied}</Text></Center>;
+    return <Center><Text colorScheme={'primary'}>{translations[language as keyof typeof translations].QRReader.permission_denied}</Text></Center>;
   }
 
   return (
@@ -46,7 +46,7 @@ export default function QRReader({navigation}) {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      {scanned && <Button title={translations[language].QRReader.rescan} onPress={() => setScanned(false)} />}
+      {scanned && <Button title={translations[language as keyof typeof translations].QRReader.rescan} onPress={() => setScanned(false)} />}
     </View>
   );
 }

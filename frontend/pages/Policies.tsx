@@ -3,31 +3,25 @@
 import {
     Box,
     Button,
-    Center,
     Checkbox,
     HStack,
-    Input,
     KeyboardAvoidingView,
     ScrollView,
     Text,
-    TextArea,
     useColorMode,
-    View,
     VStack
 } from "native-base";
-import { color } from "native-base/lib/typescript/theme/styled-system";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BackHandler, Platform, StyleSheet } from "react-native";
 import { useRecoilState } from "recoil";
 
-import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
+import { Color, FontFamily, FontSize } from "../../GlobalStyles";
 import { language as stateLanguage } from "../service/state";
 import translations from "../assets/translations";
 import { storePrivacyPolicy } from "../store/setting";
-import { navigate } from '../service/RootNavigation';
 
 
-export default function Policies({ navigation, route }) {
+export default function Policies({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
     const [language] = useRecoilState(stateLanguage);
     const { colorMode } = useColorMode();
     const [checkValues, setcheckValues] = useState(false);
@@ -61,18 +55,18 @@ export default function Policies({ navigation, route }) {
         >
             <Box alignItems="center" my={10} w={"full"}>
                 <Text style={styles.support1}>
-                {translations[language].termsConditions.title}
+                {translations[language as keyof typeof translations].termsConditions.title}
                 </Text>
                 <VStack m={5}>
                     <ScrollView w={["300", "800"]}>
-                        <Text>{translations[language].termsConditions.terms}</Text>
+                        <Text>{translations[language as keyof typeof translations].termsConditions.terms}</Text>
                     </ScrollView>
 
                 </VStack>
 
                 <Box>
                     <HStack space={6} my={4}>
-                        <Checkbox onChange={change} defaultIsChecked={checkValues} value={"true"} ><Text>{translations[language].termsConditions.accept_terms}</Text></Checkbox>
+                        <Checkbox onChange={change} defaultIsChecked={checkValues} value={"true"} ><Text>{translations[language as keyof typeof translations].termsConditions.accept_terms}</Text></Checkbox>
                     </HStack>
                 </Box>
 
@@ -85,7 +79,7 @@ export default function Policies({ navigation, route }) {
                     onPress={acceptPolicy}
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                    {translations[language].termsConditions.button_Accept}
+                    {translations[language as keyof typeof translations].termsConditions.button_Accept}
                     </Text>
                 </Button>
 
@@ -97,7 +91,7 @@ export default function Policies({ navigation, route }) {
                    onPress={declinePolicy}
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                        {translations[language].SupportPage.button_cancel}
+                        {translations[language as keyof typeof translations].SupportPage.button_cancel}
                     </Text>
                 </Button>
             </Box>

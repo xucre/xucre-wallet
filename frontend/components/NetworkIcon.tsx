@@ -32,7 +32,7 @@ import { Network } from "../service/network";
 import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../service/state";
 
 
-export default function NetworkIcon({navigation, route}) {
+export default function NetworkIcon({navigation}: {navigation: {navigate: Function}}) {
   const [language, ] = useRecoilState(stateLanguage);
   const [network, setSelectedNetwork] = useRecoilState(selectedNetwork);
   const {colorMode} = useColorMode();
