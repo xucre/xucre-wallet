@@ -1,30 +1,48 @@
 {
   "expo": {
+    
     "name": "xucre-wallet",
-    "slug": "xucre-wallet",
-    "version": "1.0.0",
+    "slug": "xucre-mobile",
+    "scheme": "xucre",
+    "version": "1.0.5",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/image/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "extra": {
+      "eas": {
+        "projectId": "20ee0e7d-2104-47c1-87c5-f3d860714b80"
+      }
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "xucre.expo.client"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "icon": "./assets/icon.png",
+      "package": "xucre.expo.client"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/20ee0e7d-2104-47c1-87c5-f3d860714b80"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "notification" : {
+      "icon": "./icon.png",
+      "color": "#ffffff"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": ["../node_modules/@notifee/react-native/android/libs"]
+          }
+        }
+      ]
+    ]
   }
 }

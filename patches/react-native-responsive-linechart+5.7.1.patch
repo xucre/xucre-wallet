@@ -1,0 +1,11 @@
+diff --git a/node_modules/react-native-responsive-linechart/lib/Chart.d.ts b/node_modules/react-native-responsive-linechart/lib/Chart.d.ts
+index abf6932..ce6fb86 100644
+--- a/node_modules/react-native-responsive-linechart/lib/Chart.d.ts
++++ b/node_modules/react-native-responsive-linechart/lib/Chart.d.ts
+@@ -22,5 +22,5 @@ declare type Props = {
+ export declare type ChartHandle = {
+     setViewportOrigin: (origin: XYValue) => void;
+ };
+-declare const Chart: React.FC<Props>;
++declare const Chart: React.FC<React.PropsWithChildren<Props>>;
+ export { Chart };
