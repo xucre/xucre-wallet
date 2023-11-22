@@ -79,8 +79,8 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
         setScrambledMnemonics(arrayShuffle(_mnemonics));
         setLoading(false);
         // only used for testing
-        setConfirmMnemonics(_mnemonics);
-        setMnemonicMatchComplete(true);
+        //setConfirmMnemonics(_mnemonics);
+        //setMnemonicMatchComplete(true);
       }, 100);
     };
     const createMnemonics = () => {
