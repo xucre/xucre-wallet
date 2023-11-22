@@ -35,6 +35,7 @@ import { Token } from "../../service/token";
 import { Transaction } from "../../service/transaction";
 import { getTokenByChain } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
+import { WalletInternal } from "../../store/wallet";
 
 export default function SendToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
   const toast = useToast();
@@ -72,12 +73,12 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
       const _tokens = await getTokenByChain(network.chainId);
       const coinToken = {
         address: "",
-        amount: ethers.utils.formatEther(0),
+        amount: BigNumber.from(0),
         chainId: network.chainId,
         name: network.symbol,
         type: "coin",
       };
-      setTokens([coinToken, ..._tokens]);
+      setTokens([coinToken, ..._tokens as Token[]]);
     };
 
     if (network) {
@@ -112,7 +113,7 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
     if (_wallet.name != "" && network) {
       const _provider = getDefaultProvider(network.rpcUrl);
       setProvider(_provider);
-      const newWallet = _wallet.wallet.connect(_provider);
+      const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
       setWallet(newWallet);
     } else {
       console.log('no wallets');

@@ -42,51 +42,53 @@ export default function SelectWallet ({navigation, route}: {navigation: {navigat
   const WalletItem = ({metadata} : {metadata: AppWallet}) => {
     const selectWallet = () => {
       setActiveWallet(metadata);
-      const walletInternal = new WalletInternal(metadata.wallet.privateKey);
-      walletInternal.name = metadata.name;
-      storeActiveWallet(walletInternal);  
+      storeActiveWallet(metadata);  
     }
 
     const openWallet = () => {      
-      setActiveWallet(metadata);   
-      const walletInternal = new WalletInternal(metadata.wallet.privateKey);
-      walletInternal.name = metadata.name;
-      storeActiveWallet(walletInternal);
+      selectWallet();
       viewWallet();
     }
     return (
-      <HStack alignItems="center" justifyContent="space-between">
-        
-        <Pressable onPress={openWallet}>
-          <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-            <VStack space={1}>
-                <Text fontSize="md" bold>
-                  {metadata.name}
-                </Text>
-            </VStack>
+      <>
+        {
+          metadata !== undefined && 
+          <HStack alignItems="center" justifyContent="space-between" >
             
-            <Text color="coolGray.500">{truncateStringStart(metadata.wallet.address, 20)}</Text>     
+          <Pressable onPress={openWallet}>
+            <HStack alignItems="center" space={{ base: 3, md: 6 }}>
+              <VStack space={1}>
+                  <Text fontSize="md" bold>
+                    {metadata.name}
+                  </Text>
+              </VStack>
+              
+              <Text color="coolGray.500">{truncateStringStart(metadata.address, 20)}</Text>     
+            </HStack>
+          </Pressable>
+          <HStack alignItems="center" space={{ base: 2 }}>       
+            <Tooltip label={translations[language as keyof typeof translations].SelectWallet.select_button_tooltip} openDelay={500}>
+              <Menu w="190" trigger={triggerProps => {
+                return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+                  <Icon
+                    as={MaterialIcons}
+                    name="more-vert"
+                    size="6"
+                    color="coolGray.500"
+                  />
+                </Pressable>;
+                }}
+              >                
+                <Menu.Item onPress={() => {selectWallet()}}><Text>{translations[language as keyof typeof translations].SelectWallet.select_button}</Text></Menu.Item>                
+              </Menu>
+            </Tooltip>
+            
           </HStack>
-        </Pressable>
-        <HStack alignItems="center" space={{ base: 2 }}>       
-          <Tooltip label={translations[language as keyof typeof translations].SelectWallet.select_button_tooltip} openDelay={500}>
-            <Menu w="190" trigger={triggerProps => {
-              return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
-                <Icon
-                  as={MaterialIcons}
-                  name="more-vert"
-                  size="6"
-                  color="coolGray.500"
-                />
-              </Pressable>;
-              }}
-            >                
-              <Menu.Item onPress={() => {selectWallet()}}><Text>{translations[language as keyof typeof translations].SelectWallet.select_button}</Text></Menu.Item>                
-            </Menu>
-          </Tooltip>
-          
         </HStack>
-      </HStack>
+        }
+
+      </>
+      
     )
   }
 
@@ -100,19 +102,21 @@ export default function SelectWallet ({navigation, route}: {navigation: {navigat
         <VStack space={4} height={'90%'}>
           {
             walletState.map((val, i) => {
-              return (
-                <Box key={val.name+i} px={4} py={1}>
-                  <WalletItem metadata={val} /> 
-                  {(i+1) !== walletState.length && 
-                    <Divider orientation={'horizontal'} mt={4} _light={{
-                      bg: "muted.800"
-                    }} _dark={{
-                      bg: "muted.300"
-                    }} />
-                  }
-                  
-                </Box>
-              )              
+              if (val) {
+                return (
+                  <Box key={val.name+i} px={4} py={1}>
+                    <WalletItem metadata={val} /> 
+                    {(i+1) !== walletState.length && 
+                      <Divider orientation={'horizontal'} mt={4} _light={{
+                        bg: "muted.800"
+                      }} _dark={{
+                        bg: "muted.300"
+                      }} />
+                    }
+                    
+                  </Box>
+                )
+              }           
             })
           }
         </VStack>

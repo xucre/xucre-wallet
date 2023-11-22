@@ -11,6 +11,7 @@ import { useRecoilState } from 'recoil';
 
 
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../service/state";
+import { WalletInternal } from '../../store/wallet';
 
 //const lifi = new LIFI();
 
@@ -24,7 +25,7 @@ export default function SwapToken({ navigation, route }: {navigation: {navigate:
     if (_wallet.name != '' && network) {
       const _provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
       setProvider(_provider);
-      const newWallet = _wallet.wallet.connect(_provider);
+      const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
       setWallet(newWallet);
     }
   }, [_wallet, network]);

@@ -25,8 +25,8 @@ export default function BuyToken({ navigation, route }: {navigation: {navigate: 
     if (_wallet.name != '' && network) {
       const _provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
       setProvider(_provider);
-      const newWallet = _wallet.wallet.connect(_provider);
-      setWallet(newWallet);
+      //const newWallet = _wallet.wallet.connect(_provider);
+      //setWallet(newWallet);
     }
   }, [_wallet, network]);
 

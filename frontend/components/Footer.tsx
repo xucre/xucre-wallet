@@ -11,6 +11,7 @@ import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
+import { Platform } from "react-native";
 
 
 type IconType = {
@@ -66,7 +67,7 @@ export default function MobileFooter({navigation}: {navigation: {navigate: Funct
   return (
     <Hidden from="md">
       <HStack
-        justifyContent="space-between"
+        justifyContent={'space-evenly'}
         safeAreaBottom
         h="8%"
         overflow={'visible'}
@@ -86,70 +87,52 @@ export default function MobileFooter({navigation}: {navigation: {navigate: Funct
         _dark={{ backgroundColor: 'gray.800' }}
       >
         {footerIcons.map((item, index) => {
-          return (
-            item.highlight ? 
+          return ( 
             <Button
               key={index}
               variant="ghost"
-              colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+              colorScheme={item.highlight ? colorMode === 'dark' ? 'primary' : 'tertiary': colorMode === 'dark' ? 'coolGray' : 'coolGray'}
               _stack={{
                 flexDirection: 'column',
+                justifyContent: 'start',
+                alignItems: 'center'
               }}
               marginBottom={5}
               startIcon={
                 <Icon
                   as={MaterialIcons}
                   name={item.name}
-                  size="10"
+                  size={Platform.OS === 'android' ? '10' : '8'}
                   _dark={{
-                    color : item.disabled ? "primary.800" : "primary.600"
+                    color : item.highlight ? item.disabled ? "primary.400" : "primary.800" : item.disabled ? "coolGray.400" : "coolGray.100"
                   }}
                   _light={{
-                    color : item.disabled ? "primary.500" : "primary.600"
+                    color : item.highlight ? item.disabled ? "primary.600" : "primary.400" : item.disabled ? "coolGray.300" : "coolGray.500"
                   }}
-                  marginTop='-3'
-                  marginBottom={3}
+                  marginTop={item.highlight ? '-3' : '0'}
+                  marginBottom={item.highlight ? 3 : 0 }
                 />
               }
-              _text={{
-                color : item.disabled ? colorMode === 'dark' ? "primary.800" : "primary.500" : colorMode === 'dark' ? "primary.800" : "primary.600"
+              _text={ item.highlight ? {
+                color : item.disabled ? 
+                  colorMode === 'dark' ? "primary.600" : "primary.400" : 
+                  colorMode === 'dark' ? "primary.800" : "primary.400",
+                width: 12,
+                height: 10,
+                textAlign: 'center'
+              } : {
+                color: item.disabled ? 
+                  colorMode === 'dark' ? "primary.800" : "coolGray.400" : 
+                  colorMode === 'dark' ? "primary.600" : "coolGray.600",
+                width: 'full',
+                height: 10,
+                textAlign: 'center'
               }}
-              paddingY={2}
+              paddingY={item.highlight ? 2 : 0} 
               onPress={() => {openPage(item.text)}}
             >
               {item.text}
-            </Button> :
-            <Button
-              key={index}
-              variant="ghost"
-              colorScheme={colorMode === 'dark' ? 'coolGray' : 'coolGray'}
-              _stack={{
-                flexDirection: 'column',
-              }}
-              startIcon={
-                <Icon
-                  as={MaterialIcons}
-                  name={item.name}
-                  size="5"
-                  _dark={{
-                    color: item.disabled ? "coolGray.400" : "coolGray.100"
-                  }}
-                  _light={{
-                    color: item.disabled ? "coolGray.300" : "coolGray.500"
-                  }}                
-                />
-              }
-              _dark={{
-                color: item.disabled ? "coolGray.400" : "coolGray.100"
-              }}              
-              _light={{
-                color: item.disabled ? "coolGray.300" : "coolGray.500"
-              }}       
-              paddingY={0}           
-              onPress={() => {openPage(item.text)}}
-            >
-              {item.text}
-            </Button> 
+            </Button>
           );
         })}
       </HStack>

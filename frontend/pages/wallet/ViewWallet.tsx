@@ -1,5 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers, Wallet } from 'ethers';
+import { BigNumber, ethers, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 import {
   Box,
@@ -30,6 +30,7 @@ import { CovalentTransaction } from "../../service/transaction";
 import { getTokenByChain } from '../../store/token';
 import NftList from "../nft/NftList";
 import { Token } from "../../service/token";
+import { WalletInternal } from "../../store/wallet";
 
 function TabItem({
   tabName,
@@ -113,19 +114,20 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
     
     const coinToken = {
       address : '',
-      amount : ethers.utils.formatEther( 0 ),
+      amount : BigNumber.from(0),
       chainId : network.chainId,
       name: network.symbol,
       type: 'coin',
     };
     
     if (isComponentMounted) {
-      setHoldings([coinToken, ..._tokens]);
+      if (_tokens) setHoldings([coinToken, ..._tokens as Token[]]);
+      if (!_tokens) setHoldings([coinToken]);
     }
   }
   
   const syncTransactions = async () => {
-    const _transactions = await getWalletTransactions(_wallet.wallet.address, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
+    const _transactions = await getWalletTransactions(_wallet.address, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
 
     if (_transactions && _transactions.data.items) {
       setTransactions(_transactions.data.items as readonly CovalentTransaction[]);
@@ -147,9 +149,9 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
       navigation.navigate('SelectWallet');
     } else if (network) {
       if (_wallet.name === '') {
-        setWallet(_walletList[0].wallet);
+        setWallet( new WalletInternal(_walletList[0].wallet));
       } else {
-        setWallet(_wallet.wallet);
+        setWallet(new WalletInternal(_wallet.wallet));
       }
       
     }

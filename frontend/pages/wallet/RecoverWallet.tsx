@@ -21,7 +21,7 @@ import { useRecoilState, useSetRecoilState, } from "recoil";
 
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
-import { language as stateLanguage, walletList } from "../../service/state";
+import { AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromMnemonics} from '../../service/wallet'
 import { storeWallet, WalletInternal } from "../../store/wallet";
 
@@ -224,16 +224,15 @@ export default function RecoverWallet ({navigation, route}: {navigation: {naviga
       try {
         if (confirmMnemonics.length > 0 ) {
           const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
-          const walletInternal = new WalletInternal(_wallet.privateKey);
-          walletInternal.name = name;
+          const walletInternal = {
+            address: _wallet.address,
+            name,
+            wallet: _wallet.privateKey
+          } as AppWallet;
           await storeWallet(walletInternal);
           setWalletList((oldWalletList) => [
             ...oldWalletList,
-            {
-              address: _wallet.address,
-              name,
-              wallet: _wallet
-            }
+            walletInternal
           ]);
           setLoading(false);
           setTimeout(() => {

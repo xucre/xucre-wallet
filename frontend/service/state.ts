@@ -10,7 +10,7 @@ import { Network } from './network';
 export type AppWallet = {
   address: string,
   name: string,
-  wallet: Wallet
+  wallet: string
 }
 
 export const walletList = atom({

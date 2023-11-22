@@ -23,7 +23,7 @@ import { Color } from "../../GlobalStyles";
 import translations from "../assets/translations";
 //import { navigate } from '../service/RootNavigation';
 import { constructDefaultNetworks } from "../service/network";
-import { activeNetwork, language, networkList, walletList, } from "../service/state";
+import { activeNetwork, AppWallet, language, networkList, walletList, } from "../service/state";
 import { loadWalletFromPrivateKey } from "../service/wallet";
 import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../store/network";
 import { storeTheme } from '../store/setting';
@@ -85,9 +85,13 @@ export default function SideBar ({navigation, route, setScheme}: {navigation: {n
       if (Array.isArray(_wallets) && _wallets.length > 0) {
         const loadedWallets = _wallets.map((val) => {
           const wallet = loadWalletFromPrivateKey(val.wallet);
-          return {address: wallet.address, name: val.name, wallet: wallet};
+          if (wallet) {
+            return {address: wallet.address, name: val.name, wallet: wallet.privateKey};
+          }
         });
-        setWalletState(loadedWallets);
+        if (loadedWallets) {
+          setWalletState(loadedWallets as AppWallet[]);
+        }
       } else {
         //navigate('NewWallet')
       }

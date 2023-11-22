@@ -30,6 +30,7 @@ import { getWalletHistory } from "../../service/api";
 import { chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, language as stateLanguage } from "../../service/state";
 import { ChartData, ExtendedBalance, Holding, ItemsWithOpenQuote, OpenQuotes, OutputObject } from "../../types/history";
+import { WalletInternal } from "../../store/wallet";
 
 
 export default function WalletHistory({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
@@ -102,7 +103,7 @@ export default function WalletHistory({ navigation, route }: {navigation: {navig
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
     } else {
-      setWallet(_wallet.wallet);
+      setWallet(new WalletInternal(_wallet.wallet));
     }
   }, [_wallet, network]);
 

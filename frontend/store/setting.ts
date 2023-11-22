@@ -125,6 +125,7 @@ export const deleteNotification = async (id: string) => {
 
 export const getNotification = async (id: string) => {
   const _events = await EncryptedStorage.getItem("connect_events");
+  console.log('getNotifications', _events);
   const events = JSON.parse(_events as string);
   if (events) {
     if (events[id]) {
@@ -139,6 +140,7 @@ export const getNotification = async (id: string) => {
 
 export const getAllNotifications = async () => {
   const _events = await EncryptedStorage.getItem("connect_events");
+  console.log('getAllNotifications', _events);
   const events = JSON.parse(_events as string);
   if (events) {  
     return Object.values(events).sort((a : any,b: any) => {

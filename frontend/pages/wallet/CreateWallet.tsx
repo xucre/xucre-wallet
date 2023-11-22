@@ -22,7 +22,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
-import { language as stateLanguage, walletList } from "../../service/state";
+import { AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import {
   generateMnemonics,
   loadWalletFromMnemonics,
@@ -79,8 +79,8 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
         setScrambledMnemonics(arrayShuffle(_mnemonics));
         setLoading(false);
         // only used for testing
-        //setConfirmMnemonics(_mnemonics);
-        //setMnemonicMatchComplete(true);
+        setConfirmMnemonics(_mnemonics);
+        setMnemonicMatchComplete(true);
       }, 100);
     };
     const createMnemonics = () => {
@@ -397,16 +397,15 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
     const runAsync = async () => {
       if (confirmMnemonics.length > 0 && name.length > 0) {
         const _wallet = await loadWalletFromMnemonics(confirmMnemonics);
-        const walletInternal = new WalletInternal(_wallet.privateKey);
-        walletInternal.name = name;
+        const walletInternal = {
+          address: _wallet.address,
+          name,
+          wallet: _wallet.privateKey,
+        } as AppWallet;
         await storeWallet(walletInternal);
         setWalletList((oldWalletList) => [
           ...oldWalletList,
-          {
-            address: _wallet.address,
-            name,
-            wallet: _wallet,
-          },
+          walletInternal
         ]);
         setLoading(false);
         setTimeout(() => {

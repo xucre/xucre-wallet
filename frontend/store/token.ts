@@ -5,6 +5,9 @@ import { Token } from "../service/token";
 
 export const addToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
+  if (!_tokens) {
+    return undefined;
+  }
   const tokens = JSON.parse(_tokens as string) as readonly Token[];
   
   if (Array.isArray(tokens)) {
@@ -23,6 +26,9 @@ export const addToken = async (token: Token) => {
 
 export const updateToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
+  if (!_tokens) {
+    return undefined;
+  }
   const tokens = JSON.parse(_tokens as string) as readonly Token[];
   if (Array.isArray(tokens)) {
     const newTokens = tokens.map((_token) => {
@@ -48,6 +54,9 @@ export const updateToken = async (token: Token) => {
 
 export const deleteToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
+  if (!_tokens) {
+    return undefined;
+  }
   const tokens = JSON.parse(_tokens as string);
   if (Array.isArray(tokens)) {
     const netTokenList = tokens.filter((_token) => {
@@ -82,16 +91,25 @@ export const storeActiveToken = async (token: Token) => {
 
 export const getActivetoken = async () => {
   const token = await EncryptedStorage.getItem('active_token');
+  if (!token) {
+    return undefined;
+  }
   return JSON.parse(token as string) as Token;
 }
 
 export const getTokens = async () => {
   const tokens = await EncryptedStorage.getItem('token_list');
+  if (!tokens) {
+    return undefined;
+  }
   return JSON.parse(tokens as string) as readonly Token[];
 }
 
 export const getTokenByChain = async (chainId: number) => {
   const tokens = await EncryptedStorage.getItem('token_list');
+  if (!tokens) {
+    return undefined;
+  }
   const _tokens = JSON.parse(tokens as string) as readonly Token[];
   if (_tokens && Array.isArray(_tokens)) {
     return _tokens.filter((token: Token) => {

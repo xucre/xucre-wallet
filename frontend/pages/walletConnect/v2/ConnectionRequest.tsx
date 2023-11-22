@@ -49,13 +49,13 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
   }
 
   const SelectWallet = ({metadata}: {metadata : AppWallet}) => {
-    const address = metadata.wallet.address;
+    const address = metadata.address;
     const selectWallet = () => {
       setSelectedWallets([...selectedWallets, metadata])   
     }
     const unSelectWallet = () => {
       setSelectedWallets(selectedWallets.filter((val) => {
-        return val.wallet.address !== address
+        return val.address !== address
       }));
     }
     return (
@@ -74,14 +74,14 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
               </Text>
           </VStack>
           
-          <Text color="coolGray.500">{truncateString(metadata.wallet.address, 25)}</Text>     
+          <Text color="coolGray.500">{truncateString(metadata.address, 25)}</Text>     
         </HStack>
       </HStack>
     )
   }
 
   const WalletItem = ({metadata} : {metadata : AppWallet}) => {
-    const address = metadata.wallet.address;
+    const address = metadata.address;
     return (
       <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>
           
@@ -89,20 +89,20 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
           <Text fontSize="md" bold>
             {metadata.name}
           </Text>
-          <Text color="coolGray.500">{truncateString(metadata.wallet.address, 25)}</Text>
+          <Text color="coolGray.500">{truncateString(metadata.address, 25)}</Text>
         </HStack>
       </HStack>
     )
   }
 
   const SelectWallet2 = ({metadata} : {metadata: AppWallet}) => {
-    const address = metadata.wallet.address;
+    const address = metadata.address;
     const selectWallet = () => {
       setSelectedWallets([...selectedWallets, metadata])   
     }
     const unSelectWallet = () => {
       setSelectedWallets(selectedWallets.filter((val) => {
-        return val.wallet.address !== address
+        return val.address !== address
       }));
     }
 
@@ -119,7 +119,7 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
           <Text fontSize="md" bold>
             {metadata.name}
           </Text>
-          <Text color="coolGray.500">{truncateString(metadata.wallet.address, 25)}</Text>
+          <Text color="coolGray.500">{truncateString(metadata.address, 25)}</Text>
         </HStack>
       </HStack>
     )
@@ -128,7 +128,7 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
   const approve = async () => {
     const accountList = selectedWallets.map((wallet) => {
       return request['params']['requiredNamespaces']['eip155']['chains'].map((chain: string) => {
-        return chain+ ':' + wallet.wallet.address;
+        return chain+ ':' + wallet.address;
       })
     })
     const payload = {
@@ -224,7 +224,7 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
                 {
                   selectedWallets.map((metadata, i) => {                  
                     return (
-                      <Box key={metadata.wallet.address}>
+                      <Box key={metadata.address}>
                         <WalletItem metadata={metadata}/>
                       </Box>
                     )

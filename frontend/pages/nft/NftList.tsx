@@ -49,7 +49,7 @@ export default function NftList ({navigation, route}: {navigation: {navigate: Fu
   const syncNfts = async () => {
     try {
       if (wallet.name.length > 0) {
-        const _tokens = await getNfts(wallet.wallet.address);
+        const _tokens = await getNfts(wallet.address);
         if (isComponentMounted) {
           setChain(_tokens.chain);
           setHoldings(_tokens.results);
@@ -111,7 +111,7 @@ export default function NftList ({navigation, route}: {navigation: {navigate: Fu
       safeAreaBottom
     >
       
-        {wallet.name.length > 0 && wallet.wallet.address !== '' && 
+        {wallet.name.length > 0 && wallet.address !== '' && 
           <ScrollView 
             refreshControl={
               <RefreshControl

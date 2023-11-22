@@ -13,6 +13,7 @@ import { truncateString } from "../../service/utility";
 import { iconNames } from '../../store/network';
 import { deleteToken } from "../../store/token";
 import { NavigationState } from "@react-navigation/native";
+import { WalletInternal } from "../../store/wallet";
 
 export default function TokenItem ({navigation, token, refreshList}: {navigation: { navigate: Function }, token: Token, refreshList: Function}) {
   const { colorMode } = useColorMode();
@@ -28,7 +29,7 @@ export default function TokenItem ({navigation, token, refreshList}: {navigation
     if (_wallet.name != '' && network && network.rpcUrl !== '') {
       const _provider = getDefaultProvider(network.rpcUrl);
          
-      const newWallet = _wallet.wallet.connect(_provider);
+      const newWallet = (new WalletInternal(_wallet.wallet)).connect(_provider);
       if (isComponentMounted) {
         setProvider(_provider);
         setWallet(newWallet);

@@ -7,6 +7,7 @@ import { EIP155_CHAINS, EIP155_SIGNING_METHODS, TEIP155Chain } from '../data/EIP
 import { getNetworks } from "../store/network";
 
 import { AppWallet } from "./state"
+import { WalletInternal } from '../store/wallet';
 
 function transformObject (
   object: any,
@@ -58,7 +59,7 @@ export async function approveEIP155Request(
     case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
     case EIP155_SIGNING_METHODS.ETH_SIGN:
       const message = getSignParamsMessage(request.params)
-      const signedMessage = await wallet?.wallet.signMessage(message)
+      const signedMessage = await (new WalletInternal((wallet as AppWallet).wallet)).signMessage(message)
       return formatJsonRpcResult(id, signedMessage)
 
     case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
@@ -68,7 +69,7 @@ export async function approveEIP155Request(
       // https://github.com/ethers-io/ethers.js/issues/687#issuecomment-714069471
       // eslint-disable-next-line functional/immutable-data
       delete types.EIP712Domain
-      const signedData = await wallet?.wallet._signTypedData(domain, types, data)
+      const signedData = await (new WalletInternal((wallet as AppWallet).wallet))._signTypedData(domain, types, data)
       return formatJsonRpcResult(id, signedData)
 
     case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
@@ -76,7 +77,7 @@ export async function approveEIP155Request(
         const provider = network ? getDefaultProvider(network.rpcUrl) : new providers.JsonRpcProvider(EIP155_CHAINS[chainId as TEIP155Chain].rpc);
       
         const request2 = request.params[0];
-        const connectedWallet = wallet?.wallet.connect(provider);
+        const connectedWallet = await (new WalletInternal((wallet as AppWallet).wallet)).connect(provider);
         const chainID = await (connectedWallet as Wallet).getChainId();
         const req = transformObject(request2, 'gas', 'gasLimit', chainID);
         const { hash } = await (connectedWallet as Wallet).sendTransaction(req);
@@ -89,7 +90,7 @@ export async function approveEIP155Request(
 
     case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
       const signTransaction = request.params[0]
-      const signature = await wallet?.wallet.signTransaction(signTransaction)
+      const signature = await (new WalletInternal((wallet as AppWallet).wallet)).signTransaction(signTransaction)
       return formatJsonRpcResult(id, signature)
 
     default:

@@ -23,6 +23,7 @@ import { getWalletHistory } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
 import { ExtendedBalance, Holding, OpenQuotes, OutputObject } from "../../types/history";
+import { WalletInternal } from "../../store/wallet";
 
 export default function WalletHistory() {
   const { colorMode } = useColorMode();
@@ -100,7 +101,7 @@ export default function WalletHistory() {
     if (_wallet.name === '') {
       //navigation.navigate('SelectWallet');
     } else {
-      setWallet(_wallet.wallet);
+      setWallet(new WalletInternal(_wallet.wallet));
     }
   }, [_wallet, network]);
 
