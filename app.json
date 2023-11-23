@@ -1,7 +1,7 @@
 {
   "expo": {
     
-    "name": "xucre-wallet",
+    "name": "Xucre Wallet",
     "slug": "xucre-mobile",
     "scheme": "xucre",
     "version": "1.0.5",
@@ -17,22 +17,23 @@
       "**/*"
     ],
     "ios": {
+      "icon": "./assets/image/icon.png",
       "supportsTablet": true,
       "bundleIdentifier": "xucre.expo.client",
       "buildNumber": "1.0.5"
     },
     "android": {
-      "icon": "./assets/icon.png",
+      "icon": "./assets/image/icon.png",
       "package": "xucre.expo.client"
     },
     "updates": {
       "url": "https://u.expo.dev/20ee0e7d-2104-47c1-87c5-f3d860714b80"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/image/icon.png"
     },
     "notification" : {
-      "icon": "./icon.png",
+      "icon": "./assets/image/icon.png",
       "color": "#ffffff"
     },
     "plugins": [
