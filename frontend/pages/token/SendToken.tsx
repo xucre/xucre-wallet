@@ -56,6 +56,7 @@ import {
   transactionList,
   walletList,
 } from "../../service/state";
+
 import { Token } from "../../service/token";
 import { Transaction } from "../../service/transaction";
 import { addToken, getTokenByChain, updateToken } from "../../store/token";
@@ -109,6 +110,24 @@ export default function SendToken({ navigation, route, storage }) {
       runAsync();
     }
   }, [network]);
+
+  useEffect(() => {
+    const runAsync = async () => {
+      const _tokens = await getTokenByChain(network.chainId);
+      const xucreToken = {
+        address: "0x924442A46EAC25646b520Da8D78218Ae8FF437C2",
+        chainId: 137,
+        name: 'Xucre',
+        type: 'token',
+      };
+      setTokens([xucreToken, ..._tokens] as readonly Token[]);
+    };
+
+    if (network) {
+      runAsync();
+    }
+  }, [network]);
+
 
   useEffect(() => {
     if (token) {

@@ -1,10 +1,30 @@
 /* eslint-disable functional/prefer-readonly-type */
 import ethers, {Wallet} from 'ethers';
+import React, {useEffect, useRef, useState} from "react";
 import {
   atom,
+  useRecoilState
 } from 'recoil';
 
+import { constructDefaultNetworks } from "../service/network"
+import { getNetworks, storeNetworks} from "../store/network";
+
 import { Network } from './network';
+
+
+  const runAsync = async () => {
+    const _networks = await getNetworks();
+    //await storeNetworks([])
+    if (!Array.isArray(_networks) || _networks.length === 0) {
+      const _newNetworks = constructDefaultNetworks();
+        console.log('_newNetworks ::: ', _newNetworks)
+      const currentNetwork = await storeNetworks(_newNetworks);
+      console.log('currentNetwork :: ', currentNetwork)
+      
+    } 
+      
+  }
+
 
 
 export type AppWallet = {
@@ -46,7 +66,19 @@ export const activeNetwork = atom({
     symbol: 'ETH',
   } as Network,
   key: 'activeNetwork'
-})
+}) 
+
+
+/* export const activeNetwork = atom({
+  default: {
+    blockExplorer: net[0].blockExplorer,
+    chainId: net[0].chainId,
+    name: net[0].name,
+    rpcUrl: net[0].rpcUrl,
+    symbol: net[0].symbol,
+  } as Network,
+  key: 'activeNetwork'
+})  */
 
 export const selectedNetwork = atom({
   default: {
