@@ -78,7 +78,21 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
         name: network.symbol,
         type: "coin",
       };
-      setTokens([coinToken, ..._tokens as Token[]]);
+      const tokenList = [coinToken, ..._tokens as Token[]];
+      if (tokenList.find((tok) => {
+        return tok.address === "0x924442A46EAC25646b520Da8D78218Ae8FF437C2" && tok.chainId === 137
+      })){
+        setTokens(tokenList);
+      } else {
+        const xucreToken = { 
+          address: "0x924442A46EAC25646b520Da8D78218Ae8FF437C2", 
+          chainId: 137, 
+          name: 'Xucre', 
+          type: 'token', 
+        }; 
+        setTokens([xucreToken, ...tokenList as Token[]]);
+      }
+      
     };
 
     if (network) {

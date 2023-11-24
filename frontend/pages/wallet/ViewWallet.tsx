@@ -25,7 +25,7 @@ import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletTransactions } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
-import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList } from "../../service/state";
+import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList, tokenList } from '../../service/state';
 import { CovalentTransaction } from "../../service/transaction";
 import { getTokenByChain } from '../../store/token';
 import NftList from "../nft/NftList";
@@ -119,10 +119,28 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
       name: network.symbol,
       type: 'coin',
     };
-    
-    if (isComponentMounted) {
-      if (_tokens) setHoldings([coinToken, ..._tokens as Token[]]);
-      if (!_tokens) setHoldings([coinToken]);
+    const xucreToken = { 
+      address: "0x924442A46EAC25646b520Da8D78218Ae8FF437C2", 
+      chainId: 137, 
+      name: 'Xucre', 
+      type: 'token', 
+    }; 
+    if (!_tokens) {
+      if (isComponentMounted) {
+        setHoldings([xucreToken, coinToken]);
+      }
+    }
+    const tokenList = [coinToken, ..._tokens as Token[]];
+    if (tokenList.find((tok) => {
+      return tok.address === "0x924442A46EAC25646b520Da8D78218Ae8FF437C2" && tok.chainId === 137
+    })){
+      if (isComponentMounted) {
+        setHoldings(tokenList);
+      }
+    } else {
+      if (isComponentMounted) {
+        setHoldings([xucreToken, ...tokenList as Token[]]);
+      }
     }
   }
   
