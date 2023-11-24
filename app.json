@@ -4,7 +4,7 @@
     "name": "Xucre Wallet",
     "slug": "xucre-mobile",
     "scheme": "xucre",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/image/icon.png",
     "userInterfaceStyle": "light",
