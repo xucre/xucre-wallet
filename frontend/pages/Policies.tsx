@@ -38,7 +38,7 @@ export default function Policies({ navigation, route }: {navigation: {navigate: 
 
     const acceptPolicy = async () => {
         await storePrivacyPolicy();
-        navigation.navigate('NetworkDefault')
+        navigation.navigate('ViewWallet')
     };
 
     const declinePolicy = () => {

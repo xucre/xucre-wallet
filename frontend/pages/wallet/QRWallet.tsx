@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 /* eslint-disable react-native/split-platform-components */
 /* eslint-disable react-native/no-inline-styles */
 import { Ionicons } from "@expo/vector-icons";
@@ -21,8 +20,8 @@ import {
   VStack
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { PermissionsAndroid, TouchableOpacity, View } from "react-native";
-import Contact from 'react-native-contacts';
+import { PermissionsAndroid, TouchableOpacity, View, Platform, NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
+import {Contact, getAll} from 'react-native-contacts';
 import Geolocation from 'react-native-geolocation-service';
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
@@ -37,20 +36,20 @@ import { activeWallet, language as stateLanguage } from "../../service/state";
 
 
 
-export default function QRWallet({ navigation, route }) {
+export default function QRWallet({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
   
   const [local, setlocal] = useState(false);
-  const [location, setLocation] = useState(false);
-  const [lat, setlat] = useState(String);
-  const [lng, setlng] = useState(String);
+  const [location, setLocation] = useState({} as Geolocation.GeoPosition);
+  const [lat, setlat] = useState(0);
+  const [lng, setlng] = useState(0);
   const { colorMode } = useColorMode();
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const initialFocusRef = React.useRef(null);
   
 
-  const [contactList, setContactList] = useState([]);
-  const [allContacts, setAllContacts] = useState([]);
+  const [contactList, setContactList] = useState([] as Contact[]);
+  const [allContacts, setAllContacts] = useState([] as Contact[]);
   const [viewWalletQR, setViewWalletQR] = useState(Boolean);
   const [showModal, setShowModal] = useState(false);
   const isFocused = useIsFocused();
@@ -59,26 +58,41 @@ export default function QRWallet({ navigation, route }) {
     getPermission();
   }, [isFocused]);
   const getPermission = () => {
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-      buttonPositive: 'Please accept bare mortal',
-      message: 'This app would like to view your contacts.',
-      title: 'Contacts',
-    }).then(res => {
-      if (res == 'granted') {
-        Contact.getAll()
-          .then(con => {
-            // work with contacts
-            const filteredContacts = con.filter((item) => item.phoneNumbers.length)
-            filteredContacts.sort((a, b) => a.displayName > b.displayName)
-            setAllContacts(filteredContacts);
-            setContactList(filteredContacts);
-          })
-          .catch(e => {
-            //
-          });
-      }
-    });
-    getLocation()
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+        buttonPositive: 'Please accept bare mortal',
+        message: 'This app would like to view your contacts.',
+        title: 'Contacts',
+      }).then(res => {
+        if (res == 'granted') {
+          getAll()
+            .then(con => {
+              // work with contacts
+              const filteredContacts = con.filter((item) => item.phoneNumbers.length)
+              filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1)
+              setAllContacts(filteredContacts);
+              setContactList(filteredContacts);
+            })
+            .catch(e => {
+              //
+            });
+        }
+      });
+      getLocation()
+    } else if (Platform.OS === 'ios') {
+      getAll().then(con => {
+        // work with contacts
+        const filteredContacts = con.filter((item) => item.phoneNumbers.length)
+        filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1)
+        setAllContacts(filteredContacts);
+        setContactList(filteredContacts);
+      })
+      .catch(e => {
+        //
+      });
+      getLocation()
+    }
+    
   };
 
 
@@ -97,7 +111,7 @@ export default function QRWallet({ navigation, route }) {
           },
           error => {
             // See error code charts below.
-            setLocation(false);
+            //setLocation();
           },
           { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 },
         );
@@ -148,13 +162,13 @@ export default function QRWallet({ navigation, route }) {
   const [displayTooltip, setDisplayTooltip] = useState(false);
 
 
-  const eventFocus = (event) => {
+  const eventFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
     const eventFocus = event
 
 
   }
 
-  const searchItem = (textSearch) => {
+  const searchItem = (textSearch: string) => {
     const data = allContacts;
     if (textSearch) {
       const newData = data.filter(item => {
@@ -169,7 +183,7 @@ export default function QRWallet({ navigation, route }) {
   }
 
   const copyToClipboard = () => {
-    Clipboard.setStringAsync(String(_wallet.wallet.address));
+    Clipboard.setStringAsync(String(_wallet.address));
     setDisplayTooltip(true);
     setTimeout(() => {
       setDisplayTooltip(false);
@@ -198,15 +212,15 @@ export default function QRWallet({ navigation, route }) {
               <QRCode
                 size={256}
                 style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%", }}
-                value={_wallet.wallet.address}
+                value={_wallet.address}
                 viewBox={`0 0 256 256`}
               />
-              <Text variant={'lg'} mt={5}>{translations[language].QRWallet.instructions}</Text>
+              <Text variant={'lg'} mt={5}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>
               <Text variant={'lg'} mt={5}>{_wallet.name}</Text>
               <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
                 color: "#fff"
               }}>
-                <Button onPress={copyToClipboard} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{_wallet.wallet.address}</Text></Button>
+                <Button onPress={copyToClipboard} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{_wallet.address}</Text></Button>
               </Tooltip>
             </Center>
 
@@ -250,7 +264,7 @@ export default function QRWallet({ navigation, route }) {
                   </View>
                   <TouchableOpacity
                     onPress={() => {
-                      const walletA = _wallet.wallet.address
+                      const walletA = _wallet.address
                       openPage('CodeCountry', item, walletA, local)
                     }}>
                     <Image
