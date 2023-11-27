@@ -53,7 +53,7 @@ import {
     language as stateLanguage,
 } from "../../service/state";
 import { truncateString } from "../../service/utility";
-import { deleteNetwork, getNetworks, storeActiveNetwork } from "../../store/network";
+import { deleteNetwork, getNetworks, storeActiveNetwork,storeNetworks } from "../../store/network";
 
 export default function NetworkDefault({ navigation, route }) {
     const [language,] = useRecoilState(stateLanguage);
@@ -97,10 +97,11 @@ export default function NetworkDefault({ navigation, route }) {
         }
 
         const openSelectNetwork = () => {
-            console.log('metadata ::: ', metadata)
+            console.log('metadataDefaul ::: ', metadata)
             setSelectedNetwork(metadata);
             setActiveNetwork(metadata);
             storeActiveNetwork(metadata);
+            storeNetworks(metadata);
             viewSelectWallet();
         }
 

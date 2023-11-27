@@ -6,7 +6,7 @@ import { Token } from "../service/token";
 export const addToken = async (token: Token) => {
   const _tokens = await EncryptedStorage.getItem("token_list");
   const tokens = JSON.parse(_tokens) as readonly Token[];
-  
+  console.log(' cr :::1 ', tokens);
   if (Array.isArray(tokens)) {
       const isSet = await EncryptedStorage.setItem(
         "token_list",

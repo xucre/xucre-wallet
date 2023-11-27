@@ -4,6 +4,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { constructDefaultNetworks } from "../service/network";
 
 export const storeNetwork = async (network) => {
+  console.log('networks componente ::: ', network);
   const _networks = await EncryptedStorage.getItem("network_list");
   const networks = JSON.parse(_networks);
   if (Array.isArray(networks)) {
@@ -22,6 +23,8 @@ export const storeNetwork = async (network) => {
 export const updateNetwork = async (network) => {
   const _networks = await EncryptedStorage.getItem("network_list");
   const networks = JSON.parse(_networks);
+
+  console.log('networks componente ::: ', networks);
   if (Array.isArray(networks)) {
     const newNetworkList = networks.map((_network) => {
       if (_network.chainId === network.chainId) {
@@ -62,6 +65,7 @@ export const deleteNetwork = async (network) => {
 }; 
 
 export const storeNetworks = async (networks) => {
+  console.log('network1 :::: store :::: ', networks);
   await EncryptedStorage.setItem(
     "network_list",
     JSON.stringify(networks)
@@ -69,6 +73,8 @@ export const storeNetworks = async (networks) => {
 };
 
 export const storeActiveNetwork = async (network) => {
+
+  console.log('network :::: store :::: ', network);
   await EncryptedStorage.setItem(
     "active_network",
     JSON.stringify(network)

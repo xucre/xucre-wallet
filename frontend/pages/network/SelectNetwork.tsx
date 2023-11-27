@@ -95,14 +95,20 @@ export default function SelectNetwork ({navigation, route}) {
 }
 
   const NetworkItem = ({metadata}) => {
+    console.log('entro select network :: ',metadata)
     const selectNetwork= () => {
-      setActiveNetwork(metadata);
       storeActiveNetwork(metadata);
+      setActiveNetwork(metadata);
+     
       //viewNetwork();
     }
 
     const openNetwork = () => {
       setSelectedNetwork(metadata);
+      console.log('metadata :::', metadata)
+      storeActiveNetwork(metadata);
+      setActiveNetwork(metadata);
+      
       viewNetwork();
     }
 

@@ -110,6 +110,8 @@ export default function ViewWallet ({navigation, route}) {
   const [holdings, setHoldings] = useState([]);
   const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
+
+  console.log('network :::', network)
   useEffect(() => {
     return () => {
       //setIsComponentMounted(false);
@@ -139,7 +141,7 @@ export default function ViewWallet ({navigation, route}) {
       type: 'coin',
     };
     
-    if (isComponentMounted) {
+    if (isComponentMounted) {coinToken
       setHoldings([coinToken, ..._tokens]);
     }
   }
