@@ -43,7 +43,7 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 - npx eas build -p ios --profile production
 
 ## How to Build APK - Deploy
-- eas build -p android --profile production
+- npx eas build -p android --profile production
 
 ## How to Build APK - Local
 - eas build -p android --local --profile production

@@ -8,6 +8,7 @@ if (typeof BigInt === 'undefined') global.BigInt = require('big-integer');
 import notifee, { EventType } from '@notifee/react-native';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import parseUrl from 'parse-url'
 import '@walletconnect/react-native-compat';
 import { useFonts } from 'expo-font';
 import {
@@ -84,7 +85,8 @@ import {createSignClient, signClient} from './service/walletConnect';
 import whatsapp from './service/whatsapp';
 import { getNotification, getTheme, storeTheme } from './store/setting';
 
-
+import * as Linking from 'expo-linking';
+import Loading from './pages/Loading';
 
 const Stack = createNativeStackNavigator();
 
@@ -186,7 +188,7 @@ export const AppWrapper = () => {
       try {
         await createSignClient();
       } catch (err) {
-        //
+        console.log('error creating sign client', err);
       }
     }
     
@@ -230,6 +232,21 @@ export const AppWrapper = () => {
     }
     return false;
   }
+
+  const prefix = Linking.createURL('/');
+  const linking = {
+    prefixes: [prefix],
+  };
+
+  Linking.addEventListener('url', async (req) => {
+    try {
+      if (signClient) {
+        await signClient.pair({uri: parseUrl(req.url).query.uri});
+      } 
+    } catch (e) {
+      console.log(e);
+    }
+  })
   
   return (
     <SafeAreaProvider>
@@ -237,6 +254,7 @@ export const AppWrapper = () => {
       <NavigationContainer 
         theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme} 
         ref={navigationRef}
+        linking={linking} fallback={<Loading />}
       >
           <Stack.Navigator initialRouteName="Home"
             screenOptions={({navigation, route}) => ({        

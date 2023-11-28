@@ -43,10 +43,11 @@ async function onDisplayNotification(id: string, translation_setting: string) {
   };
   
   await notifee.displayNotification(notificationPayload);
+  console.log('notifee displayNotification success');
 }
 export async function createSignClient() {
   try {
-    signClient = await SignClient.init({
+    const initConfig = {
       metadata: {
         description: 'Xucre Wallet',
         icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
@@ -54,13 +55,17 @@ export async function createSignClient() {
         url: env.REACT_APP_XUCRE_WALLET_SCHEME,
       },    
       projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-      //relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
-    })
+      relayUrl: 'wss://relay.walletconnect.com',
+    };
+    //console.log(initConfig);
+    signClient = await SignClient.init(initConfig)
     //const pairings = signClient.core.pairing.getPairings();
-    
+    //console.log(pairings);
     registerListeners();
+    return signClient;
   } catch (err) {
-    //
+    console.log(err);
+    return;
   }
   
 }
@@ -69,6 +74,7 @@ export const registerListeners = () => {
   
   if (signClient) {
     signClient.on("session_proposal", (event) => {
+      //console.log(event);
       const id = nanoid();
       if (AppState.currentState === 'active') {
         navigate('ConnectionRequest', {
@@ -87,23 +93,31 @@ export const registerListeners = () => {
     signClient.on("session_request", (event) => {
       // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
       //const id = nanoid();
-      
+      console.log(event);
       addNotification(String(event.id), event);
       if (
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4
       ) {
-        navigate('SignTyped', {
-          requestDetails: event
-        })
+        if (AppState.currentState === 'active') {
+          navigate('SignTyped', {
+            requestDetails: event
+          })
+        } else {
+          onDisplayNotification(String(event.id), 'session_request_sign_tx');
+        }
       } else if(
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN ||
         event.params.request.method === EIP155_SIGNING_METHODS.PERSONAL_SIGN
       ) {
-        navigate('SignEth', {
-          requestDetails: event
-        })
+        if (AppState.currentState === 'active') {
+          navigate('SignEth', {
+            requestDetails: event
+          })
+        } else {
+          onDisplayNotification(String(event.id), 'session_request_sign_tx');
+        }
       } else if(
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
       ) {
@@ -132,6 +146,7 @@ export const registerListeners = () => {
 
     signClient.on("session_ping", (event) => {
       // React to session ping event
+      console.log(event);
     });
 
     signClient.on("session_delete", (event) => {

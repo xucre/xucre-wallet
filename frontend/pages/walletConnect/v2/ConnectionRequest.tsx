@@ -48,38 +48,6 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
     setPage(page-1);
   }
 
-  const SelectWallet = ({metadata}: {metadata : AppWallet}) => {
-    const address = metadata.address;
-    const selectWallet = () => {
-      setSelectedWallets([...selectedWallets, metadata])   
-    }
-    const unSelectWallet = () => {
-      setSelectedWallets(selectedWallets.filter((val) => {
-        return val.address !== address
-      }));
-    }
-    return (
-      <HStack alignItems="center" justifyContent="space-between" p={4} rounded={'full'} bgColor={selectedWallets.includes(metadata) ? 'coolGray.200' : 'transparent'}>        
-        <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-          <Checkbox value="test" isChecked={selectedWallets.includes(metadata)} onChange={(state) => {
-            if (state) {
-              selectWallet();
-            } else {
-              unSelectWallet();
-            }
-          }} accessibilityLabel="This is a dummy checkbox" />
-          <VStack space={1}>
-              <Text fontSize="md" bold>
-                {metadata.name}
-              </Text>
-          </VStack>
-          
-          <Text color="coolGray.500">{truncateString(metadata.address, 25)}</Text>     
-        </HStack>
-      </HStack>
-    )
-  }
-
   const WalletItem = ({metadata} : {metadata : AppWallet}) => {
     const address = metadata.address;
     return (
@@ -115,7 +83,7 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
             } else {
               unSelectWallet();
             }
-          }} accessibilityLabel="This is a dummy checkbox" />
+          }} accessibilityLabel={`Checkbox used to select a specific wallet. This one is ${metadata.name}`} aria-label={`Checkbox used to select a specific wallet. This one is ${metadata.name}`} />
           <Text fontSize="md" bold>
             {metadata.name}
           </Text>
@@ -127,17 +95,24 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
 
   const approve = async () => {
     const accountList = selectedWallets.map((wallet) => {
-      return request['params']['requiredNamespaces']['eip155']['chains'].map((chain: string) => {
-        return chain+ ':' + wallet.address;
-      })
+      if (request['params']['requiredNamespaces']['eip155']) {
+        return request['params']['requiredNamespaces']['eip155']['chains'].map((chain: string) => {
+          return chain+ ':' + wallet.address;
+        })
+      } else if (request['params']['optionalNamespaces']['eip155']) {
+        return request['params']['optionalNamespaces']['eip155']['chains'].map((chain: string) => {
+          return chain+ ':' + wallet.address;
+        })
+      }
+      return wallet.address;
     })
     const payload = {
       id: request['params']['id'],
       namespaces: {
         eip155: {
           accounts: accountList.flat(),
-          events: request['params']['requiredNamespaces']['eip155']['events'],
-          methods: request['params']['requiredNamespaces']['eip155']['methods'],
+          events: request['params']['requiredNamespaces']['eip155'] ? request['params']['requiredNamespaces']['eip155']['events'] : request['params']['optionalNamespaces']['eip155']['events'],
+          methods: request['params']['requiredNamespaces']['eip155'] ? request['params']['requiredNamespaces']['eip155']['methods'] : request['params']['optionalNamespaces']['eip155']['methods'] ,
         },
       },
     };
@@ -200,7 +175,7 @@ export default function ConnectionRequest({navigation, route}: {navigation: {nav
             
               <HStack space={0} justifyContent="center" alignContent={'center'} rounded="full" mx={8} p={4} py={2} borderStyle={'solid'} borderWidth={1} borderColor={'gray'}>
                 <Avatar bg="gray.500" source={{
-                  uri: request['params'].proposer.metadata.icons[0]
+                  uri: request['params']?.proposer?.metadata?.icons[0]
                 }}></Avatar>
                 <Svg width={'50%'} height={'100%'} viewBox="0 0 91 7" fill="none">
                   <Circle cx="1.82" cy="3.82" r="1.82" fill="#D4E815"/>

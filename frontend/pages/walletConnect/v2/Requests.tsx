@@ -71,7 +71,7 @@ export default function Requests({navigation, route}: {navigation: {navigate: Fu
     }
 
     const isExpired = () => {
-      if (!metadata) {
+      if (!metadata || !metadata.active) {
         return true;
       }
       return false;
@@ -83,7 +83,7 @@ export default function Requests({navigation, route}: {navigation: {navigate: Fu
           <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>                
             <HStack alignItems="center" space={{ base: 3, md: 6 }}>
               <Avatar bg={colorMode === 'dark' ? 'coolGray.800' : 'coolGray.300'} size="md" m={2} source={{
-                uri: metadata ? metadata.peerMetadata.icons[0] : 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+                uri: metadata ? metadata?.peerMetadata?.icons[0] : 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
               }} />
               <VStack>
                 <Text color={colorMode === 'dark' ? Color.white : Color.black}>{event.id}</Text>

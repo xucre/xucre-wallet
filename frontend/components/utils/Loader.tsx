@@ -81,58 +81,73 @@ export default function Loader() {
   }, []);
 
   const bootstrap = async () => {
-    await notifee.requestPermission();
-    const initialNotification = await notifee.getInitialNotification();
-    if (initialNotification) {
-      console.log('Notification caused application to open');
-      // Add logic here that retrieves the event from storage and implements the WC Listener logic
-      const event = await getNotification(initialNotification.pressAction.id);
-      
-      if (event !== null && event.params.request.method !== null) {
-        //await deleteNotification(initialNotification.pressAction.id);
-        if (
-          event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
-          event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
-          event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4
-        ) {
-          navigate('SignTyped', {
-            requestDetails: event
-          })
-        } else if(
-          event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN ||
-          event.params.request.method === EIP155_SIGNING_METHODS.PERSONAL_SIGN
-        ) {
-          navigate('SignEth', {
-            requestDetails: event
-          })
-        } else if(
-          event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
-        ) {
-          navigate('SignTransaction', {
-            requestDetails: event
-          })
-        } else if(
-          event.params.request.method === EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION
-        ) {
-          navigate('SendTransaction', {
-            requestDetails: event
-          })
+    notifee.requestPermission().then(async (permission) => {
+      if (permission) {
+        const initialNotification = await notifee.getInitialNotification();
+        if (initialNotification) {
+          console.log('Notification caused application to open');
+          // Add logic here that retrieves the event from storage and implements the WC Listener logic
+          const event = await getNotification(initialNotification.pressAction.id);
+          
+          if (event !== null && event.params.request.method !== null) {
+            //await deleteNotification(initialNotification.pressAction.id);
+            if (
+              event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
+              event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
+              event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4
+            ) {
+              navigate('SignTyped', {
+                requestDetails: event
+              });
+              return;
+            } else if(
+              event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN ||
+              event.params.request.method === EIP155_SIGNING_METHODS.PERSONAL_SIGN
+            ) {
+              navigate('SignEth', {
+                requestDetails: event
+              });
+              return;
+            } else if(
+              event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
+            ) {
+              navigate('SignTransaction', {
+                requestDetails: event
+              })
+              return;
+            } else if(
+              event.params.request.method === EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION
+            ) {
+              navigate('SendTransaction', {
+                requestDetails: event
+              })
+              return;
+            } else {
+              await defaultRouting();
+              return;
+            }
+          } else {
+            await defaultRouting();
+            return;
+          }
         } else {
-          //
+          return;
         }
       } else {
         await defaultRouting();
+        return;
       }
-    } else {
-      await defaultRouting();
-    }
+    }).catch((err) => {
+      console.log('requestPermissionError', err);
+    })
   }
 
   const defaultRouting = async () => {
+    const _hasSigned = await hasSignedPrivacyPolicy();
     if (navigationRef.current?.getCurrentRoute()?.name === 'Home') {
       if (languageDefault) {
         navigate('Language', {});  
-      } else if (!hasSigned) {
+      } else if (!_hasSigned) {
         navigate('PrivacyPolicy', {}); 
       } else if (_wallet.name !== '') {
         navigate('ViewWallet', {});  
@@ -142,10 +157,18 @@ export default function Loader() {
     }
   }
 
+  const handleLoad = async () => {
+    bootstrap().then(async () => {
+      await defaultRouting()
+    }).catch(() => {
+      console.log('load error');
+    })
+  }
+
   useEffect(() => {
     if (!loading) {
       setTimeout(() => {
-        bootstrap();
+        handleLoad();
       }, 3000)
     }
   }, [loading])
