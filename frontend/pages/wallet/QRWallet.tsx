@@ -13,6 +13,7 @@ import {
   Icon,
   Image,
   Input,
+  KeyboardAvoidingView,
   ScrollView,
   Text,
   Tooltip,
@@ -21,7 +22,7 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { PermissionsAndroid, TouchableOpacity, View, Platform, NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
-import {Contact, getAll} from 'react-native-contacts';
+import { Contact, getAll } from 'react-native-contacts';
 import Geolocation from 'react-native-geolocation-service';
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
@@ -33,11 +34,8 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import { getIconImage } from "../../service/api";
 import { activeWallet, language as stateLanguage } from "../../service/state";
 
+export default function QRWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
-
-
-export default function QRWallet({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
-  
   const [local, setlocal] = useState(false);
   const [location, setLocation] = useState({} as Geolocation.GeoPosition);
   const [lat, setlat] = useState(0);
@@ -46,7 +44,7 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const initialFocusRef = React.useRef(null);
-  
+
 
   const [contactList, setContactList] = useState([] as Contact[]);
   const [allContacts, setAllContacts] = useState([] as Contact[]);
@@ -54,7 +52,7 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
   const [showModal, setShowModal] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
-
+    console.log('isFocused', isFocused);
     getPermission();
   }, [isFocused]);
   const getPermission = () => {
@@ -87,12 +85,12 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
         setAllContacts(filteredContacts);
         setContactList(filteredContacts);
       })
-      .catch(e => {
-        //
-      });
+        .catch(e => {
+          //
+        });
       getLocation()
     }
-    
+
   };
 
 
@@ -138,21 +136,24 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
 
   const requestLocationPermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          buttonNegative: 'Cancel',
-          buttonNeutral: 'Ask Me Later',
-          buttonPositive: 'OK',
-          message: 'Can we access your location?',
-          title: 'Geolocation Permission',
-        },
-      );
-      if (granted === 'granted') {
-        return true;
-      } else {
-        return false;
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            buttonNegative: 'Cancel',
+            buttonNeutral: 'Ask Me Later',
+            buttonPositive: 'OK',
+            message: 'Can we access your location?',
+            title: 'Geolocation Permission',
+          },
+        );
+        if (granted === 'granted') {
+          return true;
+        } else {
+          return false;
+        }
       }
+      return true;
     } catch (err) {
       return false;
     }
@@ -171,6 +172,7 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
   const searchItem = (textSearch: string) => {
     const data = allContacts;
     if (textSearch) {
+      if (!data.length) return;
       const newData = data.filter(item => {
         const itemData = item.givenName ? item.givenName.toUpperCase() : ''.toUpperCase();
         const textData = textSearch.toUpperCase();
@@ -193,14 +195,19 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
 
   const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png'
   return (
-    <ScrollView horizontal={false} style={{ flex: 1 }}>
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={{
-          height: '100%',
-          width: '100%',
-        }}>
-        <DashboardLayout title={_wallet.name} >
+    <KeyboardAvoidingView h={{
+      base: "full",
+      lg: "full"
+    }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <Box style={{ flex: 1 }}>
+        <VStack
+          style={{
+            height: '100%',
+            width: '100%',
+          }}>
+          {/*<DashboardLayout title={_wallet.name} >*/}
+
+
           <Box
             _light={{ backgroundColor: Color.white }}
             _dark={{ backgroundColor: Color.black }}
@@ -208,17 +215,17 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
             safeAreaBottom
           >
 
-            <Center mt={10} mb={6}>
+            <Center mt={10} mb={2}>
               <QRCode
-                size={256}
+                size={200}
                 style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%", }}
                 value={_wallet.address}
-                viewBox={`0 0 256 256`}
+                viewBox={`0 0 200 200`}
               />
               <Text variant={'lg'} mt={5}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>
-              <Text variant={'lg'} mt={5}>{_wallet.name}</Text>
+              <Text variant={'lg'} mt={5} mb={2} bold fontSize={20}>{_wallet.name}</Text>
               <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
-                color: "#fff"
+                color: "#ffffff"
               }}>
                 <Button onPress={copyToClipboard} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{_wallet.address}</Text></Button>
               </Tooltip>
@@ -231,120 +238,64 @@ export default function QRWallet({ navigation, route }: {navigation: {navigate: 
                 <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}
                   onChangeText={(text) => { searchItem(text) }} onFocus={(event) => { eventFocus(event) }} />
               </VStack>
-              {/* Replace ScrollView with FlatList */}
 
               <FlatList data={contactList} renderItem={({
-                  item
-                }) => <Box key={item.recordID} ><TouchableOpacity style={{
-                  alignItems: 'center',
-                  alignSelf: 'center',
-                  borderColor: colorMode === 'dark' ? Color.white : Color.gray_100,
-                  borderRadius: 10,
-                  borderWidth: 1,
-                  flexDirection: 'row',
-                  height: 70,
-                  justifyContent: 'space-between',
-                  marginTop: 10,
-                  width: '90%',
-                }}
-                >
-                  <View style={{ alignItems: 'center', flexDirection: 'row' }} key={item.recordID}>
+                item
+              }) => <Box key={item.recordID} ><TouchableOpacity style={{
+                alignItems: 'center',
+                alignSelf: 'center',
+                borderColor: colorMode === 'dark' ? Color.white : Color.gray_100,
+                borderRadius: 10,
+                borderWidth: 1,
+                flexDirection: 'row',
+                height: 70,
+                justifyContent: 'space-between',
+                marginTop: 10,
+                width: '90%',
+              }}
+              >
+                <View style={{ alignItems: 'center', flexDirection: 'row' }} key={item.recordID}>
 
-                    <Image
-                      source={ContactIcon}
-                      style={{ height: 40, marginLeft: 15, width: 40 }}
-                      alt="logo"
-                    />
-                    <View style={{ padding: 10 }}>
-                      <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{item?.displayName}</Text>
-                      <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
-                        {item?.phoneNumbers[0].number}
-                      </Text>
-                    </View>
+                  <Image
+                    source={ContactIcon}
+                    style={{ height: 40, marginLeft: 15, width: 40 }}
+                    alt="logo"
+                  />
+                  <View style={{ padding: 10 }}>
+                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{item?.displayName}</Text>
+                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
+                      {item?.phoneNumbers[0].number}
+                    </Text>
                   </View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      const walletA = _wallet.address
-                      openPage('CodeCountry', item, walletA, local)
-                    }}>
-                    <Image
-                      source={{
-                        uri: avatar,
-                      }}
-                      style={{
-                        height: 40,
-                        marginRight: 20,
-                        width: 40,
-                      }}
-                      alt="logo"
-                    />
-                  </TouchableOpacity>
-
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    const walletA = _wallet.address
+                    openPage('CodeCountry', item, walletA, local)
+                  }}>
+                  <Image
+                    source={{
+                      uri: avatar,
+                    }}
+                    style={{
+                      height: 40,
+                      marginRight: 20,
+                      width: 40,
+                    }}
+                    alt="logo"
+                  />
                 </TouchableOpacity>
 
-                </Box>} 
-                keyExtractor={item => item.recordID} 
+              </TouchableOpacity>
+
+                </Box>}
+                keyExtractor={item => item.recordID}
               />
-              {
-                /*
-                  <ScrollView>
-                    {contactList.map((contactList) => (
-                      <Box key={contactList.recordID}><TouchableOpacity style={{
-                        alignItems: 'center',
-                        alignSelf: 'center',
-                        borderColor: colorMode === 'dark' ? Color.white : Color.gray_100,
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        flexDirection: 'row',
-                        height: 70,
-                        justifyContent: 'space-between',
-                        marginTop: 10,
-                        width: '90%',
-                      }}
-                      >
-                        <View style={{ alignItems: 'center', flexDirection: 'row' }} key={contactList.recordID}>
-
-                          <Image
-                            source={ContactIcon}
-                            style={{ height: 40, marginLeft: 15, width: 40 }}
-                            alt="logo"
-                          />
-                          <View style={{ padding: 10 }}>
-                            <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{contactList.displayName}</Text>
-                            <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
-                              {contactList.phoneNumbers[0].number}
-                            </Text>
-                          </View>
-                        </View>
-                        <TouchableOpacity
-                          onPress={() => {
-                            const walletA = _wallet.wallet.address
-                            openPage('CodeCountry', contactList, walletA, local)
-                          }}>
-                          <Image
-                            source={{
-                              uri: avatar,
-                            }}
-                            style={{
-                              height: 40,
-                              marginRight: 20,
-                              width: 40,
-                            }}
-                            alt="logo"
-                          />
-                        </TouchableOpacity>
-
-                      </TouchableOpacity>
-
-                      </Box>
-                    ))}
-                  </ScrollView>
-                */
-              }
             </View>
           </Box>
-        </DashboardLayout>
-      </ScrollView>
-    </ScrollView>
+          {/*</DashboardLayout>*/}
+        </VStack>
+      </Box>
+    </KeyboardAvoidingView>
   )
 }
