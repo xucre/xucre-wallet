@@ -36,8 +36,9 @@ import { Transaction } from "../../service/transaction";
 import { getTokenByChain } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
 import { WalletInternal } from "../../store/wallet";
+import { xucreToken } from "../../service/constants";
 
-export default function SendToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const toast = useToast();
   const [language] = useRecoilState(stateLanguage);
   const token = route.params?.token;
@@ -78,21 +79,29 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
         name: network.symbol,
         type: "coin",
       };
-      const tokenList = [coinToken, ..._tokens as Token[]];
-      if (tokenList.find((tok) => {
-        return tok.address === "0x924442A46EAC25646b520Da8D78218Ae8FF437C2" && tok.chainId === 137
-      })){
-        setTokens(tokenList);
+      if (_tokens) {
+        const tokenList = [coinToken, ..._tokens as Token[]];
+        if (tokenList.find((tok) => {
+          return tok.address === xucreToken.address && tok.chainId === xucreToken.chainId
+        })) {
+          setTokens(tokenList);
+          return;
+        } else {
+          if (network.chainId === xucreToken.chainId) {
+            setTokens([xucreToken, ...tokenList]);
+            return;
+          }
+          setTokens([...tokenList as Token[]]);
+          return;
+        }
       } else {
-        const xucreToken = { 
-          address: "0x924442A46EAC25646b520Da8D78218Ae8FF437C2", 
-          chainId: 137, 
-          name: 'Xucre', 
-          type: 'token', 
-        }; 
-        setTokens([xucreToken, ...tokenList as Token[]]);
+        if (network.chainId === xucreToken.chainId) {
+          setTokens([xucreToken, coinToken]);
+          return;
+        }
+        setTokens([coinToken]);
+        return;
       }
-      
     };
 
     if (network) {
@@ -134,13 +143,13 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
     }
   }, [_wallet, network]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (amount) {
       try {
         const isTooMuch = ethers.utils.parseEther(amount).gt(balance);
         setNotEnough(isTooMuch);
       } catch (err) {
-        console.log('compare amounts error',err);
+        console.log('compare amounts error', err);
       }
     }
   }, [balance, amount])
@@ -173,7 +182,7 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
   const openPage = (pageName: string, param1: any, param2: any, param3: any, param4: any) => {
     switch (pageName) {
       case 'SendNotificationToken':
-        navigation.navigate('SendNotificationToken',{param1,param2,param3,param4});
+        navigation.navigate('SendNotificationToken', { param1, param2, param3, param4 });
         break;
     }
   }
@@ -195,9 +204,9 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
             const contract = _contract.connect(wallet);
             const gasEstimate = await contract.estimateGas.transfer(
               ethers.utils.getAddress(address),
-              ethers.utils.parseEther(amount)              
+              ethers.utils.parseEther(amount)
             )
-            console.log('gas estimate',gasEstimate);
+            console.log('gas estimate', gasEstimate);
 
             const _submitted = await contract.transfer(
               ethers.utils.getAddress(address),
@@ -207,10 +216,10 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
                 gasPrice: await provider.getGasPrice(),
               }
             );
-            console.log('submittedhash',_submitted.hash);
+            console.log('submittedhash', _submitted.hash);
             setLoadingStage('confirm');
             const result = await _submitted.wait();
-            console.log('confirmations',result.confirmations > 0);
+            console.log('confirmations', result.confirmations > 0);
 
             const _transaction = {
               chainId: _submitted.chainId,
@@ -227,8 +236,8 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
             setTransactionList([...pendingTransactions as never[], _submitted as never]);
             if (_transaction) {
               //Whatsapp Integration
-              if(checkValues){
-                openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
+              if (checkValues) {
+                openPage('SendNotificationToken', amount, address, selectedToken.name, 'send')
               }
               navigation.navigate("ViewWallet");
             }
@@ -243,7 +252,7 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
             }
             // Sending ether
             const _submitted = await wallet.sendTransaction(tx)
-            console.log('submittedhash',_submitted.hash);
+            console.log('submittedhash', _submitted.hash);
 
             setLoadingStage('confirm');
             const result = await _submitted.wait();
@@ -264,8 +273,8 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
             setTransactionList([...pendingTransactions as never[], _submitted as never]);
             if (_transaction) {
               //Whatsapp Integration
-              if(checkValues){
-                openPage('SendNotificationToken', amount, address,selectedToken.name,'send')
+              if (checkValues) {
+                openPage('SendNotificationToken', amount, address, selectedToken.name, 'send')
               }
               navigation.navigate("ViewWallet");
             }
@@ -283,7 +292,7 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
           setLoadingStage('')
         }
       } catch (err) {
-        console.log('error sending',err)
+        console.log('error sending', err)
         setLoading(false);
         setError('Error Processing');
         setLoadingStage('')
@@ -299,10 +308,10 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
     return (
       <Alert w="100%" status={'warning'}>
         <VStack space={2} flexShrink={1} w="100%">
-          <Text 
+          <Text
             color={colorMode === "dark" ? Color.black : Color.white}
             fontWeight={"bold"}>
-              {error}
+            {error}
           </Text>
         </VStack>
       </Alert>
@@ -324,7 +333,7 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
         }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        {tokens.length > 0 && 
+        {tokens.length > 0 &&
           <VStack
             minW="300px"
             w="100%"
@@ -334,7 +343,7 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
             marginBottom={20}
             marginTop={20}
           >
-            {loading && 
+            {loading &&
               <VStack>
 
                 <Spinner accessibilityLabel="Loading transaction" />
@@ -343,8 +352,8 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
                   {loadingStage === 'confirm' && 'Confirming Transaction'}
                 </Text>
               </VStack>
-            } 
-            {!loading && 
+            }
+            {!loading &&
               <>
                 <Text fontSize="2xl" bold mb={"5"} pt={1}>
                   {translations[language as keyof typeof translations].SendToken.title}
@@ -400,22 +409,22 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
                 />
 
                 <Box>
-                <HStack space={6} my={4}>
-                  {/*
+                  <HStack space={6} my={4}>
+                    {/*
                     <Checkbox onChange={setcheckValues}  defaultIsChecked={checkValues} value={'whatsapp'} >{translations[language].WhatsAppNotification.button}</Checkbox>
                   */}
-                  {notEnough && 
-                    <Alert w="100%" status={'error'}>
-                      <VStack space={2} flexShrink={1} w="100%">
-                        <Text 
-                          color={colorMode === "dark" ? Color.black : Color.white}
-                          fontWeight={"bold"}>
+                    {notEnough &&
+                      <Alert w="100%" status={'error'}>
+                        <VStack space={2} flexShrink={1} w="100%">
+                          <Text
+                            color={colorMode === "dark" ? Color.black : Color.white}
+                            fontWeight={"bold"}>
                             {translations[language as keyof typeof translations].SendToken.not_enough_error}
-                        </Text>
-                      </VStack>
-                    </Alert>
-                  }
-                </HStack>
+                          </Text>
+                        </VStack>
+                      </Alert>
+                    }
+                  </HStack>
                 </Box>
                 <Box>
                   <Box>
@@ -440,10 +449,10 @@ export default function SendToken({ navigation, route }: {navigation: {navigate:
                 </Box>
               </>
             }
-            
+
           </VStack>
         }
-        
+
       </KeyboardAvoidingView>
     </Center>
   );

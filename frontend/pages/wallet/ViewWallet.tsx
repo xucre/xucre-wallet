@@ -1,6 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { BigNumber, ethers, Wallet } from 'ethers';
-import * as Clipboard from 'expo-clipboard';
 import {
   Box,
   Button,
@@ -13,7 +12,7 @@ import {
   useColorMode,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { useRecoilState } from "recoil";
 
@@ -24,7 +23,7 @@ import CovalentItem from "../../components/transaction/CovalentItem";
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletTransactions } from "../../service/api";
-import { chainIdToNameMap } from "../../service/constants";
+import { chainIdToNameMap, xucreToken } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList, tokenList } from '../../service/state';
 import { CovalentTransaction } from "../../service/transaction";
 import { getTokenByChain } from '../../store/token';
@@ -37,8 +36,8 @@ function TabItem({
   currentTab,
   handleTabChange,
 }: {
-  tabName : string,
-  currentTab:string,
+  tabName: string,
+  currentTab: string,
   handleTabChange: Function
 }) {
   return (
@@ -76,18 +75,16 @@ function TabItem({
   );
 }
 
-export default function ViewWallet ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
+export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
   const [currentTab, setCurrentTab] = useState(translations[language as keyof typeof translations].ViewWallet.tab_list[0]);
-  const [_walletList, ] = useRecoilState(walletList);
-  const [_wallet, ] = useRecoilState(activeWallet);
+  const [_walletList,] = useRecoilState(walletList);
+  const [_wallet,] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
-  const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
-  const [network, ] = useRecoilState(activeNetwork);
-  const [networks, setAllNetworks] = useRecoilState(networkList);
+  const [network,] = useRecoilState(activeNetwork);
   const [holdings, setHoldings] = useState([] as Token[]);
   const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
@@ -105,45 +102,46 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
   const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
   const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
 
-
-  // Transitions
-  const [displayTooltip, setDisplayTooltip] = useState(false);
-  
   const syncTokens = async () => {
     const _tokens = await getTokenByChain(network.chainId);
-    
     const coinToken = {
-      address : '',
-      amount : BigNumber.from(0),
-      chainId : network.chainId,
+      address: '',
+      amount: BigNumber.from(0),
+      chainId: network.chainId,
       name: network.symbol,
       type: 'coin',
     };
-    const xucreToken = { 
-      address: "0x924442A46EAC25646b520Da8D78218Ae8FF437C2", 
-      chainId: 137, 
-      name: 'Xucre', 
-      type: 'token', 
-    }; 
     if (!_tokens) {
       if (isComponentMounted) {
-        setHoldings([xucreToken, coinToken]);
+        if (network.chainId === xucreToken.chainId) {
+          setHoldings([xucreToken, coinToken]);
+          return;
+        }
+        setHoldings([coinToken]);
+        return;
       }
     }
     const tokenList = [coinToken, ..._tokens as Token[]];
-    if (tokenList.find((tok) => {
-      return tok.address === "0x924442A46EAC25646b520Da8D78218Ae8FF437C2" && tok.chainId === 137
-    })){
-      if (isComponentMounted) {
+    const hasXucre = tokenList.find((tok) => {
+      return tok.address === xucreToken.address && tok.chainId === xucreToken.chainId
+    });
+    if (!!hasXucre) {
+      if (isComponentMounted && tokenList) {
         setHoldings(tokenList);
+        return;
       }
     } else {
-      if (isComponentMounted) {
-        setHoldings([xucreToken, ...tokenList as Token[]]);
+      if (isComponentMounted && tokenList) {
+        if (network.chainId === xucreToken.chainId) {
+          setHoldings([xucreToken, coinToken]);
+          return;
+        }
+        setHoldings([...tokenList as Token[]]);
+        return;
       }
     }
   }
-  
+
   const syncTransactions = async () => {
     const _transactions = await getWalletTransactions(_wallet.address, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
 
@@ -159,7 +157,7 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
       setLoading(false);
     }
     setLoading(true);
-    runAsync();    
+    runAsync();
   }
 
   useEffect(() => {
@@ -167,45 +165,37 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
       navigation.navigate('SelectWallet');
     } else if (network) {
       if (_wallet.name === '') {
-        setWallet( new WalletInternal(_walletList[0].wallet));
+        setWallet(new WalletInternal(_walletList[0].wallet));
       } else {
         setWallet(new WalletInternal(_wallet.wallet));
       }
-      
+
     }
   }, [_wallet, _walletList, network]);
 
-  useEffect(() => {    
+  useEffect(() => {
     setTimeout(() => {
-      if(holdings.length === 0) {
+      if (holdings.length === 0) {
         syncTokens();
       }
       if (transactions.length === 0) {
         syncTransactions();
-      }      
+      }
     }, 1000)
   }, [])
-
-  const copyToClipboard = () => {
-    Clipboard.setStringAsync(String(wallet.address));
-    setDisplayTooltip(true);
-    setTimeout(() => {
-      setDisplayTooltip(false);
-    }, 1000)
-  };
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     setHoldings([]);
     setTransactions([]);
-    
-    setTimeout(async() => {
+
+    setTimeout(async () => {
       await syncTokens();
       await syncTransactions();
       setRefreshing(false);
     }, 100)
   }, []);
-  
+
   const addToken = () => {
     navigation.navigate('AddToken');
   }
@@ -213,7 +203,7 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
   const receiveFunds = () => {
     navigation.navigate('QRWallet');
   }
-  
+
   const sendFunds = () => {
     navigation.navigate('SendToken');
   }
@@ -226,7 +216,7 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
     navigation.navigate('NFT');
   }
 
-  const buyTokens = () =>{
+  const buyTokens = () => {
     navigation.navigate('BuyToken');
   }
 
@@ -246,36 +236,36 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
 
   const middleButtons = [
     {
-        action: sendFunds,
-        icon: "arrow-right-alt",
-        text: buttonSend,
+      action: sendFunds,
+      icon: "arrow-right-alt",
+      text: buttonSend,
     },
     {
-        action: buyTokens,
-        icon: "monetization-on",
-        text: buttonBuy,
+      action: buyTokens,
+      icon: "monetization-on",
+      text: buttonBuy,
     },
     {
-        action: receiveFunds,
-        icon: "arrow-downward",
-        text: buttonReceive,
+      action: receiveFunds,
+      icon: "arrow-downward",
+      text: buttonReceive,
     },
     {
       action: connectWallet,
       icon: "qr-code-2",
       text: buttonConnect,
-  },
+    },
   ];
 
   return (
     <DashboardLayout title={_wallet.name}>
-      {network && network.rpcUrl === '' && 
-        <Center         
-        _light={{ backgroundColor: 'white' }}
-        _dark={{ backgroundColor: 'black' }}
-        height={'100%'}
-        justifyContent={'center'}
-        safeAreaBottom
+      {network && network.rpcUrl === '' &&
+        <Center
+          _light={{ backgroundColor: 'white' }}
+          _dark={{ backgroundColor: 'black' }}
+          height={'100%'}
+          justifyContent={'center'}
+          safeAreaBottom
         >
           <Center bg={colorMode === 'dark' ? "primary.400" : "tertiary.500"} _text={{
             color: "white",
@@ -284,12 +274,12 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
             base: 200,
             lg: 250
           }}>
-              <Text fontSize="md" _light={{color: 'lightText'}} _dark={{color: 'darkText'}} bold={true}>{translations[language as keyof typeof translations].ViewWallet.no_network_error}</Text>
-            </Center>
+            <Text fontSize="md" _light={{ color: 'lightText' }} _dark={{ color: 'darkText' }} bold={true}>{translations[language as keyof typeof translations].ViewWallet.no_network_error}</Text>
+          </Center>
         </Center>
       }
-      {network && network.rpcUrl !== '' && 
-          <Box         
+      {network && network.rpcUrl !== '' &&
+        <Box
           _light={{ backgroundColor: 'white' }}
           _dark={{ backgroundColor: 'black' }}
           height={'100%'}
@@ -328,7 +318,7 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
               middleButtons.map((btn, i) => {
                 return (
                   <Button
-                    key={'middleButtons'+i}
+                    key={'middleButtons' + i}
                     variant="solid"
                     backgroundColor={'gray.700'}
                     _stack={{
@@ -345,18 +335,18 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
                     }
                     _text={{
                       color: 'white'
-                    }} 
+                    }}
                     paddingY={4}
                     paddingX={3}
-                    borderRadius={10}           
+                    borderRadius={10}
                     onPress={btn.action}
                   >
                     <Text color={'white'} fontSize={12}>{btn.text}</Text>
-                  </Button> 
+                  </Button>
                 )
               })
             }
-            
+
           </HStack>
           <HStack
             mt={5}
@@ -375,11 +365,11 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
               })
             }
           </HStack>
-          <ScrollView 
+          <ScrollView
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
-                onRefresh={onRefresh}              
+                onRefresh={onRefresh}
               />
             }
           >
@@ -389,8 +379,8 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
                   <VStack space={2} >
                     {
                       holdings.map((val, i) => {
-                        return (                        
-                          <TokenItem key={val.name+i} token={val} navigation={navigation} refreshList={onRefresh}/>                        
+                        return (
+                          <TokenItem key={val.name + i} token={val} navigation={navigation} refreshList={onRefresh} />
                         )
                       })
                     }
@@ -404,8 +394,8 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
                   <VStack space={2} direction={'column-reverse'}>
                     {
                       transactions.map((val, i) => {
-                        return (                        
-                          <CovalentItem key={val.tx_hash} transaction={val} navigation={navigation}/>                        
+                        return (
+                          <CovalentItem key={val.tx_hash} transaction={val} navigation={navigation} />
                         )
                       })
                     }
@@ -415,12 +405,12 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
 
               {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[2] &&
                 <Box my={6} >
-                  <NftList navigation={navigation} route={route}/>
+                  <NftList navigation={navigation} route={route} />
                 </Box>
               }
             </VStack>
           </ScrollView>
-          
+
           {false && currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && transactions.length > 0 &&
             <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language as keyof typeof translations].ViewWallet.clear_button}</Text></Button>
           }
@@ -428,7 +418,7 @@ export default function ViewWallet ({navigation, route}: {navigation: {navigate:
         </Box>
       }
 
-      
+
     </DashboardLayout>
   )
 }

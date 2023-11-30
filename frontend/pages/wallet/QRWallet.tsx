@@ -262,7 +262,7 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
                     alt="logo"
                   />
                   <View style={{ padding: 10 }}>
-                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{item?.displayName}</Text>
+                    <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black }}>{item?.displayName || item.givenName}</Text>
                     <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, marginTop: 4 }} >
                       {item?.phoneNumbers[0].number}
                     </Text>

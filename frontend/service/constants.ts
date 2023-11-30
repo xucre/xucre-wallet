@@ -80,3 +80,5 @@ export const chainIdToNameMap = {
   137:'matic-mainnet', 
   80001: 'matic-mumbai', 
 };
+
+export const xucreToken = {chainId: 137, address: '0x924442A46EAC25646b520Da8D78218Ae8FF437C2', name: 'Xucre',type: 'token'}
