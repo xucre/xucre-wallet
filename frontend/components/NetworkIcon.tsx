@@ -24,7 +24,7 @@ import {
   useColorModeValue,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
@@ -32,10 +32,10 @@ import { Network } from "../service/network";
 import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../service/state";
 
 
-export default function NetworkIcon({navigation}: {navigation: {navigate: Function}}) {
-  const [language, ] = useRecoilState(stateLanguage);
+export default function NetworkIcon({ navigation }: { navigation: { navigate: Function } }) {
+  const [language,] = useRecoilState(stateLanguage);
   const [network, setSelectedNetwork] = useRecoilState(selectedNetwork);
-  const {colorMode} = useColorMode();
+  const { colorMode } = useColorMode();
   const [avatar, setAvatar] = useState('');
   const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
   //const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/'+ _activeNetwork.symbol.toLowerCase() +'.png';
@@ -45,8 +45,8 @@ export default function NetworkIcon({navigation}: {navigation: {navigate: Functi
     const runAsync = async () => {
       //
     }
-    if (_activeNetwork.symbol !== null && _activeNetwork.symbol !== '') {
-      setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/'+ _activeNetwork.symbol.toLowerCase() +'.png');
+    if (_activeNetwork.symbol && _activeNetwork.symbol !== '') {
+      setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + _activeNetwork.symbol.toLowerCase() + '.png');
       setSelectedNetwork(_activeNetwork as Network)
     }
     runAsync();
@@ -57,14 +57,14 @@ export default function NetworkIcon({navigation}: {navigation: {navigate: Functi
   }, [avatar])
   return (
     <>
-      {avatar !== '' && 
-        <Button variant={'unstyled'} onPress={() => {navigation.navigate('ViewNetwork')}}>
+      {avatar !== '' &&
+        <Button variant={'unstyled'} onPress={() => { navigation.navigate('ViewNetwork') }}>
           <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
-              uri: avatar
-            }} />
+            uri: avatar
+          }} />
         </Button>
       }
     </>
-    
+
   );
 }

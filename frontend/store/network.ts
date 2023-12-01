@@ -16,13 +16,13 @@ export const storeNetwork = async (network: Network) => {
     } else {
       await EncryptedStorage.setItem(
         "network_list",
-        JSON.stringify([network])
+        JSON.stringify([...constructDefaultNetworks()])
       );
     }
   } else {
     await EncryptedStorage.setItem(
       "network_list",
-      JSON.stringify([network])
+      JSON.stringify([...constructDefaultNetworks()])
     );
   }
   
@@ -31,25 +31,33 @@ export const storeNetwork = async (network: Network) => {
 export const updateNetwork = async (network: { blockExplorer?: string | undefined; chainId: any; name?: string; rpcUrl?: string; symbol?: string; }) => {
   const _networks = await EncryptedStorage.getItem("network_list");
   //console.log('updateNetwork', _networks);
-  const networks = JSON.parse(_networks as string);
-  if (Array.isArray(networks)) {
-    const newNetworkList = networks.map((_network) => {
-      if (_network.chainId === network.chainId) {
-        return network;
-      } else {
-        return _network;
-      }
-    });
-    await EncryptedStorage.setItem(
-      "network_list",
-      JSON.stringify(newNetworkList)
-    );
+  if (_networks) {
+    const networks = JSON.parse(_networks as string);
+    if (Array.isArray(networks)) {
+      const newNetworkList = networks.map((_network) => {
+        if (_network.chainId === network.chainId) {
+          return network;
+        } else {
+          return _network;
+        }
+      });
+      await EncryptedStorage.setItem(
+        "network_list",
+        JSON.stringify(newNetworkList)
+      );
+    } else {
+      await EncryptedStorage.setItem(
+        "network_list",
+        JSON.stringify([...constructDefaultNetworks()])
+      );
+    }
   } else {
     await EncryptedStorage.setItem(
       "network_list",
-      JSON.stringify([network])
+      JSON.stringify([...constructDefaultNetworks()])
     );
   }
+  
 };
 
 export const deleteNetwork = async (network: { chainId: any; }) => { 
@@ -67,7 +75,7 @@ export const deleteNetwork = async (network: { chainId: any; }) => {
   } else { 
     await EncryptedStorage.setItem( 
       "network_list", 
-      JSON.stringify([]) 
+      JSON.stringify([...constructDefaultNetworks()]) 
     ); 
   } 
 }; 

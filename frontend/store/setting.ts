@@ -126,33 +126,37 @@ export const deleteNotification = async (id: string) => {
 export const getNotification = async (id: string) => {
   const _events = await EncryptedStorage.getItem("connect_events");
   console.log('getNotifications', _events);
-  const events = JSON.parse(_events as string);
-  if (events) {
-    if (events[id]) {
-      return events[id];
+  if (_events) {
+    const events = JSON.parse(_events as string);
+    if (events) {
+      if (events[id]) {
+        return events[id];
+      }
+
+      return null;
     }
-
-    return null;
   }
-
   return null;
 };
 
 export const getAllNotifications = async () => {
   const _events = await EncryptedStorage.getItem("connect_events");
   console.log('getAllNotifications', _events);
-  const events = JSON.parse(_events as string);
-  if (events) {  
-    return Object.values(events).sort((a : any,b: any) => {
-      if ( a.id < b.id ){
-        return 1;
-      }
-      if ( a.id > b.id ){
-        return -1;
-      }
-      return 0;
-    });
+  if (_events) {
+    const events = JSON.parse(_events as string);
+    if (events) {  
+      return Object.values(events).sort((a : any,b: any) => {
+        if ( a.id < b.id ){
+          return 1;
+        }
+        if ( a.id > b.id ){
+          return -1;
+        }
+        return 0;
+      });
+    }
   }
+  
 
   return null;
 };
