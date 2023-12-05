@@ -89,3 +89,7 @@ export const PromiseHelperAllSettled = (promises: any[]) => {
       });
   }));
 };
+
+export const convertDollarAmountToCurrency = (dollarValue: number, conversionRate: number) => {
+  return conversionRate * dollarValue;
+}
