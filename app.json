@@ -3,7 +3,7 @@
     "name": "Xucre Wallet",
     "slug": "xucre-mobile",
     "scheme": "xucre",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "orientation": "portrait",
     "icon": "./assets/image/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
       "icon": "./assets/image/icon.png",
       "supportsTablet": true,
       "bundleIdentifier": "xucre.expo.client",
-      "buildNumber": "1.0.10"
+      "buildNumber": "1.0.11"
     },
     "android": {
       "icon": "./assets/image/icon.png",
