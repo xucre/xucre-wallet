@@ -32,7 +32,7 @@ import { Network } from "../service/network";
 import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../service/state";
 
 
-export default function NetworkIcon({ navigation }: { navigation: { navigate: Function } }) {
+export default function NetworkIcon({ navigation, close }: { navigation: { navigate: Function }, close: Function }) {
   const [language,] = useRecoilState(stateLanguage);
   const [network, setSelectedNetwork] = useRecoilState(selectedNetwork);
   const { colorMode } = useColorMode();
@@ -58,7 +58,7 @@ export default function NetworkIcon({ navigation }: { navigation: { navigate: Fu
   return (
     <>
       {avatar !== '' &&
-        <Button variant={'unstyled'} onPress={() => { navigation.navigate('ViewNetwork') }}>
+        <Button variant={'unstyled'} onPress={() => { navigation.navigate('ViewNetwork'); close(false); }}>
           <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
             uri: avatar
           }} />

@@ -319,9 +319,9 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   }
 
   return (
-    <Center
+    <Box
       style={{
-        backgroundColor: colorMode === "dark" ? Color.gray_200 : Color.white,
+        backgroundColor: colorMode === "dark" ? Color.black : Color.white,
       }}
       flex={1}
       px="3"
@@ -341,7 +341,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             flex="1"
             justifyContent="space-between"
             marginBottom={20}
-            marginTop={20}
+            space={2}
           >
             {loading &&
               <VStack>
@@ -454,7 +454,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
         }
 
       </KeyboardAvoidingView>
-    </Center>
+    </Box>
   );
 }
 

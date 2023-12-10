@@ -60,6 +60,7 @@ export const storePassword = async (old: string, _password: string) => {
   const credentials = await Keychain.getGenericPassword();
   const unlockDate = Date();
   if (credentials) {
+    console.log(credentials);
     if (credentials.password === old) {      
       await Keychain.setGenericPassword('app', _password);
       await EncryptedStorage.setItem('lastUnlock', JSON.stringify(unlockDate));

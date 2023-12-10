@@ -6,7 +6,7 @@ const values : TranslationType = {
     chain_placeholder: "Select Chain",
     name_placeholder: "Enter Token Name",
     submit_button: "Save Token",
-    title: "Wallet"
+    title: "Add Token"
   },
   App: {
     select_network_title: "Networks",
