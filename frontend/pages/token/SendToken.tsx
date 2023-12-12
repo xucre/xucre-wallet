@@ -340,7 +340,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             alignItems="center"
             flex="1"
             justifyContent="space-between"
-            marginBottom={20}
+            marginBottom={0}
             space={2}
           >
             {loading &&

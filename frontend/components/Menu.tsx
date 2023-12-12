@@ -278,7 +278,7 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
           safeAreaTop
         >
           <HStack justifyContent={'space-between'} pt={4} pb={0}>
-            <Pressable onPress={() => { setDrawerStatus(true) }}>
+            <Pressable onPress={() => { setDrawerStatus(true); navigate('ViewWallet'); }}>
               <Avatar source={
                 colorMode === 'dark' ? require('../assets/images/icon-green.png') : require('../assets/images/icon-green.png')
               } size="sm" bg={Color.transparent} m={1} ml={2} mb={1} mt={2}></Avatar>

@@ -93,74 +93,70 @@ export default function AddToken({ navigation, route }: { navigation: { navigate
   };
 
   return (
-    <Box w={'full'} h={'full'} marginTop={5}>
-      <>
-        <Box marginBottom={3}>
-          <VStack
-            minW="300px"
-            w="100%"
-            alignItems="center"
-            justifyContent="space-between"
-            marginTop={0}
-          >
-            <Text fontSize="2xl" bold mb={"5"} pt={1}>
-              {translations[language as keyof typeof translations].AddToken.title}
-            </Text>
+    <Box marginTop={5} marginBottom={3}>
+      <VStack
+        minW="300px"
+        w="100%"
+        alignItems="center"
+        justifyContent="space-between"
+        marginTop={0}
+      >
+        <Text fontSize="2xl" bold mb={"5"} pt={1}>
+          {translations[language as keyof typeof translations].AddToken.title}
+        </Text>
 
-            <Input
-              w="90%"
-              h={16}
-              mb={2}
-              value={name}
-              onChange={handleNameChange}
-              placeholder={translations[language as keyof typeof translations].AddToken.name_placeholder}
-            />
-            <Select
-              selectedValue={chainId}
-              w="90%"
-              h={16}
-              accessibilityLabel={translations[language as keyof typeof translations].AddToken.chain_placeholder}
-              placeholder={translations[language as keyof typeof translations].AddToken.chain_placeholder}
-              _selectedItem={{
-                bg: colorMode === "dark" ? "primary.600" : "info.600",
-                color: Color.white,
-                fontSize: "lg",
-                endIcon: <CheckIcon size="5" />
-              }}
-              mt={1}
-              mb={"2"}
-              onValueChange={itemValue => setChainId(itemValue)}
-            >
-              {
-                networks.map((_network) => {
-                  return (
-                    <Select.Item key={_network.chainId} label={_network.name} value={_network.chainId.toString()} />
-                  )
-                })
-              }
-            </Select>
-            <Input
-              w="90%"
-              h={16}
-              mb={2}
-              value={address}
-              onChange={handleAddressChange}
-              placeholder={translations[language as keyof typeof translations].AddToken.address_placeholder}
-            />
+        <Input
+          w="90%"
+          h={16}
+          mb={2}
+          value={name}
+          onChange={handleNameChange}
+          placeholder={translations[language as keyof typeof translations].AddToken.name_placeholder}
+        />
+        <Select
+          selectedValue={chainId}
+          w="90%"
+          h={16}
+          accessibilityLabel={translations[language as keyof typeof translations].AddToken.chain_placeholder}
+          placeholder={translations[language as keyof typeof translations].AddToken.chain_placeholder}
+          _selectedItem={{
+            bg: colorMode === "dark" ? "primary.600" : "info.600",
+            color: Color.white,
+            fontSize: "lg",
+            endIcon: <CheckIcon size="5" />
+          }}
+          mt={1}
+          mb={"2"}
+          onValueChange={itemValue => setChainId(itemValue)}
+        >
+          {
+            networks.map((_network) => {
+              return (
+                <Select.Item key={_network.chainId} label={_network.name} value={_network.chainId.toString()} />
+              )
+            })
+          }
+        </Select>
+        <Input
+          w="90%"
+          h={16}
+          mb={2}
+          value={address}
+          onChange={handleAddressChange}
+          placeholder={translations[language as keyof typeof translations].AddToken.address_placeholder}
+        />
 
-            <Button
-              mt={6}
-              w="90%"
-              colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-              onPress={() => { saveToken(); }}
-              isLoading={loading}
-              disabled={name.length === 0 || chainId.length === 0 || address.length === 0 || type.length === 0}
-            >
-              <Text color={'white'}>{translations[language as keyof typeof translations].AddToken.submit_button}</Text>
-            </Button>
-          </VStack>
-        </Box>
-      </>
+        <Button
+          mt={6}
+          w="90%"
+          colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+          onPress={() => { saveToken(); }}
+          isLoading={loading}
+          disabled={name.length === 0 || chainId.length === 0 || address.length === 0 || type.length === 0}
+        >
+          <Text color={'white'}>{translations[language as keyof typeof translations].AddToken.submit_button}</Text>
+        </Button>
+      </VStack>
     </Box>
   );
 }

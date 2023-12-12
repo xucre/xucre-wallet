@@ -31,6 +31,7 @@ export default function Loader() {
   } = useColorMode();
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [loading, setLoading] = useState(true);
+  //const [hasBooted, setHasBooted] = useState(false);
 
 
   //Loading Fonts
@@ -71,12 +72,17 @@ export default function Loader() {
   }, [])
 
   useEffect(() => {
+    let hasBooted = false;
     const subscription = AppState.addEventListener("change", async (nextAppState) => {
       if (
         appState.current.match(/inactive|background/) &&
         nextAppState === "active"
       ) {
-        await bootstrap()
+        if (!hasBooted) {
+          console.log('calling bootstrap');
+          hasBooted = true;
+          await bootstrap();
+        }
       }
       // eslint-disable-next-line functional/immutable-data
       appState.current = nextAppState;

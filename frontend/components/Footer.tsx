@@ -33,13 +33,15 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
   const swapButton = translations[language as keyof typeof translations].Buttons_Footer.buttonswap;
   const supportButton = translations[language as keyof typeof translations].Buttons_Footer.support;
   const profileButton = translations[language as keyof typeof translations].Buttons_Footer.profile;
+  const feedButton = translations[language as keyof typeof translations].Buttons_Footer?.feed || 'Feed';
+
 
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: homeButton },
     { disabled: false, highlight: false, name: 'image-search', text: buttonNft },
     { highlight: true, name: 'swap-vertical-circle', text: swapButton },
     { highlight: false, name: 'live-help', text: supportButton },
-    { disabled: true, highlight: false, name: 'person', text: profileButton },
+    { disabled: true, highlight: false, name: 'dynamic-feed', text: feedButton },
   ];
 
   const openPage = (pageName: string) => {
@@ -68,14 +70,15 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
     <Hidden from="md">
       <HStack
         justifyContent={'space-evenly'}
+        alignItems={'flex-start'}
         safeAreaBottom
-        h="8%"
+        h="9%"
         overflow={'visible'}
         width="96%"
-        position="absolute"
+        position={'absolute'}
         left="0"
         right="0"
-        bottom="2"
+        bottom="10"
         alignSelf="center"
         borderTopLeftRadius="20"
         borderTopRightRadius="20"
@@ -85,6 +88,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         paddingTop="0"
         _light={{ backgroundColor: 'gray.50' }}
         _dark={{ backgroundColor: 'gray.800' }}
+
       >
         {footerIcons.map((item, index) => {
           return (
@@ -95,23 +99,22 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
               width={1}
               _stack={{
                 flexDirection: 'column',
-                justifyContent: 'start',
+                justifyContent: 'end',
                 alignItems: 'center'
               }}
-              marginBottom={5}
               startIcon={
                 <Icon
                   as={MaterialIcons}
                   name={item.name}
-                  size={Platform.OS === 'android' ? '10' : '8'}
+                  size={item.highlight ? '10' : '8'}
                   _dark={{
                     color: item.highlight ? item.disabled ? "primary.400" : "primary.800" : item.disabled ? "coolGray.400" : "coolGray.100"
                   }}
                   _light={{
                     color: item.highlight ? item.disabled ? "primary.600" : "primary.400" : item.disabled ? "coolGray.300" : "coolGray.500"
                   }}
-                  marginTop={item.highlight ? '-3' : '0'}
-                  marginBottom={item.highlight ? 3 : 0}
+                  marginTop={item.highlight ? '-5' : '0'}
+                  marginBottom={item.highlight ? 2 : 0}
                 />
               }
               _text={item.highlight ? {
@@ -123,11 +126,11 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
                 textAlign: 'center'
               } : {
                 color: item.disabled ?
-                  colorMode === 'dark' ? "primary.800" : "coolGray.400" :
-                  colorMode === 'dark' ? "primary.600" : "coolGray.600",
+                  colorMode === 'dark' ? "coolGray.400" : "coolGray.400" :
+                  colorMode === 'dark' ? "coolGray.100" : "coolGray.600",
                 width: 'full',
                 height: 10,
-                textAlign: 'center'
+                textAlign: 'center',
               }}
               paddingY={item.highlight ? 2 : 0}
               onPress={() => { openPage(item.text) }}
@@ -137,6 +140,6 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
           );
         })}
       </HStack>
-    </Hidden>
+    </Hidden >
   );
 }
