@@ -58,7 +58,7 @@ export default function NetworkIcon({ navigation, close }: { navigation: { navig
   return (
     <>
       {avatar !== '' &&
-        <Button variant={'unstyled'} onPress={() => { navigation.navigate('ViewNetwork'); close(false); }}>
+        <Button variant={'unstyled'} onPress={() => { navigation.navigate('SelectNetwork'); close(false); }}>
           <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
             uri: avatar
           }} />

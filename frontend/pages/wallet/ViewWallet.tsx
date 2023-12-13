@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Center,
+  FlatList,
   HStack,
   Icon,
   Pressable,
@@ -15,6 +16,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { useRecoilState } from "recoil";
+//import { TokenBalancesListView } from "@covalenthq/goldrush-kit";
+
 
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
@@ -30,6 +33,8 @@ import { getTokenByChain } from '../../store/token';
 import NftList from "../nft/NftList";
 import { Token } from "../../service/token";
 import { WalletInternal } from "../../store/wallet";
+import { TouchableOpacity } from "react-native";
+import { Color } from "../../../GlobalStyles";
 
 function TabItem({
   tabName,
@@ -191,7 +196,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
     setTimeout(async () => {
       await syncTokens();
-      await syncTransactions();
+      //await syncTransactions();
       setRefreshing(false);
     }, 100)
   }, []);
@@ -330,7 +335,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                         as={MaterialIcons}
                         name={btn.icon}
                         color={'white'}
-                        size="5"
+                        size={7}
                       />
                     }
                     _text={{
@@ -348,7 +353,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             }
 
           </HStack>
-          <HStack
+          {/*<HStack
             mt={5}
             mx={5}
             borderBottomWidth={1}
@@ -364,52 +369,27 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                 )
               })
             }
-          </HStack>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
+          </HStack>*/}
+          <VStack space="5" px={2} mb={10}>
+            {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
+              <Box m={6} >
+                <Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>
+                <FlatList data={holdings} refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                } renderItem={
+                  ({ item, index }) => <TokenItem key={item.name + index} token={item} navigation={navigation} refreshList={onRefresh} />
+                }
+                  keyExtractor={item => item.name}
+                />
+              </Box>
             }
-          >
-            <VStack space="5" px={2} mb={10}>
-              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&
-                <Box m={6} >
-                  <VStack space={2} >
-                    {
-                      holdings.map((val, i) => {
-                        return (
-                          <TokenItem key={val.name + i} token={val} navigation={navigation} refreshList={onRefresh} />
-                        )
-                      })
-                    }
-                  </VStack>
-                  <Button onPress={addToken} mt={4} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>
-                </Box>
-              }
-
-              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] &&
-                <Box m={6} >
-                  <VStack space={2} direction={'column-reverse'}>
-                    {
-                      transactions.map((val, i) => {
-                        return (
-                          <CovalentItem key={val.tx_hash} transaction={val} navigation={navigation} />
-                        )
-                      })
-                    }
-                  </VStack>
-                </Box>
-              }
-
-              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[2] &&
-                <Box my={6} >
-                  <NftList navigation={navigation} route={route} />
-                </Box>
-              }
-            </VStack>
-          </ScrollView>
+            {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && wallet.address !== '' &&
+              <TokenBalancesListView address={wallet.address} />*/
+            }
+          </VStack>
 
           {false && currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && transactions.length > 0 &&
             <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language as keyof typeof translations].ViewWallet.clear_button}</Text></Button>

@@ -116,8 +116,12 @@ export const getNetworks = async () => {
   return constructDefaultNetworks();
 }
 
-export const iconNames = {
-  1: 'ETH',
-  137: 'PLY',
-  80001: 'PLY'
+export const coinIconNames = {
+  1: 'eth',
+  137: 'matic',
+  80001: 'matic',
+}
+
+export const tokenIconNames = {
+  '137-0x924442a46eac25646b520da8d78218ae8ff437c2' : 'xucre'
 }

@@ -106,7 +106,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
                 <Icon
                   as={MaterialIcons}
                   name={item.name}
-                  size={item.highlight ? '10' : '8'}
+                  size={item.highlight ? 10 : 7}
                   _dark={{
                     color: item.highlight ? item.disabled ? "primary.400" : "primary.800" : item.disabled ? "coolGray.400" : "coolGray.100"
                   }}
