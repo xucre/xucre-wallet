@@ -107,6 +107,7 @@ const values : TranslationType  = {
   },
   Menu: {
     connections_button: 'CONNECTIONS',
+    currency_button: 'CURRENCY',
     network_button: 'MAATLA-TL',
     nft_button: 'NFTS',
     password_button: 'ICHTACAYOOH',

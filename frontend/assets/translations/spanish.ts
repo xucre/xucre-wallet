@@ -107,6 +107,7 @@ const values : TranslationType = {
   },
   Menu: {
     connections_button: 'CONEXIONES',
+    currency_button: 'CURRENCY',
     network_button: "REDES",
     nft_button: "NFTS",
     password_button: "CONTRASEÑA",

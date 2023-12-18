@@ -26,7 +26,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from "native-base";
-import React, { useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
@@ -58,7 +58,7 @@ import SetPassword from './pages/SetPassword';
 import SupportPage from './pages/SupportPage';
 import CreateNetwork from './pages/network/CreateNetwork';
 import NetworkDefault from './pages/network/NetworkDefault';
-import Currency from './service/Currency';
+import Currency from './pages/Currency';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
 import NftList from './pages/nft/NftList';
@@ -82,7 +82,7 @@ import SignTransaction from './pages/walletConnect/v2/SignTransaction';
 import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import { navigate, navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
-import {createSignClient, signClient} from './service/walletConnect';
+import { createSignClient, signClient } from './service/walletConnect';
 import whatsapp from './service/whatsapp';
 import { getNotification, getTheme, storeTheme } from './store/setting';
 
@@ -117,7 +117,7 @@ const AppDarkTheme = {
 };
 
 // extend the theme
-export const theme = extendTheme({ 
+export const theme = extendTheme({
   colors: {
     // Add new color
     primary: {
@@ -145,11 +145,11 @@ export const theme = extendTheme({
       900: '#1B1E3F',
     },
   },
- });
+});
 
-export default function App(): JSX.Element { 
+export default function App(): JSX.Element {
   //const StackNavigator = createThemedComponent(Stack.Navigator);
-  
+
 
   return (
     //<DAppProvider config={finalConfig}>
@@ -167,8 +167,8 @@ export const AppWrapper = () => {
     'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
   });
   const [scheme, setScheme] = useState('');
-  const [routeState, setRouteState] = useState('');  
-  const [language, ] = useRecoilState(stateLanguage);
+  const [routeState, setRouteState] = useState('');
+  const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
 
@@ -183,7 +183,7 @@ export const AppWrapper = () => {
   const {
     colorMode,
     setColorMode
-  } = useColorMode();  
+  } = useColorMode();
   useEffect(() => {
     const runAsync = async () => {
       try {
@@ -192,7 +192,7 @@ export const AppWrapper = () => {
         console.log('error creating sign client', err);
       }
     }
-    
+
     runAsync();
   }, []);
 
@@ -214,19 +214,19 @@ export const AppWrapper = () => {
         setScheme(clientTheme);
       }
     }
-    
+
     runAsync();
   }, []);
 
   const hideHeader = (name: string) => {
     if (
-      name === 'Home' || 
-      name === 'Language' || 
-      name === 'ConnectionRequest' || 
-      name === 'SignTransaction' || 
-      name === 'SendTransaction' || 
-      name === 'SignEth' || 
-      name === 'SignTyped' || 
+      name === 'Home' ||
+      name === 'Language' ||
+      name === 'ConnectionRequest' ||
+      name === 'SignTransaction' ||
+      name === 'SendTransaction' ||
+      name === 'SignEth' ||
+      name === 'SignTyped' ||
       name === 'PrivacyPolicy'
     ) {
       return true;
@@ -242,166 +242,166 @@ export const AppWrapper = () => {
   Linking.addEventListener('url', async (req) => {
     try {
       if (signClient) {
-        await signClient.pair({uri: parseUrl(req.url).query.uri});
-      } 
+        await signClient.pair({ uri: parseUrl(req.url).query.uri });
+      }
     } catch (e) {
       console.log(e);
     }
   })
-  
+
   return (
     <SafeAreaProvider>
       <Loader />
-      <NavigationContainer 
-        theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme} 
+      <NavigationContainer
+        theme={scheme === 'dark' ? AppDarkTheme : AppLightTheme}
         ref={navigationRef}
         linking={linking} fallback={<Loading />}
       >
-          <Stack.Navigator initialRouteName="Home"
-            screenOptions={({navigation, route}) => ({        
-              headerLeft: () => {                
-                return hideHeader(route.name) ? <></> : <Menu navigation={navigation} route={route} setScheme={setScheme} />;
-              },
-              headerRight: () => {
-                return hideHeader(route.name) ? <></> : <Notifications />;
-              },
-            })}
-            screenListeners={{
-              state: (e) => {
-                setRouteState(uuidv4());
-              },
-            }}
-          >
-            <Stack.Screen name="Home" component={LandingPage} options={{ 
-              headerShown: false,
-              headerTitle : "",
-            }} ></Stack.Screen>
-            <Stack.Screen name="Language" component={LanguagePage} options={{ 
-              headerShown: false,
-              headerTitle : "",
-            }} ></Stack.Screen>
-            
-            <Stack.Screen name="NewWallet" component={NewWallet} options={{ 
-              title: '', 
-            }} ></Stack.Screen> 
-            <Stack.Screen name="CreateWallet" component={CreateWallet} options={{ 
-              title: '', 
-            }} ></Stack.Screen> 
-            <Stack.Screen name="RecoverWallet" component={RecoverWallet} options={{ 
-              title: '', 
-            }} ></Stack.Screen>                  
-            <Stack.Screen name="SelectWallet" component={SelectWallet} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.SelectWallet?.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="ViewWallet" component={ViewWallet} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.ViewWallet?.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="WalletHistory" component={WalletHistory} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.WalletHistory?.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{ 
-              title: '', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.SelectNetwork?.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="NetworkDefault" component={NetworkDefault} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.SelectNetwork?.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="Currency" component={Currency} options={{ 
-              headerTitleAlign: 'left',
-              title: '', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.ViewNetwork?.title,  
-            }} ></Stack.Screen>
-            <Stack.Screen name="AddToken" component={AddToken} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.AddToken?.title, 
-            }} ></Stack.Screen>                  
-            <Stack.Screen name="QRWallet" component={QRWallet} options={{ 
-              title: '', 
-            }} ></Stack.Screen>      
-            <Stack.Screen name="SendToken" component={SendToken} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.SendToken?.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="SwapToken" component={SwapToken} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations]?.SwapToken?.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="BuyToken" component={BuyToken} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations].SwapToken.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="SupportPage" component={SupportPage} options={{ 
-              headerTitleAlign: 'left',
-              title: ' ', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{ 
-              headerTitleAlign: 'left',
-              title: ' ', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="CodeCountry" component={CodeCountry} options={{ 
-              headerTitleAlign: 'left',
-              title: ' ', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="SendNotificationToken" component={SendNotificationToken} options={{ 
-              headerTitleAlign: 'left',
-              title: ' ', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="NFT" component={NftList} options={{
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations].SwapToken.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="QRReader" component={QRReader} options={{ 
-              title: '', 
-            }} ></Stack.Screen>            
-            <Stack.Screen name="Connections" component={Connections} options={{ 
-              headerTitleAlign: 'left',
-              title: 'Connections', 
-            }} ></Stack.Screen>       
-            <Stack.Screen name="Requests" component={Requests} options={{ 
-              headerTitleAlign: 'left',
-              title: 'Requests', 
-            }} ></Stack.Screen>            
-            <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{ 
-              title: '', 
-            }} ></Stack.Screen>
-            <Stack.Screen name="SignTyped" component={SignTypedData} options={{ 
-              headerTitleAlign: 'left',
-              title: ' '//translations[language].SignTyped.title, 
-            }} ></Stack.Screen>
-            <Stack.Screen name="SignEth" component={EthSign} options={{ 
-              headerTitleAlign: 'left',
-              title: ' '//translations[language].SignEth.title, 
-            }} ></Stack.Screen>                  
-            <Stack.Screen name="SignTransaction" component={SignTransaction} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations].SignTransaction.header, 
-            }} ></Stack.Screen>           
-            <Stack.Screen name="SendTransaction" component={SendTransaction} options={{ 
-              headerTitleAlign: 'left',
-              title: ' '//translations[language].SendTransaction.title, 
-            }} ></Stack.Screen>    
-            <Stack.Screen name="SetPassword" component={SetPassword} options={{ 
-              headerTitleAlign: 'left',
-              title: translations[language as keyof typeof translations].SetPassword.title, 
-            }} ></Stack.Screen>
-          </Stack.Navigator>
+        <Stack.Navigator initialRouteName="Home"
+          screenOptions={({ navigation, route }) => ({
+            headerLeft: () => {
+              return hideHeader(route.name) ? <></> : <Menu navigation={navigation} route={route} setScheme={setScheme} />;
+            },
+            headerRight: () => {
+              return hideHeader(route.name) ? <></> : <Notifications />;
+            },
+          })}
+          screenListeners={{
+            state: (e) => {
+              setRouteState(uuidv4());
+            },
+          }}
+        >
+          <Stack.Screen name="Home" component={LandingPage} options={{
+            headerShown: false,
+            headerTitle: "",
+          }} ></Stack.Screen>
+          <Stack.Screen name="Language" component={LanguagePage} options={{
+            headerShown: false,
+            headerTitle: "",
+          }} ></Stack.Screen>
+
+          <Stack.Screen name="NewWallet" component={NewWallet} options={{
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="CreateWallet" component={CreateWallet} options={{
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="RecoverWallet" component={RecoverWallet} options={{
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="SelectWallet" component={SelectWallet} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.SelectWallet?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="ViewWallet" component={ViewWallet} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.ViewWallet?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="WalletHistory" component={WalletHistory} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.WalletHistory?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.SelectNetwork?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="NetworkDefault" component={NetworkDefault} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.SelectNetwork?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="Currency" component={Currency} options={{
+            headerTitleAlign: 'left',
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.ViewNetwork?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="AddToken" component={AddToken} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.AddToken?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="QRWallet" component={QRWallet} options={{
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="SendToken" component={SendToken} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.SendToken?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="SwapToken" component={SwapToken} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations]?.SwapToken?.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="BuyToken" component={BuyToken} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations].SwapToken.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="SupportPage" component={SupportPage} options={{
+            headerTitleAlign: 'left',
+            title: ' ',
+          }} ></Stack.Screen>
+          <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{
+            headerTitleAlign: 'left',
+            title: ' ',
+          }} ></Stack.Screen>
+          <Stack.Screen name="CodeCountry" component={CodeCountry} options={{
+            headerTitleAlign: 'left',
+            title: ' ',
+          }} ></Stack.Screen>
+          <Stack.Screen name="SendNotificationToken" component={SendNotificationToken} options={{
+            headerTitleAlign: 'left',
+            title: ' ',
+          }} ></Stack.Screen>
+          <Stack.Screen name="NFT" component={NftList} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations].SwapToken.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="QRReader" component={QRReader} options={{
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="Connections" component={Connections} options={{
+            headerTitleAlign: 'left',
+            title: 'Connections',
+          }} ></Stack.Screen>
+          <Stack.Screen name="Requests" component={Requests} options={{
+            headerTitleAlign: 'left',
+            title: 'Requests',
+          }} ></Stack.Screen>
+          <Stack.Screen name="ConnectionRequest" component={ConnectionRequest} options={{
+            title: '',
+          }} ></Stack.Screen>
+          <Stack.Screen name="SignTyped" component={SignTypedData} options={{
+            headerTitleAlign: 'left',
+            title: ' '//translations[language].SignTyped.title, 
+          }} ></Stack.Screen>
+          <Stack.Screen name="SignEth" component={EthSign} options={{
+            headerTitleAlign: 'left',
+            title: ' '//translations[language].SignEth.title, 
+          }} ></Stack.Screen>
+          <Stack.Screen name="SignTransaction" component={SignTransaction} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations].SignTransaction.header,
+          }} ></Stack.Screen>
+          <Stack.Screen name="SendTransaction" component={SendTransaction} options={{
+            headerTitleAlign: 'left',
+            title: ' '//translations[language].SendTransaction.title, 
+          }} ></Stack.Screen>
+          <Stack.Screen name="SetPassword" component={SetPassword} options={{
+            headerTitleAlign: 'left',
+            title: translations[language as keyof typeof translations].SetPassword.title,
+          }} ></Stack.Screen>
+        </Stack.Navigator>
       </NavigationContainer>
       <Listener />
     </SafeAreaProvider>
   )
 }
 
-export const ToggleDarkMode = ({setScheme} : {setScheme: Function}) => {
+export const ToggleDarkMode = ({ setScheme }: { setScheme: Function }) => {
   const {
     colorMode,
     setColorMode
