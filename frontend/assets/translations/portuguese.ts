@@ -44,6 +44,12 @@ const values : TranslationType  = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: 'Salvar',
     chainId_placeholder: 'Digite o ID da cadeia',

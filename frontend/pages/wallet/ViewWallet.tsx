@@ -226,7 +226,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   }
 
   const connectWallet = () => {
-    navigation.navigate('QRReader');
+    navigation.navigate('ConnectionManagement');
   }
 
 
@@ -290,35 +290,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           height={'100%'}
           safeAreaBottom
         >
-          {
-            /*<VStack space={4} p={3}>
-              <HStack justifyContent={'space-between'}>
-                <Text fontSize={'lg'}>{_wallet.name}</Text>
-                <Badge rounded={6} variant={'solid'} >
-                  <Text color={'lightText'}>{network.chainId}</Text>
-                </Badge>
-              </HStack>            
-              <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
-                color: "#fff"
-              }}>
-                <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
-              </Tooltip>           
-            </VStack>*/
-          }
 
           {
             <TotalBalance />
           }
-          {
-            /*<HStack my={2}>
-              <Button.Group isAttached colorScheme="muted" size="full">
-                <Button onPress={receiveFunds} width={'1/3'} py={3}><Text>Recieve</Text></Button>
-                <Button width={'1/3'} py={3} colorScheme={'darkBlue'} onPress={swapTokens} ><Text>Swap</Text></Button>
-                <Button width={'1/3'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
-              </Button.Group>
-            </HStack>*/
-          }
-          <HStack space="2" alignItems="center" justifyContent={'space-around'} marginTop={2} marginLeft={2} marginRight={2}>
+          <HStack space="2" alignItems="center" justifyContent={'space-around'} marginTop={0} marginLeft={2} marginRight={2}>
             {
               middleButtons.map((btn, i) => {
                 return (
@@ -353,23 +329,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             }
 
           </HStack>
-          {/*<HStack
-            mt={5}
-            mx={5}
-            borderBottomWidth={1}
-            borderBottomColor={'gray.700'}
-            w="90%"
-            justifyContent="space-around"
-            borderRadius="sm"
-          >
-            {
-              tabList.map((tab, index) => {
-                return (
-                  <TabItem key={index} tabName={tab} currentTab={currentTab} handleTabChange={handleTabChange} />
-                )
-              })
-            }
-          </HStack>*/}
           <VStack space="5" px={2} mb={10}>
             {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
               <Box m={6} >

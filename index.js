@@ -32,7 +32,7 @@ process.version = 'v9.40';
 import notifee, { EventType } from '@notifee/react-native';
 const { registerRootComponent } = require('expo');
 const { default: App } = require('./frontend/App');
-
+//console.log(notifee);
 notifee.onBackgroundEvent(async ({ type, detail }) => {
   const { notification, pressAction } = detail;
   console.log('background action', detail.pressAction.id);

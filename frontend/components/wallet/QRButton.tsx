@@ -4,6 +4,7 @@ import {
   Center,
   IconButton,
   ScrollView,
+  Text,
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
@@ -32,18 +33,20 @@ export default function QRButton({ address }: { address: string }) {
         as: MaterialIcons,
         name: "qr-code"
       }} />
-      <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose} >
+      <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose} size={'full'}>
         <AlertDialog.Content>
-          <AlertDialog.CloseButton />
-          <AlertDialog.Header>{translations[language as keyof typeof translations]?.QRWallet.instructions}</AlertDialog.Header>
+          {/*<AlertDialog.CloseButton />
+          <AlertDialog.Header>{translations[language as keyof typeof translations]?.QRWallet.instructions}</AlertDialog.Header>*/}
           <AlertDialog.Body>
             <Center >
+              <Text marginY={8}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>
               <QRCode
-                size={250}
-                style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%", }}
+                size={350}
+                style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%" }}
                 value={address}
                 viewBox={`0 0 200 200`}
               />
+              <Text marginY={4}></Text>
             </Center>
           </AlertDialog.Body>
           <AlertDialog.Footer>

@@ -25,7 +25,7 @@ import { activeNetwork, activeWallet, networkList, language as stateLanguage } f
 import { ExtendedBalance, Holding, OpenQuotes, OutputObject } from "../../types/history";
 import { WalletInternal } from "../../store/wallet";
 
-export default function WalletHistory() {
+export default function TotalBalance() {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
@@ -66,15 +66,17 @@ export default function WalletHistory() {
     try {
       const historyResults = await getWalletHistory(wallet.address, chainName as string);
       const outputData = processJsonData(historyResults);
-
       // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
       //const isReady = outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
       const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, _i) => {
         return {
-          direction: 'down', 
+          ...finalVal,
           quotes: [...finalVal.quotes, d]
         } as OpenQuotes;
-      }, {} as OpenQuotes)
+      }, {
+        direction: 'down',
+        quotes: []
+      } as OpenQuotes)
       // END TESTING PORTION
       const finalQuotes = openQuotes.quotes.map((d) => {
         return {
@@ -85,22 +87,30 @@ export default function WalletHistory() {
           y: Math.round((d.totalQuote + Number.EPSILON) * 100) / 100
         }
       });
+      //console.log(finalQuotes[0]);
+      //console.log(finalQuotes[1]);
       setCurrentHoldings(finalQuotes[0]);
+      //console.log('1');
+      const percent = (((finalQuotes[1].y - finalQuotes[0].y) / finalQuotes[0].y) || 0).toFixed(0) + '%';
+      //console.log('2');
+      const trend = finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat';
+      //console.log('3');
+      const y = (finalQuotes[1].y - finalQuotes[0].y).toFixed(2);
+      //console.log('4');
       setSecondToLastHoldings({
-        percent: (((finalQuotes[1].y - finalQuotes[0].y)/finalQuotes[0].y) || 0).toFixed(0)+ '%' ,
-        trend: finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat',
-        y: (finalQuotes[1].y - finalQuotes[0].y).toFixed(2),
+        percent,
+        trend,
+        y
       })
     } catch (err) {
       //
+      console.log(err);
     }
-    
+
   }
 
   useEffect(() => {
-    if (_wallet.name === '') {
-      //navigation.navigate('SelectWallet');
-    } else {
+    if (_wallet.name !== '' && network) {
       setWallet(new WalletInternal(_wallet.wallet));
     }
   }, [_wallet, network]);
@@ -118,20 +128,6 @@ export default function WalletHistory() {
     }
   }, [wallet, chainName])
 
-
-
-  useEffect(() => {
-    //setHoldings([]);
-  }, [])
-
-  const copyToClipboard = () => {
-    Clipboard.setStringAsync(String(wallet.address));
-    setDisplayTooltip(true);
-    setTimeout(() => {
-      setDisplayTooltip(false);
-    }, 1000)
-  };
-
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
@@ -146,7 +142,7 @@ export default function WalletHistory() {
   }, [])
 
   const processJsonData = (jsonData: { error: any; data: { items: any[]; }; } | null) => {
-    const output : OutputObject = {
+    const output: OutputObject = {
       isTokenValue: false,
       itemsWithRecentOpenQuote: [],
       openQuotesByDay: [],
@@ -161,7 +157,7 @@ export default function WalletHistory() {
 
       item.holdings.forEach((holding: Holding) => {
         const date = holding.timestamp.split("T")[0];
-
+        //console.log(holding);
         if (holding.open) {
           const existingEntry = output.openQuotesByDay.find((entry) => entry.date === date);
 
@@ -171,7 +167,7 @@ export default function WalletHistory() {
           } else {
             output.openQuotesByDay.push({
               date, totalQuote: holding.open.quote,
-              quoteRate: undefined
+              quoteRate: holding.quote_rate
             });
           }
 
@@ -195,7 +191,7 @@ export default function WalletHistory() {
 
     return output;
   }
-  
+
   const formatCurrency = (amount: string) => {
     return Number.parseFloat(amount).toFixed(2);
   }
@@ -204,34 +200,34 @@ export default function WalletHistory() {
     <Box
       _light={{ backgroundColor: 'white' }}
       _dark={{ backgroundColor: 'black' }}
-      safeAreaBottom
+      my={4}
     >
-    
+
       {
         <Box bg={colorMode === 'dark' ? "primary.600" : "tertiary.500"} padding={3} borderRadius={10} marginX={2} >
-            
+
           <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>{translations[language as keyof typeof translations].totalBalance.title}</Text>
           <HStack paddingBottom={0} space={1}>
             <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >${currentHoldings ? formatCurrency(currentHoldings.y.toString()) : '0.00'}</Text></Heading>
             <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
-            
+
           </HStack>
-          
+
           <Badge rounded={10} variant={'solid'} backgroundColor={colorMode === 'dark' ? "black" : "primary.500"} width={'2/5'} marginTop={2}>
             <HStack paddingY={1} alignItems={'center'}>
-              {secondToLastHoldings.trend === 'up' && 
-                <Icon as={MaterialIcons} name="trending-up" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />              
+              {secondToLastHoldings.trend === 'up' &&
+                <Icon as={MaterialIcons} name="trending-up" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
               }
-              {secondToLastHoldings.trend === 'flat' && 
-                <Icon as={MaterialIcons} name="trending-flat" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />              
+              {secondToLastHoldings.trend === 'flat' &&
+                <Icon as={MaterialIcons} name="trending-flat" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
               }
-              {secondToLastHoldings.trend === 'down' && 
-                <Icon as={MaterialIcons} name="trending-down" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />              
+              {secondToLastHoldings.trend === 'down' &&
+                <Icon as={MaterialIcons} name="trending-down" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
               }
-              <Text textAlign={'left'} color={colorMode === 'dark' ? 'white': 'black'} marginRight={1.5}>${formatCurrency(secondToLastHoldings.y)}</Text>
+              <Text textAlign={'left'} color={colorMode === 'dark' ? 'white' : 'black'} marginRight={1.5}>${formatCurrency(secondToLastHoldings.y)}</Text>
               <Text textAlign={'left'} color={'coolGray.500'}>{`(${secondToLastHoldings.percent})`}</Text>
             </HStack>
-            
+
           </Badge>
         </Box>
       }
