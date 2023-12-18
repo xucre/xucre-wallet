@@ -45,7 +45,7 @@ export default function NetworkDefault({ navigation, route }: {navigation: {navi
     }, [tokenImage])
 
     const viewSelectWallet = () => {
-        navigation.navigate('SelectWallet');
+        navigation.navigate('Currency');
     }
 
     const getIconNetwork = async (metadata: any) => {

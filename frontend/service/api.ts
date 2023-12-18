@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import { env } from './constants';
 
@@ -115,3 +115,19 @@ export const getWhatsAppToken = async () => {
     return null;
   }
 }
+
+  export const conversionTokens = (cValue: string) => {
+    //Main Params
+    const valueToConvert = 'https://pgoh3ugkwf7bg4avrcwe5yts7e0epnon.lambda-url.sa-east-1.on.aws/conversion?currency=' + cValue
+    async function endPoint(): Promise<any> {
+        try {
+            const response: AxiosResponse = await axios.get(valueToConvert)
+            return response.data
+        } catch (error) {
+            console.log('error ', error)
+        }
+    }
+
+    return endPoint(
+
+

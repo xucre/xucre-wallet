@@ -58,6 +58,7 @@ import SetPassword from './pages/SetPassword';
 import SupportPage from './pages/SupportPage';
 import CreateNetwork from './pages/network/CreateNetwork';
 import NetworkDefault from './pages/network/NetworkDefault';
+import Currency from './service/Currency';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
 import NftList from './pages/nft/NftList';
@@ -311,6 +312,10 @@ export const AppWrapper = () => {
             <Stack.Screen name="NetworkDefault" component={NetworkDefault} options={{ 
               headerTitleAlign: 'left',
               title: translations[language as keyof typeof translations]?.SelectNetwork?.title, 
+            }} ></Stack.Screen>
+            <Stack.Screen name="Currency" component={Currency} options={{ 
+              headerTitleAlign: 'left',
+              title: '', 
             }} ></Stack.Screen>
             <Stack.Screen name="ViewNetwork" component={ViewNetwork} options={{ 
               headerTitleAlign: 'left',
