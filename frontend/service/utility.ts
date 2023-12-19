@@ -2,6 +2,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 import { env } from './constants';
+import { ExtendedBalance, Holding, OutputObject } from '../types/history';
 
 //Static References
 
@@ -92,4 +93,55 @@ export const PromiseHelperAllSettled = (promises: any[]) => {
 
 export const convertDollarAmountToCurrency = (dollarValue: number, conversionRate: number) => {
   return conversionRate * dollarValue;
+}
+
+export const processJsonData = (jsonData: { error: any; data: { items: any[]; }; } | null) => {
+  const output: OutputObject = {
+    isTokenValue: false,
+    itemsWithRecentOpenQuote: [],
+    openQuotesByDay: [],
+  };
+
+  if (jsonData === null || jsonData.error) {
+    return output;
+  }
+
+  jsonData.data.items.forEach((item) => {
+    let mostRecentOpenQuote: ExtendedBalance | null = null;
+
+    item.holdings.forEach((holding: Holding) => {
+      const date = holding.timestamp.split("T")[0];
+      //console.log(holding);
+      if (holding.open) {
+        const existingEntry = output.openQuotesByDay.find((entry) => entry.date === date);
+
+        if (existingEntry) {
+          existingEntry.totalQuote += holding.open.quote;
+          existingEntry.quoteRate = holding.quote_rate;
+        } else {
+          output.openQuotesByDay.push({
+            date, totalQuote: holding.open.quote,
+            quoteRate: holding.quote_rate
+          });
+        }
+
+        if (!mostRecentOpenQuote || mostRecentOpenQuote.timestamp as number < parseFloat(holding.timestamp)) {
+          mostRecentOpenQuote = holding.open;
+        }
+      }
+    });
+
+    if (mostRecentOpenQuote) {
+      output.itemsWithRecentOpenQuote.push({
+        contract: {
+          address: item.contract_address,
+          name: item.contract_name,
+          ticker_symbol: item.contract_ticker_symbol,
+        },
+        mostRecentOpenQuote,
+      });
+    }
+  });
+
+  return output;
 }

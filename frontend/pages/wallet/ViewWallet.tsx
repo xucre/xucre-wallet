@@ -292,7 +292,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
         >
 
           {
-            <TotalBalance />
+            <TotalBalance navigate={navigation.navigate} />
           }
           <HStack space="2" alignItems="center" justifyContent={'space-around'} marginTop={0} marginLeft={2} marginRight={2}>
             {

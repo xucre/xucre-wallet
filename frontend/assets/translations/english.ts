@@ -266,7 +266,8 @@ const values : TranslationType = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
-    title: "History"
+    title: "History",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Send WhatsApp notification",

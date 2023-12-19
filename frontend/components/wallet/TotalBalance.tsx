@@ -24,8 +24,10 @@ import { chainIdToNameMap } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
 import { ExtendedBalance, Holding, OpenQuotes, OutputObject } from "../../types/history";
 import { WalletInternal } from "../../store/wallet";
+import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
+import { processJsonData } from "../../service/utility";
 
-export default function TotalBalance() {
+export default function TotalBalance({ navigate }: { navigate: Function }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
@@ -38,6 +40,8 @@ export default function TotalBalance() {
   const [network,] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
   const [chainName, setChainName] = useState(chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap] || 1);
+  const conversionRate = 1;
+  const currency = 'USD';
   const [currentHoldings, setCurrentHoldings] = useState({
     meta: {
       'date': ''
@@ -51,16 +55,6 @@ export default function TotalBalance() {
     y: '0.00',
 
   })
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
-  const tabList = translations[language as keyof typeof translations].ViewWallet.tab_list;
-
-  // Transitions
-  const [displayTooltip, setDisplayTooltip] = useState(false);
 
   const getData = async () => {
     try {
@@ -84,7 +78,7 @@ export default function TotalBalance() {
             'date': d.date
           },
           x: moment(d.date).unix(),
-          y: Math.round((d.totalQuote + Number.EPSILON) * 100) / 100
+          y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
         }
       });
       //console.log(finalQuotes[0]);
@@ -105,6 +99,10 @@ export default function TotalBalance() {
     } catch (err) {
       //
       console.log(err);
+      setTimeout(() => {
+        getData();
+      }, 1000)
+
     }
 
   }
@@ -141,57 +139,6 @@ export default function TotalBalance() {
     //setAllNetworks([])
   }, [])
 
-  const processJsonData = (jsonData: { error: any; data: { items: any[]; }; } | null) => {
-    const output: OutputObject = {
-      isTokenValue: false,
-      itemsWithRecentOpenQuote: [],
-      openQuotesByDay: [],
-    };
-
-    if (jsonData === null || jsonData.error) {
-      return output;
-    }
-
-    jsonData.data.items.forEach((item) => {
-      let mostRecentOpenQuote: ExtendedBalance | null = null;
-
-      item.holdings.forEach((holding: Holding) => {
-        const date = holding.timestamp.split("T")[0];
-        //console.log(holding);
-        if (holding.open) {
-          const existingEntry = output.openQuotesByDay.find((entry) => entry.date === date);
-
-          if (existingEntry) {
-            existingEntry.totalQuote += holding.open.quote;
-            existingEntry.quoteRate = holding.quote_rate;
-          } else {
-            output.openQuotesByDay.push({
-              date, totalQuote: holding.open.quote,
-              quoteRate: holding.quote_rate
-            });
-          }
-
-          if (!mostRecentOpenQuote || mostRecentOpenQuote.timestamp as number < parseFloat(holding.timestamp)) {
-            mostRecentOpenQuote = holding.open;
-          }
-        }
-      });
-
-      if (mostRecentOpenQuote) {
-        output.itemsWithRecentOpenQuote.push({
-          contract: {
-            address: item.contract_address,
-            name: item.contract_name,
-            ticker_symbol: item.contract_ticker_symbol,
-          },
-          mostRecentOpenQuote,
-        });
-      }
-    });
-
-    return output;
-  }
-
   const formatCurrency = (amount: string) => {
     return Number.parseFloat(amount).toFixed(2);
   }
@@ -202,35 +149,37 @@ export default function TotalBalance() {
       _dark={{ backgroundColor: 'black' }}
       my={4}
     >
+      <Pressable onPress={() => navigate('WalletHistory')}>
+        {
+          <Box bg={colorMode === 'dark' ? "primary.600" : "tertiary.500"} padding={3} borderRadius={10} marginX={2} >
 
-      {
-        <Box bg={colorMode === 'dark' ? "primary.600" : "tertiary.500"} padding={3} borderRadius={10} marginX={2} >
+            <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>{translations[language as keyof typeof translations].totalBalance.title}</Text>
 
-          <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>{translations[language as keyof typeof translations].totalBalance.title}</Text>
-          <HStack paddingBottom={0} space={1}>
-            <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >${currentHoldings ? formatCurrency(currentHoldings.y.toString()) : '0.00'}</Text></Heading>
-            <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
+            <HStack paddingBottom={0} space={1}>
+              <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >{CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}{currentHoldings ? formatCurrency(currentHoldings.y.toString()) : '0.00'}</Text></Heading>
+              <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
 
-          </HStack>
-
-          <Badge rounded={10} variant={'solid'} backgroundColor={colorMode === 'dark' ? "black" : "primary.500"} width={'2/5'} marginTop={2}>
-            <HStack paddingY={1} alignItems={'center'}>
-              {secondToLastHoldings.trend === 'up' &&
-                <Icon as={MaterialIcons} name="trending-up" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
-              }
-              {secondToLastHoldings.trend === 'flat' &&
-                <Icon as={MaterialIcons} name="trending-flat" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
-              }
-              {secondToLastHoldings.trend === 'down' &&
-                <Icon as={MaterialIcons} name="trending-down" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
-              }
-              <Text textAlign={'left'} color={colorMode === 'dark' ? 'white' : 'black'} marginRight={1.5}>${formatCurrency(secondToLastHoldings.y)}</Text>
-              <Text textAlign={'left'} color={'coolGray.500'}>{`(${secondToLastHoldings.percent})`}</Text>
             </HStack>
 
-          </Badge>
-        </Box>
-      }
+            <Badge rounded={10} variant={'solid'} backgroundColor={colorMode === 'dark' ? "black" : "primary.500"} width={'2/5'} marginTop={2}>
+              <HStack paddingY={1} alignItems={'center'}>
+                {secondToLastHoldings.trend === 'up' &&
+                  <Icon as={MaterialIcons} name="trending-up" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
+                }
+                {secondToLastHoldings.trend === 'flat' &&
+                  <Icon as={MaterialIcons} name="trending-flat" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
+                }
+                {secondToLastHoldings.trend === 'down' &&
+                  <Icon as={MaterialIcons} name="trending-down" color={colorMode === 'dark' ? "primary.500" : "darkText"} size={'sm'} marginRight={1.5} />
+                }
+                <Text textAlign={'left'} color={colorMode === 'dark' ? 'white' : 'black'} marginRight={1.5}>${formatCurrency(secondToLastHoldings.y)}</Text>
+                <Text textAlign={'left'} color={'coolGray.500'}>{`(${secondToLastHoldings.percent})`}</Text>
+              </HStack>
+
+            </Badge>
+          </Box>
+        }
+      </Pressable>
     </Box>
   )
 }
