@@ -41,7 +41,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
     { disabled: false, highlight: false, name: 'image-search', text: buttonNft },
     { highlight: true, name: 'swap-vertical-circle', text: swapButton },
     { highlight: false, name: 'live-help', text: supportButton },
-    { disabled: false, highlight: false, name: 'dynamic-feed', text: feedButton },
+    { disabled: true, highlight: false, name: 'dynamic-feed', text: feedButton },
   ];
 
   const openPage = (pageName: string) => {
@@ -149,7 +149,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
 
               }}
               paddingY={item.highlight ? 2 : 0}
-              onPress={() => { openPage(item.text) }}
+              onPress={() => { if (!item.disabled) { openPage(item.text) } }}
             >
               {item.text}
             </Button>
