@@ -44,6 +44,12 @@ const values : TranslationType  = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: "Malhuiaa",
     chainId_placeholder: 'Ahaquiaa Chain ID',
@@ -260,7 +266,8 @@ const values : TranslationType  = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
-    title: "Necocteentiaa"
+    title: "Necocteentiaa",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Ihuaa WhatsApp tenemachtiliztli",

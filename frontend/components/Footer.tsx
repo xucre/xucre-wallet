@@ -55,8 +55,8 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
       case 'History':
         navigation.navigate('WalletHistory');
         break;
-      case 'Profile':
-        //navigation.navigate('Profile');
+      case 'Feed':
+        navigation.navigate('ProfileList');
         break;
       case 'Support':
         navigation.navigate('SupportPage');
@@ -91,12 +91,14 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
 
       >
         {footerIcons.map((item, index) => {
+          const colorScheme = item.highlight ? colorMode === 'dark' ? 'primary' : 'tertiary' : colorMode === 'dark' ? 'coolGray' : 'coolGray';
           return (
             <Button
               key={index}
               variant="ghost"
-              colorScheme={item.highlight ? colorMode === 'dark' ? 'primary' : 'tertiary' : colorMode === 'dark' ? 'coolGray' : 'coolGray'}
-              width={1}
+              colorScheme={colorScheme}
+              width={'1/5'}
+              height={'auto'}
               _stack={{
                 flexDirection: 'column',
                 justifyContent: 'end',
@@ -108,21 +110,22 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
                   name={item.name}
                   size={item.highlight ? 10 : 7}
                   _dark={{
-                    color: item.highlight ? item.disabled ? "primary.400" : "primary.800" : item.disabled ? "coolGray.400" : "coolGray.100"
+                    color: item.highlight ? item.disabled ? "primary.400" : "primary.600" : item.disabled ? "coolGray.400" : "coolGray.100"
                   }}
                   _light={{
                     color: item.highlight ? item.disabled ? "primary.600" : "primary.400" : item.disabled ? "coolGray.300" : "coolGray.500"
                   }}
-                  marginTop={item.highlight ? '-5' : '0'}
-                  marginBottom={item.highlight ? 2 : 0}
+                  marginTop={item.highlight ? -5 : -1}
+                  marginBottom={item.highlight ? 2 : 1}
                 />
               }
               _text={item.highlight ? {
                 color: item.disabled ?
-                  colorMode === 'dark' ? "primary.600" : "primary.400" :
-                  colorMode === 'dark' ? "primary.800" : "primary.400",
+                  colorMode === 'dark' ? "primary.200" : "primary.400" :
+                  colorMode === 'dark' ? "primary.200" : "primary.400",
                 width: 12,
                 height: 10,
+                fontSize: 12,
                 textAlign: 'center'
               } : {
                 color: item.disabled ?
@@ -130,10 +133,23 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
                   colorMode === 'dark' ? "coolGray.100" : "coolGray.600",
                 width: 'full',
                 height: 10,
+                fontSize: 12,
                 textAlign: 'center',
               }}
+              _pressed={{
+                bg: `transparent`,
+                _icon: {
+                  _dark: {
+                    color: `${colorScheme}.600:alpha.50 !important`
+                  }
+                },
+                _text: {
+                  color: `${colorScheme}.600:alpha.50`
+                }
+
+              }}
               paddingY={item.highlight ? 2 : 0}
-              onPress={() => { openPage(item.text) }}
+              onPress={() => { if (!item.disabled) { openPage(item.text) } }}
             >
               {item.text}
             </Button>

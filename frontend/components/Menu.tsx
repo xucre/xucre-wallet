@@ -298,9 +298,9 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
             <SelectLanguageLink />
             <NetworkLink />
             <WalletLink />
-            <Connections />
-            <Requests />
-            <QRScan />
+            {/*<Connections />
+            <Requests />*/}
+            {/*<QRScan />*/}
             {/*<SetPassword />*/}
           </VStack>
 

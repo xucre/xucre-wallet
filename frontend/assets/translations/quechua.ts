@@ -44,6 +44,12 @@ const values : TranslationType = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: 'Waqaychay',
     chainId_placeholder: 'Kadena ID nisqaman yaykuy', 
@@ -260,7 +266,8 @@ const values : TranslationType = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {  
-    title: "Willarina"  
+    title: "Willarina",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Kachay WhatsApp Willana",

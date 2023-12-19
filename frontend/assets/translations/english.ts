@@ -44,6 +44,12 @@ const values : TranslationType = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: "Save",
     chainId_placeholder: "Enter Chain ID",
@@ -260,7 +266,8 @@ const values : TranslationType = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
-    title: "History"
+    title: "History",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Send WhatsApp notification",

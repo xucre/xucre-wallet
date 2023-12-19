@@ -11,6 +11,7 @@ export interface TranslationType {
   Buttons_Header: any,
   ConnectionRequest: any,
   Connections: any,
+  ConnectManagement: any,
   CreateNetwork: any,
   CreateWallet: any,
   LanguagePage: any,

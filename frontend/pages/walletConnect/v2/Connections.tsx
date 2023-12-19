@@ -22,7 +22,7 @@ import { language as stateLanguage } from "../../../service/state";
 import { truncateStringStart } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
 
-export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
+export default function Connections({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [request, setRequest] = useState({} as any);
   const [pairings, setPairings] = useState([] as any[]);
   const [language,] = useRecoilState(stateLanguage);
