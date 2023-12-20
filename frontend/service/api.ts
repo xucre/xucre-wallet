@@ -83,6 +83,26 @@ export const getWalletTransactions = async (wallet: string, chainName: any) => {
   }
 }
 
+export const getTokenBalances = async (wallet: string, chainName: any) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 1000,
+    });
+    const response = await instance({
+      method: 'get',
+      params: {
+        chainName,
+        wallet,
+      },
+      url: `tokens`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
 export const callWhatsApp = async (payload: any) => {
   try {
     const instance = axios.create({

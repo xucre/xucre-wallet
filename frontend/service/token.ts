@@ -6,4 +6,6 @@ export type Token = {
   readonly chainId: number;
   readonly name: string;
   readonly type: string;
+  readonly logo?: string;
+  readonly symbol?: string;
 }

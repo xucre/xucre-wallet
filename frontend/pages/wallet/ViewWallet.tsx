@@ -1,5 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { BigNumber, ethers, Wallet } from 'ethers';
+import { BigNumber, ethers, getDefaultProvider, Wallet } from 'ethers';
 import {
   Box,
   Button,
@@ -25,7 +25,7 @@ import TokenItem from '../../components/token/TokenItem';
 import CovalentItem from "../../components/transaction/CovalentItem";
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { getWalletTransactions } from "../../service/api";
+import { getTokenBalances, getWalletTransactions } from "../../service/api";
 import { chainIdToNameMap, xucreToken } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList, tokenList } from '../../service/state';
 import { CovalentTransaction } from "../../service/transaction";
@@ -35,6 +35,8 @@ import { Token } from "../../service/token";
 import { WalletInternal } from "../../store/wallet";
 import { TouchableOpacity } from "react-native";
 import { Color } from "../../../GlobalStyles";
+import ethTokens from '../../assets/json/eth_tokens.json'
+import polygonTokens from '../../assets/json/matic_tokens.json'
 
 function TabItem({
   tabName,
@@ -107,44 +109,74 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
   const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
 
+  const tokenMetadataMap = network.chainId === 1 ? ethTokens : network.chainId === 137 ? polygonTokens : {};
+
   const syncTokens = async () => {
-    const _tokens = await getTokenByChain(network.chainId);
-    const coinToken = {
-      address: '',
-      amount: BigNumber.from(0),
-      chainId: network.chainId,
-      name: network.symbol,
-      type: 'coin',
-    };
-    if (!_tokens) {
-      if (isComponentMounted) {
-        if (network.chainId === xucreToken.chainId) {
-          setHoldings([xucreToken, coinToken]);
+    try {
+      const _tokens = await getTokenBalances(_wallet.address, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
+      //await wallet.provider.getNetwork();'
+      const _provider = getDefaultProvider(network.rpcUrl);
+
+      const walletBalance = await wallet.connect(_provider).getBalance();
+
+      const coinToken = {
+        address: ethers.constants.AddressZero,
+        amount: walletBalance,
+        chainId: network.chainId,
+        name: network.name,
+        symbol: network.symbol,
+        type: 'coin',
+      };
+      if (!_tokens) {
+        if (isComponentMounted) {
+          if (network.chainId === xucreToken.chainId) {
+            setHoldings([xucreToken, coinToken]);
+            return;
+          }
+          setHoldings([coinToken]);
           return;
         }
-        setHoldings([coinToken]);
-        return;
       }
-    }
-    const tokenList = [coinToken, ..._tokens as Token[]];
-    const hasXucre = tokenList.find((tok) => {
-      return tok.address === xucreToken.address && tok.chainId === xucreToken.chainId
-    });
-    if (!!hasXucre) {
-      if (isComponentMounted && tokenList) {
-        setHoldings(tokenList);
-        return;
-      }
-    } else {
-      if (isComponentMounted && tokenList) {
-        if (network.chainId === xucreToken.chainId) {
-          setHoldings([xucreToken, coinToken]);
+      const convertedTokens = _tokens.map((token: { contractAddress: string; tokenBalance: any; }) => {
+        const tokenMetadata = tokenMetadataMap[ethers.utils.getAddress(token.contractAddress) as keyof typeof tokenMetadataMap];
+
+        return {
+          //@ts-ignore
+          name: tokenMetadata?.name,
+          amount: BigNumber.from(token.tokenBalance),
+          chainId: network.chainId,
+          address: ethers.utils.getAddress(token.contractAddress),
+          type: 'token',
+          //@ts-ignore
+          logo: tokenMetadata?.logo,
+          //@ts-ignore
+          symbol: tokenMetadata?.symbol
+
+        } as Token
+      })
+      const tokenList = [coinToken, ...convertedTokens];
+      const hasXucre = tokenList.find((tok) => {
+        return ethers.utils.getAddress(tok.address) === ethers.utils.getAddress(xucreToken.address) && tok.chainId === xucreToken.chainId
+      });
+      if (!!hasXucre) {
+        if (isComponentMounted && tokenList) {
+          setHoldings(tokenList);
           return;
         }
-        setHoldings([...tokenList as Token[]]);
-        return;
+      } else {
+        if (isComponentMounted && tokenList) {
+          if (network.chainId === xucreToken.chainId) {
+            setHoldings([xucreToken, coinToken, ...tokenList]);
+            return;
+          }
+          setHoldings([...tokenList as Token[]]);
+          return;
+        }
       }
+    } catch (err) {
+      console.log('fails when wallet is empty');
     }
+
   }
 
   const syncTransactions = async () => {
@@ -168,26 +200,24 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   useEffect(() => {
     if (_wallet.name === '' && _walletList.length === 0) {
       navigation.navigate('SelectWallet');
-    } else if (network) {
+    } else if (network && network.rpcUrl.length) {
+      const _provider = getDefaultProvider(network.rpcUrl);
       if (_wallet.name === '') {
-        setWallet(new WalletInternal(_walletList[0].wallet));
+        setWallet(new WalletInternal(_walletList[0].wallet).connect(_provider));
       } else {
-        setWallet(new WalletInternal(_wallet.wallet));
+        setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
       }
 
+      setTimeout(() => {
+        if (holdings.length === 0) {
+          syncTokens();
+        }
+        if (transactions.length === 0) {
+          //syncTransactions();
+        }
+      }, 1000)
     }
   }, [_wallet, _walletList, network]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (holdings.length === 0) {
-        syncTokens();
-      }
-      if (transactions.length === 0) {
-        syncTransactions();
-      }
-    }, 1000)
-  }, [])
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -332,7 +362,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           <VStack space="5" px={2} mb={10}>
             {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
               <Box m={6} >
-                <Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>
+                {/*<Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>*/}
                 <FlatList data={holdings} refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
