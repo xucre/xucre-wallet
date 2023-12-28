@@ -242,6 +242,9 @@ const values : TranslationType  = {
     menu_accessiblity_label: "Menu mais opÃ§Ãµes",
     send_token_button: 'Enviar'
   },
+  TransactionFeed: {
+    title: "TransaÃ§Ãµes"
+  },
   ViewNetwork: {
     active_network: 'Rede Ativa',
     edit_button: 'Editar',

@@ -41,7 +41,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
     { disabled: false, highlight: false, name: 'image-search', text: buttonNft },
     { highlight: true, name: 'swap-vertical-circle', text: swapButton },
     { highlight: false, name: 'live-help', text: supportButton },
-    { disabled: true, highlight: false, name: 'dynamic-feed', text: feedButton },
+    { disabled: false, highlight: false, name: 'history', text: historyButton },
   ];
 
   const openPage = (pageName: string) => {
@@ -56,7 +56,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         navigation.navigate('WalletHistory');
         break;
       case 'Feed':
-        navigation.navigate('ProfileList');
+        navigation.navigate('TransactionFeed');
         break;
       case 'Support':
         navigation.navigate('SupportPage');

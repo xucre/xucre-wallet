@@ -91,7 +91,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
     };
 
     return (
-      <VStack marginBottom={20} justifyContent={'space-around'} w={"full"}>
+      <VStack marginBottom={20} justifyContent={'space-around'} w={"full"} alignItems={'center'}>
         <Heading
           style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
           py={2}
@@ -123,9 +123,8 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
     );
   }
 
-
-
   function MnemonicList() {
+    console.log(mnemonics);
     function ListItem({ value, index }: { value: string, index: number }) {
       return (
         <Button
@@ -419,7 +418,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
   };
 
   return (
-    <Box style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white }} flex={1} px="3">
+    <Box style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white }} flex={1} px="3" h={'full'}>
       <KeyboardAvoidingView h={{
         base: "auto",
         lg: "auto"
@@ -434,8 +433,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
           <Box
             alignItems="center"
           >
-            <VStack marginBottom={20} w={"full"} alignItems="center" flex="1" justifyContent="space-between">
-
+            <VStack marginBottom={0} w={"full"} alignItems="center" justifyContent="space-between" _text={{ color: "warmGray.50", fontWeight: "medium" }}>
               <Heading
                 style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
                 py={2}
@@ -460,7 +458,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
           <Box
             alignItems="center"
           >
-            <VStack marginBottom={0} w={"full"} alignItems="center" flex="1" justifyContent="space-between" _text={{ color: "warmGray.50", fontWeight: "medium" }}>
+            <VStack marginBottom={0} w={"full"} alignItems="center" justifyContent="space-between" _text={{ color: "warmGray.50", fontWeight: "medium" }}>
               <Heading
                 style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
                 py={2}

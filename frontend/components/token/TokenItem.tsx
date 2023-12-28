@@ -67,7 +67,7 @@ export default function TokenItem({ navigation, token, refreshList }: { navigati
         <VStack>
           <Pressable>
             <Text fontSize="md" bold>
-              {token.name}
+              {token.symbol || token.name}
             </Text>
           </Pressable>
         </VStack>

@@ -244,6 +244,9 @@ const values : TranslationType = {
     menu_accessiblity_label: "Menu más opciones",
     send_token_button: "Enviar"
   },
+  TransactionFeed: {
+    title: "Transacciones"
+  },
   ViewNetwork: {
     active_network: "Red Activa",
     edit_button: "Editar",

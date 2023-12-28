@@ -242,6 +242,9 @@ const values : TranslationType  = {
     menu_accessiblity_label: 'Menu okachi tlaihittaliz-tli',
     send_token_button: 'Ihuaa',
   },
+  TransactionFeed: {
+    title: "Tlapeepeehuiliz-tli"
+  },
   ViewNetwork: {
     active_network: "Zaazahuatic maatla-tl",
     edit_button: "Pahpanhuetzi",

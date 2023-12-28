@@ -52,6 +52,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   const [loadingStage, setLoadingStage] = useState('');
   const [amount, setAmount] = useState("0");
   const [balance, setBalance] = useState(BigNumber.from(0))
+  const [gasBalance, setGasBalance] = useState(BigNumber.from(0))
   const [notEnough, setNotEnough] = useState(false);
   const [address, setAddress] = useState("");
   const [type, setType] = useState("token");
@@ -118,8 +119,10 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   useEffect(() => {
     const runAsync = async () => {
       await wallet.provider.getNetwork();
+
+      const walletBalance = await wallet.getBalance();
+      setGasBalance(walletBalance);
       if (selectedToken.type === 'coin' && wallet.address) {
-        const walletBalance = await wallet.getBalance();
         setBalance(walletBalance);
       } else if (selectedToken.type === 'token' && wallet.address) {
         const contract = new ethers.Contract(selectedToken.address, erc20Abi, provider);
@@ -153,6 +156,8 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
       }
     }
   }, [balance, amount])
+
+  //const hasEnoughGas = amount.length === 0 ? false : ethers.utils.parseEther(amount).gt(gasBalance);
 
   useEffect(() => {
     if (error.length > 0) {
@@ -207,7 +212,12 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
               ethers.utils.parseEther(amount)
             )
             console.log('gas estimate', gasEstimate);
-
+            if (gasEstimate.gt(gasBalance)) {
+              setLoading(false);
+              setError('Not enough gas for this transaction');
+              setLoadingStage('');
+              return;
+            }
             const _submitted = await contract.transfer(
               ethers.utils.getAddress(address),
               ethers.utils.parseEther(amount),
@@ -245,10 +255,18 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             setError('');
             setLoadingStage('');
           } else if (selectedToken.type === "coin" && wallet.address) {
-
             const tx = {
               to: address,
               value: ethers.utils.parseEther(amount)
+            }
+
+            const gasEstimate = await wallet.estimateGas(tx);
+
+            if (gasEstimate.gt(gasBalance)) {
+              setLoading(false);
+              setError('Not enough gas for this transaction');
+              setLoadingStage('');
+              return;
             }
             // Sending ether
             const _submitted = await wallet.sendTransaction(tx)

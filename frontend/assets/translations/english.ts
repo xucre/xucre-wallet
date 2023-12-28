@@ -1,4 +1,5 @@
 import { TranslationType } from ".";
+import TransactionFeed from '../../components/transaction/TransactionFeed';
 /* eslint-disable sort-keys */
 const values : TranslationType = {
   AddToken: {
@@ -241,6 +242,9 @@ const values : TranslationType = {
     delete_button: 'Delete Token',
     menu_accessiblity_label: "More options menu",
     send_token_button: "Send"
+  },
+  TransactionFeed: {
+    title: "Transactions"
   },
   ViewNetwork: {
     active_network: "Active Network",

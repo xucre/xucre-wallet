@@ -57,7 +57,7 @@ export async function createSignClient() {
       projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
       relayUrl: 'wss://relay.walletconnect.com',
     };
-    console.log(initConfig);
+    //console.log(initConfig);
     signClient = await SignClient.init(initConfig)
     //console.log(signClient);
     //const pairings = signClient.core.pairing.getPairings();

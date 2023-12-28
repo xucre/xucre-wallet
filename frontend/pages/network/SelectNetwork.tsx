@@ -72,7 +72,7 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
   }
 
   const NetworkItem = ({ metadata }: { metadata: Network }) => {
-    const selectNetwork = () => {
+    const selectNetwork = async () => {
       setActiveNetwork(metadata);
       storeActiveNetwork(metadata);
       //viewNetwork();
@@ -107,7 +107,7 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
 
     return (
       <HStack alignItems="center" justifyContent="space-between" pr={3} py={1} borderRadius={25} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
-        <Pressable onPress={() => { openNetwork() }}>
+        <Pressable onPress={() => { selectNetwork() }}>
           <HStack alignItems="center" space={{ base: 3, md: 6 }}>
             <Avatar bg={colorMode === 'dark' ? 'coolGray.800' : 'coolGray.300'} size="md" ml="10px" mb="10px" mr="1" mt="4px" source={{
               uri: avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'

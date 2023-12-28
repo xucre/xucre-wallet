@@ -145,3 +145,7 @@ export const processJsonData = (jsonData: { error: any; data: { items: any[]; };
 
   return output;
 }
+
+export const isSVGFormatImage = (url: string) => {
+  return url.endsWith(".svg");
+}

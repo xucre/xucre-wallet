@@ -15,7 +15,7 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
-import { useRecoilState } from "recoil";
+import { useRecoilRefresher_UNSTABLE, useRecoilState, useRecoilValue } from "recoil";
 //import { TokenBalancesListView } from "@covalenthq/goldrush-kit";
 
 
@@ -33,57 +33,16 @@ import { getTokenByChain } from '../../store/token';
 import NftList from "../nft/NftList";
 import { Token } from "../../service/token";
 import { WalletInternal } from "../../store/wallet";
+import { getActiveNetwork } from "../../store/network";
 import { TouchableOpacity } from "react-native";
 import { Color } from "../../../GlobalStyles";
 import ethTokens from '../../assets/json/eth_tokens.json'
 import polygonTokens from '../../assets/json/matic_tokens.json'
-
-function TabItem({
-  tabName,
-  currentTab,
-  handleTabChange,
-}: {
-  tabName: string,
-  currentTab: string,
-  handleTabChange: Function
-}) {
-  return (
-    <Pressable onPress={() => handleTabChange(tabName)} px="4" pt="2">
-      <VStack>
-        <Text
-          fontSize="sm"
-          fontWeight="medium"
-          letterSpacing="0.4"
-          _light={{
-            color: tabName === currentTab ? 'gray.700' : 'gray.700',
-          }}
-          _dark={{
-            color: tabName === currentTab ? 'gray.100' : 'gray.100',
-          }}
-          px={4}
-          py={2}
-        >
-          {tabName}
-        </Text>
-        {tabName === currentTab && (
-          <Box
-            _light={{
-              bg: 'primary.900',
-            }}
-            _dark={{
-              bg: 'primary.500',
-            }}
-            marginBottom={-1}
-            h="0.5"
-          />
-        )}
-      </VStack>
-    </Pressable>
-  );
-}
+import { useIsFocused } from '@react-navigation/native';
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
+  const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -91,8 +50,9 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [_walletList,] = useRecoilState(walletList);
   const [_wallet,] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
-  const [network,] = useRecoilState(activeNetwork);
-  const [holdings, setHoldings] = useState([] as Token[]);
+  const network = useRecoilValue(activeNetwork);
+  const refreshNetwork = useRecoilRefresher_UNSTABLE(activeNetwork);
+  const [tokens, setTokens] = useState([] as Token[]);
   const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
@@ -113,27 +73,30 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
   const syncTokens = async () => {
     try {
-      const _tokens = await getTokenBalances(_wallet.address, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
-      //await wallet.provider.getNetwork();'
-      const _provider = getDefaultProvider(network.rpcUrl);
 
+      const _network = await getActiveNetwork();
+      console.log('network chainId', _network.chainId);
+      const _tokens = await getTokenBalances(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
+      //await wallet.provider.getNetwork();'
+      const _provider = getDefaultProvider(_network.rpcUrl);
+      //console.log(wallet._isSigner);
       const walletBalance = await wallet.connect(_provider).getBalance();
 
       const coinToken = {
         address: ethers.constants.AddressZero,
         amount: walletBalance,
-        chainId: network.chainId,
-        name: network.name,
-        symbol: network.symbol,
+        chainId: _network.chainId,
+        name: _network.name,
+        symbol: _network.symbol,
         type: 'coin',
       };
       if (!_tokens) {
         if (isComponentMounted) {
-          if (network.chainId === xucreToken.chainId) {
-            setHoldings([xucreToken, coinToken]);
+          if (_network.chainId === xucreToken.chainId) {
+            setTokens([xucreToken, coinToken]);
             return;
           }
-          setHoldings([coinToken]);
+          setTokens([coinToken]);
           return;
         }
       }
@@ -144,7 +107,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           //@ts-ignore
           name: tokenMetadata?.name,
           amount: BigNumber.from(token.tokenBalance),
-          chainId: network.chainId,
+          chainId: _network.chainId,
           address: ethers.utils.getAddress(token.contractAddress),
           type: 'token',
           //@ts-ignore
@@ -160,21 +123,21 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       });
       if (!!hasXucre) {
         if (isComponentMounted && tokenList) {
-          setHoldings(tokenList);
+          setTokens(tokenList);
           return;
         }
       } else {
         if (isComponentMounted && tokenList) {
           if (network.chainId === xucreToken.chainId) {
-            setHoldings([xucreToken, coinToken, ...tokenList]);
+            setTokens([xucreToken, coinToken, ...tokenList]);
             return;
           }
-          setHoldings([...tokenList as Token[]]);
+          setTokens([...tokenList as Token[]]);
           return;
         }
       }
     } catch (err) {
-      console.log('fails when wallet is empty');
+      console.log('fails when wallet is empty', err);
     }
 
   }
@@ -209,11 +172,8 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       }
 
       setTimeout(() => {
-        if (holdings.length === 0) {
+        if (tokens.length === 0) {
           syncTokens();
-        }
-        if (transactions.length === 0) {
-          //syncTransactions();
         }
       }, 1000)
     }
@@ -221,14 +181,14 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    setHoldings([]);
-    setTransactions([]);
-
+    //setTokens([]);
+    //setTransactions([]);
+    //await refreshNetwork();
     setTimeout(async () => {
       await syncTokens();
       //await syncTransactions();
       setRefreshing(false);
-    }, 100)
+    }, 500)
   }, []);
 
   const addToken = () => {
@@ -265,6 +225,12 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     //setAllNetworks([])
   }, [])
 
+  useEffect(() => {
+    if (isFocused && wallet.address) {
+      onRefresh();
+    }
+  }, [isFocused])
+
   const handleTabChange = (newTab: React.SetStateAction<string>) => {
     setCurrentTab(newTab);
   }
@@ -276,14 +242,14 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       text: buttonSend,
     },
     {
-      action: buyTokens,
-      icon: "monetization-on",
-      text: buttonBuy,
-    },
-    {
       action: receiveFunds,
       icon: "arrow-downward",
       text: buttonReceive,
+    },
+    {
+      action: buyTokens,
+      icon: "monetization-on",
+      text: buttonBuy,
     },
     {
       action: connectWallet,
@@ -363,10 +329,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
               <Box m={6} >
                 {/*<Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>*/}
-                <FlatList data={holdings} refreshControl={
+                <FlatList data={tokens} refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefresh}
+                    tintColor={colorMode === 'dark' ? Color.white : Color.darkgray_200}
                   />
                 } renderItem={
                   ({ item, index }) => <TokenItem key={item.name + index} token={item} navigation={navigation} refreshList={onRefresh} />
