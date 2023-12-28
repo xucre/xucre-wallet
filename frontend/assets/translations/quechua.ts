@@ -242,6 +242,9 @@ const values : TranslationType = {
     menu_accessiblity_label: "Aswan akllanakuna menÃº",
     send_token_button: 'Kachay'
   },
+  TransactionFeed: {
+    title: "Transacciones"
+  },
   ViewNetwork: {
     active_network: 'Llika llamk\'achiq',
     edit_button: 'Apuy',    

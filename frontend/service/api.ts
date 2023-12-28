@@ -67,6 +67,28 @@ export const getWalletTransactions = async (wallet: string, chainName: any) => {
   try {
     const instance = axios.create({
       baseURL: BASEURL,
+      timeout: 10000,
+    });
+    const response = await instance({
+      method: 'get',
+      params: {
+        chainName,
+        wallet: wallet.toLowerCase(),
+      },
+      url: `transactions`,
+    });
+    //console.log('getWalletTransactions', wallet.toLowerCase(), response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export const getTokenBalances = async (wallet: string, chainName: any) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
       timeout: 1000,
     });
     const response = await instance({
@@ -75,7 +97,7 @@ export const getWalletTransactions = async (wallet: string, chainName: any) => {
         chainName,
         wallet,
       },
-      url: `transactions`,
+      url: `tokens`,
     });
     return response.data;
   } catch (error) {

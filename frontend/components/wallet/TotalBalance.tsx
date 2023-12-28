@@ -26,20 +26,19 @@ import { ExtendedBalance, Holding, OpenQuotes, OutputObject } from "../../types/
 import { WalletInternal } from "../../store/wallet";
 import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
 import { processJsonData } from "../../service/utility";
+import { useIsFocused } from '@react-navigation/native';
 
 export default function TotalBalance({ navigate }: { navigate: Function }) {
   const { colorMode } = useColorMode();
+  const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const [currentTab, setCurrentTab] = useState(translations[language as keyof typeof translations].ViewWallet.tab_list[0]);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
   const [network,] = useRecoilState(activeNetwork);
   const [networks, setAllNetworks] = useRecoilState(networkList);
-  const [chainName, setChainName] = useState(chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap] || 1);
+  const chainName = chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap] || 1;
   const conversionRate = 1;
   const currency = 'USD';
   const [currentHoldings, setCurrentHoldings] = useState({
@@ -56,12 +55,12 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
 
   })
 
-  const getData = async () => {
+  const getData = async (runCount = 0) => {
     try {
       const historyResults = await getWalletHistory(wallet.address, chainName as string);
+      //console.log(historyResults);
       const outputData = processJsonData(historyResults);
       // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
-      //const isReady = outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
       const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, _i) => {
         return {
           ...finalVal,
@@ -81,28 +80,45 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
           y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
         }
       });
-      //console.log(finalQuotes[0]);
-      //console.log(finalQuotes[1]);
-      setCurrentHoldings(finalQuotes[0]);
-      //console.log('1');
-      const percent = (((finalQuotes[1].y - finalQuotes[0].y) / finalQuotes[0].y) || 0).toFixed(0) + '%';
-      //console.log('2');
-      const trend = finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat';
-      //console.log('3');
-      const y = (finalQuotes[1].y - finalQuotes[0].y).toFixed(2);
-      //console.log('4');
-      setSecondToLastHoldings({
-        percent,
-        trend,
-        y
-      })
+      if (finalQuotes.length > 0) {
+        setCurrentHoldings(finalQuotes[0]);
+        //console.log('1');
+        if (finalQuotes.length > 1) {
+          const percent = (((finalQuotes[1].y - finalQuotes[0].y) / finalQuotes[0].y) || 0).toFixed(0) + '%';
+          //console.log('2');
+          const trend = finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat';
+          //console.log('3');
+          const y = (finalQuotes[1].y - finalQuotes[0].y).toFixed(2);
+          //console.log('4');
+          setSecondToLastHoldings({
+            percent,
+            trend,
+            y: y || ''
+          })
+        } else {
+          const percent = '0%';
+          //console.log('2');
+          const trend = 'flat';
+          //console.log('3');
+          const y = '';
+          //console.log('4');
+          setSecondToLastHoldings({
+            percent,
+            trend,
+            y: y || ''
+          })
+        }
+
+      } else {
+        console.log('finalQuotes are empty');
+
+        setTimeout(() => {
+          if (runCount < 4) getData(runCount + 1);
+        }, 1000)
+      }
     } catch (err) {
       //
-      console.log(err);
-      setTimeout(() => {
-        getData();
-      }, 1000)
-
+      console.log('outerCalc');
     }
 
   }
@@ -114,7 +130,7 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
   }, [_wallet, network]);
 
   useEffect(() => {
-    if (wallet.address) {
+    if (wallet.address && isFocused) {
       setCurrentHoldings({
         meta: {
           'date': ''
@@ -124,20 +140,7 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
       });
       getData();
     }
-  }, [wallet, chainName])
-
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-
-    setTimeout(async () => {
-      setRefreshing(false);
-    }, 100)
-  }, []);
-
-  useEffect(() => {
-    //setNetwork(null)
-    //setAllNetworks([])
-  }, [])
+  }, [wallet, chainName, isFocused])
 
   const formatCurrency = (amount: string) => {
     return Number.parseFloat(amount).toFixed(2);

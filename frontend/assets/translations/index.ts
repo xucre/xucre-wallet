@@ -39,6 +39,7 @@ export interface TranslationType {
   SupportPage: any,
   SwapToken: any,
   TokenItem: any,
+  TransactionFeed: any,
   ViewNetwork: any,
   ViewWallet: {
     clear_button: string,
