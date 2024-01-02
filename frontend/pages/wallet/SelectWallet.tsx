@@ -122,7 +122,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
             }
           </VStack>
 
-          <Button onPress={createWallet} style={{ borderRadius: 100, marginLeft: 10, marginRight: 10 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'darkText' : 'lightText'}>{translations[language as keyof typeof translations].SelectWallet.new_button}</Text></Button>
+          <Button onPress={createWallet} style={{ borderRadius: 100, marginLeft: 10, marginRight: 10 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? Color.black : Color.black} bold>{translations[language as keyof typeof translations].SelectWallet.new_button}</Text></Button>
         </VStack>
       </Box>
     </GuestLayout>

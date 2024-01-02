@@ -1,4 +1,4 @@
-
+import { utils } from 'ethers';
 import {
   HARDHAT_PORT,
   HARDHAT_PRIVATE_KEY, 
@@ -28,6 +28,7 @@ import {
   REACT_APP_XUCRE_ADDRESS,
   REACT_APP_XUCRE_WALLET_SCHEME
 } from '@env';
+import { LogMap } from './transaction';
 
 export const env = {
   HARDHAT_PORT: process.env.HARDHAT_PORT || HARDHAT_PORT,
@@ -82,3 +83,264 @@ export const chainIdToNameMap = {
 };
 
 export const xucreToken = {chainId: 137, address: '0x924442A46EAC25646b520Da8D78218Ae8FF437C2', name: 'Xucre',type: 'token'}
+
+
+export const logTopicMap = {
+  "ERC20": [
+    {
+      topic: utils.id("Transfer(address,address,uint256)"),
+      argsToAction: [
+        "Send",
+        "Recieve", 
+        "Amount"
+      ],
+      argsToType: [
+        {
+          label: 'From',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'Amount',
+          dataType: 'uint256',
+          isValue: true
+        }
+      ]
+    },  
+    {
+      topic: utils.id("Approval(address,address,uint256)"),
+      argsToAction: [
+        "Approve From",
+        "Approve For", 
+        "Amount"
+      ],
+      argsToType: [
+        {
+          label: 'From',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'Amount',
+          dataType: 'uint256',
+          isValue: true
+        }
+      ]
+    }
+  ] as LogMap[],
+  "ERC721": [
+    {
+      topic: utils.id("Transfer(address,address,uint256)"),
+      argsToAction: [
+        "Send",
+        "Recieve", 
+        "TokenId"
+      ],
+      argsToType: [
+        {
+          label: 'From',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'TokenId',
+          dataType: 'uint256',
+          isValue: true
+        }
+      ]
+    },  
+    {
+      topic: utils.id("Approval(address,address,uint256)"),
+      argsToAction: [
+        "Approve From",
+        "Approve For", 
+        "TokenId"
+      ],
+      argsToType: [
+        {
+          label: 'From',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'TokenId',
+          dataType: 'uint256',
+          isValue: true
+        }
+      ]
+    },
+    {
+      topic: utils.id("ApprovalForAll(address,address,bool)"),
+      argsToAction: [
+        "Approve From",
+        "Approve For", 
+        "Approved for All?"
+      ],
+      argsToType: [
+        {
+          label: 'From',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'Approved',
+          dataType: 'boolean',
+          isValue: true
+        }
+      ]
+    }
+  ] as LogMap[],
+  "ERC1155": [
+    {
+      topic: utils.id("TransferSingle(address,address,address,uint256,uint256)"),
+      argsToAction: [
+        "Operator",
+        "Send",
+        "Recieve", 
+        "TokenId",
+        "Amount"
+      ],
+      argsToType: [
+        {
+          label: 'Operator',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'From',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'Token Id',
+          dataType: 'uint256',
+          isValue: true
+        },
+        {
+          label: 'Amount',
+          dataType: 'uint256',
+          isValue: true
+        }
+      ]
+    },  
+    {
+      topic: utils.id("TransferBatch(address,address,address,uint256[],uint256[])"),
+      argsToAction: [
+        "Operator",
+        "Send",
+        "Recieve", 
+        "TokenIds",
+        "Amounts"
+      ],
+      argsToType: [
+        {
+          label: 'Operator',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'From',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'TokenIds',
+          dataType: 'uint256[]',
+          isValue: true
+        },
+        {
+          label: 'Amount',
+          dataType: 'uint256[]',
+          isValue: true
+        }
+      ]
+    },
+    {
+      topic: utils.id("ApprovalForAll(address,address,bool)"),
+      argsToAction: [
+        "Approve From",
+        "Approve For", 
+        "Approved for All?"
+      ],
+      argsToType: [
+        {
+          label: 'On Behalf Of',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'To',
+          dataType: 'address',
+          isValue: false
+        },
+        {
+          label: 'Approved',
+          dataType: 'boolean',
+          isValue: true
+        }
+      ]
+    },
+    {
+      topic: utils.id("URI(string,uint256)"),
+      argsToAction: [
+        "Value",
+        "TokenId"
+      ],
+      argsToType: [
+        {
+          label: 'Uri',
+          dataType: 'string',
+          isValue: false
+        },
+        {
+          label: 'TokenId',
+          dataType: 'uint256',
+          isValue: true
+        }
+      ],
+      singularAction: 'NFT URI Updated'
+    }
+  ] as LogMap[]
+}
+
+export const actionToScheme = {
+  "Recieve": 'success',
+  "Send": 'warning',
+  "Unknown" : 'default',
+  "Approve From" : 'success', 
+}

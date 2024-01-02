@@ -1,4 +1,10 @@
-import { BigNumber } from "ethers";
+import { BigNumber, ethers, getDefaultProvider, Wallet, utils } from 'ethers';
+import { Network } from './network';
+import { Interface } from 'ethers/lib/utils';
+import erc20 from '../assets/contracts/erc20.abi.json'
+import erc721 from '../assets/contracts/erc721.abi.json'
+import erc1155 from '../assets/contracts/erc1155.abi.json'
+import { logTopicMap } from './constants';
 
 export type Transaction = {
   readonly hash: string;
@@ -144,3 +150,187 @@ export type CovalentTransactionV3 = {
     raw_log_data: string,
   }
 }
+
+// Define the interface for the parsed transaction
+export type ParsedTransaction = {
+  transactionId: string;
+  contractType: string;
+  action: string;
+  amount: string;
+  valueRaw: BigNumber;
+  contractAddress: string;
+  spam: boolean;
+}
+
+export type LogMap = {
+  topic: string;
+  argsToAction: string[];
+  singularAction?: string;
+  argsToType: LogMapType[];
+}
+
+export type LogMapType = {
+  label: string;
+  dataType: string;
+  isValue: boolean;
+}
+
+const ERC721_INTERFACE_ID = "0x80ac58cd";
+const ERC20_INTERFACE_ID = "0x36372b07";
+const ERC1155_INTERFACE_ID = "0xd9b67a26";
+const erc20Interface = new Interface(erc20);
+const erc721Interface = new Interface(erc721);
+const erc1155Interface = new Interface(erc1155);
+const UNKNOWN_TRANSACTION = {
+  transactionId: '',
+  contractType: 'Unknown', 
+  eventType: 'Unknown',
+  action: 'Unknown',
+  amount: '',
+  valueRaw: BigNumber.from(0),
+  contractAddress: '',
+  spam: false
+} as ParsedTransaction;
+
+// Function to parse a list of transactions
+export async function parseTransaction(wallet: Wallet, transaction: CovalentTransactionV3, _network: Network): Promise<ParsedTransaction> {
+  const provider = getDefaultProvider(_network.rpcUrl);
+
+  const receipt = await provider.getTransactionReceipt(transaction.tx_hash);
+  const toAddress = receipt.to;
+  const addressType = await checkAddressType(toAddress, provider);
+
+  if (addressType === 'Wallet') {
+    return {
+      transactionId: transaction.tx_hash,
+      contractType: 'Wallet', 
+      eventType: 'Transfer',
+      contractAddress: transaction.to_address,
+      action: utils.getAddress(toAddress) === utils.getAddress(wallet.address) ? 'Recieve' : 'Send',
+      amount: utils.formatEther(BigNumber.from(transaction.value)),
+      valueRaw: BigNumber.from(transaction.value),
+      spam: false
+    } as ParsedTransaction;
+  }
+
+  const matchedLog : ethers.providers.Log | undefined = receipt.logs.find((log) => {
+    try {
+        const _parsedLog = parseLog(wallet, transaction, log, addressType) || null;
+        if (_parsedLog) {
+          return true;
+        }
+    } catch (error) {
+        console.error(`Error parsing log: ${error}`);
+    }
+  }, {} as ParsedTransaction)
+  if (!matchedLog) {
+    //console.log('no matching log');
+    return {
+      ...UNKNOWN_TRANSACTION, 
+      transactionId: transaction.tx_hash,
+      contractAddress: transaction.to_address,
+      amount: utils.formatEther(BigNumber.from(transaction.value)), 
+      valueRaw: BigNumber.from(transaction.value)
+    };
+  }
+  const parsedLog : ParsedTransaction | null = parseLog(wallet, transaction, matchedLog, addressType);
+  if (!parsedLog) {
+    //console.log('no parsed log');
+    return {
+      ...UNKNOWN_TRANSACTION, 
+      transactionId: transaction.tx_hash,
+      contractAddress: transaction.to_address,
+      amount: utils.formatEther(BigNumber.from(transaction.value)), 
+      valueRaw: BigNumber.from(transaction.value)
+    };
+  }
+  return parsedLog;
+}
+
+// Function to parse a single log entry
+function parseLog(wallet: Wallet, transaction: CovalentTransactionV3, log: ethers.providers.Log, addressType: string): ParsedTransaction | null {
+  try {
+    const topicList = logTopicMap[addressType as keyof typeof logTopicMap];
+    const logValues = addressType === 'ERC20' ? erc20Interface.parseLog(log) 
+      : addressType === 'ERC721' ? erc721Interface.parseLog(log) 
+      : addressType === 'ERC1155' ? erc1155Interface.parseLog(log) 
+      : null;
+    if (logValues === null) {
+      console.log('logValues are empty')
+      return null;
+    }
+
+    const matchedTopic = topicList.find((topicData) => {
+      if (log.topics.includes(topicData.topic)) return topicData;
+    });
+    if (!matchedTopic) {
+      console.log('matched topics are empty');
+      return null;
+    }
+    const action = matchedTopic.singularAction !== null ? 
+      matchedTopic.singularAction : 
+      logValues.args.reduce((returnVal, argVal, index) => {
+        if (utils.isAddress(argVal) && returnVal.length === 0) {
+          if (utils.getAddress(argVal) === utils.getAddress(wallet.address)) return matchedTopic.argsToAction[index];
+        }
+        return returnVal;
+      },null);
+    
+    if (!action) {
+      //console.log('no matching action');
+      return null;
+    }
+
+    return {
+      transactionId: transaction.tx_hash,
+      contractType: addressType, 
+      contractAddress: transaction.to_address,
+      action,
+      amount: utils.formatEther(BigNumber.from(transaction.value)),
+      valueRaw: BigNumber.from(transaction.value),
+      spam: false
+    } as ParsedTransaction;
+  } catch (err) {
+    console.log('error parsing log');
+    return null;
+  }
+  
+}
+
+async function checkAddressType(contractAddress: string, provider: ethers.providers.BaseProvider): Promise<string> {
+    const contract = new ethers.Contract(contractAddress, ["function supportsInterface(bytes4 interfaceID) external view returns (bool)"], provider);
+    
+    const isContractTransaction = await isContractAddress(contractAddress, provider);
+    if (!isContractTransaction) {
+      return "Wallet";
+    }
+
+    const isERC721 = await contract.supportsInterface(ERC721_INTERFACE_ID);
+    if (isERC721) {
+        return "ERC721";
+    }
+
+    const isERC20 = await contract.supportsInterface(ERC20_INTERFACE_ID);
+    if (isERC20) {
+        return "ERC20";
+    }
+
+    const isERC1155 = await contract.supportsInterface(ERC1155_INTERFACE_ID);
+    if (isERC1155) {
+        return "ERC1155";
+    }
+    
+    return "Unknown";
+}
+
+async function isContractAddress(address: string, provider: ethers.providers.BaseProvider): Promise<boolean> {
+  const code = await provider.getCode(address);
+  return code !== '0x'; // If code is not '0x', it's a contract
+}
+
+// Example usage
+// const transactionIds = ["0x..."]; // Add transaction IDs here
+// const providerUrl = "YOUR_PROVIDER_URL"; // Replace with your Ethereum provider URL
+// parseTransactions(transactionIds, providerUrl)
+//   .then(parsedTransactions => console.log(parsedTransactions))
+//   .catch(error => console.error(error));

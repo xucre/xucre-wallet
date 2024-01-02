@@ -29,7 +29,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
   const { colorMode } = useColorMode();
   const homeButton = translations[language as keyof typeof translations].Buttons_Footer.home;
   const historyButton = translations[language as keyof typeof translations].Buttons_Footer.history;
-  const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
+  const nftButton = translations[language as keyof typeof translations].Buttons_Header.nft;
   const swapButton = translations[language as keyof typeof translations].Buttons_Footer.buttonswap;
   const supportButton = translations[language as keyof typeof translations].Buttons_Footer.support;
   const profileButton = translations[language as keyof typeof translations].Buttons_Footer.profile;
@@ -38,7 +38,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
 
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: homeButton },
-    { disabled: false, highlight: false, name: 'image-search', text: buttonNft },
+    { disabled: false, highlight: false, name: 'image-search', text: nftButton },
     { highlight: true, name: 'swap-vertical-circle', text: swapButton },
     { highlight: false, name: 'live-help', text: supportButton },
     { disabled: false, highlight: false, name: 'history', text: historyButton },
@@ -46,22 +46,25 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
 
   const openPage = (pageName: string) => {
     switch (pageName) {
-      case 'Home':
+      case homeButton:
         navigation.navigate('ViewWallet');
         break;
-      case 'SWAP':
+      case swapButton:
         navigation.navigate('SwapToken');
         break;
-      case 'History':
+      case historyButton:
         navigation.navigate('WalletHistory');
         break;
-      case 'Feed':
+      case feedButton:
         navigation.navigate('TransactionFeed');
         break;
-      case 'Support':
+      case profileButton:
         navigation.navigate('SupportPage');
         break;
-      case 'NFT':
+      case supportButton:
+        navigation.navigate('SupportPage');
+        break;
+      case nftButton:
         navigation.navigate('NFT');
         break;
     }

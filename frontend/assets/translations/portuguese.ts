@@ -58,6 +58,7 @@ const values : TranslationType  = {
     rpcUrl_placeholder: 'Digite o URL RPC',
     submit_button: 'Salvar rede',
     symbol_placeholder: 'Digite o sÃ­mbolo da cadeia',
+    title: "New Network"
   },
   CreateWallet: {
     instructions: 'Ao criar uma nova carteira, vocÃª receberÃ¡ uma sequÃªncia de mnemÃ´nicos que representam sua "senha pessoal". Qualquer pessoa com essa sequÃªncia pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possÃ­vel Somente vocÃª deve ter acesso a essas informaÃ§Ãµes.',

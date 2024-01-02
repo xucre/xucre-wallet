@@ -106,7 +106,7 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
     }, [metadata])
 
     return (
-      <HStack alignItems="center" justifyContent="space-between" pr={3} py={1} borderRadius={25} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
+      <HStack alignItems="center" justifyContent="space-between" pr={3} py={1} borderRadius={15} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
         <Pressable onPress={() => { selectNetwork() }}>
           <HStack alignItems="center" space={{ base: 3, md: 6 }}>
             <Avatar bg={colorMode === 'dark' ? 'coolGray.800' : 'coolGray.300'} size="md" ml="10px" mb="10px" mr="1" mt="4px" source={{
@@ -152,7 +152,6 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
 
           width={'100%'}
         >
-          <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={'md'} fontWeight={'bold'}>{translations[language as keyof typeof translations].SelectNetwork.title}</Text>
           <Text style={{ color: Color.gray_100, textAlign: 'center', marginLeft: 15, marginRight: 15 }} fontSize={15} >{translations[language as keyof typeof translations].SelectNetwork.select_network}</Text>
 
           <VStack space={3} py={4}>
@@ -165,11 +164,11 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
                 )
               })
             }
-            <Button mx={5} width={'90%'} style={{ borderRadius: 100 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={createNetwork}>
-              <Text style={{ color: colorMode === 'dark' ? '#fff' : '#fff' }}>{translations[language as keyof typeof translations].SelectNetwork.new_button}</Text>
-            </Button>
           </VStack>
 
+          <Button justifyContent={'start'} mx={5} width={'90%'} mt={10} colorScheme={colorMode === 'dark' ? 'muted' : 'muted'} _dark={{ bgColor: 'coolGray.800', color: 'white' }} _light={{ bgColor: 'coolGray.300' }} onPress={createNetwork}>
+            <Text style={{ color: colorMode === 'dark' ? Color.white : Color.black, padding: 4 }} bold>{translations[language as keyof typeof translations].SelectNetwork.new_button}</Text>
+          </Button>
         </Box>
       </ScrollView>
     </GuestLayout>
