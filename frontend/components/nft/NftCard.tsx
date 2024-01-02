@@ -23,9 +23,9 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftCard({contract, token, chain}: {contract : string, token : string, chain : string}) {
+function NftCard({ contract, token, chain }: { contract: string, token: string, chain: string }) {
   //`const theme = useTheme();
-  const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : ''});
+  const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '' });
   const [url, setUrl] = useState('');
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
@@ -33,7 +33,7 @@ function NftCard({contract, token, chain}: {contract : string, token : string, c
       setIsComponentMounted(false)
     }
   }, []);
-  
+
 
   useEffect(() => {
     retrieveMetadata();
@@ -41,10 +41,10 @@ function NftCard({contract, token, chain}: {contract : string, token : string, c
 
   const retrieveMetadata = async () => {
     const result = await getMetadata(contract, token, chain);
-    
+
     setChannelMetadata({
       description: result.token_description,
-      image: result.cached_images.small_250_250,
+      image: result.cached_images.small_250_250 || '',
       key: `${result.contract_address}/${result.id}`,
       name: result.token_name
     })
@@ -61,38 +61,38 @@ function NftCard({contract, token, chain}: {contract : string, token : string, c
     }
   }
 
-  const AvatarImage = (props: React.JSX.IntrinsicAttributes & InterfaceAvatarProps & Partial<{}> & { variant?: unknown; size?: ThemeComponentSizeType<"Avatar">; colorScheme?: ColorSchemeType; } & { ref?: React.MutableRefObject<any> | undefined; }) =>  {
+  const AvatarImage = (props: React.JSX.IntrinsicAttributes & InterfaceAvatarProps & Partial<{}> & { variant?: unknown; size?: ThemeComponentSizeType<"Avatar">; colorScheme?: ColorSchemeType; } & { ref?: React.MutableRefObject<any> | undefined; }) => {
     if (!chain) {
       return (
         <>
-          <Avatar size={10} {...props}  bg="amber.500" >
-            <Text>0x</Text>      
+          <Avatar size={10} {...props} bg="amber.500" >
+            <Text>0x</Text>
           </Avatar>
         </>
-        
+
       )
     } else {
       return (
-        <Avatar size={'sm'} {...props} 
+        <Avatar size={'sm'} {...props}
           _light={{
             bg: 'coolGray.200'
-          }} 
+          }}
           _dark={{
             bg: 'coolGray.400'
-          }} 
+          }}
           source={
             chain === 'arbitrum-main' ? ArbLogo :
-            chain === 'eth-main' ? EthLogo :
-            chain === 'optimism-main' ? OptLogo :
-            chain === 'poly-main' ? PlyLogo :
-            null
+              chain === 'eth-main' ? EthLogo :
+                chain === 'optimism-main' ? OptLogo :
+                  chain === 'poly-main' ? PlyLogo :
+                    null
           } />
       )
     }
   };
-  const BetterCard = ({image, title, subtitle }: {image: string, title: string, subtitle: string}) => {
+  const BetterCard = ({ image, title, subtitle }: { image: string, title: string, subtitle: string }) => {
     return (
-      <Pressable 
+      <Pressable
         borderRadius="sm"
         padding={0}
         pt={0}
@@ -101,14 +101,14 @@ function NftCard({contract, token, chain}: {contract : string, token : string, c
         _light={{ bg: 'coolGray.100' }}
         _dark={{ bg: 'coolGray.700' }}
         onPress={accessLink}
-      > 
+      >
         {
-          <Badge 
-          rounded="full" mt={-5} mb={-4} mr={-4} zIndex={1} size={5} top={200} variant="ghost" alignSelf="flex-start" position='relative' left="0">
+          <Badge
+            rounded="full" mt={-5} mb={-4} mr={-4} zIndex={1} size={5} top={200} variant="ghost" alignSelf="flex-start" position='relative' left="0">
             <AvatarImage />
           </Badge>
         }
-        
+
         <Image
           borderTopRadius="sm"
           source={{
@@ -142,7 +142,7 @@ function NftCard({contract, token, chain}: {contract : string, token : string, c
             {title}
           </Text>
 
-          
+
         </Box>
       </Pressable>
     );
@@ -151,7 +151,7 @@ function NftCard({contract, token, chain}: {contract : string, token : string, c
   return (
     <Box pt={0} mt={0} mx={'auto'}>
       {
-        metadata.name != null && 
+        metadata.name != null &&
         <BetterCard
           title={metadata.name}
           subtitle={metadata.description}
@@ -161,7 +161,7 @@ function NftCard({contract, token, chain}: {contract : string, token : string, c
         />
       }
     </Box>
-    
+
   );
 }
 

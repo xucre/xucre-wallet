@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Center,
   Heading,
@@ -8,8 +9,8 @@ import {
   useColorMode,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
-import {Platform, StyleSheet} from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Platform, StyleSheet } from 'react-native';
 import { useRecoilState, } from "recoil";
 
 import { Border, Color, FontFamily } from "../../../GlobalStyles";
@@ -19,9 +20,9 @@ import { networkList, language as stateLanguage } from "../../service/state";
 import { storeNetwork, } from "../../store/network";
 
 
-export default function CreateWallet ({navigation, route}: {navigation: {navigate: Function}, route: any}) {
+export default function CreateWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [networks, setNetworks] = useRecoilState(networkList);
-  const [language, ] = useRecoilState(stateLanguage);
+  const [language,] = useRecoilState(stateLanguage);
   const [loading, setLoading] = useState(false);
   const [blockExplorer, setBlockExplorer] = useState('');
   const [chainId, setChainId] = useState('');
@@ -37,7 +38,7 @@ export default function CreateWallet ({navigation, route}: {navigation: {navigat
   const {
     colorMode
   } = useColorMode();
-  const icon_color = colorMode ==='dark'? 'white':'black';
+  const icon_color = colorMode === 'dark' ? 'white' : 'black';
 
   const handleNameChange = (event: { nativeEvent: { text: React.SetStateAction<string>; }; }) => {
     setName(event.nativeEvent.text)
@@ -59,10 +60,10 @@ export default function CreateWallet ({navigation, route}: {navigation: {navigat
   const saveNetwork = () => {
     const runAsync = async () => {
       if (name.length > 0 && chainId.length > 0 && rpcUrl.length > 0 && symbol.length > 0 && Number.isInteger(Number.parseInt(chainId))) {
-        
-        const _network : Network = {
+
+        const _network: Network = {
           blockExplorer,
-          chainId : Number.parseInt(chainId),
+          chainId: Number.parseInt(chainId),
           name,
           rpcUrl,
           symbol,
@@ -76,7 +77,7 @@ export default function CreateWallet ({navigation, route}: {navigation: {navigat
         setTimeout(() => {
           navigation.navigate('SelectNetwork');
         }, 100);
-        
+
       } else {
         setLoading(false);
       }
@@ -85,32 +86,31 @@ export default function CreateWallet ({navigation, route}: {navigation: {navigat
     setTimeout(() => {
       runAsync();
     }, 100);
-    
+
   };
 
   return (
-        <Center style={{backgroundColor: colorMode === 'dark' ? Color.gray_200 : Color.white}} flex={1} px="3">          
-          <KeyboardAvoidingView h={{
-            base: "400px",
-            lg: "auto"
-          }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-            <VStack minW="300px" w="full" alignItems="center" flex="1" justifyContent={'center'} marginBottom={20} marginTop={20}>
-              <Heading mb={5} style={styles.titleLayout} fontWeight={'normal'}><Text color={colorMode === 'dark' ? Color.white : Color.black}>New Network</Text></Heading>
-              <Input style={styles.textoImput} mb={2} value={name} onChange={handleNameChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.name_placeholder}  />
-              <Input style={styles.textoImput} mb={2} value={chainId} onChange={handleChainIdChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.chainId_placeholder}  />
-              <Input style={styles.textoImput} mb={2} value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.rpcUrl_placeholder}  />
-              <Input style={styles.textoImput} mb={2} value={symbol} onChange={handleSymbolChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.symbol_placeholder}  />
-              <Input style={styles.textoImput} mb={2} value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.explorer_placeholder}  />
-              <Button.Group>
-                <Button w={'100%'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => {saveNetwork();}} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}>
-                  <Text fontWeight={'bold'} style={{color: colorMode === 'dark' ? Color.black : Color.white}}>{translations[language as keyof typeof translations].CreateNetwork.submit_button}</Text>
-                </Button>
-              </Button.Group>
-              
-            </VStack>
-              
-          </KeyboardAvoidingView>
-        </Center>
+    <Box flex={1} px="3">
+      <KeyboardAvoidingView h={{
+        base: "400px",
+        lg: "auto"
+      }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <VStack w="full" alignItems="center" flex="1" justifyContent={'center'} marginBottom={20} marginTop={20} space={4}>
+          <Input value={name} onChange={handleNameChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.name_placeholder} />
+          <Input value={chainId} onChange={handleChainIdChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.chainId_placeholder} />
+          <Input value={rpcUrl} onChange={handleRpcUrlChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.rpcUrl_placeholder} />
+          <Input value={symbol} onChange={handleSymbolChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.symbol_placeholder} />
+          <Input value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.explorer_placeholder} />
+          <Button.Group>
+            <Button w={'100%'} mt={4} style={{ borderRadius: 100 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => { saveNetwork(); }} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}>
+              <Text fontWeight={'bold'} style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>{translations[language as keyof typeof translations].CreateNetwork.submit_button}</Text>
+            </Button>
+          </Button.Group>
+
+        </VStack>
+
+      </KeyboardAvoidingView>
+    </Box>
   );
 }
 
@@ -120,10 +120,10 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
   },
-    titleLayout: {
-      color: Color.black,
-      fontFamily: FontFamily.inter,
-      fontSize: 30,
-      textAlign: "center",
-    },
+  titleLayout: {
+    color: Color.black,
+    fontFamily: FontFamily.inter,
+    fontSize: 30,
+    textAlign: "center",
+  },
 });

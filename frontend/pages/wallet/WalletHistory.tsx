@@ -129,7 +129,8 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
   useEffect(() => {
     if (wallet.address) {
-      setHoldings([]);
+      console.log('refiring');
+      /*setHoldings([]);
       setCurrentHoldings({
         meta: {
           'date': ''
@@ -137,7 +138,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
         x: 0,
         y: 0
       });
-      setChartData([]);
+      setChartData([]);*/
       setRefreshing(true);
       getData();
     }
@@ -145,13 +146,15 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    setHoldings([]);
-    setChartData([]);
+    //setHoldings([]);
+    //setChartData([]);
     getData();
     /*setTimeout(async () => {
       setRefreshing(false);
     }, 100)*/
   }, []);
+
+  //\\\const walletTotal = currentHoldings ? currentHoldings.y : '0.00';
 
   const getMaxValue = () => {
     const result = chartData.reduce((retVal, chart) => {
@@ -178,7 +181,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
               <VStack>
                 <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} paddingTop={3} >{translations[language as keyof typeof translations].WalletHistory.total_balance}</Text>
                 <HStack paddingBottom={0} space={1}>
-                  <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >{CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}{currentHoldings ? currentHoldings.y : '0.00'}</Text></Heading>
+                  <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >{CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}{currentHoldings ? currentHoldings.y.toFixed(2) : '0.00'}</Text></Heading>
                 </HStack>
               </VStack>
               {/*<Menu w="160" shouldOverlapWithTrigger={false} trigger={triggerProps => {

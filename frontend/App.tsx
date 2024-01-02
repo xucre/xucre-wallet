@@ -62,7 +62,7 @@ import CreateNetwork from './pages/network/CreateNetwork';
 import NetworkDefault from './pages/network/NetworkDefault';
 import SelectNetwork from './pages/network/SelectNetwork';
 import ViewNetwork from './pages/network/ViewNetwork';
-import NftList from './pages/nft/NftList';
+import NftDashboard from './pages/nft/NftDashboard';
 import AddToken from './pages/token/AddToken';
 import BuyToken from './pages/token/BuyToken';
 import SendToken from './pages/token/SendToken';
@@ -313,7 +313,7 @@ export const AppWrapper = () => {
               title: translations[language as keyof typeof translations]?.WalletHistory?.title,
             }} ></Stack.Screen>
             <Stack.Screen name="CreateNetwork" component={CreateNetwork} options={{
-              title: '',
+              title: translations[language as keyof typeof translations]?.CreateNetwork?.title,
             }} ></Stack.Screen>
             <Stack.Screen name="SelectNetwork" component={SelectNetwork} options={{
               headerTitleAlign: 'center',
@@ -362,7 +362,7 @@ export const AppWrapper = () => {
               headerTitleAlign: 'center',
               title: ' ',
             }} ></Stack.Screen>
-            <Stack.Screen name="NFT" component={NftList} options={{
+            <Stack.Screen name="NFT" component={NftDashboard} options={{
               headerTitleAlign: 'center',
               title: translations[language as keyof typeof translations].SwapToken.title,
             }} ></Stack.Screen>

@@ -6,7 +6,7 @@ import {
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
-import { NFT } from '../../pages/nft/NftList';
+import { NFT } from '../../pages/nft/NftDashboard';
 //import SvgUri from 'react-native-svg-uri';
 
 
@@ -15,9 +15,9 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftItemSmall({item}: {item: NFT}) {
+function NftItemSmall({ item }: { item: NFT }) {
   //`const theme = useTheme();
-  const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : ''});
+  const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '' });
   const [url, setUrl] = useState('');
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
@@ -25,7 +25,7 @@ function NftItemSmall({item}: {item: NFT}) {
       setIsComponentMounted(false)
     }
   }, []);
-  
+
 
   useEffect(() => {
     setChannelMetadata(item);
@@ -42,9 +42,9 @@ function NftItemSmall({item}: {item: NFT}) {
     }
   }
 
-  const BetterCard = ({image, title, subtitle, projectName } : {image : string, title : string, subtitle : string, projectName : string }) => {
+  const BetterCard = ({ image, title, subtitle, projectName }: { image: string, title: string, subtitle: string, projectName: string }) => {
     return (
-      <Pressable 
+      <Pressable
         borderRadius="sm"
         padding={0}
         pt={0}
@@ -54,11 +54,13 @@ function NftItemSmall({item}: {item: NFT}) {
         _light={{ bg: 'transparent' }}
         _dark={{ bg: 'transparent' }}
         onPress={accessLink}
-      > 
-        <Avatar bg="transparent" alignSelf="center" size="lg" source={{
-          uri: image
-        }}></Avatar>
-        
+      >
+        {image.length > 0 &&
+          <Avatar bg="transparent" alignSelf="center" size="lg" source={{
+            uri: image
+          }}></Avatar>
+        }
+
         <Box
           borderRadius="sm"
           p={3}
@@ -74,8 +76,8 @@ function NftItemSmall({item}: {item: NFT}) {
           >
             {title}
           </Text>
-          <Text 
-            fontSize="md" 
+          <Text
+            fontSize="md"
             _light={{ color: 'coolGray.600' }}
             _dark={{ color: 'coolGray.400' }}
             textAlign={'center'}
@@ -90,7 +92,7 @@ function NftItemSmall({item}: {item: NFT}) {
   return (
     <Box m={0}>
       {
-        metadata.name != null && 
+        metadata.name != null &&
         <BetterCard
           title={metadata.name}
           subtitle={metadata.description}
@@ -103,7 +105,7 @@ function NftItemSmall({item}: {item: NFT}) {
         />
       }
     </Box>
-    
+
   );
 }
 

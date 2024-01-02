@@ -57,7 +57,8 @@ const values : TranslationType = {
     name_placeholder: 'Sutita qillqay', 
     rpcUrl_placeholder: 'RPC URL nisqapi qillqay',
     submit_button: 'Waqaychay', 
-    symbol_placeholder: 'Kadena siqiman yaykuy' 
+    symbol_placeholder: 'Kadena siqiman yaykuy',
+    title: "New Network"
   },
   CreateWallet: {
     instructions : 'Musuq billetera ruwachkaspa huk secuencia mnemÃ³nicas chaskinki mayqinkunachus "kikin contraseÃ±aykita" riqsichinku. Pipas kay qatiqniyuqqa mayqin musuq dispositivopipas billeteraykita wakmanta ruwayta atinman. Atikusqanman hina allinta waqaychay. Kay willakuymanqa qamllam haykunayki.',

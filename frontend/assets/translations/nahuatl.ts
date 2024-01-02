@@ -58,6 +58,7 @@ const values : TranslationType  = {
     rpcUrl_placeholder: 'Ahaquiaa RPC Url',
     submit_button: 'Tla-piya Maatla-tl',
     symbol_placeholder: 'Ahaquiaa Chain Symbol',
+    title: "New Network"
   },
   CreateWallet: {
     instructions:'Tla-yoocoya yancuic Tlahcuiloolaamapetlaacaltoon-tli, recibirá una secuencia de mnemónicos que representan su "Ichtacayooh personal". Cualquier persona con esta secuencia puede reconfigurar su Tlahcuiloolaamapetlaacaltoon-tli en cualquier dispositivo Yancuic. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',

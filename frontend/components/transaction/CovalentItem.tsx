@@ -1,21 +1,27 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { BigNumber, ethers, getDefaultProvider, Wallet } from "ethers";
 import moment from 'moment';
-import { Avatar, Box, Center, createIcon, HStack, Icon, IconButton, Menu, Pressable, Text, Tooltip, useColorMode, VStack, } from "native-base";
+import { Avatar, Badge, Box, Center, createIcon, HStack, Icon, IconButton, Menu, Pressable, Spinner, Text, Tooltip, useColorMode, VStack, } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
 import { Linking } from "react-native";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
-import { activeNetwork } from "../../service/state";
+import { activeNetwork, activeWallet } from "../../service/state";
 import { isSVGFormatImage, truncateString } from "../../service/utility";
-import { CovalentTransactionV3 } from "../../service/transaction";
+import { CovalentTransactionV3, ParsedTransaction, parseTransaction } from "../../service/transaction";
 import { SvgUri } from "react-native-svg";
 import { iconBackground } from "../../assets/styles/themeContext";
+import { WalletInternal } from "../../store/wallet";
+import { getIsSpam } from "../../service/api";
+import { actionToScheme } from "../../service/constants";
 
 export default function CovalentItem({ navigation, transaction }: { navigation: { navigate: Function }, transaction: CovalentTransactionV3 }) {
   const { colorMode } = useColorMode();
+  const [loading, setLoading] = useState(false);
+  const wallet = useRecoilValue(activeWallet);
+  const network = useRecoilValue(activeNetwork);
+  const [transactionDetails, setTransactionDetails] = useState({} as ParsedTransaction)
 
-  const [network,] = useRecoilState(activeNetwork);
   const openTransaction = () => {
     const blockUrl = network?.blockExplorer?.endsWith('/') ? network.blockExplorer + 'tx/' + transaction.tx_hash : network.blockExplorer + '/tx/' + transaction.tx_hash;
 
@@ -23,9 +29,26 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
   }
 
   useEffect(() => {
-    //console.log(transaction);
-    //console.log(transaction.gas_metadata?.logo_url);
-  }, [])
+    if (transaction && wallet.wallet.length > 0 && network.chainId) parseDetails();
+  }, [transaction, wallet, network])
+
+  useEffect(() => {
+    //console.log(transactionDetails);
+  }, [transactionDetails])
+
+  const parseDetails = async () => {
+    setLoading(true);
+    const result: ParsedTransaction = await parseTransaction(new WalletInternal(wallet.wallet), transaction, network);
+    if (result.action === 'Unknown') {
+      const isSpam = await getIsSpam(result.contractAddress, network.chainId);
+      //console.log('isSpam', isSpam, result.action);
+      setTransactionDetails({ ...result, spam: isSpam === true })
+    } else {
+      setTransactionDetails({ ...result })
+    }
+
+    setLoading(false);
+  }
 
   const CustomIcon = ({ data, size }: { data: any, size: number }): JSX.Element => {
     return <SvgUri
@@ -57,6 +80,32 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
     )
   }
 
+  const getItemStatus = () => {
+    if (transactionDetails.spam) {
+      return 'Spam'
+    }
+
+    return transaction.successful ? 'Completed' : 'Failure';
+  }
+
+  const getItemAmount = () => {
+    return transaction.dex_details ?
+      ethers.utils.formatEther(transaction.dex_details.token_1_amount) + ' ' + transaction.dex_details.token_1_ticker :
+      ethers.utils.formatEther(transaction.value) + ' ' + transaction.gas_metadata.contract_ticker_symbol
+  }
+
+  const ItemAction = () => {
+    return (
+      <Badge variant={'solid'} colorScheme={getItemActionScheme()} alignSelf="center">
+        {transactionDetails.action}
+      </Badge>
+    )
+  }
+
+  const getItemActionScheme = () => {
+    return actionToScheme[transactionDetails.action as keyof typeof actionToScheme];
+  }
+
   return (
     <Pressable onPress={() => { openTransaction() }} >
       {({
@@ -71,7 +120,7 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
                 <TokenIcon iname={transaction.gas_metadata?.contract_ticker_symbol} />
                 <VStack space={{ base: 0 }} justifyContent={'space-around'} alignItems={'flex-start'}>
                   <Text fontSize="sm" bold>
-                    {BigNumber.from(transaction.value).isZero() ? '$0.00' : transaction.pretty_value_quote}
+                    <ItemAction />
                   </Text>
                   <Text fontSize="sm">
                     {transaction.block_signed_at &&
@@ -85,12 +134,15 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
             <HStack alignItems="center" space={{ base: 2 }}>
               <VStack alignItems={'flex-end'}>
                 <Text>
-                  {transaction.dex_details ? ethers.utils.formatEther(transaction.dex_details.token_1_amount) : ethers.utils.formatEther(transaction.value)}
+                  {getItemAmount()}
                 </Text>
-                <Text
-                  color={(!transaction.successful) ? 'error.500' : 'success.500'}
-                  rounded={'md'}
-                  fontWeight="normal">{transaction.successful ? 'Completed' : 'Failure'}</Text>
+                {loading && <Spinner size="sm" />}
+                {!loading &&
+                  <Text
+                    color={(!transaction.successful) || transactionDetails.spam ? 'error.500' : 'success.500'}
+                    rounded={'md'}
+                    fontWeight="normal">{getItemStatus()}</Text>
+                }
               </VStack>
             </HStack>
           </HStack>

@@ -21,9 +21,9 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftListItem({contract, token, chain}: {contract: string, token: string, chain: string}) {
+function NftListItem({ contract, token, chain }: { contract: string, token: string, chain: string }) {
   //`const theme = useTheme();
-  const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : '', subtitle: ''});
+  const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '', subtitle: '' });
   const [url, setUrl] = useState('');
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
@@ -31,7 +31,7 @@ function NftListItem({contract, token, chain}: {contract: string, token: string,
       setIsComponentMounted(false)
     }
   }, []);
-  
+
 
   useEffect(() => {
     retrieveMetadata();
@@ -39,10 +39,10 @@ function NftListItem({contract, token, chain}: {contract: string, token: string,
 
   const retrieveMetadata = async () => {
     const result = await getMetadata(contract, token, chain);
-    
+
     setChannelMetadata({
       description: result.token_description,
-      image: result.cached_images.small_250_250,
+      image: result.cached_images.small_250_250 || '',
       key: `${result.contract_address}/${result.id}`,
       name: result.token_name,
       subtitle: result.token_type,
@@ -60,46 +60,48 @@ function NftListItem({contract, token, chain}: {contract: string, token: string,
     }
   }
 
-  const ListItem = ({image, title, subtitle, contract }: {image: string, title: string, subtitle: string, contract: string}) => {
+  const ListItem = ({ image, title, subtitle, contract }: { image: string, title: string, subtitle: string, contract: string }) => {
     return (
       <HStack alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-          <Avatar bg="transparent" alignSelf="center" size="md" source={{
-            uri: image
-          }}></Avatar>
+          {image.length > 0 &&
+            <Avatar bg="transparent" alignSelf="center" size="md" source={{
+              uri: image
+            }}></Avatar>
+          }
           <VStack>
-              <Text fontSize="md" bold>
-                {title}
-              </Text>
-              
-              <Text 
-                fontSize="md" 
-                _light={{ color: 'coolGray.600' }}
-                _dark={{ color: 'coolGray.400' }}
-              >
-                {subtitle}
-              </Text>
+            <Text fontSize="md" bold>
+              {title}
+            </Text>
+
+            <Text
+              fontSize="md"
+              _light={{ color: 'coolGray.600' }}
+              _dark={{ color: 'coolGray.400' }}
+            >
+              {subtitle}
+            </Text>
           </VStack>
         </HStack>
         <HStack alignItems="center" space={{ base: 2 }}>
-          <Text 
-              _light={{ color: 'coolGray.500' }}
-              _dark={{ color: 'coolGray.400' }}
-              fontWeight="normal">{truncateString(contract, 3, false)}</Text>
+          <Text
+            _light={{ color: 'coolGray.500' }}
+            _dark={{ color: 'coolGray.400' }}
+            fontWeight="normal">{truncateString(contract, 3, false)}</Text>
           <Tooltip label="More Options" openDelay={500}>
-              <Menu w="190" trigger={triggerProps => {
-                return <Pressable accessibilityLabel={'Options'} {...triggerProps}>
-                  <Icon
-                    as={MaterialIcons}
-                    name="more-vert"
-                    size="6"
-                    color="coolGray.500"
-                  />
-                </Pressable>;
-                }}
-              >                
-                <Menu.Item onPress={accessLink}><Text>{'OpenSea'}</Text></Menu.Item>                
-              </Menu>
+            <Menu w="190" trigger={triggerProps => {
+              return <Pressable accessibilityLabel={'Options'} {...triggerProps}>
+                <Icon
+                  as={MaterialIcons}
+                  name="more-vert"
+                  size="6"
+                  color="coolGray.500"
+                />
+              </Pressable>;
+            }}
+            >
+              <Menu.Item onPress={accessLink}><Text>{'OpenSea'}</Text></Menu.Item>
+            </Menu>
           </Tooltip>
         </HStack>
       </HStack>
@@ -109,7 +111,7 @@ function NftListItem({contract, token, chain}: {contract: string, token: string,
   return (
     <>
       {
-        metadata.name != null && 
+        metadata.name != null &&
         <ListItem
           title={metadata.name}
           subtitle={metadata.subtitle}
@@ -122,7 +124,7 @@ function NftListItem({contract, token, chain}: {contract: string, token: string,
         />
       }
     </>
-    
+
   );
 }
 

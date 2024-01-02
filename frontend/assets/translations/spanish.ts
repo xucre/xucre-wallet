@@ -57,7 +57,8 @@ const values : TranslationType = {
     name_placeholder: "Ingrese Nombre",
     rpcUrl_placeholder: "Ingrese RPC Url",
     submit_button: "Guardar Red",
-    symbol_placeholder: "Ingrese Chain Symbol"
+    symbol_placeholder: "Ingrese Chain Symbol",
+    title: "Nueva Network"
   },
   CreateWallet: {
     instructions: "Al crear una nueva billetera, recibirá una secuencia de mnemónicos que representan su \"contraseña personal\". Cualquier persona con esta secuencia puede reconfigurar su billetera en cualquier dispositivo nuevo. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.",

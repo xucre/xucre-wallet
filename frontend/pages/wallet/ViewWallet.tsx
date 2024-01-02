@@ -7,34 +7,28 @@ import {
   FlatList,
   HStack,
   Icon,
-  Pressable,
-  ScrollView,
   Text,
   useColorMode,
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
-import { useRecoilRefresher_UNSTABLE, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 //import { TokenBalancesListView } from "@covalenthq/goldrush-kit";
 
 
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
-import CovalentItem from "../../components/transaction/CovalentItem";
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getTokenBalances, getWalletTransactions } from "../../service/api";
 import { chainIdToNameMap, xucreToken } from "../../service/constants";
-import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList, tokenList } from '../../service/state';
+import { activeNetwork, activeWallet, language as stateLanguage, walletList } from '../../service/state';
 import { CovalentTransaction } from "../../service/transaction";
-import { getTokenByChain } from '../../store/token';
-import NftList from "../nft/NftList";
 import { Token } from "../../service/token";
 import { WalletInternal } from "../../store/wallet";
 import { getActiveNetwork } from "../../store/network";
-import { TouchableOpacity } from "react-native";
 import { Color } from "../../../GlobalStyles";
 import ethTokens from '../../assets/json/eth_tokens.json'
 import polygonTokens from '../../assets/json/matic_tokens.json'
@@ -51,7 +45,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [_wallet,] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const network = useRecoilValue(activeNetwork);
-  const refreshNetwork = useRecoilRefresher_UNSTABLE(activeNetwork);
   const [tokens, setTokens] = useState([] as Token[]);
   const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
@@ -66,7 +59,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const buttonSend = translations[language as keyof typeof translations].Buttons_Header.send;
   const buttonReceive = translations[language as keyof typeof translations].Buttons_Header.receive;
   const buttonBuy = translations[language as keyof typeof translations].Buttons_Header.buy;
-  const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
+  //const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
   const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
 
   const tokenMetadataMap = network.chainId === 1 ? ethTokens : network.chainId === 137 ? polygonTokens : {};
@@ -76,7 +69,9 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
       const _network = await getActiveNetwork();
       console.log('network chainId', _network.chainId);
+      // TODO - 
       const _tokens = await getTokenBalances(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
+      console.log(_tokens);
       //await wallet.provider.getNetwork();'
       const _provider = getDefaultProvider(_network.rpcUrl);
       //console.log(wallet._isSigner);
