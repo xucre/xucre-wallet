@@ -15,7 +15,7 @@ import { WalletInternal } from '../../store/wallet';
 
 //const lifi = new LIFI();
 
-export default function SwapToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function SwapToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [network,] = useRecoilState(activeNetwork);
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet,] = useRecoilState(activeWallet);
@@ -23,10 +23,10 @@ export default function SwapToken({ navigation, route }: {navigation: {navigate:
   const [provider, setProvider] = useState({} as ethers.providers.JsonRpcProvider);
   useEffect(() => {
     if (_wallet.name != '' && network) {
-      const _provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
+      /*const _provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
       setProvider(_provider);
       const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
-      setWallet(newWallet);
+      setWallet(newWallet);*/
     }
   }, [_wallet, network]);
 

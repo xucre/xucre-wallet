@@ -8,31 +8,31 @@ import {
   useColorMode,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
-import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data"; 
+import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 
-export default function SignTransaction({navigation, route}: {navigation: {navigate: Function}, route: any}) {
-  const {requestDetails} = route.params;
-  const {colorMode} = useColorMode();
+export default function SignTransaction({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
+  const { requestDetails } = route.params;
+  const { colorMode } = useColorMode();
   const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
   const [method, setMethod] = useState('');
   const [value, setValue] = useState({});
   const [walletAddress, setWalletAddress] = useState('');
-  const [walletState, ] = useRecoilState(walletList);
+  const [walletState,] = useRecoilState(walletList);
   const [selectedWallets, setSelectedWallets] = useState([]);
   const [viewData, setViewData] = useState(false);
-  const [language, ] = useRecoilState(stateLanguage);
+  const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
@@ -52,16 +52,16 @@ export default function SignTransaction({navigation, route}: {navigation: {navig
       }
       setValue(request['params']['request']['params'][0]);
     }
-    
+
   }, [request])
-  
+
   useEffect(() => {
     //
   }, [])
 
-  const StyledItem = ({label, value} : {label : string, value: string}) => {
+  const StyledItem = ({ label, value }: { label: string, value: string }) => {
     return (
-      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>   
+      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
         <VStack space={0}>
           <Text fontSize="sm" color="coolGray.500">
             {label}
@@ -72,14 +72,14 @@ export default function SignTransaction({navigation, route}: {navigation: {navig
     );
   }
 
-  const CustomTextAreaOverlay = ({ data } : {data : string}) => {
+  const CustomTextAreaOverlay = ({ data }: { data: string }) => {
     return (
-      <Box borderRadius={'md'} w={'full'} borderColor={'gray.300'} borderStyle={'solid'} h={'1/4'} borderWidth={1}> 
+      <Box borderRadius={'md'} w={'full'} borderColor={'gray.300'} borderStyle={'solid'} h={'1/4'} borderWidth={1}>
         <ScrollView w={'full'} maxH={'full'}>
           <Text color={'gray.500'}>{data}</Text>
         </ScrollView>
       </Box>
-      
+
     );
   };
 
@@ -108,17 +108,16 @@ export default function SignTransaction({navigation, route}: {navigation: {navig
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');    
+    navigation.navigate('ViewWallet');
   }
 
   return (
     <GuestLayout>
-      <Center         
+      <Box
         _light={{ backgroundColor: Color.white }}
         _dark={{ backgroundColor: Color.black }}
-        height={'100%'}
       >
-        {request && request['params'] && 
+        {request && request['params'] &&
           <VStack>
             <VStack>
               {/*<Center mt={5}>          
@@ -126,18 +125,18 @@ export default function SignTransaction({navigation, route}: {navigation: {navig
               </Center>*/}
               <Box mx={2} px={2} >
                 <HStack alignItems={'flex-end'}>
-                  {!viewData && 
+                  {!viewData &&
                     <Button variant={'ghost'} onPress={() => setViewData(true)}>{translations[language as keyof typeof translations].SendTransaction.view_data}</Button>
                   }
-                  {viewData && 
+                  {viewData &&
                     <Button variant={'ghost'} onPress={() => setViewData(false)}>{translations[language as keyof typeof translations].SendTransaction.hide_data}</Button>
                   }
                 </HStack>
-                {viewData && 
+                {viewData &&
                   <CustomTextAreaOverlay data={JSON.stringify(value)} />
                 }
               </Box>
-              
+
               {/*<Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
                 <ScrollView height={'50%'} width={'100%'} >
                   <Text>{JSON.stringify(value)}</Text>                    
@@ -148,12 +147,12 @@ export default function SignTransaction({navigation, route}: {navigation: {navig
               </VStack>
             </VStack>
             <Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}  >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white } fontWeight={'bold'}>{translations[language as keyof typeof translations].SignTransaction.approve_button}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language as keyof typeof translations].SignTransaction.approve_button}</Text></Button>
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignTransaction.reject_button}</Text></Button>
             </Button.Group>
           </VStack>
-        }        
-      </Center>
+        }
+      </Box>
     </GuestLayout>
   );
 }

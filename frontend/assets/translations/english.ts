@@ -1,4 +1,5 @@
 import { TranslationType } from ".";
+import TransactionFeed from '../../components/transaction/TransactionFeed';
 /* eslint-disable sort-keys */
 const values : TranslationType = {
   AddToken: {
@@ -6,7 +7,7 @@ const values : TranslationType = {
     chain_placeholder: "Select Chain",
     name_placeholder: "Enter Token Name",
     submit_button: "Save Token",
-    title: "Wallet"
+    title: "Add Token"
   },
   App: {
     select_network_title: "Networks",
@@ -44,6 +45,12 @@ const values : TranslationType = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: "Save",
     chainId_placeholder: "Enter Chain ID",
@@ -51,7 +58,8 @@ const values : TranslationType = {
     name_placeholder: "Enter Name",
     rpcUrl_placeholder: "Enter RPC Url",
     submit_button: "Save",
-    symbol_placeholder: "Enter Chain Symbol"
+    symbol_placeholder: "Enter Chain Symbol",
+    title: "New Network"
   },
   CreateWallet: {
     instructions: "When creating a new wallet you will receive a sequence of mnemonics which represent your \"personal password\". Anyone with this sequence may be able to reconfigure your wallet in any new device. Keep it stored as secure as possible. Only you should have access to this information.",
@@ -237,6 +245,9 @@ const values : TranslationType = {
     menu_accessiblity_label: "More options menu",
     send_token_button: "Send"
   },
+  TransactionFeed: {
+    title: "Transactions"
+  },
   ViewNetwork: {
     active_network: "Active Network",
     edit_button: "Edit",
@@ -261,7 +272,8 @@ const values : TranslationType = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
-    title: "History"
+    title: "History",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Send WhatsApp notification",

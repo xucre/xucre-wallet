@@ -44,6 +44,12 @@ const values : TranslationType  = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: 'Salvar',
     chainId_placeholder: 'Digite o ID da cadeia',
@@ -52,6 +58,7 @@ const values : TranslationType  = {
     rpcUrl_placeholder: 'Digite o URL RPC',
     submit_button: 'Salvar rede',
     symbol_placeholder: 'Digite o sÃ­mbolo da cadeia',
+    title: "New Network"
   },
   CreateWallet: {
     instructions: 'Ao criar uma nova carteira, vocÃª receberÃ¡ uma sequÃªncia de mnemÃ´nicos que representam sua "senha pessoal". Qualquer pessoa com essa sequÃªncia pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possÃ­vel Somente vocÃª deve ter acesso a essas informaÃ§Ãµes.',
@@ -237,6 +244,9 @@ const values : TranslationType  = {
     menu_accessiblity_label: "Menu mais opÃ§Ãµes",
     send_token_button: 'Enviar'
   },
+  TransactionFeed: {
+    title: "TransaÃ§Ãµes"
+  },
   ViewNetwork: {
     active_network: 'Rede Ativa',
     edit_button: 'Editar',
@@ -261,7 +271,8 @@ const values : TranslationType  = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {  
-    title: "HistÃ³ria"   
+    title: "HistÃ³ria",
+    total_balance: 'Total Balance'   
   },  
   WhatsAppNotification:{
     button: "Enviar notificação pelo WhatsApp",

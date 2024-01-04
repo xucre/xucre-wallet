@@ -35,45 +35,59 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 
 - [Expo TypeScript guide](https://docs.expo.dev/versions/latest/guides/typescript/)
 
-
 ## How to Build - Local
+
 - npx expo run:android
 
 ## How to Build IOS - Deploy
-- npx eas build -p ios --profile production
+
+- npx eas build --profile production -p ios
 
 ## How to Build APK - Deploy
-- npx eas build -p android --profile production
+
+- npx eas build --profile production -p android
+
+## How to Deploy - Prod - Android
+
+- npx eas submit -p android
 
 ## How to Build APK - Local
+
 - eas build -p android --local --profile production
 
-## How to Build - Local - Production 
+## How to Build - Local - Production
+
 - npx expo run:android --variant release
 
 ## How to Build - Prod
+
 - eas build -p android --profile production_deploy
 
 ## How to Deploy - Prod - Android
+
 - npx eas submit -p android
 
 ## How to run language translation validation
-- ts-node --esm ./scripts/compareLanguages.ts 
+
+- ts-node --esm ./scripts/compareLanguages.ts
 - change the comparison by updating params in console.log
 
 ## Compile error checklist
+
 - Run npm i
 - Delete node_modules and run npm i
 - Delete android/app/build directory
 
 ## How to update version
+
 - package.json version
 - app.json version
 - android/app/build.gradle version
 - android/app/build.gradle versionCode
-Versions should all be the same value. 
-VersionCode should increment by 1
+  Versions should all be the same value.
+  VersionCode should increment by 1
 
 ## How to clear cache
-- npm i 
+
+- npm i
 - npx expo start -c

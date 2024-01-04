@@ -44,6 +44,12 @@ const values : TranslationType = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: "Guardar",
     chainId_placeholder: "Ingrese Chain ID",
@@ -51,7 +57,8 @@ const values : TranslationType = {
     name_placeholder: "Ingrese Nombre",
     rpcUrl_placeholder: "Ingrese RPC Url",
     submit_button: "Guardar Red",
-    symbol_placeholder: "Ingrese Chain Symbol"
+    symbol_placeholder: "Ingrese Chain Symbol",
+    title: "Nueva Network"
   },
   CreateWallet: {
     instructions: "Al crear una nueva billetera, recibirá una secuencia de mnemónicos que representan su \"contraseña personal\". Cualquier persona con esta secuencia puede reconfigurar su billetera en cualquier dispositivo nuevo. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.",
@@ -239,6 +246,9 @@ const values : TranslationType = {
     menu_accessiblity_label: "Menu más opciones",
     send_token_button: "Enviar"
   },
+  TransactionFeed: {
+    title: "Transacciones"
+  },
   ViewNetwork: {
     active_network: "Red Activa",
     edit_button: "Editar",
@@ -263,7 +273,8 @@ const values : TranslationType = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
-    title: "History"
+    title: "History",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Enviar notificación de WhatsApp",

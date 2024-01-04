@@ -10,6 +10,7 @@ import {
   Button,
   Center,
   FlatList,
+  HStack,
   Icon,
   Image,
   Input,
@@ -33,6 +34,8 @@ import translations from "../../assets/translations";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getIconImage } from "../../service/api";
 import { activeWallet, language as stateLanguage } from "../../service/state";
+import CopyButton from "../../components/wallet/CopyButton";
+import QRButton from "../../components/wallet/QRButton";
 
 export default function QRWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
@@ -160,7 +163,6 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
   };
 
   // Transitions
-  const [displayTooltip, setDisplayTooltip] = useState(false);
 
 
   const eventFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -184,15 +186,6 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
     }
   }
 
-  const copyToClipboard = () => {
-    Clipboard.setStringAsync(String(_wallet.address));
-    setDisplayTooltip(true);
-    setTimeout(() => {
-      setDisplayTooltip(false);
-    }, 1000)
-  };
-
-
   const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/whatsapp.png'
   return (
     <KeyboardAvoidingView h={{
@@ -215,27 +208,23 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
             safeAreaBottom
           >
 
-            <Center mt={10} mb={2}>
-              <QRCode
-                size={200}
-                style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%", }}
-                value={_wallet.address}
-                viewBox={`0 0 200 200`}
-              />
-              <Text variant={'lg'} mt={5}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>
-              <Text variant={'lg'} mt={5} mb={2} bold fontSize={20}>{_wallet.name}</Text>
-              <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
-                color: "#ffffff"
-              }}>
-                <Button onPress={copyToClipboard} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{_wallet.address}</Text></Button>
-              </Tooltip>
+            <Center mt={6}>
+              {/*<Text variant={'lg'} mt={5}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>*/}
+
             </Center>
 
+            <HStack justifyContent={'space-between'} marginX={5}>
+              <Text variant={'lg'} mt={5} mb={2} bold fontSize={20}>{_wallet.name}</Text>
+              <Button.Group>
+                <QRButton address={_wallet.address} />
+                <CopyButton address={_wallet.address} />
+              </Button.Group>
+            </HStack>
 
             <View style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white, flex: 1 }}>
 
               <VStack w="100%" space={5} alignSelf="center">
-                <Input placeholder="Search" variant="filled" marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}
+                <Input placeholder="Search" variant="filled" h={'10'} marginLeft="5" marginTop="5" width="90%" borderRadius="10" py="1" px="2" InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="ios-search" />} />}
                   onChangeText={(text) => { searchItem(text) }} onFocus={(event) => { eventFocus(event) }} />
               </VStack>
 

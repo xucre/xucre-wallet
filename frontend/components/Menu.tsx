@@ -6,6 +6,7 @@ import {
   Divider,
   Drawer,
   HStack,
+  IconButton,
   MoonIcon,
   Pressable,
   SunIcon,
@@ -14,6 +15,7 @@ import {
   useColorModeValue,
   VStack,
 } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { useRecoilState } from "recoil";
@@ -96,6 +98,8 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
         //navigate('NewWallet')
       }
 
+      await validateAuth();
+
 
     }
 
@@ -111,6 +115,7 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
 
   const validateAuth = async () => {
     const _authNeeded = await needsAuth();
+    console.log(_authNeeded);
     setAuthNeeded(_authNeeded);
   }
 
@@ -160,23 +165,6 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
           onPress={() => { navigate('NFTs'); }}
         >
           <Text>{translations[_language as keyof typeof translations].Menu.nft_button}</Text>
-        </Button>
-      </VStack>
-    );
-  }
-
-  function CurencyCode() {
-    return (
-      <VStack space={4} mt={{ base: 0 }}>
-        <Button
-          variant="outline"
-          my={1}
-          colorScheme={'yellow'}
-          rounded={100}
-          px={10}
-          onPress={() => { navigate('Currency'); }}
-        >
-          <Text>{translations[_language as keyof typeof translations].Menu.currency_button}</Text>
         </Button>
       </VStack>
     );
@@ -273,11 +261,10 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
       _dark={{ bg: Color.black }}
     >
       {!drawerStatus &&
-        <Pressable onPress={() => { setDrawerStatus(true) }}>
-          <Avatar source={
-            colorMode === 'dark' ? require('../assets/images/icon-green.png') : require('../assets/images/icon-green.png')
-          } bg={Color.transparent} size="xs" m={1} ml={0} mr={3} mb={1}></Avatar>
-        </Pressable>
+        <IconButton onPress={() => setDrawerStatus(!drawerStatus)} colorScheme={'dark'} key={'copyButton'} variant={'ghost'} _icon={{
+          as: MaterialIcons,
+          name: "menu"
+        }} />
       }
       <Drawer
         isOpen={drawerStatus}
@@ -291,14 +278,14 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
           safeAreaTop
         >
           <HStack justifyContent={'space-between'} pt={4} pb={0}>
-            <Pressable onPress={() => { setDrawerStatus(true) }}>
+            <Pressable onPress={() => { setDrawerStatus(true); navigate('ViewWallet'); }}>
               <Avatar source={
                 colorMode === 'dark' ? require('../assets/images/icon-green.png') : require('../assets/images/icon-green.png')
               } size="sm" bg={Color.transparent} m={1} ml={2} mb={1} mt={2}></Avatar>
             </Pressable>
 
             {/*<SelectLanguage />*/}
-            {<NetworkIcon navigation={navigation} />}
+            {<NetworkIcon navigation={navigation} close={setDrawerStatus} />}
             {<ToggleDarkMode setScheme={setScheme} />}
             {/*<BackButton setDrawerStatus={setDrawerStatus}/>*/}
           </HStack>
@@ -309,13 +296,12 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
           }
           <VStack space={0}>
             <SelectLanguageLink />
-            <CurencyCode />
             <NetworkLink />
             <WalletLink />
-            <Connections />
-            <Requests />
-            <QRScan />
-            <SetPassword />
+            {/*<Connections />
+            <Requests />*/}
+            {/*<QRScan />*/}
+            {/*<SetPassword />*/}
           </VStack>
 
           <Box my={'2'}></Box>

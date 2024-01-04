@@ -30,7 +30,7 @@ import {
 import { storeWallet, WalletInternal } from '../../store/wallet';
 import { Wallet } from "ethers";
 
-export default function CreateWallet({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function CreateWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const setWalletList = useSetRecoilState(walletList);
   const [language] = useRecoilState(stateLanguage);
   const [steps, setSteps] = useState(0);
@@ -79,8 +79,10 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
         setScrambledMnemonics(arrayShuffle(_mnemonics));
         setLoading(false);
         // only used for testing
-        //setConfirmMnemonics(_mnemonics);
-        //setMnemonicMatchComplete(true);
+        if (__DEV__) {
+          setConfirmMnemonics(_mnemonics);
+          setMnemonicMatchComplete(true);
+        }
       }, 100);
     };
     const createMnemonics = () => {
@@ -89,7 +91,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
     };
 
     return (
-      <Center marginBottom={20} h={"3/4"} w={"full"}>
+      <VStack marginBottom={20} justifyContent={'space-around'} w={"full"} alignItems={'center'}>
         <Heading
           style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
           py={2}
@@ -117,14 +119,13 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             {translations[language as keyof typeof translations].CreateWallet.instructions_button}
           </Text>
         </Button>
-      </Center>
+      </VStack>
     );
   }
 
-  
-
   function MnemonicList() {
-    function ListItem({value, index} : {value :string, index:number}) {
+    console.log(mnemonics);
+    function ListItem({ value, index }: { value: string, index: number }) {
       return (
         <Button
           width={'100%'}
@@ -144,22 +145,22 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
           shadow={"3"}
           startIcon={
             <Badge
-            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-            rounded="full"
-            zIndex={100}
-            variant="solid"
-            alignSelf="flex-start"
-            _text={{
-              fontSize: 12,
-            }}
-            margin={2}
-          >
-            <Text style={{
-              color : colorMode === 'dark' ? Color.black : Color.white,
-            }}>{index + 1}</Text>
-          </Badge>
+              colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+              rounded="full"
+              zIndex={100}
+              variant="solid"
+              alignSelf="flex-start"
+              _text={{
+                fontSize: 12,
+              }}
+              margin={2}
+            >
+              <Text style={{
+                color: colorMode === 'dark' ? Color.black : Color.white,
+              }}>{index + 1}</Text>
+            </Badge>
           }
-        >                      
+        >
           <Text >{value}</Text>
         </Button>
       )
@@ -187,7 +188,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             {mnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
-                  <ListItem value={val} index={i} key={i}/>
+                  <ListItem value={val} index={i} key={i} />
                 );
               }
             })}
@@ -196,7 +197,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             {mnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
-                  <ListItem value={val} index={i} key={i}/>
+                  <ListItem value={val} index={i} key={i} />
                 );
               }
             })}
@@ -205,7 +206,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             {mnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
-                  <ListItem value={val} index={i} key={i}/>
+                  <ListItem value={val} index={i} key={i} />
                 );
               }
             })}
@@ -225,7 +226,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
       });
       setConfirmMnemonics(filteredList);
     };
-    function ListItem({value, index} : {value :string, index:number}) {
+    function ListItem({ value, index }: { value: string, index: number }) {
       return (
         <Button
           width={'100%'}
@@ -243,16 +244,16 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
           alignItems={'center'}
           justifyContent={'flex-start'}
           shadow={"3"}
-          
+
           onPress={() => {
-            if (confirmMnemonics.includes(value) ) {
+            if (confirmMnemonics.includes(value)) {
               removeMnemonic(value);
             } else {
               selectMnemonic(value);
-            }            
+            }
           }}
           startIcon={
-            confirmMnemonics.includes(value) ? 
+            confirmMnemonics.includes(value) ?
               <Badge
                 colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                 rounded="full"
@@ -265,7 +266,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
                 margin={2}
               >
                 <Text style={{
-                  color : colorMode === 'dark' ? Color.black : Color.white,
+                  color: colorMode === 'dark' ? Color.black : Color.white,
                 }}>{confirmMnemonics.indexOf(value) + 1}</Text>
               </Badge> :
               <Badge
@@ -280,11 +281,11 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
                 marginY={2}
               >
                 <Text style={{
-                  color : 'transparent',
+                  color: 'transparent',
                 }}></Text>
               </Badge>
           }
-        >                      
+        >
           <Text >{value}</Text>
         </Button>
       )
@@ -304,9 +305,6 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
           {translations[language as keyof typeof translations].CreateWallet.mnemonic_instructions}
         </Text>
 
-        
-
-        
         <HStack
           style={{
             paddingBottom: 10,
@@ -316,7 +314,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
-                  <ListItem value={val} index={i} key={i}/>
+                  <ListItem value={val} index={i} key={i} />
                 );
               }
             })}
@@ -325,7 +323,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
-                  <ListItem value={val} index={i} key={i}/>
+                  <ListItem value={val} index={i} key={i} />
                 );
               }
             })}
@@ -334,7 +332,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
-                  <ListItem value={val} index={i} key={i}/>
+                  <ListItem value={val} index={i} key={i} />
                 );
               }
             })}
@@ -363,7 +361,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
             </Text>
           </Button>
         )}
-        {!mnemonicMatchError && !mnemonicMatchComplete && 
+        {!mnemonicMatchError && !mnemonicMatchComplete &&
           <Box minH={15} my={4}></Box>
         }
       </>
@@ -420,12 +418,12 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
   };
 
   return (
-    <Center style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white }} flex={1} px="3">
+    <Box style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white }} flex={1} px="3" h={'full'}>
       <KeyboardAvoidingView h={{
         base: "auto",
         lg: "auto"
       }} behavior={Platform.OS === "ios" ? "padding" : "height"} py={10}>
-        {steps === 0 && 
+        {steps === 0 &&
           <Box>
             <Instructions></Instructions>
           </Box>
@@ -435,8 +433,7 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
           <Box
             alignItems="center"
           >
-            <Center marginBottom={20} h={"3/4"} w={"full"} alignItems="center" flex="1" justifyContent="space-between">
-              
+            <VStack marginBottom={0} w={"full"} alignItems="center" justifyContent="space-between" _text={{ color: "warmGray.50", fontWeight: "medium" }}>
               <Heading
                 style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
                 py={2}
@@ -453,36 +450,37 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
                   </Button>
                 </Button.Group>
               </Box>
-            </Center>
+            </VStack>
           </Box>
         )}
 
         {steps === 2 && (
           <Box
-          alignItems="center"
+            alignItems="center"
           >
-          <Center marginBottom={0} h={"3/4"} w={"full"} alignItems="center" flex="1" justifyContent="space-between" _text={{ color: "warmGray.50", fontWeight: "medium" }}>
-            <Heading
-              style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
-              py={2}
-            >
-              {translations[language as keyof typeof translations].CreateWallet.mnemonic_confirm_instructions}
-            </Heading>
-            <ConfirmMnemonicList></ConfirmMnemonicList>
-            <MnemonicError></MnemonicError>
-          </Center>
+            <VStack marginBottom={0} w={"full"} alignItems="center" justifyContent="space-between" _text={{ color: "warmGray.50", fontWeight: "medium" }}>
+              <Heading
+                style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
+                py={2}
+              >
+                {translations[language as keyof typeof translations].CreateWallet.mnemonic_confirm_instructions}
+              </Heading>
+              <ConfirmMnemonicList></ConfirmMnemonicList>
+              <MnemonicError></MnemonicError>
+            </VStack>
           </Box>
         )}
 
         {steps === 3 && (
-          <Center
+          <VStack
             alignItems="center"
+            w={'full'}
+            justifyContent={'space-around'}
           >
             <Text
               style={{ color: colorMode === 'dark' ? Color.white : Color.black, fontWeight: "bold" }}
               fontSize={"lg"}
               mt={5}
-              
             >
               {translations[language as keyof typeof translations].CreateWallet.name_wallet}
             </Text>
@@ -495,12 +493,12 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
               }}
               fontSize={"md"}
               mt={5}
-              
+
             >
               {translations[language as keyof typeof translations].CreateWallet.instructions_nameWallet}
             </Text>
             <Input
-              w="full"
+              w="90%"
               my={10}
               value={name}
               onChange={handleChange}
@@ -518,9 +516,9 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
                 translations[language as keyof typeof translations].CreateWallet
                   .name_entry_button_loadingtext
               }
-              my={40}
-              
-              width={'100%'}
+              my={4}
+
+              width={'90%'}
               disabled={
                 confirmMnemonics.length < mnemonics.length || name.length === 0
               }
@@ -530,10 +528,10 @@ export default function CreateWallet({ navigation, route }: {navigation: {naviga
                 {translations[language as keyof typeof translations].CreateWallet.name_entry_button}
               </Text>
             </Button>
-          </Center>
+          </VStack>
         )}
       </KeyboardAvoidingView>
-    </Center>
+    </Box>
   );
 }
 

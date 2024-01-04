@@ -44,6 +44,12 @@ const values : TranslationType  = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: "Malhuiaa",
     chainId_placeholder: 'Ahaquiaa Chain ID',
@@ -52,6 +58,7 @@ const values : TranslationType  = {
     rpcUrl_placeholder: 'Ahaquiaa RPC Url',
     submit_button: 'Tla-piya Maatla-tl',
     symbol_placeholder: 'Ahaquiaa Chain Symbol',
+    title: "New Network"
   },
   CreateWallet: {
     instructions:'Tla-yoocoya yancuic Tlahcuiloolaamapetlaacaltoon-tli, recibirá una secuencia de mnemónicos que representan su "Ichtacayooh personal". Cualquier persona con esta secuencia puede reconfigurar su Tlahcuiloolaamapetlaacaltoon-tli en cualquier dispositivo Yancuic. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
@@ -237,6 +244,9 @@ const values : TranslationType  = {
     menu_accessiblity_label: 'Menu okachi tlaihittaliz-tli',
     send_token_button: 'Ihuaa',
   },
+  TransactionFeed: {
+    title: "Tlapeepeehuiliz-tli"
+  },
   ViewNetwork: {
     active_network: "Zaazahuatic maatla-tl",
     edit_button: "Pahpanhuetzi",
@@ -261,7 +271,8 @@ const values : TranslationType  = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {
-    title: "Necocteentiaa"
+    title: "Necocteentiaa",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Ihuaa WhatsApp tenemachtiliztli",

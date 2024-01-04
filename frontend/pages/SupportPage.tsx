@@ -10,7 +10,7 @@ import {
 } from "native-base";
 import { Button } from "native-base";
 import React, { useState } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Keyboard, Platform, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { useRecoilState } from "recoil";
 
 import { Border, Color, FontFamily, FontSize } from "../../GlobalStyles";
@@ -18,7 +18,7 @@ import { language as stateLanguage } from "../../frontend/service/state";
 import translations from "../assets/translations";
 import sendEmail from "../service/sendEmail";
 
-export default function SuportPage({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function SuportPage({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
     const [language] = useRecoilState(stateLanguage);
     const { colorMode } = useColorMode();
     const [name, setName] = useState("");
@@ -51,88 +51,95 @@ export default function SuportPage({ navigation, route }: {navigation: {navigate
         );
     };
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    }
+
     return (
-        <KeyboardAvoidingView
-            h={{
-                base: "400px",
-                lg: "auto",
-            }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-            <Box alignItems="center" my={10} w={"full"}>
-                <Text style={styles.support1}>
-                    {translations[language as keyof typeof translations].SupportPage.title}
-                </Text>
-
-                <Text style={styles.contactUsViaTypo} w='85%'>
-                    <Text style={styles.ifYouHave}>
-                        {translations[language as keyof typeof translations].SupportPage.introduction}
+        <TouchableWithoutFeedback
+            onPress={dismissKeyboard}>
+            <KeyboardAvoidingView
+                h={{
+                    base: "400px",
+                    lg: "auto",
+                }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+                <Box alignItems="center" my={10} w={"full"}>
+                    <Text style={styles.support1}>
+                        {translations[language as keyof typeof translations].SupportPage.title}
                     </Text>
-                </Text>
-                <VStack m={2}>
-                    <Text> {translations[language as keyof typeof translations].SupportPage.to_send} </Text>
-                    <Input
-                        style={styles.textoImput}
-                        value={toEmail}
-                        onChange={handletoEmailChange}
-                        w='90%'
-                        mb={2}
-                        placeholder={translations[language as keyof typeof translations].SupportPage.to_send}
-                    />
-                </VStack>
 
-                <VStack m={3}>
-                    <Text>{translations[language as keyof typeof translations].SupportPage.subject_send}</Text>
-
-                    <Input
-                        style={styles.textoImput}
-                        value={name}
-                        onChange={handleNameChange}
-                        w='90%'
-                        mb={2}
-                        placeholder={translations[language as keyof typeof translations].SupportPage.subject_send}
-                    />
-                </VStack>
-
-                <VStack m={3}>
-                    <Text>{translations[language as keyof typeof translations].SupportPage.describe_issue}</Text>
-
-                    <TextArea
-                        autoCompleteType={"off"}
-                        style={styles.textoImputArea}
-                        value={issue}
-                        onChange={handleIssueChange}
-                        placeholder={translations[language as keyof typeof translations].SupportPage.describe_issue}
-                        w='90%'
-                        minHeight={200}
-                    />
-                </VStack>
-
-                <Button
-                    style={styles.buttonContainer}
-                    mt={4}
-                    width={"3/4"}
-                    colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-                    onPress={send}
-                >
-                    <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                        {translations[language as keyof typeof translations].SupportPage.button_send}
+                    <Text style={styles.contactUsViaTypo} w='85%'>
+                        <Text style={styles.ifYouHave}>
+                            {translations[language as keyof typeof translations].SupportPage.introduction}
+                        </Text>
                     </Text>
-                </Button>
+                    <VStack m={2}>
+                        <Text> {translations[language as keyof typeof translations].SupportPage.to_send} </Text>
+                        <Input
+                            style={styles.textoImput}
+                            value={toEmail}
+                            onChange={handletoEmailChange}
+                            w='90%'
+                            mb={2}
+                            placeholder={translations[language as keyof typeof translations].SupportPage.to_send}
+                        />
+                    </VStack>
 
-                <Button
-                    style={styles.buttonContainer}
-                    mt={4}
-                    width={"3/4"}
-                    colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-                    onPress={viewWallet}
-                >
-                    <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                        {translations[language as keyof typeof translations].SupportPage.button_cancel}
-                    </Text>
-                </Button>
-            </Box>
-        </KeyboardAvoidingView>
+                    <VStack m={3}>
+                        <Text>{translations[language as keyof typeof translations].SupportPage.subject_send}</Text>
+
+                        <Input
+                            style={styles.textoImput}
+                            value={name}
+                            onChange={handleNameChange}
+                            w='90%'
+                            mb={2}
+                            placeholder={translations[language as keyof typeof translations].SupportPage.subject_send}
+                        />
+                    </VStack>
+
+                    <VStack m={3}>
+                        <Text>{translations[language as keyof typeof translations].SupportPage.describe_issue}</Text>
+
+                        <TextArea
+                            autoCompleteType={"off"}
+                            style={styles.textoImputArea}
+                            value={issue}
+                            onChange={handleIssueChange}
+                            placeholder={translations[language as keyof typeof translations].SupportPage.describe_issue}
+                            w='90%'
+                            minHeight={200}
+                        />
+                    </VStack>
+
+                    <Button
+                        style={styles.buttonContainer}
+                        mt={4}
+                        width={"3/4"}
+                        colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
+                        onPress={send}
+                    >
+                        <Text color={colorMode === "dark" ? Color.black : Color.white}>
+                            {translations[language as keyof typeof translations].SupportPage.button_send}
+                        </Text>
+                    </Button>
+
+                    <Button
+                        style={styles.buttonContainer}
+                        mt={4}
+                        width={"3/4"}
+                        colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
+                        onPress={viewWallet}
+                    >
+                        <Text color={colorMode === "dark" ? Color.black : Color.white}>
+                            {translations[language as keyof typeof translations].SupportPage.button_cancel}
+                        </Text>
+                    </Button>
+                </Box>
+            </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     );
 }
 

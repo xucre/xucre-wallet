@@ -1,82 +1,42 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { BigNumber, ethers, Wallet } from 'ethers';
+import { BigNumber, ethers, getDefaultProvider, Wallet } from 'ethers';
 import {
   Box,
   Button,
   Center,
+  FlatList,
   HStack,
   Icon,
-  Pressable,
-  ScrollView,
   Text,
   useColorMode,
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+//import { TokenBalancesListView } from "@covalenthq/goldrush-kit";
+
 
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
-import CovalentItem from "../../components/transaction/CovalentItem";
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { getWalletTransactions } from "../../service/api";
+import { getTokenBalances, getWalletTransactions } from "../../service/api";
 import { chainIdToNameMap, xucreToken } from "../../service/constants";
-import { activeNetwork, activeWallet, networkList, language as stateLanguage, walletList, tokenList } from '../../service/state';
+import { activeNetwork, activeWallet, language as stateLanguage, walletList } from '../../service/state';
 import { CovalentTransaction } from "../../service/transaction";
-import { getTokenByChain } from '../../store/token';
-import NftList from "../nft/NftList";
 import { Token } from "../../service/token";
 import { WalletInternal } from "../../store/wallet";
-
-function TabItem({
-  tabName,
-  currentTab,
-  handleTabChange,
-}: {
-  tabName: string,
-  currentTab: string,
-  handleTabChange: Function
-}) {
-  return (
-    <Pressable onPress={() => handleTabChange(tabName)} px="4" pt="2">
-      <VStack>
-        <Text
-          fontSize="sm"
-          fontWeight="medium"
-          letterSpacing="0.4"
-          _light={{
-            color: tabName === currentTab ? 'gray.700' : 'gray.700',
-          }}
-          _dark={{
-            color: tabName === currentTab ? 'gray.100' : 'gray.100',
-          }}
-          px={4}
-          py={2}
-        >
-          {tabName}
-        </Text>
-        {tabName === currentTab && (
-          <Box
-            _light={{
-              bg: 'primary.900',
-            }}
-            _dark={{
-              bg: 'primary.500',
-            }}
-            marginBottom={-1}
-            h="0.5"
-          />
-        )}
-      </VStack>
-    </Pressable>
-  );
-}
+import { getActiveNetwork } from "../../store/network";
+import { Color } from "../../../GlobalStyles";
+import ethTokens from '../../assets/json/eth_tokens.json'
+import polygonTokens from '../../assets/json/matic_tokens.json'
+import { useIsFocused } from '@react-navigation/native';
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
+  const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -84,8 +44,8 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [_walletList,] = useRecoilState(walletList);
   const [_wallet,] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
-  const [network,] = useRecoilState(activeNetwork);
-  const [holdings, setHoldings] = useState([] as Token[]);
+  const network = useRecoilValue(activeNetwork);
+  const [tokens, setTokens] = useState([] as Token[]);
   const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
@@ -99,47 +59,82 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const buttonSend = translations[language as keyof typeof translations].Buttons_Header.send;
   const buttonReceive = translations[language as keyof typeof translations].Buttons_Header.receive;
   const buttonBuy = translations[language as keyof typeof translations].Buttons_Header.buy;
-  const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
+  //const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
   const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
 
+  const tokenMetadataMap = network.chainId === 1 ? ethTokens : network.chainId === 137 ? polygonTokens : {};
+
   const syncTokens = async () => {
-    const _tokens = await getTokenByChain(network.chainId);
-    const coinToken = {
-      address: '',
-      amount: BigNumber.from(0),
-      chainId: network.chainId,
-      name: network.symbol,
-      type: 'coin',
-    };
-    if (!_tokens) {
-      if (isComponentMounted) {
-        if (network.chainId === xucreToken.chainId) {
-          setHoldings([xucreToken, coinToken]);
+    try {
+
+      const _network = await getActiveNetwork();
+      console.log('network chainId', _network.chainId);
+      // TODO - 
+      const _tokens = await getTokenBalances(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
+      console.log(_tokens);
+      //await wallet.provider.getNetwork();'
+      const _provider = getDefaultProvider(_network.rpcUrl);
+      //console.log(wallet._isSigner);
+      const walletBalance = await wallet.connect(_provider).getBalance();
+
+      const coinToken = {
+        address: ethers.constants.AddressZero,
+        amount: walletBalance,
+        chainId: _network.chainId,
+        name: _network.name,
+        symbol: _network.symbol,
+        type: 'coin',
+      };
+      if (!_tokens) {
+        if (isComponentMounted) {
+          if (_network.chainId === xucreToken.chainId) {
+            setTokens([xucreToken, coinToken]);
+            return;
+          }
+          setTokens([coinToken]);
           return;
         }
-        setHoldings([coinToken]);
-        return;
       }
-    }
-    const tokenList = [coinToken, ..._tokens as Token[]];
-    const hasXucre = tokenList.find((tok) => {
-      return tok.address === xucreToken.address && tok.chainId === xucreToken.chainId
-    });
-    if (!!hasXucre) {
-      if (isComponentMounted && tokenList) {
-        setHoldings(tokenList);
-        return;
-      }
-    } else {
-      if (isComponentMounted && tokenList) {
-        if (network.chainId === xucreToken.chainId) {
-          setHoldings([xucreToken, coinToken]);
+      const convertedTokens = _tokens.map((token: { contractAddress: string; tokenBalance: any; }) => {
+        const tokenMetadata = tokenMetadataMap[ethers.utils.getAddress(token.contractAddress) as keyof typeof tokenMetadataMap];
+
+        return {
+          //@ts-ignore
+          name: tokenMetadata?.name,
+          amount: BigNumber.from(token.tokenBalance),
+          chainId: _network.chainId,
+          address: ethers.utils.getAddress(token.contractAddress),
+          type: 'token',
+          //@ts-ignore
+          logo: tokenMetadata?.logo,
+          //@ts-ignore
+          symbol: tokenMetadata?.symbol
+
+        } as Token
+      })
+      const tokenList = [coinToken, ...convertedTokens];
+      const hasXucre = tokenList.find((tok) => {
+        return ethers.utils.getAddress(tok.address) === ethers.utils.getAddress(xucreToken.address) && tok.chainId === xucreToken.chainId
+      });
+      if (!!hasXucre) {
+        if (isComponentMounted && tokenList) {
+          setTokens(tokenList);
           return;
         }
-        setHoldings([...tokenList as Token[]]);
-        return;
+      } else {
+        if (isComponentMounted && tokenList) {
+          if (network.chainId === xucreToken.chainId) {
+            setTokens([xucreToken, coinToken, ...tokenList]);
+            return;
+          }
+          setTokens([...tokenList as Token[]]);
+          return;
+        }
       }
+    } catch (err) {
+      console.log('fails when wallet is empty', err);
     }
+
   }
 
   const syncTransactions = async () => {
@@ -163,37 +158,32 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   useEffect(() => {
     if (_wallet.name === '' && _walletList.length === 0) {
       navigation.navigate('SelectWallet');
-    } else if (network) {
+    } else if (network && network.rpcUrl.length) {
+      const _provider = getDefaultProvider(network.rpcUrl);
       if (_wallet.name === '') {
-        setWallet(new WalletInternal(_walletList[0].wallet));
+        setWallet(new WalletInternal(_walletList[0].wallet).connect(_provider));
       } else {
-        setWallet(new WalletInternal(_wallet.wallet));
+        setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
       }
 
+      setTimeout(() => {
+        if (tokens.length === 0) {
+          syncTokens();
+        }
+      }, 1000)
     }
   }, [_wallet, _walletList, network]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (holdings.length === 0) {
-        syncTokens();
-      }
-      if (transactions.length === 0) {
-        syncTransactions();
-      }
-    }, 1000)
-  }, [])
-
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    setHoldings([]);
-    setTransactions([]);
-
+    //setTokens([]);
+    //setTransactions([]);
+    //await refreshNetwork();
     setTimeout(async () => {
       await syncTokens();
-      await syncTransactions();
+      //await syncTransactions();
       setRefreshing(false);
-    }, 100)
+    }, 500)
   }, []);
 
   const addToken = () => {
@@ -221,7 +211,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   }
 
   const connectWallet = () => {
-    navigation.navigate('QRReader');
+    navigation.navigate('ConnectionManagement');
   }
 
 
@@ -229,6 +219,12 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     //setNetwork(null)
     //setAllNetworks([])
   }, [])
+
+  useEffect(() => {
+    if (isFocused && wallet.address) {
+      onRefresh();
+    }
+  }, [isFocused])
 
   const handleTabChange = (newTab: React.SetStateAction<string>) => {
     setCurrentTab(newTab);
@@ -241,14 +237,14 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       text: buttonSend,
     },
     {
-      action: buyTokens,
-      icon: "monetization-on",
-      text: buttonBuy,
-    },
-    {
       action: receiveFunds,
       icon: "arrow-downward",
       text: buttonReceive,
+    },
+    {
+      action: buyTokens,
+      icon: "monetization-on",
+      text: buttonBuy,
     },
     {
       action: connectWallet,
@@ -285,35 +281,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           height={'100%'}
           safeAreaBottom
         >
-          {
-            /*<VStack space={4} p={3}>
-              <HStack justifyContent={'space-between'}>
-                <Text fontSize={'lg'}>{_wallet.name}</Text>
-                <Badge rounded={6} variant={'solid'} >
-                  <Text color={'lightText'}>{network.chainId}</Text>
-                </Badge>
-              </HStack>            
-              <Tooltip label="Copied to clipboard" isOpen={displayTooltip} bg="indigo.500" _text={{
-                color: "#fff"
-              }}>
-                <Button onPress={copyToClipboard}><Text>{_wallet.wallet.address}</Text></Button>
-              </Tooltip>           
-            </VStack>*/
-          }
 
           {
-            <TotalBalance />
+            <TotalBalance navigate={navigation.navigate} />
           }
-          {
-            /*<HStack my={2}>
-              <Button.Group isAttached colorScheme="muted" size="full">
-                <Button onPress={receiveFunds} width={'1/3'} py={3}><Text>Recieve</Text></Button>
-                <Button width={'1/3'} py={3} colorScheme={'darkBlue'} onPress={swapTokens} ><Text>Swap</Text></Button>
-                <Button width={'1/3'} py={3} variant={'outline'} onPress={sendFunds} ><Text>Send</Text></Button>
-              </Button.Group>
-            </HStack>*/
-          }
-          <HStack space="2" alignItems="center" justifyContent={'space-around'} marginTop={2} marginLeft={2} marginRight={2}>
+          <HStack space="2" alignItems="center" justifyContent={'space-around'} marginTop={0} marginLeft={2} marginRight={2}>
             {
               middleButtons.map((btn, i) => {
                 return (
@@ -330,7 +302,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                         as={MaterialIcons}
                         name={btn.icon}
                         color={'white'}
-                        size="5"
+                        size={7}
                       />
                     }
                     _text={{
@@ -348,68 +320,27 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             }
 
           </HStack>
-          <HStack
-            mt={5}
-            mx={5}
-            borderBottomWidth={1}
-            borderBottomColor={'gray.700'}
-            w="90%"
-            justifyContent="space-around"
-            borderRadius="sm"
-          >
-            {
-              tabList.map((tab, index) => {
-                return (
-                  <TabItem key={index} tabName={tab} currentTab={currentTab} handleTabChange={handleTabChange} />
-                )
-              })
+          <VStack space="5" px={2} mb={10}>
+            {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
+              <Box m={6} >
+                {/*<Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>*/}
+                <FlatList data={tokens} refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor={colorMode === 'dark' ? Color.white : Color.darkgray_200}
+                  />
+                } renderItem={
+                  ({ item, index }) => <TokenItem key={item.name + index} token={item} navigation={navigation} refreshList={onRefresh} />
+                }
+                  keyExtractor={item => item.name}
+                />
+              </Box>
             }
-          </HStack>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
+            {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && wallet.address !== '' &&
+              <TokenBalancesListView address={wallet.address} />*/
             }
-          >
-            <VStack space="5" px={2} mb={10}>
-              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&
-                <Box m={6} >
-                  <VStack space={2} >
-                    {
-                      holdings.map((val, i) => {
-                        return (
-                          <TokenItem key={val.name + i} token={val} navigation={navigation} refreshList={onRefresh} />
-                        )
-                      })
-                    }
-                  </VStack>
-                  <Button onPress={addToken} mt={4} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>
-                </Box>
-              }
-
-              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] &&
-                <Box m={6} >
-                  <VStack space={2} direction={'column-reverse'}>
-                    {
-                      transactions.map((val, i) => {
-                        return (
-                          <CovalentItem key={val.tx_hash} transaction={val} navigation={navigation} />
-                        )
-                      })
-                    }
-                  </VStack>
-                </Box>
-              }
-
-              {currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[2] &&
-                <Box my={6} >
-                  <NftList navigation={navigation} route={route} />
-                </Box>
-              }
-            </VStack>
-          </ScrollView>
+          </VStack>
 
           {false && currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && transactions.length > 0 &&
             <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language as keyof typeof translations].ViewWallet.clear_button}</Text></Button>

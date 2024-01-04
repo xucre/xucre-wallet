@@ -14,9 +14,9 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftItemLarge({item}: {item: {description : string, image: string, key: string, name : string, url: string}}) {
+function NftItemLarge({ item }: { item: { description: string, image: string, key: string, name: string, url: string } }) {
   //`const theme = useTheme();
-  const [metadata, setChannelMetadata] = useState({description : '', image: '', key: '', name : ''});
+  const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '' });
   const [url, setUrl] = useState('');
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
@@ -24,7 +24,7 @@ function NftItemLarge({item}: {item: {description : string, image: string, key: 
       setIsComponentMounted(false)
     }
   }, []);
-  
+
 
   useEffect(() => {
     setChannelMetadata(item);
@@ -41,9 +41,9 @@ function NftItemLarge({item}: {item: {description : string, image: string, key: 
     }
   }
 
-  const BetterCard = ({image, title, subtitle, projectName } : {image : string, title : string, subtitle : string, projectName : string }) => {
+  const BetterCard = ({ image, title, subtitle, projectName }: { image: string, title: string, subtitle: string, projectName: string }) => {
     return (
-      <Pressable 
+      <Pressable
         borderRadius="sm"
         padding={0}
         pt={0}
@@ -53,12 +53,12 @@ function NftItemLarge({item}: {item: {description : string, image: string, key: 
         _light={{ bg: 'transparent' }}
         _dark={{ bg: 'transparent' }}
         onPress={accessLink}
-      > 
+      >
         <Image
           borderTopLeftRadius="md"
           borderBottomRadius="md"
           source={{
-            uri: image
+            uri: image || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
           }}
           alt={title}
           w={{ base: 192, md: 224 }}
@@ -80,9 +80,9 @@ function NftItemLarge({item}: {item: {description : string, image: string, key: 
           >
             {title}
           </Text>
-          
-          <Text 
-            fontSize="md" 
+
+          <Text
+            fontSize="md"
             _light={{ color: 'coolGray.600' }}
             _dark={{ color: 'coolGray.400' }}
             textAlign={'center'}
@@ -97,7 +97,7 @@ function NftItemLarge({item}: {item: {description : string, image: string, key: 
   return (
     <>
       {
-        metadata.name != null && 
+        metadata.name != null &&
         <BetterCard
           title={metadata.name}
           subtitle={metadata.description}
@@ -110,7 +110,7 @@ function NftItemLarge({item}: {item: {description : string, image: string, key: 
         />
       }
     </>
-    
+
   );
 }
 

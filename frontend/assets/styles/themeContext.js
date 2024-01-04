@@ -28,3 +28,7 @@ export const themes = {
 export const ThemeContext = React.createContext(
   themes.light // default value
 );
+
+export const iconBackground = (mode) => {
+  return mode === 'dark' ? 'muted.800' : 'muted.300'
+}

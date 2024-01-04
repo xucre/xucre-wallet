@@ -44,6 +44,12 @@ const values : TranslationType = {
   Connections: {
     delete_button: "Disconnect"
   },
+  ConnectManagement: {
+    tab_list: [
+      'Connections',
+      'Requests'
+    ]
+  },
   CreateNetwork: {
     button_save: 'Waqaychay',
     chainId_placeholder: 'Kadena ID nisqaman yaykuy', 
@@ -51,7 +57,8 @@ const values : TranslationType = {
     name_placeholder: 'Sutita qillqay', 
     rpcUrl_placeholder: 'RPC URL nisqapi qillqay',
     submit_button: 'Waqaychay', 
-    symbol_placeholder: 'Kadena siqiman yaykuy' 
+    symbol_placeholder: 'Kadena siqiman yaykuy',
+    title: "New Network"
   },
   CreateWallet: {
     instructions : 'Musuq billetera ruwachkaspa huk secuencia mnemÃ³nicas chaskinki mayqinkunachus "kikin contraseÃ±aykita" riqsichinku. Pipas kay qatiqniyuqqa mayqin musuq dispositivopipas billeteraykita wakmanta ruwayta atinman. Atikusqanman hina allinta waqaychay. Kay willakuymanqa qamllam haykunayki.',
@@ -237,6 +244,9 @@ const values : TranslationType = {
     menu_accessiblity_label: "Aswan akllanakuna menÃº",
     send_token_button: 'Kachay'
   },
+  TransactionFeed: {
+    title: "Transacciones"
+  },
   ViewNetwork: {
     active_network: 'Llika llamk\'achiq',
     edit_button: 'Apuy',    
@@ -261,7 +271,8 @@ const values : TranslationType = {
     session_request_send_tx: ['Send Transaction', 'Please approve or reject request'],
   },
   WalletHistory: {  
-    title: "Willarina"  
+    title: "Willarina",
+    total_balance: 'Total Balance'
   },
   WhatsAppNotification:{
     button: "Kachay WhatsApp Willana",
