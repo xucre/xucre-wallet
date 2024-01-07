@@ -5,7 +5,7 @@ import React, { createRef, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 
-import erc20Abi from '../../../contracts/erc20.json';
+import erc20Abi from '../../../contracts/erc20.abi.json';
 import translations from "../../assets/translations";
 import { activeNetwork, activeWallet } from "../../service/state";
 import { language as stateLanguage } from "../../service/state";
@@ -16,14 +16,13 @@ import { deleteToken } from "../../store/token";
 import { NavigationState } from "@react-navigation/native";
 import { WalletInternal } from "../../store/wallet";
 
-export default function TokenItem({ navigation, token, refreshList }: { navigation: { navigate: Function }, token: Token, refreshList: Function }) {
+export default function TokenItem({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
   const { colorMode } = useColorMode();
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [language,] = useRecoilState(stateLanguage);
   const [avatar, setAvatar] = useState('');
-
-
+  const [rawAmount, setRawAmount] = useState(BigNumber.from(0));
 
   useEffect(() => {
     if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
@@ -33,8 +32,19 @@ export default function TokenItem({ navigation, token, refreshList }: { navigati
     } else {
       //setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/placeholdericon.png');
     }
+
+    if (!token.amount || token.amount.isZero()) {
+      getRawBalance();
+    }
     //setAvatar('');
   }, [token])
+
+  const getRawBalance = async () => {
+    const erc20 = new ethers.Contract(ethers.utils.getAddress(token.address), erc20Abi, wallet);
+    const walletBalance = await erc20.balanceOf(ethers.utils.getAddress(wallet.address));
+    //console.log('raw balance', walletBalance, ethers.utils.getAddress(wallet.address));
+    setRawAmount(walletBalance);
+  }
 
   /*const removeToken = async () => {
     const result = await deleteToken(token);
@@ -76,7 +86,7 @@ export default function TokenItem({ navigation, token, refreshList }: { navigati
         <Text
           _light={{ color: 'coolGray.500' }}
           _dark={{ color: 'coolGray.400' }}
-          fontWeight="normal">{token.amount ? ethers.utils.formatEther(token.amount as BigNumberish) : '0.00'}</Text>
+          fontWeight="normal">{token.amount ? ethers.utils.formatEther(token.amount as BigNumberish || rawAmount) : !rawAmount.isZero() ? ethers.utils.formatEther(rawAmount) : '0.00'}</Text>
         <Tooltip label="More Options" openDelay={500}>
           <Menu w="190" trigger={triggerProps => {
             return <Pressable accessibilityLabel={translations[language as keyof typeof translations].TokenItem.menu_accessiblity_label} {...triggerProps}>

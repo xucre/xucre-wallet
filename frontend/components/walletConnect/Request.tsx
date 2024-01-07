@@ -46,7 +46,7 @@ export default function Request({ event, metadata, getRequests }: { event: any, 
   if (isExpired()) {
     return (
       <Box display={isDeleted ? 'none' : 'flex'}>
-        <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
+        <HStack alignItems="center" justifyContent="space-between" p={3} my={2} borderRadius={25} _dark={{ bgColor: Color.gray_400 }} _light={{ bgColor: Color.lightgray_100 }}>
           <HStack alignItems="center" space={{ base: 3, md: 6 }}>
             <Avatar bg={colorMode === 'dark' ? 'coolGray.800' : 'coolGray.300'} size="md" m={2} source={{
               uri: metadata ? metadata?.peerMetadata?.icons[0] : 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'

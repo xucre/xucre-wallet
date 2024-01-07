@@ -28,6 +28,7 @@ export const Color = {
   gray_200: "#202020",
   gray_300: "#181818",
   gray_400: "#0b0a0a",
+  lightgray_100: "#F4F5F7",
   transparent: 'transparent',
   white: "#fff",
   yellow: "#d4e815",

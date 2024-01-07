@@ -29,6 +29,7 @@ export default function Connections({ navigation, route }: { navigation: { navig
   const { colorMode } = useColorMode();
   //{translations[language].ConnectionRequest.}
   useEffect(() => {
+    //setPairings([])
     getPairs();
   }, []);
 
@@ -53,9 +54,9 @@ export default function Connections({ navigation, route }: { navigation: { navig
     }
     if (!metadata) return (<></>)
     return (
-      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
+      <HStack alignItems="center" justifyContent="space-between" p={3} my={4} borderRadius={25} _dark={{ bgColor: Color.darkgray_200 }} _light={{ bgColor: Color.gray_200 }}>
         <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-          <Avatar bg={colorMode === 'dark' ? 'coolGray.800' : 'coolGray.300'} size="md" m={2} source={{
+          <Avatar bg={colorMode === 'dark' ? Color.darkgray_200 : Color.gray_200} size="md" m={2} source={{
             uri: metadata?.peerMetadata?.icons[0] || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
           }} />
           <VStack>

@@ -22,7 +22,7 @@ import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { getTokenBalances, getWalletTransactions } from "../../service/api";
+import { getTokenBalances, getWalletTransactions, swapUrl } from "../../service/api";
 import { chainIdToNameMap, xucreToken } from "../../service/constants";
 import { activeNetwork, activeWallet, language as stateLanguage, walletList } from '../../service/state';
 import { CovalentTransaction } from "../../service/transaction";
@@ -33,6 +33,7 @@ import { Color } from "../../../GlobalStyles";
 import ethTokens from '../../assets/json/eth_tokens.json'
 import polygonTokens from '../../assets/json/matic_tokens.json'
 import { useIsFocused } from '@react-navigation/native';
+import { Linking } from "react-native";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -61,6 +62,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const buttonBuy = translations[language as keyof typeof translations].Buttons_Header.buy;
   //const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
   const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
+  const buttonSwap = translations[language as keyof typeof translations].Buttons_Header.buttonswap;
 
   const tokenMetadataMap = network.chainId === 1 ? ethTokens : network.chainId === 137 ? polygonTokens : {};
 
@@ -68,8 +70,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     try {
 
       const _network = await getActiveNetwork();
-      console.log('network chainId', _network.chainId);
-      // TODO - 
+      //console.log('network chainId', _network.chainId);
       const _tokens = await getTokenBalances(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
       console.log(_tokens);
       //await wallet.provider.getNetwork();'
@@ -206,8 +207,15 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('NFT');
   }
 
-  const buyTokens = () => {
-    navigation.navigate('BuyToken');
+  const buyTokens = async () => {
+    //navigation.navigate('SwapToken');
+    const supported = await Linking.canOpenURL(swapUrl);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(swapUrl);
+    }
   }
 
   const connectWallet = () => {
@@ -331,7 +339,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                     tintColor={colorMode === 'dark' ? Color.white : Color.darkgray_200}
                   />
                 } renderItem={
-                  ({ item, index }) => <TokenItem key={item.name + index} token={item} navigation={navigation} refreshList={onRefresh} />
+                  ({ item, index }) => <TokenItem key={item.name + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} />
                 }
                   keyExtractor={item => item.name}
                 />
