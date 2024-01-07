@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Center,
+  Divider,
   Heading,
   HStack,
   Input,
@@ -79,7 +80,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         setScrambledMnemonics(arrayShuffle(_mnemonics));
         setLoading(false);
         // only used for testing
-        if (__DEV__) {
+        if (__DEV__ && false) {
           setConfirmMnemonics(_mnemonics);
           setMnemonicMatchComplete(true);
         }
@@ -91,7 +92,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
     };
 
     return (
-      <VStack marginBottom={20} justifyContent={'space-around'} w={"full"} alignItems={'center'}>
+      <VStack h={'container'} marginBottom={20} justifyContent={'space-around'} w={"full"} alignItems={'center'}>
         <Heading
           style={{ color: colorMode === 'dark' ? Color.white : Color.gray_200, fontWeight: "bold" }}
           py={2}
@@ -128,9 +129,9 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
     function ListItem({ value, index }: { value: string, index: number }) {
       return (
         <Button
-          width={'100%'}
-          bg="Color.gray_100"
-          rounded="sm"
+          width={'full'}
+          bg={Color.gray_300}
+          rounded="lg"
           _text={{
             alignContent: 'center',
             color: Color.gray_200,
@@ -142,7 +143,6 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
           margin={1}
           alignItems={'center'}
           justifyContent={'flex-start'}
-          shadow={"3"}
           startIcon={
             <Badge
               colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
@@ -151,9 +151,9 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               variant="solid"
               alignSelf="flex-start"
               _text={{
-                fontSize: 12,
+                fontSize: 10,
               }}
-              margin={2}
+              margin={1}
             >
               <Text style={{
                 color: colorMode === 'dark' ? Color.black : Color.white,
@@ -161,7 +161,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
             </Badge>
           }
         >
-          <Text >{value}</Text>
+          <Text>{value}</Text>
         </Button>
       )
     };
@@ -179,12 +179,12 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         >
           {translations[language as keyof typeof translations].CreateWallet.mnemonic_instructions}
         </Text>
-        <HStack
+        <HStack space={2}
           style={{
             paddingBottom: 10,
           }}
         >
-          <VStack space={4} alignItems="center">
+          <VStack space={2} alignItems="center">
             {mnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
@@ -193,7 +193,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               }
             })}
           </VStack>
-          <VStack space={4} alignItems="center">
+          <VStack space={2} alignItems="center">
             {mnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
@@ -202,7 +202,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               }
             })}
           </VStack>
-          <VStack space={4} alignItems="center">
+          <VStack space={2} alignItems="center">
             {mnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
@@ -229,9 +229,9 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
     function ListItem({ value, index }: { value: string, index: number }) {
       return (
         <Button
-          width={'100%'}
-          bg="Color.gray_100"
-          rounded="sm"
+          width={'full'}
+          bg={Color.gray_300}
+          rounded="lg"
           _text={{
             alignContent: 'center',
             color: Color.gray_200,
@@ -243,7 +243,6 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
           margin={1}
           alignItems={'center'}
           justifyContent={'flex-start'}
-          shadow={"3"}
 
           onPress={() => {
             if (confirmMnemonics.includes(value)) {
@@ -261,9 +260,9 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
                 variant="solid"
                 alignSelf="flex-start"
                 _text={{
-                  fontSize: 12,
+                  fontSize: 10,
                 }}
-                margin={2}
+                margin={1}
               >
                 <Text style={{
                   color: colorMode === 'dark' ? Color.black : Color.white,
@@ -276,9 +275,9 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
                 variant="solid"
                 alignSelf="flex-start"
                 _text={{
-                  fontSize: 12,
+                  fontSize: 10,
                 }}
-                marginY={2}
+                marginY={1}
               >
                 <Text style={{
                   color: 'transparent',
@@ -306,11 +305,12 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         </Text>
 
         <HStack
+          space={2}
           style={{
             paddingBottom: 10,
           }}
         >
-          <VStack space={4} alignItems="center" justifyItems={'center'}>
+          <VStack space={2} alignItems="center" justifyItems={'center'}>
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 0) {
                 return (
@@ -319,7 +319,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               }
             })}
           </VStack>
-          <VStack space={4} alignItems="center" justifyItems={'center'}>
+          <VStack space={2} alignItems="center" justifyItems={'center'}>
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 1) {
                 return (
@@ -328,7 +328,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               }
             })}
           </VStack>
-          <VStack space={4} alignItems="center" justifyItems={'center'}>
+          <VStack space={2} alignItems="center" justifyItems={'center'}>
             {scrambledMnemonics.map((val, i) => {
               if (i % 3 === 2) {
                 return (
@@ -417,16 +417,83 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
     }, 100);
   };
 
+  function Stepper() {
+    return (
+      <HStack space={0} alignItems={'center'} justifyContent={'center'} w={'2/5'}>
+        {steps === 0 ?
+          <Badge
+            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+            rounded="full"
+            zIndex={100}
+            variant="solid"
+            alignSelf="flex-start"
+            _text={{
+              fontSize: 10,
+            }}
+            margin={1}
+          >
+            <Text style={{
+              color: colorMode === 'dark' ? Color.black : Color.white,
+            }}>{steps + 1}</Text>
+          </Badge> :
+          <Badge variant={'solid'} w={3} h={3} p={1} rounded="full"></Badge>
+        }
+
+        <Divider orientation={'horizontal'} w={'1/3'} />
+        {steps === 1 ?
+          <Badge
+            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+            rounded="full"
+            zIndex={100}
+            variant="solid"
+            alignSelf="flex-start"
+            _text={{
+              fontSize: 10,
+            }}
+            margin={1}
+          >
+            <Text style={{
+              color: colorMode === 'dark' ? Color.black : Color.white,
+            }}>{steps + 1}</Text>
+          </Badge> :
+          <Badge variant={'solid'} w={3} h={3} p={1} rounded="full"></Badge>
+        }
+        <Divider orientation={'horizontal'} w={'1/3'} />
+        {steps === 2 ?
+          <Badge
+            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+            rounded="full"
+            zIndex={100}
+            variant="solid"
+            alignSelf="flex-start"
+            _text={{
+              fontSize: 10,
+            }}
+            margin={1}
+          >
+            <Text style={{
+              color: colorMode === 'dark' ? Color.black : Color.white,
+            }}>{steps + 1}</Text>
+          </Badge> :
+          <Badge variant={'solid'} w={3} h={3} p={1} rounded="full"></Badge>
+        }
+      </HStack>
+    )
+  }
+
   return (
     <Box style={{ backgroundColor: colorMode === 'dark' ? Color.black : Color.white }} flex={1} px="3" h={'full'}>
       <KeyboardAvoidingView h={{
         base: "auto",
         lg: "auto"
       }} behavior={Platform.OS === "ios" ? "padding" : "height"} py={10}>
+        <Center>
+          <Stepper />
+        </Center>
         {steps === 0 &&
-          <Box>
-            <Instructions></Instructions>
-          </Box>
+
+          <Instructions></Instructions>
+
         }
 
         {steps === 1 && (

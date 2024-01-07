@@ -11,7 +11,8 @@ import { useRecoilState } from "recoil";
 
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
-import { Platform } from "react-native";
+import { Linking, Platform } from "react-native";
+import { swapUrl } from "../service/api";
 
 
 type IconType = {
@@ -20,8 +21,6 @@ type IconType = {
   readonly highlight: boolean;
   readonly disabled?: boolean;
 };
-
-
 
 export default function MobileFooter({ navigation }: { navigation: { navigate: Function } }) {
 
@@ -44,13 +43,24 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
     { disabled: false, highlight: false, name: 'history', text: historyButton },
   ];
 
+  const openSwap = async () => {
+    const supported = await Linking.canOpenURL(swapUrl);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(swapUrl);
+    }
+  }
+
   const openPage = (pageName: string) => {
     switch (pageName) {
       case homeButton:
         navigation.navigate('ViewWallet');
         break;
       case swapButton:
-        navigation.navigate('SwapToken');
+        //navigation.navigate('SwapToken');
+        openSwap();
         break;
       case historyButton:
         navigation.navigate('WalletHistory');
@@ -69,6 +79,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         break;
     }
   }
+
   return (
     <Hidden from="md">
       <HStack

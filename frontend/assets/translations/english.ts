@@ -237,7 +237,7 @@ const values : TranslationType = {
     toast_send: "Email sent successfully!"
   },
   SwapToken: {
-    title: "Wallet"
+    title: "Swap"
   },
   TokenItem: {
     delete_button: 'Delete Token',
