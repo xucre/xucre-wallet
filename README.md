@@ -91,3 +91,5 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 
 - npm i
 - npx expo start -c
+
+1-7-2024 - Refire Deployment
