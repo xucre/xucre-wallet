@@ -63,6 +63,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   //const buttonNft = translations[language as keyof typeof translations].Buttons_Header.nft;
   const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
   const buttonSwap = translations[language as keyof typeof translations].Buttons_Header.buttonswap;
+  const buttonProfile = translations[language as keyof typeof translations].Buttons_Header.profile;
 
   const tokenMetadataMap = network.chainId === 1 ? ethTokens : network.chainId === 137 ? polygonTokens : {};
 
@@ -207,6 +208,10 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('NFT');
   }
 
+  const openProfile = () => {
+    navigation.navigate('ProfileList');
+  }
+
   const buyTokens = async () => {
     //navigation.navigate('SwapToken');
     const supported = await Linking.canOpenURL(swapUrl);
@@ -253,6 +258,9 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       action: buyTokens,
       icon: "monetization-on",
       text: buttonBuy,
+      // action: openProfile,
+      // icon: "person",
+      // text: buttonProfile
     },
     {
       action: connectWallet,

@@ -33,6 +33,7 @@ const values : TranslationType = {
     nft: "NFT",
     receive: "Receive",
     send: "Send",
+    profile: "Profile",
   },
   ConnectionRequest: {
     approve_button: "Approve",

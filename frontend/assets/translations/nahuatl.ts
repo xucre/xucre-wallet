@@ -31,7 +31,8 @@ const values : TranslationType  = {
     connect: "Conectar",
     nft: "NFT",
     receive: "Tla-celia",
-    send: "Ihuaa"
+    send: "Ihuaa",
+    profile: "Profile"
   },
   ConnectionRequest: {
     approve_button: 'Ninocaqui',

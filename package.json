@@ -13,6 +13,7 @@
     "@babel/plugin-syntax-bigint": "^7.8.3",
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
+    "@lens-protocol/client": "^2.0.0-alpha.27",
     "@lens-protocol/react-native-lens-ui-kit": "^0.2.9",
     "@lifi/sdk": "^2.5.0",
     "@notifee/react-native": "^7.8.0",

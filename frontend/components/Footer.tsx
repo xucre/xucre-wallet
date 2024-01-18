@@ -69,7 +69,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         navigation.navigate('TransactionFeed');
         break;
       case profileButton:
-        navigation.navigate('SupportPage');
+        navigation.navigate('ProfileList');
         break;
       case supportButton:
         navigation.navigate('SupportPage');
