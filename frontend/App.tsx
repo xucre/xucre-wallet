@@ -246,9 +246,15 @@ export const AppWrapper = () => {
   };
 
   Linking.addEventListener('url', async (req) => {
+    const parsedUrl = parseUrl(req.url);
     try {
       if (signClient) {
-        await signClient.pair({ uri: req.url });
+        if (parsedUrl.query.uri) {
+          await signClient.pair({ uri: parsedUrl.query.uri })
+        } else {
+          await signClient.pair({ uri: req.url });
+        }
+
       }
     } catch (e) {
       console.log(e);
