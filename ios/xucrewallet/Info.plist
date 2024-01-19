@@ -27,13 +27,13 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>xucre</string>
           <string>xucre.expo.client</string>
+          <string>xucre</string>
         </array>
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>20</string>
+    <string>21</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>

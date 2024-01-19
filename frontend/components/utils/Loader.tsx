@@ -143,6 +143,7 @@ export default function Loader() {
             return;
           }
         } else {
+          await defaultRouting();
           return;
         }
       } else {

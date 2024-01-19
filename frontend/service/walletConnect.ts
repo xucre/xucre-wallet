@@ -11,6 +11,7 @@ import { addNotification, deleteNotification } from '../store/setting';
 
 import { navigate } from './RootNavigation';
 import { env } from './constants';
+import { SignClientTypes } from '@walletconnect/types';
 
 // eslint-disable-next-line functional/no-let
 export let signClient: SignClient;
@@ -53,9 +54,12 @@ export async function createSignClient() {
         icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
         name: 'Xucre Wallet',
         url: env.REACT_APP_XUCRE_WALLET_SCHEME,
+        redirect: {
+          native: env.REACT_APP_XUCRE_WALLET_SCHEME
+        }
       },    
       projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-      relayUrl: 'wss://relay.walletconnect.com',
+      relayUrl: 'wss://relay.walletconnect.com'
     };
     //console.log(initConfig);
     signClient = await SignClient.init(initConfig)
@@ -63,9 +67,10 @@ export async function createSignClient() {
     //const pairings = signClient.core.pairing.getPairings();
     //console.log(pairings);
     registerListeners();
+    console.log('sign client created', signClient.metadata);
     return signClient;
   } catch (err) {
-    console.log(err);
+    console.log('signClientSetup error', err);
     return;
   }
   
@@ -180,6 +185,7 @@ export const registerListeners = () => {
     });
 
     signClient.on("proposal_expire", (event) => {
+      console.log('proposal_expire');
       deleteNotification(String(event.id))
       if (AppState.currentState === 'active') {
         navigate('ViewWallet', {});
@@ -200,6 +206,8 @@ export const registerListeners = () => {
       //
       console.log('pairing_expire');
     });
+  } else {
+    console.log('no signClient', signClient);
   }
 }
 

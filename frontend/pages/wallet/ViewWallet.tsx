@@ -50,6 +50,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
+    console.log('linking details')
     return () => {
       //setIsComponentMounted(false);
     }
