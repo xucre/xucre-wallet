@@ -1,4 +1,4 @@
-import { LiFi } from '@lifi/sdk'
+
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
 import { Text, useColorMode } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
@@ -16,10 +16,6 @@ import { WalletInternal } from '../../store/wallet';
 import { useIsFocused } from '@react-navigation/core';
 import { Token } from '../../service/token';
 import { getActiveNetwork } from '../../store/network';
-
-const lifi = new LiFi({
-  integrator: 'xucre'
-})
 
 export default function SwapToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -51,7 +47,6 @@ export default function SwapToken({ navigation, route }: { navigation: { navigat
 
   useEffect(() => {
     const runAsync = async () => {
-      //const chains = await lifi.getChains();
     }
     if (network) {
       runAsync();
@@ -72,15 +67,3 @@ export default function SwapToken({ navigation, route }: { navigation: { navigat
     </>
   )
 }
-
-//<SwapWidget provider={provider} />
-//<LiFiWidget config={widgetConfig} ></LiFiWidget>
-/*
-const widgetConfig: WidgetConfig = {
-  containerStyle: {
-    border: '1px solid rgb(234, 234, 234)',
-    borderRadius: '16px',
-  },
-  integrator: 'Xucre',
-};
-*/
