@@ -1,5 +1,5 @@
-//import LIFI, {ChainId} from '@lifi/sdk';
-import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
+
+import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import { Text } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -11,9 +11,7 @@ import { useRecoilState } from 'recoil';
 
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../service/state";
 
-//const lifi = new LIFI();
-
-export default function BuyToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function BuyToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
 
   const [network,] = useRecoilState(activeNetwork);
@@ -32,7 +30,7 @@ export default function BuyToken({ navigation, route }: {navigation: {navigate: 
 
   useEffect(() => {
     const runAsync = async () => {
-      //const chains = await lifi.getChains();
+
     }
     if (network) {
       runAsync();
@@ -49,15 +47,3 @@ export default function BuyToken({ navigation, route }: {navigation: {navigate: 
     </>
   )
 }
-
-//<SwapWidget provider={provider} />
-//<LiFiWidget config={widgetConfig} ></LiFiWidget>
-/*
-const widgetConfig: WidgetConfig = {
-  containerStyle: {
-    border: '1px solid rgb(234, 234, 234)',
-    borderRadius: '16px',
-  },
-  integrator: 'Xucre',
-};
-*/
