@@ -9,6 +9,7 @@ import notifee, { EventType } from '@notifee/react-native';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import parseUrl from 'parse-url'
+import 'react-native-gesture-handler';
 import '@walletconnect/react-native-compat';
 import { useFonts } from 'expo-font';
 import {

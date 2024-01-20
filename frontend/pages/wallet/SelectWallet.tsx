@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Divider,
+  FlatList,
   HStack,
   Icon,
   Menu,
@@ -22,6 +23,7 @@ import GuestLayout from '../../layouts/GuestLayout';
 import { activeWallet, AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { truncateStringStart } from "../../service/utility";
 import { storeActiveWallet, WalletInternal } from "../../store/wallet";
+import { RefreshControl } from "react-native";
 
 export default function SelectWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const {
@@ -93,38 +95,45 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
   }
 
   return (
-    <GuestLayout>
+    <>
       <Box
         _light={{ backgroundColor: Color.white }}
         _dark={{ backgroundColor: Color.black }}
         height={'100%'}
       >
-        <VStack justifyContent={'space-between'}>
-          <VStack space={4} height={'80%'}>
-            {
-              walletState.map((val, i) => {
-                if (val) {
-                  return (
-                    <Box key={val.name + i} px={4} py={1}>
-                      <WalletItem metadata={val} />
-                      {(i + 1) !== walletState.length &&
-                        <Divider orientation={'horizontal'} mt={4} _light={{
-                          bg: "muted.800"
-                        }} _dark={{
-                          bg: "muted.300"
-                        }} />
-                      }
+        <VStack marginBottom={'10%'} marginY={4} justifyContent={'space-between'}>
+          <FlatList data={walletState}
+            renderItem={
+              ({ item, index }) => {
+                return (
+                  <Box key={item.name + index} px={4} py={1}>
+                    <WalletItem metadata={item} />
+                    {(index + 1) !== walletState.length &&
+                      <Divider orientation={'horizontal'} mt={4} _light={{
+                        bg: "muted.800"
+                      }} _dark={{
+                        bg: "muted.300"
+                      }} />
+                    }
 
-                    </Box>
-                  )
-                }
-              })
+                  </Box>
+                )
+              }
             }
-          </VStack>
-
-          <Button onPress={createWallet} style={{ borderRadius: 100, marginLeft: 10, marginRight: 10 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? Color.black : Color.white} bold>{translations[language as keyof typeof translations].SelectWallet.new_button}</Text></Button>
+            keyExtractor={item => item.address}
+          />
         </VStack>
+        <Box
+          safeAreaBottom
+          alignSelf="center"
+          position='absolute'
+          bottom={'0%'}
+          left={0}
+          width={'full'}
+        >
+          <Button onPress={createWallet} style={{ borderRadius: 100, marginLeft: 10, marginRight: 10 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? Color.black : Color.white} bold>{translations[language as keyof typeof translations].SelectWallet.new_button}</Text></Button>
+        </Box>
       </Box>
-    </GuestLayout>
+    </>
   )
 }
