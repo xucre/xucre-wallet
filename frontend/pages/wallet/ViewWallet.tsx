@@ -22,6 +22,7 @@ import MobileFooter from "../../components/Footer";
 import TokenItem from '../../components/token/TokenItem';
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { getTokenItems, storeTokenItems } from "../../store/tokenItem";
 import { getTokenBalances, getWalletTransactions, swapUrl } from "../../service/api";
 import { chainIdToNameMap, xucreToken } from "../../service/constants";
 import { activeNetwork, activeWallet, language as stateLanguage, walletList } from '../../service/state';
@@ -47,7 +48,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [wallet, setWallet] = useState({} as Wallet);
   const network = useRecoilValue(activeNetwork);
   const [tokens, setTokens] = useState([] as Token[]);
-  const [transactions, setTransactions] = useState([] as readonly CovalentTransaction[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     console.log('linking details')
@@ -140,24 +140,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
   }
 
-  const syncTransactions = async () => {
-    const _transactions = await getWalletTransactions(_wallet.address, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
-
-    if (_transactions && _transactions.data.items) {
-      setTransactions(_transactions.data.items as readonly CovalentTransaction[]);
-    }
-  }
-
-  const clearTransactions = () => {
-    const runAsync = async () => {
-      //await storeTransactions([] as readonly CovalentTransaction[]);
-      await syncTransactions();
-      setLoading(false);
-    }
-    setLoading(true);
-    runAsync();
-  }
-
   useEffect(() => {
     if (_wallet.name === '' && _walletList.length === 0) {
       navigation.navigate('SelectWallet');
@@ -169,10 +151,20 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
         setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
       }
 
-      setTimeout(() => {
-        if (tokens.length === 0) {
-          syncTokens();
+      setTimeout(async () => {
+        const _tokens = await getTokenItems(_wallet.address, network.chainId);
+        console.log(_wallet.address);
+        if (_tokens && _tokens.length > 0) {
+          setTokens(_tokens.map((token) => {
+            console.log(token);
+            return {
+              ...token,
+              amount: BigNumber.from(token.amount?.hex || 0)
+            } as Token;
+          }));
         }
+        syncTokens();
+
       }, 1000)
     }
   }, [_wallet, _walletList, network]);
@@ -228,21 +220,22 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('ConnectionManagement');
   }
 
-
-  useEffect(() => {
-    //setNetwork(null)
-    //setAllNetworks([])
-  }, [])
-
   useEffect(() => {
     if (isFocused && wallet.address) {
-      onRefresh();
+      //onRefresh();
     }
   }, [isFocused])
 
-  const handleTabChange = (newTab: React.SetStateAction<string>) => {
-    setCurrentTab(newTab);
-  }
+  useEffect(() => {
+    const runAsync = async () => {
+      const _network = await getActiveNetwork();
+      console.log('storing tokens');
+      storeTokenItems(_wallet.address, _network.chainId, tokens);
+    }
+    if (tokens.length > 0) {
+      runAsync();
+    }
+  }, [tokens])
 
   const middleButtons = [
     {
@@ -359,9 +352,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             }
           </VStack>
 
-          {false && currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && transactions.length > 0 &&
-            <Button onPress={clearTransactions} mt={4} width={'full'} position={'absolute'} bottom={0} isLoading={loading}><Text>{translations[language as keyof typeof translations].ViewWallet.clear_button}</Text></Button>
-          }
           <MobileFooter navigation={navigation}></MobileFooter>
         </Box>
       }

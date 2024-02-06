@@ -101,7 +101,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         </Heading>
         <Text
           style={{
-            color: Color.gray_100,
+            color: colorMode === 'dark' ? Color.black : Color.white,
             textAlign: "center",
           }}
           fontSize={"md"}
@@ -161,7 +161,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
             </Badge>
           }
         >
-          <Text>{value}</Text>
+          <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>{value}</Text>
         </Button>
       )
     };
@@ -285,7 +285,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               </Badge>
           }
         >
-          <Text >{value}</Text>
+          <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>{value}</Text>
         </Button>
       )
     };

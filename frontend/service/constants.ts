@@ -341,6 +341,6 @@ export const logTopicMap = {
 export const actionToScheme = {
   "Recieve": 'success',
   "Send": 'warning',
-  "Unknown" : 'default',
+  "Unknown" : 'primary',
   "Approve From" : 'success', 
 }

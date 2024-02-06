@@ -5,6 +5,8 @@ import erc20 from '../assets/contracts/erc20.abi.json'
 import erc721 from '../assets/contracts/erc721.abi.json'
 import erc1155 from '../assets/contracts/erc1155.abi.json'
 import { logTopicMap } from './constants';
+import { getParsedTransaction } from '../store/transactionFeedItem';
+import { getIsSpam } from './api';
 
 export type Transaction = {
   readonly hash: string;
@@ -186,7 +188,7 @@ const UNKNOWN_TRANSACTION = {
   contractType: 'Unknown', 
   eventType: 'Unknown',
   action: 'Unknown',
-  amount: '',
+  amount: '0.0',
   valueRaw: BigNumber.from(0),
   contractAddress: '',
   spam: false
@@ -194,6 +196,11 @@ const UNKNOWN_TRANSACTION = {
 
 // Function to parse a list of transactions
 export async function parseTransaction(wallet: Wallet, transaction: CovalentTransactionV3, _network: Network): Promise<ParsedTransaction> {
+  const existingTransaction = await getParsedTransaction(wallet.address, _network.chainId, transaction.tx_hash);
+  if (existingTransaction && existingTransaction.transactionId.length > 0) {
+    return existingTransaction;
+  }
+
   const provider = getDefaultProvider(_network.rpcUrl);
 
   const receipt = await provider.getTransactionReceipt(transaction.tx_hash);
@@ -224,13 +231,16 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
     }
   }, {} as ParsedTransaction)
   if (!matchedLog) {
-    //console.log('no matching log');
+    const isSpam = await getIsSpam(transaction.to_address, _network.chainId);
+    //console.log('no matching log', isSpam);
+
     return {
       ...UNKNOWN_TRANSACTION, 
       transactionId: transaction.tx_hash,
       contractAddress: transaction.to_address,
       amount: utils.formatEther(BigNumber.from(transaction.value)), 
-      valueRaw: BigNumber.from(transaction.value)
+      valueRaw: BigNumber.from(transaction.value),
+      spam: isSpam === true
     };
   }
   const parsedLog : ParsedTransaction | null = parseLog(wallet, transaction, matchedLog, addressType);
@@ -241,7 +251,8 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       transactionId: transaction.tx_hash,
       contractAddress: transaction.to_address,
       amount: utils.formatEther(BigNumber.from(transaction.value)), 
-      valueRaw: BigNumber.from(transaction.value)
+      valueRaw: BigNumber.from(transaction.value),
+      spam: false
     };
   }
   return parsedLog;

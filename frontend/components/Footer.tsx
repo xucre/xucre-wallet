@@ -127,7 +127,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
                     color: item.highlight ? item.disabled ? "primary.400" : "primary.600" : item.disabled ? "coolGray.400" : "coolGray.100"
                   }}
                   _light={{
-                    color: item.highlight ? item.disabled ? "primary.600" : "primary.400" : item.disabled ? "coolGray.300" : "coolGray.500"
+                    color: item.highlight ? item.disabled ? "primary.400" : "primary.600" : item.disabled ? "coolGray.300" : "coolGray.500"
                   }}
                   marginTop={item.highlight ? -5 : -1}
                   marginBottom={item.highlight ? 2 : 1}
@@ -135,8 +135,8 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
               }
               _text={item.highlight ? {
                 color: item.disabled ?
-                  colorMode === 'dark' ? "primary.200" : "primary.400" :
-                  colorMode === 'dark' ? "primary.200" : "primary.400",
+                  colorMode === 'dark' ? "primary.400" : "primary.600" :
+                  colorMode === 'dark' ? "primary.400" : "primary.600",
                 width: 12,
                 height: 10,
                 fontSize: 12,

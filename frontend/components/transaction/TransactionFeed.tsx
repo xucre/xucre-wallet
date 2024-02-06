@@ -18,6 +18,7 @@ import { Pressable, RefreshControl } from "react-native";
 import CovalentItem from './CovalentItem';
 import { getActiveNetwork } from "../../store/network";
 import { useIsFocused } from "@react-navigation/native";
+import { getFeedItems, storeFeedItems } from "../../store/transactionFeedItem";
 
 export default function TransactionFeed({ navigation }: { navigation: { navigate: Function } }) {
   const isFocused = useIsFocused();
@@ -33,6 +34,17 @@ export default function TransactionFeed({ navigation }: { navigation: { navigate
       syncTransactions();
     }
   }, [_wallet])
+
+  useEffect(() => {
+    const runAsync = async () => {
+      const _network = await getActiveNetwork();
+      console.log('storing transactions');
+      storeFeedItems(_wallet.address, _network.chainId, transactions);
+    }
+    if (transactions.length > 0) {
+      runAsync();
+    }
+  }, [transactions])
 
   const syncTransactions = async () => {
     //console.log('syncTransactions');
@@ -51,8 +63,16 @@ export default function TransactionFeed({ navigation }: { navigation: { navigate
   }
 
   useEffect(() => {
-    if (isFocused && _wallet.address) {
+    const runAsync = async () => {
+      const _transactions = await getFeedItems(_wallet.address, network.chainId);
+      if (_transactions && _transactions.length > 0) {
+        setTransactions(_transactions);
+      }
       syncTransactions();
+
+    }
+    if (isFocused && _wallet.address) {
+      runAsync();
     }
   }, [isFocused])
   return (

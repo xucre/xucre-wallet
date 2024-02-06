@@ -69,7 +69,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
   useEffect(() => {
     if (isFocused && wallet.address) {
-      onRefresh();
+      //onRefresh();
     }
   }, [isFocused])
 
@@ -130,19 +130,10 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   useEffect(() => {
     if (wallet.address) {
       console.log('refiring');
-      /*setHoldings([]);
-      setCurrentHoldings({
-        meta: {
-          'date': ''
-        },
-        x: 0,
-        y: 0
-      });
-      setChartData([]);*/
       setRefreshing(true);
       getData();
     }
-  }, [wallet, chainName])
+  }, [])
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -184,20 +175,6 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
                   <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >{CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}{currentHoldings ? currentHoldings.y.toFixed(2) : '0.00'}</Text></Heading>
                 </HStack>
               </VStack>
-              {/*<Menu w="160" shouldOverlapWithTrigger={false} trigger={triggerProps => {
-                return <Button alignSelf="center" variant="ghost" color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} marginTop={-1} endIcon={<Icon as={MaterialIcons} name="keyboard-arrow-down" size="md" color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} marginLeft={-1} />} {...triggerProps}>
-                  <Text color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} fontWeight={'bold'}>{chainName}</Text>
-                </Button>
-                  ;
-              }}>
-                {
-                  chainNames.map((cname, i) => {
-                    return (
-                      <Menu.Item onPress={() => { setChainName(cname) }} key={cname + i}><Text>{cname}</Text></Menu.Item>
-                    )
-                  })
-                }
-              </Menu>*/}
 
             </HStack>
 
