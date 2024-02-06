@@ -3,22 +3,31 @@
     "version": ">= 5.6.0"
   },
   "build": {
-    "development": {
-      "distribution": "internal",
+    "base": {
       "android": {
-        "gradleCommand": ":app:assembleDebug",
         "image": "latest"
       },
       "ios": {
-        "buildConfiguration": "Debug",
         "image": "latest"
       }
     },
+    "development": {
+      "extends": "base",
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
+    },
     "preview": {
+      "extends": "base",
       "distribution": "internal"
     },
     "production": {
-      "prebuildCommand" : "prebuild --npm"
+      "extends": "base",
+      "prebuildCommand": "prebuild --npm"
     }
   },
   "submit": {
