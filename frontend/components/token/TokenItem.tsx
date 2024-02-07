@@ -10,11 +10,13 @@ import translations from "../../assets/translations";
 import { activeNetwork, activeWallet } from "../../service/state";
 import { language as stateLanguage } from "../../service/state";
 import { Token } from "../../service/token";
-import { truncateString } from "../../service/utility";
+import { isSVGFormatImage, truncateString } from "../../service/utility";
 import { coinIconNames, tokenIconNames } from '../../store/network';
 import { deleteToken } from "../../store/token";
 import { NavigationState } from "@react-navigation/native";
 import { WalletInternal } from "../../store/wallet";
+import { SvgUri } from "react-native-svg";
+import { iconBackground } from "../../assets/styles/themeContext";
 
 export default function TokenItem({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
   const { colorMode } = useColorMode();
@@ -51,16 +53,34 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
     refreshList();
   }*/
 
+  const CustomIcon = ({ data, size }: { data: any, size: number }): JSX.Element => {
+    return <SvgUri
+      width={size}
+      height={size}
+      uri={data}
+    />
+  }
+
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
+    const isSvg = isSVGFormatImage(token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png');
+
     return (
       <>
-        <Avatar bg="transparent" mr="1" source={{
-          uri: token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
-        }} size={10}>
-          <Text>{iname}</Text>
-        </Avatar>
+        {isSvg &&
+          <Avatar bg="transparent" mr="1" size={10}>
+            <CustomIcon data={token.logo || avatar} size={40} />
+          </Avatar>
+        }
+        {!isSvg &&
+          <Avatar bg="transparent" mr="1" source={{
+            uri: token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+          }} size={10}>
+            <Text>{iname}</Text>
+          </Avatar>
+        }
       </>
+
 
       //<Icon name="poly" style={{ alignSelf: 'center', color: icon_color, fontSize: 25, justifyContent: 'center',marginBottom:0, marginTop:-100,  }}/>
     )
@@ -77,7 +97,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
         <VStack>
           <Pressable>
             <Text fontSize="md" bold>
-              {token.symbol || token.name}
+              {token.symbol || token.name || 'N/A'}
             </Text>
           </Pressable>
         </VStack>

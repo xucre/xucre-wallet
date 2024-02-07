@@ -73,8 +73,8 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
       const _network = await getActiveNetwork();
       //console.log('network chainId', _network.chainId);
-      const _tokens = await getTokenBalances(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
-      console.log(_tokens);
+      const _tokens = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap])).tokenBalances;
+      //console.log('tokens', _tokens);
       //await wallet.provider.getNetwork();'
       const _provider = getDefaultProvider(_network.rpcUrl);
       //console.log(wallet._isSigner);
@@ -99,8 +99,8 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
         }
       }
       const convertedTokens = _tokens.map((token: { contractAddress: string; tokenBalance: any; }) => {
-        const tokenMetadata = tokenMetadataMap[ethers.utils.getAddress(token.contractAddress) as keyof typeof tokenMetadataMap];
-
+        const tokenMetadata = tokenMetadataMap[token.contractAddress.toLowerCase() as keyof typeof tokenMetadataMap];
+        //console.log(token.contractAddress.toLowerCase());
         return {
           //@ts-ignore
           name: tokenMetadata?.name,
@@ -288,7 +288,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
         <Box
           _light={{ backgroundColor: 'white' }}
           _dark={{ backgroundColor: 'black' }}
-          height={'100%'}
           safeAreaBottom
         >
 
@@ -332,18 +331,25 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           </HStack>
           <VStack space="5" px={2} mb={10}>
             {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
-              <Box m={6} >
+              <Box m={6} height={'2/3'}>
                 {/*<Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>*/}
-                <FlatList data={tokens} refreshControl={
+                <FlatList data={tokens.sort((a, b) => {
+                  if (a.amount && b.amount) {
+                    return (a.amount.gt(b.amount)) ? -1 : 1
+                  } else if (a) {
+                    return -1;
+                  } else {
+                    return 1;
+                  }
+                })} refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefresh}
                     tintColor={colorMode === 'dark' ? Color.white : Color.darkgray_200}
                   />
                 } renderItem={
-                  ({ item, index }) => <TokenItem key={item.name + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} />
+                  ({ item, index }) => <TokenItem key={item.address + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} />
                 }
-                  keyExtractor={item => item.name}
                 />
               </Box>
             }
@@ -352,11 +358,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             }
           </VStack>
 
-          <MobileFooter navigation={navigation}></MobileFooter>
+          { }
         </Box>
       }
 
-
+      <MobileFooter navigation={navigation}></MobileFooter>
     </DashboardLayout>
   )
 }

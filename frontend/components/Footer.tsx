@@ -92,7 +92,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         position={'absolute'}
         left="0"
         right="0"
-        bottom="10"
+        bottom="0"
         alignSelf="center"
         borderTopLeftRadius="20"
         borderTopRightRadius="20"
