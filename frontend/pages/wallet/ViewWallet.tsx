@@ -35,6 +35,7 @@ import ethTokens from '../../assets/json/eth_tokens.json'
 import polygonTokens from '../../assets/json/matic_tokens.json'
 import { useIsFocused } from '@react-navigation/native';
 import { Linking } from "react-native";
+import { isSpam } from "../../store/spam";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -49,12 +50,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const network = useRecoilValue(activeNetwork);
   const [tokens, setTokens] = useState([] as Token[]);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    console.log('linking details')
-    return () => {
-      //setIsComponentMounted(false);
-    }
-  }, []);
+
   const tabList = translations[language as keyof typeof translations].ViewWallet.tab_list;
   //Buttons
 
@@ -72,12 +68,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     try {
 
       const _network = await getActiveNetwork();
-      //console.log('network chainId', _network.chainId);
+
       const _tokens = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap])).tokenBalances;
-      //console.log('tokens', _tokens);
-      //await wallet.provider.getNetwork();'
+
       const _provider = getDefaultProvider(_network.rpcUrl);
-      //console.log(wallet._isSigner);
+
       const walletBalance = await wallet.connect(_provider).getBalance();
 
       const coinToken = {
@@ -87,6 +82,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
         name: _network.name,
         symbol: _network.symbol,
         type: 'coin',
+        isNotSpammable: true
       };
       if (!_tokens) {
         if (isComponentMounted) {
@@ -98,26 +94,33 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           return;
         }
       }
-      const convertedTokens = _tokens.map((token: { contractAddress: string; tokenBalance: any; }) => {
+      const isTokenNotInSpamList = await Promise.all(_tokens.map(async (token: { contractAddress: string; tokenBalance: any; }) => {
+        const spamCheck = await isSpam(token.contractAddress, _network.chainId);
+        return !spamCheck
+      }));
+
+      const finalTokens = _tokens.filter((token: { contractAddress: string; tokenBalance: any; }, index: number) => {
+        return isTokenNotInSpamList[index];
+      }).map((token: { contractAddress: string; tokenBalance: any; }) => {
         const tokenMetadata = tokenMetadataMap[token.contractAddress.toLowerCase() as keyof typeof tokenMetadataMap];
-        //console.log(token.contractAddress.toLowerCase());
+
         return {
           //@ts-ignore
           name: tokenMetadata?.name,
           amount: BigNumber.from(token.tokenBalance),
           chainId: _network.chainId,
-          address: ethers.utils.getAddress(token.contractAddress),
+          address: token.contractAddress,//ethers.utils.getAddress(token.contractAddress),
           type: 'token',
           //@ts-ignore
           logo: tokenMetadata?.logo,
           //@ts-ignore
-          symbol: tokenMetadata?.symbol
-
+          symbol: tokenMetadata?.symbol,
+          isNotSpammable: false
         } as Token
       })
-      const tokenList = [coinToken, ...convertedTokens];
+      const tokenList = [coinToken, ...finalTokens];
       const hasXucre = tokenList.find((tok) => {
-        return ethers.utils.getAddress(tok.address) === ethers.utils.getAddress(xucreToken.address) && tok.chainId === xucreToken.chainId
+        return tok.address.toLowerCase() === xucreToken.address.toLowerCase() && tok.chainId === xucreToken.chainId
       });
       if (!!hasXucre) {
         if (isComponentMounted && tokenList) {
@@ -153,10 +156,17 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
       setTimeout(async () => {
         const _tokens = await getTokenItems(_wallet.address, network.chainId);
-        console.log(_wallet.address);
+        //console.log(_wallet.address);
         if (_tokens && _tokens.length > 0) {
-          setTokens(_tokens.map((token) => {
-            console.log(token);
+          setTokens(_tokens.filter(async (token: { contractAddress: string }) => {
+            if (token.contractAddress && token.contractAddress.length > 0) {
+              const spamCheck = await isSpam(token.contractAddress, network.chainId);
+              //console.log('isSpam ', spamCheck);
+              return spamCheck === false
+            }
+            return false;
+          }).map((token) => {
+            //console.log(token);
             return {
               ...token,
               amount: BigNumber.from(token.amount?.hex || 0)
@@ -229,7 +239,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   useEffect(() => {
     const runAsync = async () => {
       const _network = await getActiveNetwork();
-      console.log('storing tokens');
       storeTokenItems(_wallet.address, _network.chainId, tokens);
     }
     if (tokens.length > 0) {

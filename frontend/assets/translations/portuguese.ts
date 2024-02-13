@@ -240,6 +240,7 @@ const values : TranslationType  = {
     title: 'Carteira'
   },
   TokenItem: {
+    blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
     menu_accessiblity_label: "Menu mais opÃ§Ãµes",
     send_token_button: 'Enviar'

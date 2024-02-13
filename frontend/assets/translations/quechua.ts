@@ -240,6 +240,7 @@ const values : TranslationType = {
     title: 'Chuspa'
   },
   TokenItem: {
+    blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
     menu_accessiblity_label: "Aswan akllanakuna menÃº",
     send_token_button: 'Kachay'

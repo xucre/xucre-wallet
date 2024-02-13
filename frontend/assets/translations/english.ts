@@ -241,6 +241,7 @@ const values : TranslationType = {
     title: "Swap"
   },
   TokenItem: {
+    blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
     menu_accessiblity_label: "More options menu",
     send_token_button: "Send"
