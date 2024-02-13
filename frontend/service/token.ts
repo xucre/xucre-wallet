@@ -8,4 +8,5 @@ export type Token = {
   readonly type: string;
   readonly logo?: string;
   readonly symbol?: string;
+  readonly isNotSpammable?: boolean;
 }

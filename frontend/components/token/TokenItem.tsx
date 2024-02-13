@@ -17,6 +17,14 @@ import { NavigationState } from "@react-navigation/native";
 import { WalletInternal } from "../../store/wallet";
 import { SvgUri } from "react-native-svg";
 import { iconBackground } from "../../assets/styles/themeContext";
+import { getTokenMetadata } from "../../service/api";
+import { chainIdToNameMap } from "../../service/constants";
+import { addToSpam } from "../../store/spam";
+
+type AlchemyMetadata = {
+  readonly logo?: string;
+  readonly symbol?: string;
+}
 
 export default function TokenItem({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
   const { colorMode } = useColorMode();
@@ -25,6 +33,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
   const [language,] = useRecoilState(stateLanguage);
   const [avatar, setAvatar] = useState('');
   const [rawAmount, setRawAmount] = useState(BigNumber.from(0));
+  const [alchemyMetadata, setAlchemyMetadata] = useState({} as AlchemyMetadata);
 
   useEffect(() => {
     if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
@@ -38,6 +47,10 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
     if (!token.amount || token.amount.isZero()) {
       getRawBalance();
     }
+
+    if (!token.name) {
+      getMetadata();
+    }
     //setAvatar('');
   }, [token])
 
@@ -46,6 +59,12 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
     const walletBalance = await erc20.balanceOf(ethers.utils.getAddress(wallet.address));
     //console.log('raw balance', walletBalance, ethers.utils.getAddress(wallet.address));
     setRawAmount(walletBalance);
+  }
+
+  const getMetadata = async () => {
+    const result = await getTokenMetadata(token.address, chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap]);
+    //console.log('getMetadata result', result);
+    setAlchemyMetadata(result as AlchemyMetadata);
   }
 
   /*const removeToken = async () => {
@@ -63,18 +82,18 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
 
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
-    const isSvg = isSVGFormatImage(token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png');
+    const isSvg = isSVGFormatImage(token.logo || avatar || alchemyMetadata.logo || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png');
 
     return (
       <>
         {isSvg &&
           <Avatar bg="transparent" mr="1" size={10}>
-            <CustomIcon data={token.logo || avatar} size={40} />
+            <CustomIcon data={token.logo || avatar || alchemyMetadata.logo} size={40} />
           </Avatar>
         }
         {!isSvg &&
           <Avatar bg="transparent" mr="1" source={{
-            uri: token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+            uri: token.logo || avatar || alchemyMetadata.logo || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png'
           }} size={10}>
             <Text>{iname}</Text>
           </Avatar>
@@ -89,6 +108,11 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
   const sendToken = () => {
     navigation.navigate('SendToken', { token })
   }
+
+  const blacklistToken = async () => {
+    await addToSpam(token.address, token.chainId, token);
+    refreshList();
+  }
   return (
     <HStack alignItems="center" justifyContent="space-between" py={2}>
       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
@@ -97,7 +121,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
         <VStack>
           <Pressable>
             <Text fontSize="md" bold>
-              {token.symbol || token.name || 'N/A'}
+              {token.symbol || token.name || truncateString(alchemyMetadata.symbol as string, 14) || 'N/A'}
             </Text>
           </Pressable>
         </VStack>
@@ -120,6 +144,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
           }}
           >
             <Menu.Item onPress={() => { sendToken() }}><Text>{translations[language as keyof typeof translations].TokenItem.send_token_button}</Text></Menu.Item>
+            <Menu.Item onPress={() => { blacklistToken() }}><Text>{translations[language as keyof typeof translations].TokenItem.blacklist_button}</Text></Menu.Item>
             {/*<Menu.Item onPress={() => { removeToken() }}><Text>{translations[language as keyof typeof translations].TokenItem.delete_button}</Text></Menu.Item>*/}
           </Menu>
         </Tooltip>

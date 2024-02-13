@@ -106,6 +106,27 @@ export const getTokenBalances = async (wallet: string, chainName: any) => {
   }
 }
 
+export const getTokenMetadata = async (address: string, chainName: any) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 1000,
+    });
+    const response = await instance({
+      method: 'get',
+      params: {
+        chainName,
+        address,
+      },
+      url: `tokens/metadata`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+
 export const getIsSpam = async (address: string, chainId: number) => {
   try {
     const instance = axios.create({

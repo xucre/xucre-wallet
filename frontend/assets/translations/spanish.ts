@@ -242,6 +242,7 @@ const values : TranslationType = {
     title: "Billetera"
   },
   TokenItem: {
+    blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
     menu_accessiblity_label: "Menu más opciones",
     send_token_button: "Enviar"

@@ -240,6 +240,7 @@ const values : TranslationType  = {
     title: 'Tlahcuiloolaamapetlaacaltoon-tli',
   },
   TokenItem: {
+    blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
     menu_accessiblity_label: 'Menu okachi tlaihittaliz-tli',
     send_token_button: 'Ihuaa',
