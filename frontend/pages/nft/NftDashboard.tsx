@@ -30,6 +30,8 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [chain, setChain] = useState('');
+  const [trendingRefreshing, setTrendingRefreshing] = useState(false);
+  const [collectionsRefreshing, setCollectionsRefreshing] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [wallet, setActiveWallet] = useState({
     name: '',
@@ -68,11 +70,10 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
   const syncTrendingNfts = async () => {
     try {
       if (wallet.name.length > 0) {
-        const nftJson = await getNftJson();
+        const nftJsonTrending = await getNftJson('trending');
         if (isComponentMounted) {
-          setTrending(nftJson.trending);
-          setCollections(nftJson.collections);
-          setRefreshing(false);
+          setTrending(nftJsonTrending.items);
+          setTrendingRefreshing(true);
         }
       }
     } catch (err) {
@@ -80,14 +81,38 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
     }
   }
 
+  const syncCollectionNfts = async () => {
+    try {
+      if (wallet.name.length > 0) {
+        const nftJsonCollections = await getNftJson('collections');
+        if (isComponentMounted) {
+          setCollections(nftJsonCollections.items);
+          setCollectionsRefreshing(true);
+        }
+      }
+    } catch (err) {
+      //
+    }
+  }
+
+
   useEffect(() => {
     setTimeout(() => {
       if (wallet.name.length > 0) {
+        setTrendingRefreshing(true);
+        setCollectionsRefreshing(true);
         syncTrendingNfts();
+        syncCollectionNfts();
         syncNfts();
       }
     }, 1000)
   }, [wallet])
+
+  useEffect(() => {
+    if (trendingRefreshing && collectionsRefreshing) {
+      setRefreshing(false);
+    }
+  }, [trendingRefreshing, collectionsRefreshing])
 
   useEffect(() => {
     const runAsync = async () => {
@@ -100,7 +125,7 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
 
 
   const onRefresh = React.useCallback(async () => {
-    //
+
   }, []);
 
   const addToken = () => {

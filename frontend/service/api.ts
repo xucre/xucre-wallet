@@ -5,7 +5,7 @@ import { env } from './constants';
 const BASEURL = env.REACT_APP_API_URL;
 export const swapUrl = 'https://swap.xucre.net/';
 
-export const getNftJson = async () => {
+export const getNftJson = async (type: string) => {
   try {
     const instance = axios.create({
       baseURL: BASEURL,
@@ -13,7 +13,10 @@ export const getNftJson = async () => {
     });
     const response = await instance({
       method: 'get',
-      url: `nfts`,
+      url: `v2/nfts`,
+      params: {
+        type
+      }
     });
     return response.data;
   } catch (error) {

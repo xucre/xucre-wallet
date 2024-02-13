@@ -42,7 +42,7 @@ function NftListItem({ contract, token, chain }: { contract: string, token: stri
 
     setChannelMetadata({
       description: result.token_description,
-      image: result.cached_images.small_250_250 || '',
+      image: (result.cached_images && result?.cached_images.small_250_250) ? result.cached_images.small_250_250 : '',
       key: `${result.contract_address}/${result.id}`,
       name: result.token_name,
       subtitle: result.token_type,
