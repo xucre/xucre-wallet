@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { BigNumber, ethers, getDefaultProvider, Wallet } from "ethers";
-import { Avatar, HStack, Icon, IconButton, Menu, Pressable, Text, Tooltip, useColorMode, VStack, } from "native-base";
+import { Avatar, HStack, Icon, IconButton, Menu, Pressable, Skeleton, Text, Tooltip, useColorMode, VStack, } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -19,6 +19,7 @@ export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
   const [tokenImage, setTokenImage] = useState('');
   const [language,] = useRecoilState(stateLanguage);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     return () => {
       setIsComponentMounted(false);
@@ -34,6 +35,8 @@ export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
           const img = await getIconImage(token.contract.ticker_symbol.toLowerCase());
 
           setTokenImage(img as string);
+        } else {
+          setLoading(false);
         }
 
         //const blob = new Blob([img.data], {type: "image/png"})
@@ -64,8 +67,12 @@ export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
     const isDark = colorMode === 'dark';
     return (
       <>
+
+        {loading &&
+          <Skeleton rounded={'full'} size={10} fadeDuration={1} />
+        }
         {tokenImage !== '' &&
-          <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} mr="1" source={{
+          <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} bg={isDark ? 'coolGray.800' : 'coolGray.300'} mr="1" source={{
             uri: tokenImage
           }}>
             <Text>{iname}</Text>

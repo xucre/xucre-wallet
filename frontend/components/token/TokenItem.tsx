@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { BigNumber, BigNumberish, ethers, getDefaultProvider, Wallet } from "ethers";
-import { Avatar, HStack, Icon, IconButton, Menu, Pressable, Text, Tooltip, useColorMode, VStack, } from "native-base";
+import { Avatar, HStack, Icon, IconButton, Menu, Pressable, Skeleton, Text, Tooltip, useColorMode, VStack, } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -34,6 +34,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
   const [avatar, setAvatar] = useState('');
   const [rawAmount, setRawAmount] = useState(BigNumber.from(0));
   const [alchemyMetadata, setAlchemyMetadata] = useState({} as AlchemyMetadata);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
@@ -74,6 +75,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
 
   const CustomIcon = ({ data, size }: { data: any, size: number }): JSX.Element => {
     return <SvgUri
+      onLoad={() => { setLoading(false) }}
       width={size}
       height={size}
       uri={data}
@@ -86,13 +88,16 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
 
     return (
       <>
+        {loading &&
+          <Skeleton rounded={'full'} size={10} fadeDuration={1} />
+        }
         {isSvg &&
-          <Avatar bg="transparent" mr="1" size={10}>
+          <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" size={10}>
             <CustomIcon data={token.logo || avatar || alchemyMetadata.logo} size={40} />
           </Avatar>
         }
         {!isSvg &&
-          <Avatar bg="transparent" mr="1" source={{
+          <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" source={{
             uri: token.logo || avatar || alchemyMetadata.logo || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png'
           }} size={10}>
             <Text>{iname}</Text>

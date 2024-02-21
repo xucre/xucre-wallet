@@ -101,7 +101,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         </Heading>
         <Text
           style={{
-            color: colorMode === 'dark' ? Color.black : Color.white,
+            color: colorMode === 'dark' ? Color.white : Color.black,
             textAlign: "center",
           }}
           fontSize={"md"}
@@ -125,7 +125,6 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
   }
 
   function MnemonicList() {
-    console.log(mnemonics);
     function ListItem({ value, index }: { value: string, index: number }) {
       return (
         <Button

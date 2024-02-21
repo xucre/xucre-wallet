@@ -23,6 +23,7 @@
     },
     "preview": {
       "extends": "base",
+      "prebuildCommand": "prebuild --npm",
       "distribution": "internal"
     },
     "production": {
