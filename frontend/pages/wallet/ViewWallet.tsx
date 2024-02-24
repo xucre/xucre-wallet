@@ -71,16 +71,16 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
       const _tokens = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap])).tokenBalances;
 
-      const _provider = getDefaultProvider(_network.rpcUrl);
+      //const _provider = getDefaultProvider(_network.rpcUrl);
 
-      const walletBalance = await wallet.connect(_provider).getBalance();
+      //const walletBalance = await wallet.connect(_provider).getBalance();
 
       const coinToken = {
         address: ethers.constants.AddressZero,
-        amount: walletBalance,
+        //amount: walletBalance,
         chainId: _network.chainId,
         name: _network.name,
-        symbol: _network.symbol,
+        symbol: _network.symbol || 'NA',
         type: 'coin',
         isNotSpammable: true
       };
@@ -93,52 +93,37 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           setTokens([coinToken]);
           return;
         }
-      }
-      const isTokenNotInSpamList = await Promise.all(_tokens.map(async (token: { contractAddress: string; tokenBalance: any; }) => {
-        const spamCheck = await isSpam(token.contractAddress, _network.chainId);
-        return !spamCheck
-      }));
-
-      const finalTokens = _tokens.filter((token: { contractAddress: string; tokenBalance: any; }, index: number) => {
-        return isTokenNotInSpamList[index];
-      }).map((token: { contractAddress: string; tokenBalance: any; }) => {
-        const tokenMetadata = tokenMetadataMap[token.contractAddress.toLowerCase() as keyof typeof tokenMetadataMap];
-
-        return {
-          //@ts-ignore
-          name: tokenMetadata?.name,
-          amount: BigNumber.from(token.tokenBalance),
-          chainId: _network.chainId,
-          address: token.contractAddress,//ethers.utils.getAddress(token.contractAddress),
-          type: 'token',
-          //@ts-ignore
-          logo: tokenMetadata?.logo,
-          //@ts-ignore
-          symbol: tokenMetadata?.symbol,
-          isNotSpammable: false
-        } as Token
-      })
-      const tokenList = [coinToken, ...finalTokens];
-      const hasXucre = tokenList.find((tok) => {
-        return tok.address.toLowerCase() === xucreToken.address.toLowerCase() && tok.chainId === xucreToken.chainId
-      });
-      if (!!hasXucre) {
-        if (isComponentMounted && tokenList) {
-          setTokens(tokenList);
-          return;
-        }
       } else {
-        if (isComponentMounted && tokenList) {
-          if (network.chainId === xucreToken.chainId) {
-            setTokens([xucreToken, coinToken, ...tokenList]);
-            return;
+        const tokenList = [..._tokens.map((token: { contractAddress: string; tokenBalance: any; }) => {
+          const tokenMetadata = tokenMetadataMap[token.contractAddress.toLowerCase() as keyof typeof tokenMetadataMap];
+          const _token = {
+            //@ts-ignore
+            name: tokenMetadata?.name || 'N/A',
+            amount: BigNumber.from(token.tokenBalance || 0),
+            chainId: _network.chainId,
+            address: token.contractAddress,//ethers.utils.getAddress(token.contractAddress),
+            type: 'token',
+            //@ts-ignore
+            logo: tokenMetadata?.logo || undefined,
+            //@ts-ignore
+            symbol: tokenMetadata?.symbol || 'N/A',
+            isNotSpammable: false
+          } as Token
+          return _token;
+        }).values(), coinToken];
+        const finalTokens = tokenList.sort((a, b) => {
+          if (a.amount && b.amount) {
+            return (a.amount.gt(b.amount)) ? -1 : 1
+          } else if (a) {
+            return -1;
+          } else {
+            return 1;
           }
-          setTokens([...tokenList as Token[]]);
-          return;
-        }
+        });
+        setTokens(finalTokens);
+        return;
       }
     } catch (err) {
-      console.log('fails when wallet is empty', err);
     }
 
   }
@@ -155,24 +140,19 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       }
 
       setTimeout(async () => {
-        const _tokens = await getTokenItems(_wallet.address, network.chainId);
-        //console.log(_wallet.address);
+        /*const _tokens = await getTokenItems(_wallet.address, network.chainId);
         if (_tokens && _tokens.length > 0) {
-          setTokens(_tokens.filter(async (token: { contractAddress: string }) => {
-            if (token.contractAddress && token.contractAddress.length > 0) {
-              const spamCheck = await isSpam(token.contractAddress, network.chainId);
-              //console.log('isSpam ', spamCheck);
-              return spamCheck === false
-            }
-            return false;
-          }).map((token) => {
-            //console.log(token);
+          const finalTokens = [..._tokens.map((token) => {
             return {
               ...token,
               amount: BigNumber.from(token.amount?.hex || 0)
             } as Token;
-          }));
-        }
+          }).values()];
+
+          setTokens(finalTokens);
+        } else {
+          syncTokens();
+        }*/
         syncTokens();
 
       }, 1000)
@@ -342,15 +322,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
               <Box m={6} height={'2/3'}>
                 {/*<Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>*/}
-                <FlatList data={tokens.sort((a, b) => {
-                  if (a.amount && b.amount) {
-                    return (a.amount.gt(b.amount)) ? -1 : 1
-                  } else if (a) {
-                    return -1;
-                  } else {
-                    return 1;
-                  }
-                })} refreshControl={
+                <FlatList data={tokens} refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefresh}

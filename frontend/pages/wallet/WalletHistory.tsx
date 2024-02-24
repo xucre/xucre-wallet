@@ -77,9 +77,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
     try {
       const _network = await getActiveNetwork();
       const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
-      //console.log(chainName);
       const historyResults = await getWalletHistory(wallet.address, chainName);
-      //console.log(historyResults);
       const outputData = processJsonData(historyResults);
       const isReady = outputData === null || outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
       const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, _i) => {
@@ -102,16 +100,12 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
           y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
         }
       });
-      //console.log(finalQuotes[0]);
-      //console.log(finalQuotes[1]);
       setCurrentHoldings(finalQuotes[0]);
       setChartData(finalQuotes);
       setIsZeroData(isReady);
       setRefreshing(false);
 
     } catch (err) {
-      //
-      console.log('walletHistory getData', err);
       setTimeout(() => {
         //getData();
       }, 1000)
@@ -129,7 +123,6 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
   useEffect(() => {
     if (wallet.address) {
-      console.log('refiring');
       setRefreshing(true);
       getData();
     }
@@ -154,7 +147,6 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
       }
       return retVal;
     }, 0);
-    //console.log('getMaxValue', result);
     return result;
   }
   return (

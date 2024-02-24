@@ -33,21 +33,13 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
     if (transaction && wallet.wallet.length > 0 && network.chainId) parseDetails();
   }, [transaction, wallet, network])
 
-  useEffect(() => {
-    //console.log(transactionDetails);
-  }, [transactionDetails])
-
   const parseDetails = async () => {
     try {
       setLoading(true);
       const result: ParsedTransaction = await parseTransaction(new WalletInternal(wallet.wallet), transaction, network);
       await storeParsedTransaction(wallet.address, network.chainId, { ...result });
-      if (result.spam) {
-        //console.log(result);
-      }
       setTransactionDetails({ ...result });
     } catch (err) {
-      console.log('parseData error');
     } finally {
       setLoading(false);
     }
@@ -66,7 +58,6 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
     //const isSvg = isSVGFormatImage(transaction.dex_details?.token_1_logo_url || transaction.gas_metadata?.logo_url);
     const isSvg = isSVGFormatImage(transaction.gas_metadata?.logo_url);
-    //console.log('isSvg', isSvg,  transaction.gas_metadata?.logo_url);
     return (
       <>
         {isSvg &&
@@ -95,7 +86,6 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
   }
 
   const getItemAmount = () => {
-    //console.log('getItemAmount', transaction.value)
     return transaction.dex_details ?
       ethers.utils.formatEther(transaction.dex_details.token_1_amount) + ' ' + transaction.dex_details.token_1_ticker :
       ethers.utils.formatEther(transaction.value) + ' ' + transaction.gas_metadata.contract_ticker_symbol
@@ -115,7 +105,6 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
     try {
       return actionToScheme[transactionDetails.action as keyof typeof actionToScheme];
     } catch (err) {
-      console.log('error computing action scheme');
       return actionToScheme.Unknown;
     }
 

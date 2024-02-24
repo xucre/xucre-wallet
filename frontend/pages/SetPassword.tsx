@@ -31,7 +31,6 @@ export default function SetPassword({ navigation, route }: { navigation: { navig
   useEffect(() => {
     const runAsync = async () => {
       const _existingPassword = await hasPassword();
-      console.log('hasPassword', _existingPassword);
       setExistingPassword(_existingPassword);
     }
 
@@ -56,7 +55,6 @@ export default function SetPassword({ navigation, route }: { navigation: { navig
 
   const save = async () => {
     const result = await storePassword(currentPw, inputPw);
-    console.log(result);
     if (result.message === 'success') {
       navigation.navigate('Home');
     }

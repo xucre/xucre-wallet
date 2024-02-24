@@ -81,10 +81,8 @@ export const getWalletTransactions = async (wallet: string, chainName: any) => {
       },
       url: `transactions`,
     });
-    //console.log('getWalletTransactions', wallet.toLowerCase(), response.data);
     return response.data;
   } catch (error) {
-    console.log(error);
     return null;
   }
 }

@@ -29,7 +29,6 @@ export default function TransactionFeed({ navigation }: { navigation: { navigate
   const [transactions, setTransactions] = useState([] as CovalentTransactionV3[]);
   //{translations[language].BasePage.title}
   useEffect(() => {
-    //console.log(_wallet);
     if (_wallet) {
       syncTransactions();
     }
@@ -38,7 +37,6 @@ export default function TransactionFeed({ navigation }: { navigation: { navigate
   useEffect(() => {
     const runAsync = async () => {
       const _network = await getActiveNetwork();
-      console.log('storing transactions');
       storeFeedItems(_wallet.address, _network.chainId, transactions);
     }
     if (transactions.length > 0) {
@@ -47,14 +45,11 @@ export default function TransactionFeed({ navigation }: { navigation: { navigate
   }, [transactions])
 
   const syncTransactions = async () => {
-    //console.log('syncTransactions');
     setRefreshing(true);
     setTimeout(async () => {
       const _network = await getActiveNetwork();
       const _transactions = await getWalletTransactions(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
-      //console.log('syncTransactions', _transactions);
       if (_transactions && _transactions.covalent.items) {
-        //console.log('get Transactions', _transactions);
         setTransactions(_transactions.covalent.items as CovalentTransactionV3[]);
       }
       setRefreshing(false);

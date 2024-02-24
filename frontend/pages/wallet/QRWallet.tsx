@@ -55,7 +55,6 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
   const [showModal, setShowModal] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
-    console.log('isFocused', isFocused);
     getPermission();
   }, [isFocused]);
   const getPermission = () => {

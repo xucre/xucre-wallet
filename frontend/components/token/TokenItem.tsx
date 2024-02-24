@@ -10,7 +10,7 @@ import translations from "../../assets/translations";
 import { activeNetwork, activeWallet } from "../../service/state";
 import { language as stateLanguage } from "../../service/state";
 import { Token } from "../../service/token";
-import { isSVGFormatImage, truncateString } from "../../service/utility";
+import { isSVGFormatImage, truncateString_old } from "../../service/utility";
 import { coinIconNames, tokenIconNames } from '../../store/network';
 import { deleteToken } from "../../store/token";
 import { NavigationState } from "@react-navigation/native";
@@ -19,7 +19,7 @@ import { SvgUri } from "react-native-svg";
 import { iconBackground } from "../../assets/styles/themeContext";
 import { getTokenMetadata } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
-import { addToSpam } from "../../store/spam";
+import { addToSpam, isSpam } from "../../store/spam";
 
 type AlchemyMetadata = {
   readonly logo?: string;
@@ -35,6 +35,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
   const [rawAmount, setRawAmount] = useState(BigNumber.from(0));
   const [alchemyMetadata, setAlchemyMetadata] = useState({} as AlchemyMetadata);
   const [loading, setLoading] = useState(true);
+  const [amISpam, setAmISpam] = useState(true);
 
   useEffect(() => {
     if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
@@ -49,23 +50,40 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
       getRawBalance();
     }
 
-    if (!token.name) {
+    if (!token.name || token.name === 'N/A') {
       getMetadata();
     }
+
+    _isSpam();
     //setAvatar('');
   }, [token])
 
   const getRawBalance = async () => {
-    const erc20 = new ethers.Contract(ethers.utils.getAddress(token.address), erc20Abi, wallet);
-    const walletBalance = await erc20.balanceOf(ethers.utils.getAddress(wallet.address));
-    //console.log('raw balance', walletBalance, ethers.utils.getAddress(wallet.address));
-    setRawAmount(walletBalance);
+    try {
+      if (token.type === 'token') {
+        const erc20 = new ethers.Contract(ethers.utils.getAddress(token.address), erc20Abi, wallet);
+        const walletBalance = await erc20.balanceOf(ethers.utils.getAddress(wallet.address));
+        setRawAmount(walletBalance);
+      } else if (token.type === 'coin') {
+        const _provider = getDefaultProvider(network.rpcUrl);
+
+        const walletBalance = await wallet.connect(_provider).getBalance();
+        setRawAmount(walletBalance);
+      }
+    } catch (err) {
+
+    }
+
+
   }
 
   const getMetadata = async () => {
     const result = await getTokenMetadata(token.address, chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap]);
-    //console.log('getMetadata result', result);
     setAlchemyMetadata(result as AlchemyMetadata);
+  }
+
+  const _isSpam = async () => {
+    setAmISpam(await isSpam(token.address, network.chainId));
   }
 
   /*const removeToken = async () => {
@@ -84,7 +102,7 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
 
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
-    const isSvg = isSVGFormatImage(token.logo || avatar || alchemyMetadata.logo || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png');
+    const isSvg = isSVGFormatImage(alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png');
 
     return (
       <>
@@ -93,12 +111,12 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
         }
         {isSvg &&
           <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" size={10}>
-            <CustomIcon data={token.logo || avatar || alchemyMetadata.logo} size={40} />
+            <CustomIcon data={alchemyMetadata.logo || token.logo || avatar} size={40} />
           </Avatar>
         }
         {!isSvg &&
           <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" source={{
-            uri: token.logo || avatar || alchemyMetadata.logo || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png'
+            uri: alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png'
           }} size={10}>
             <Text>{iname}</Text>
           </Avatar>
@@ -118,15 +136,20 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
     await addToSpam(token.address, token.chainId, token);
     refreshList();
   }
+
+  const computedSymbol = alchemyMetadata.symbol ? truncateString_old(alchemyMetadata.symbol, 8) : (token.symbol || token.name || 'N/A');
+
+  if (amISpam) return <></>
+
   return (
     <HStack alignItems="center" justifyContent="space-between" py={2}>
       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-        <TokenIcon iname={token.type == 'coin' ? coinIconNames[token.chainId as keyof typeof coinIconNames] : truncateString(token.address, 3) as string} />
+        <TokenIcon iname={token.type == 'coin' ? coinIconNames[token.chainId as keyof typeof coinIconNames] : truncateString_old(token.address, 3) as string} />
 
         <VStack>
           <Pressable>
             <Text fontSize="md" bold>
-              {token.symbol || token.name || truncateString(alchemyMetadata.symbol as string, 14) || 'N/A'}
+              {computedSymbol}
             </Text>
           </Pressable>
         </VStack>

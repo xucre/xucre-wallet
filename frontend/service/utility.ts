@@ -53,7 +53,22 @@ export const urlCheck = (websiteUrl: any) => {
     return urlRegEx.test(String(websiteUrl).toLowerCase());
 }
 
+const truncateStringBase = (str: string) => {
+  if (str.length > 17) {
+    return str.substr(0, 7) + '...' + str.substr(-7);
+  }
+  return str;
+}
+
 export const truncateString = (str: string, num: number, addDots = true) => {
+  return truncateStringBase(str);
+}
+
+export const truncateStringStart = (str: string, num: number, addDots = true) => {
+  return truncateStringBase(str);
+}
+
+export const truncateString_old = (str: string, num: number, addDots = true) => {
   // If the length of str is less than or equal to num
   // just return str--don't truncate it.
   if (str) {
@@ -71,7 +86,7 @@ export const truncateString = (str: string, num: number, addDots = true) => {
   
 }
 
-export const truncateStringStart = (str: string, num: number) => {
+export const truncateStringStart_old = (str: string, num: number) => {
   // If the length of str is less than or equal to num
   // just return str--don't truncate it.
   if (str.length <= num) {
@@ -111,7 +126,6 @@ export const processJsonData = (jsonData: { error: any; data: { items: any[]; };
 
     item.holdings.forEach((holding: Holding) => {
       const date = holding.timestamp.split("T")[0];
-      //console.log(holding);
       if (holding.open) {
         const existingEntry = output.openQuotesByDay.find((entry) => entry.date === date);
 

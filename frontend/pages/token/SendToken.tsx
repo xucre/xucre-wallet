@@ -141,8 +141,6 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
       setProvider(_provider);
       const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
       setWallet(newWallet);
-    } else {
-      console.log('no wallets');
     }
   }, [_wallet, network]);
 
@@ -152,7 +150,6 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
         const isTooMuch = ethers.utils.parseEther(amount).gt(balance);
         setNotEnough(isTooMuch);
       } catch (err) {
-        console.log('compare amounts error', err);
       }
     }
   }, [balance, amount])
@@ -211,7 +208,6 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
               ethers.utils.getAddress(address),
               ethers.utils.parseEther(amount)
             )
-            console.log('gas estimate', gasEstimate);
             if (gasEstimate.gt(gasBalance)) {
               setLoading(false);
               setError('Not enough gas for this transaction');
@@ -226,10 +222,8 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
                 gasPrice: await provider.getGasPrice(),
               }
             );
-            console.log('submittedhash', _submitted.hash);
             setLoadingStage('confirm');
-            const result = await _submitted.wait();
-            console.log('confirmations', result.confirmations > 0);
+            await _submitted.wait();
 
             const _transaction = {
               chainId: _submitted.chainId,
@@ -270,11 +264,9 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             }
             // Sending ether
             const _submitted = await wallet.sendTransaction(tx)
-            console.log('submittedhash', _submitted.hash);
 
             setLoadingStage('confirm');
-            const result = await _submitted.wait();
-            console.log(result);
+            await _submitted.wait();
 
             const _transaction = {
               chainId: _submitted.chainId,
@@ -310,7 +302,6 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
           setLoadingStage('')
         }
       } catch (err) {
-        console.log('error sending', err)
         setLoading(false);
         setError('Error Processing');
         setLoadingStage('')

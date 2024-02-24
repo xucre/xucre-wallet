@@ -227,12 +227,10 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
           return true;
         }
     } catch (error) {
-        console.error(`Error parsing log: ${error}`);
     }
   }, {} as ParsedTransaction)
   if (!matchedLog) {
     const isSpam = await getIsSpam(transaction.to_address, _network.chainId);
-    //console.log('no matching log', isSpam);
 
     return {
       ...UNKNOWN_TRANSACTION, 
@@ -245,7 +243,6 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
   }
   const parsedLog : ParsedTransaction | null = parseLog(wallet, transaction, matchedLog, addressType);
   if (!parsedLog) {
-    //console.log('no parsed log');
     return {
       ...UNKNOWN_TRANSACTION, 
       transactionId: transaction.tx_hash,
@@ -267,7 +264,6 @@ function parseLog(wallet: Wallet, transaction: CovalentTransactionV3, log: ether
       : addressType === 'ERC1155' ? erc1155Interface.parseLog(log) 
       : null;
     if (logValues === null) {
-      console.log('logValues are empty')
       return null;
     }
 
@@ -275,7 +271,6 @@ function parseLog(wallet: Wallet, transaction: CovalentTransactionV3, log: ether
       if (log.topics.includes(topicData.topic)) return topicData;
     });
     if (!matchedTopic) {
-      console.log('matched topics are empty');
       return null;
     }
     const action = matchedTopic.singularAction !== null ? 
@@ -288,7 +283,6 @@ function parseLog(wallet: Wallet, transaction: CovalentTransactionV3, log: ether
       },null);
     
     if (!action) {
-      //console.log('no matching action');
       return null;
     }
 
@@ -302,7 +296,6 @@ function parseLog(wallet: Wallet, transaction: CovalentTransactionV3, log: ether
       spam: false
     } as ParsedTransaction;
   } catch (err) {
-    console.log('error parsing log');
     return null;
   }
   
@@ -343,5 +336,5 @@ async function isContractAddress(address: string, provider: ethers.providers.Bas
 // const transactionIds = ["0x..."]; // Add transaction IDs here
 // const providerUrl = "YOUR_PROVIDER_URL"; // Replace with your Ethereum provider URL
 // parseTransactions(transactionIds, providerUrl)
-//   .then(parsedTransactions => console.log(parsedTransactions))
+//   .then(parsedTransactions => (parsedTransactions))
 //   .catch(error => console.error(error));

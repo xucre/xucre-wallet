@@ -6,7 +6,6 @@ import { Network, constructDefaultNetworks } from "../service/network";
 export const storeNetwork = async (network: Network) => {
   const _networks = await EncryptedStorage.getItem("network_list");
   if (_networks) {
-    //console.log('networks', _networks);
     const networks = JSON.parse(_networks as string);
     if (Array.isArray(networks)) {
       await EncryptedStorage.setItem(
@@ -30,7 +29,6 @@ export const storeNetwork = async (network: Network) => {
 
 export const updateNetwork = async (network: { blockExplorer?: string | undefined; chainId: any; name?: string; rpcUrl?: string; symbol?: string; }) => {
   const _networks = await EncryptedStorage.getItem("network_list");
-  //console.log('updateNetwork', _networks);
   if (_networks) {
     const networks = JSON.parse(_networks as string);
     if (Array.isArray(networks)) {
@@ -62,7 +60,6 @@ export const updateNetwork = async (network: { blockExplorer?: string | undefine
 
 export const deleteNetwork = async (network: { chainId: any; }) => { 
   const _networks = await EncryptedStorage.getItem("network_list"); 
-  //console.log('deleteNetwork', _networks);
   const networks = JSON.parse(_networks as string); 
   if (Array.isArray(networks)) { 
     const newNetworkList = networks.filter((_network) => { 
@@ -108,7 +105,6 @@ export const getNetworks = async () => {
   if (!_networks) {
     return constructDefaultNetworks();
   }
-  //console.log('getNetworks',_networks);
   const networks = JSON.parse(_networks as string);
   if (networks && networks.length > 0) {
     return networks;

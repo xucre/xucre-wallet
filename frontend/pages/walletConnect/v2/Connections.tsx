@@ -35,7 +35,6 @@ export default function Connections({ navigation, route }: { navigation: { navig
 
   const getPairs = async () => {
     const _pairings = signClient.core.pairing.getPairings();
-    console.log('getPairings', _pairings);
     setPairings(_pairings);
   }
 
@@ -46,7 +45,6 @@ export default function Connections({ navigation, route }: { navigation: { navig
         const res = await signClient.core.pairing.ping({ topic: metadata.topic })
       }
       runAsync();
-      console.log('metadata', metadata);
     }, [metadata])
     const removePair = async () => {
       await signClient.core.pairing.disconnect({ topic: metadata.topic });

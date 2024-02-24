@@ -79,7 +79,6 @@ export default function Loader() {
         nextAppState === "active"
       ) {
         if (!hasBooted) {
-          console.log('calling bootstrap');
           hasBooted = true;
           await bootstrap();
         }
@@ -97,7 +96,6 @@ export default function Loader() {
       if (permission) {
         const initialNotification = await notifee.getInitialNotification();
         if (initialNotification) {
-          console.log('Notification caused application to open');
           // Add logic here that retrieves the event from storage and implements the WC Listener logic
           const event = await getNotification(initialNotification.pressAction.id);
 
@@ -151,7 +149,6 @@ export default function Loader() {
         return;
       }
     }).catch((err) => {
-      console.log('requestPermissionError', err);
     })
   }
 
@@ -174,7 +171,6 @@ export default function Loader() {
     bootstrap().then(async () => {
       await defaultRouting()
     }).catch(() => {
-      console.log('load error');
     })
   }
 

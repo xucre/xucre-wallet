@@ -177,7 +177,7 @@ export const AppWrapper = () => {
   const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
-      console.log('notifee foregrounde event', type);
+      //('notifee foregrounde event', type);
       switch (type) {
         case EventType.DISMISSED:
           break;
@@ -193,10 +193,10 @@ export const AppWrapper = () => {
   useEffect(() => {
     const runAsync = async () => {
       try {
-        console.log('isdev', __DEV__)
+        //('isdev', __DEV__)
         await createSignClient();
       } catch (err) {
-        console.log('error creating sign client', err);
+        //('error creating sign client', err);
       }
     }
 
@@ -258,7 +258,7 @@ export const AppWrapper = () => {
 
       }
     } catch (e) {
-      console.log(e);
+      //(e);
     }
   })
 

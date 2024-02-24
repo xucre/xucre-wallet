@@ -58,7 +58,6 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
   const getData = async (runCount = 0) => {
     try {
       const historyResults = await getWalletHistory(wallet.address, chainName as string);
-      //console.log(historyResults);
       const outputData = processJsonData(historyResults);
       // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
       const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, _i) => {
@@ -82,14 +81,10 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
       });
       if (finalQuotes.length > 0) {
         setCurrentHoldings(finalQuotes[0]);
-        //console.log('1');
         if (finalQuotes.length > 1) {
           const percent = (((finalQuotes[1].y - finalQuotes[0].y) / finalQuotes[0].y) || 0).toFixed(0) + '%';
-          //console.log('2');
           const trend = finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat';
-          //console.log('3');
           const y = (finalQuotes[1].y - finalQuotes[0].y).toFixed(2);
-          //console.log('4');
           setSecondToLastHoldings({
             percent,
             trend,
@@ -97,11 +92,8 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
           })
         } else {
           const percent = '0%';
-          //console.log('2');
           const trend = 'flat';
-          //console.log('3');
           const y = '';
-          //console.log('4');
           setSecondToLastHoldings({
             percent,
             trend,
@@ -110,15 +102,11 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
         }
 
       } else {
-        console.log('finalQuotes are empty');
-
         setTimeout(() => {
           if (runCount < 4) getData(runCount + 1);
         }, 1000)
       }
     } catch (err) {
-      //
-      console.log('outerCalc');
     }
 
   }

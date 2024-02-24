@@ -64,11 +64,12 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
                     {metadata.name}
                   </Text>
                 </VStack>
-
-                <Text color="coolGray.500">{truncateStringStart(metadata.address, 20)}</Text>
               </HStack>
             </Pressable>
             <HStack alignItems="center" space={{ base: 2 }}>
+              <Pressable onPress={openWallet}>
+                <Text color="coolGray.500">{truncateStringStart(metadata.address, 20)}</Text>
+              </Pressable>
               <Tooltip label={translations[language as keyof typeof translations].SelectWallet.select_button_tooltip} openDelay={500}>
                 <Menu w="190" trigger={triggerProps => {
                   return <Pressable accessibilityLabel="More options menu" {...triggerProps}>

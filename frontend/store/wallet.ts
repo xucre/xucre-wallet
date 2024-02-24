@@ -8,7 +8,6 @@ export class WalletInternal extends Wallet {
 
 export const storeWallet = async (wallet: AppWallet) => {
   const _wallets = await EncryptedStorage.getItem("wallet_list");
-  console.log('storeWallet existing list',_wallets);
   if (!_wallets) {
     await EncryptedStorage.setItem(
       "wallet_list",
@@ -41,7 +40,6 @@ export const getWallets = async () => {
     const regular = JSON.parse(_wallets as string) as AppWallet[];
     return regular;
   } catch (err) {
-    console.log('data conversion');
     const oldVersion = JSON.parse(_wallets as string) as WalletInternal[];
     const newVersion = oldVersion.map((old) => {
       return {

@@ -115,7 +115,6 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
 
   const validateAuth = async () => {
     const _authNeeded = await needsAuth();
-    console.log(_authNeeded);
     setAuthNeeded(_authNeeded);
   }
 

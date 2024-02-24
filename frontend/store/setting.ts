@@ -60,7 +60,6 @@ export const storePassword = async (old: string, _password: string) => {
   const credentials = await Keychain.getGenericPassword();
   const unlockDate = Date();
   if (credentials) {
-    console.log(credentials);
     if (credentials.password === old) {      
       await Keychain.setGenericPassword('app', _password);
       await EncryptedStorage.setItem('lastUnlock', JSON.stringify(unlockDate));
@@ -126,7 +125,6 @@ export const deleteNotification = async (id: string) => {
 
 export const getNotification = async (id: string) => {
   const _events = await EncryptedStorage.getItem("connect_events");
-  console.log('getNotifications', _events);
   if (_events) {
     const events = JSON.parse(_events as string);
     if (events) {
@@ -142,7 +140,6 @@ export const getNotification = async (id: string) => {
 
 export const getAllNotifications = async () => {
   const _events = await EncryptedStorage.getItem("connect_events");
-  console.log('getAllNotifications', _events);
   if (_events) {
     const events = JSON.parse(_events as string);
     if (events) {  

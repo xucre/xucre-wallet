@@ -44,7 +44,6 @@ async function onDisplayNotification(id: string, translation_setting: string) {
   };
   
   await notifee.displayNotification(notificationPayload);
-  console.log('notifee displayNotification success');
 }
 export async function createSignClient() {
   try {
@@ -61,16 +60,10 @@ export async function createSignClient() {
       projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
       relayUrl: 'wss://relay.walletconnect.com'
     };
-    //console.log(initConfig);
     signClient = await SignClient.init(initConfig)
-    //console.log(signClient);
-    //const pairings = signClient.core.pairing.getPairings();
-    //console.log(pairings);
     registerListeners();
-    console.log('sign client created', signClient.metadata);
     return signClient;
   } catch (err) {
-    console.log('signClientSetup error', err);
     return;
   }
   
@@ -80,7 +73,6 @@ export const registerListeners = () => {
   
   if (signClient) {
     signClient.on("session_proposal", (event) => {
-      console.log("session_proposal");
       const id = nanoid();
       if (AppState.currentState === 'active') {
         navigate('ConnectionRequest', {
@@ -93,14 +85,12 @@ export const registerListeners = () => {
     });
 
     signClient.on("session_event", (event) => {
-      console.log("session_event",event);
       // Handle session events, such as "chainChanged", "accountsChanged", etc.
     });
 
     signClient.on("session_request", (event) => {
       // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
       //const id = nanoid();
-      console.log("session_request", event);
       addNotification(String(event.id), event);
       if (
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
@@ -153,12 +143,9 @@ export const registerListeners = () => {
 
     signClient.on("session_ping", (event) => {
       // React to session ping event
-      console.log("session_ping");
-      console.log(event);
     });
 
     signClient.on("session_delete", (event) => {
-      console.log("session_delete");
       // React to session delete event
       signClient.core.pairing.disconnect({ topic: event.topic });
     });
@@ -166,7 +153,6 @@ export const registerListeners = () => {
     signClient.on("session_update", ({ topic, params }) => {
       // React to session delete event
       const { namespaces } = params;
-      console.log('session_update', namespaces);
       const _session = signClient.session.get(topic)
       // Overwrite the `namespaces` of the existing session with the incoming one.
       const updatedSession = { ..._session, namespaces }
@@ -175,17 +161,14 @@ export const registerListeners = () => {
     });
 
     signClient.on("session_extend", (event) => {
-      console.log("session_extend");
       // React to session delete event
     });
 
     signClient.on("session_request_sent", (event) => {
-      console.log('session_request_sent');
       // React to session delete event
     });
 
     signClient.on("proposal_expire", (event) => {
-      console.log('proposal_expire');
       deleteNotification(String(event.id))
       if (AppState.currentState === 'active') {
         navigate('ViewWallet', {});
@@ -193,21 +176,15 @@ export const registerListeners = () => {
     });
 
     signClient.core.pairing.events.on("pairing_delete", ({ id, topic }) => {
-      console.log('pairing_delete');
       //
     });
 
     signClient.core.pairing.events.on("pairing_ping", ({ id, topic }) => {
-      //
-      console.log('pairing_ping');
     });
 
     signClient.core.pairing.events.on("pairing_expire", ({ id, topic }) => {
-      //
-      console.log('pairing_expire');
     });
   } else {
-    console.log('no signClient', signClient);
   }
 }
 

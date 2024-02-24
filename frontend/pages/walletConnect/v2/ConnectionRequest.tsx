@@ -32,7 +32,6 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   //{translations[language].ConnectionRequest.}
   useEffect(() => {
     const runAsync = async () => {
-      //console.log('requestDetails', requestDetails);
       if (requestDetails) {
         setRequest(requestDetails)
       }
