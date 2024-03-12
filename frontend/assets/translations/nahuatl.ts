@@ -62,6 +62,7 @@ const values : TranslationType  = {
     title: "New Network"
   },
   CreateWallet: {
+    add_to_google: "Agregar a Google Wallet",
     instructions:'Tla-yoocoya yancuic Tlahcuiloolaamapetlaacaltoon-tli, recibirá una secuencia de mnemónicos que representan su "Ichtacayooh personal". Cualquier persona con esta secuencia puede reconfigurar su Tlahcuiloolaamapetlaacaltoon-tli en cualquier dispositivo Yancuic. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.',
     instructions_button: 'Tla-yoocoya',
     instructions_nameWallet: "Tla-ihcuiloa toocaa",
@@ -75,6 +76,12 @@ const values : TranslationType  = {
     name_entry_button_loadingtext: 'Ihuaa',
     name_entry_input_placeholder:'Establecer toocaa de Tlahcuiloolaamapetlaacaltoon-tli',
     name_wallet: "Toocaa tla Tlahcuiloolaamapetlaacaltoon-tli",
+  },
+  ExportWallet: {
+    button_loading: 'Generando',
+    instructions: 'Por favor recuerde su contraseña. Cifrará su billetera para que solo usted pueda recuperarla.',
+    invalid_wallet: 'Invalid Wallet Selected',
+    title: 'Export Wallet'
   },
   LanguagePage: {
     menu_button: "TLAHTOLLI",
@@ -144,9 +151,21 @@ const values : TranslationType  = {
     instructions: 'Quimilceehuiaa pampa tla-celia tlacohcoohualooni',
     toast_send: "WhatsApp otitlani successfully!"
   },
+  RecoverMnemonic: {
+    instructions: 'Porfavor ahaquiaa la secuencia de mnemónicos del proceso de creacion de su wallet original.',
+    wallet_name_label: 'Nombre de la billetera',
+    mnemonic_label: 'Mnemotécnico'
+  },
+  RecoverPrivateKey: {
+    instructions: 'Please enter the name, password, and private key from the pass in your Google Wallet.',
+    wallet_name_label: 'Nombre de la billetera',
+    password_label: 'Contraseña',
+    private_key_label: 'Llave privada'
+  },
   RecoverWallet: {
     instructions:'Porfavor ahaquiaa la secuencia de mnemónicos del proceso de creacion de su wallet original.',
     instructions_button: 'Pahti',
+    header: 'Recuperar billetera',
     mnemonic_entry_input_placeholder:'Ahaquiaa frase mnemónica separada por espacios',
     mnemonic_not_complete: 'El mnemónicos no tiene la longitud adecuada',
     name_entry_input_placeholder:'Ahaquiaa toocaa de la Tlahcuiloolaamapetlaacaltoon-tli',
@@ -174,6 +193,7 @@ const values : TranslationType  = {
     title: 'Maatla-tl',
   },
   SelectWallet: {
+    export_button: "Exportar billetera",
     new_button: 'Yancuic Tlahcuiloolaamapetlaacaltoon-tli',
     select_button: 'Ihitta Tlahcuiloolaamapetlaacaltoon-tli',
     select_button_tooltip: 'Yeh cencah tlaihittaliz-tli',
@@ -206,6 +226,7 @@ const values : TranslationType  = {
     form_save_button: 'Tla-piya',
     password_placeholder: 'Ichtacayooh',
     title: 'Nahuatiilxeloaa Ichtacayooh',
+    update_button: "Actualiza contraseña",
   },
   SignEth: {
     approve_button: 'Ninocaqui',

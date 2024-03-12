@@ -62,6 +62,7 @@ const values : TranslationType = {
     title: "Nueva Network"
   },
   CreateWallet: {
+    add_to_google: "Agregar a Google Wallet",
     instructions: "Al crear una nueva billetera, recibirá una secuencia de mnemónicos que representan su \"contraseña personal\". Cualquier persona con esta secuencia puede reconfigurar su billetera en cualquier dispositivo nuevo. Manténgalo almacenado lo más seguro posible. Solo usted debe tener acceso a esta información.",
     instructions_button: "Generar",
     instructions_nameWallet: "Establecer nombre de billetera",
@@ -75,6 +76,12 @@ const values : TranslationType = {
     name_entry_button_loadingtext: "Enviando",
     name_entry_input_placeholder: "Establecer nombre de billetera",
     name_wallet: "Nombre de la Billetera"
+  },
+  ExportWallet: {
+    button_loading: 'Generando',
+    instructions: 'Por favor recuerde su contraseña. Cifrará su billetera para que solo usted pueda recuperarla.',
+    invalid_wallet: 'Invalid Wallet Selected',
+    title: 'Export Wallet'
   },
   LanguagePage: {
     menu_button: 'IDIOMA',
@@ -144,8 +151,20 @@ const values : TranslationType = {
     instructions: "Compartir para recibir fondos",
     toast_send: "WhatsApp enviado exitosamente!"
   },
+  RecoverMnemonic: {
+    instructions: 'Porfavor ingrese la secuencia de mnemónicos del proceso de creacion de su wallet original.',
+    wallet_name_label: 'Nombre de la billetera',
+    mnemonic_label: 'Mnemotécnico'
+  },
+  RecoverPrivateKey: {
+    instructions: 'Please enter the name, password, and private key from the pass in your Google Wallet.',
+    wallet_name_label: 'Nombre de la billetera',
+    password_label: 'Contraseña',
+    private_key_label: 'Llave privada'
+  },
   RecoverWallet: {
     instructions: "Porfavor ingrese la secuencia de mnemónicos del proceso de creacion de su wallet original.",
+    header: 'Recuperar billetera',
     instructions_button: "Recuperar",
     mnemonic_entry_input_placeholder: "Ingrese frase mnemónica separada por espacios",
     mnemonic_not_complete: "El mnemónicos no tiene la longitud adecuada",
@@ -176,6 +195,7 @@ const values : TranslationType = {
     title: "Redes"
   },
   SelectWallet: {
+    export_button: "Exportar billetera",
     new_button: "Nueva billetera",
     select_button: "Seleccione billetera",
     select_button_tooltip: "Mas opciones",
@@ -207,7 +227,8 @@ const values : TranslationType = {
     form_old_header: "Contraseña actual",
     form_save_button: "Guardar",
     password_placeholder: "Contraseña",
-    title: "Configurar la Contraseña"
+    title: "Configurar la Contraseña",
+    update_button: "Actualiza contraseña",
   },
   SignEth: {
     approve_button: "Aprobar",

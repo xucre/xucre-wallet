@@ -1,6 +1,4 @@
-/* eslint-disable react-native/no-unused-styles */
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable react-native/no-inline-styles */
+
 import arrayShuffle from "array-shuffle";
 import {
   Alert,
@@ -8,6 +6,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   Divider,
   Heading,
   HStack,
@@ -42,6 +41,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
   const [confirmMnemonics, setConfirmMnemonics] = useState([] as string[]);
   const [mnemonicMatchError, setMnemonicMatchError] = useState(false);
   const [mnemonicMatchComplete, setMnemonicMatchComplete] = useState(false);
+  const [exportWallet, setExportWallet] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -80,7 +80,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         setScrambledMnemonics(arrayShuffle(_mnemonics));
         setLoading(false);
         // only used for testing
-        if (__DEV__ && false) {
+        if (process.env.DEV) {
           setConfirmMnemonics(_mnemonics);
           setMnemonicMatchComplete(true);
         }
@@ -133,7 +133,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
           rounded="lg"
           _text={{
             alignContent: 'center',
-            color: Color.gray_200,
+            color: colorMode === 'dark' ? Color.white : Color.gray_200,
             fontWeight: "medium",
             justifyContent: 'center',
           }}
@@ -160,7 +160,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
             </Badge>
           }
         >
-          <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>{value}</Text>
+          <Text style={{ color: Color.white }}>{value}</Text>
         </Button>
       )
     };
@@ -284,7 +284,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               </Badge>
           }
         >
-          <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>{value}</Text>
+          <Text style={{ color: Color.white }}>{value}</Text>
         </Button>
       )
     };
@@ -406,7 +406,11 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         ]);
         setLoading(false);
         setTimeout(() => {
-          navigation.navigate("SelectWallet");
+          if (exportWallet) {
+            navigation.navigate('ExportWallet', { address: _wallet.address })
+          } else {
+            navigation.navigate("SelectWallet");
+          }
         }, 100);
       }
     };
@@ -572,6 +576,13 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
                 translations[language as keyof typeof translations].CreateWallet.name_entry_input_placeholder
               }
             />
+            <HStack space={6}>
+              <Checkbox shadow={2} value={exportWallet.toString()} accessibilityLabel="Add key to Google Wallet" >
+                <Text style={{
+                  color: colorMode === 'dark' ? Color.white : Color.black,
+                }}>{translations[language as keyof typeof translations].CreateWallet.add_to_google}</Text>
+              </Checkbox>
+            </HStack>
             <Button
               style={styles.buttonContainer}
               onPress={() => {

@@ -34,11 +34,9 @@ export function loadWalletFromMnemonics(mnemonics: string | any[]) {
 
 // @ts-ignore
 export function loadWalletFromPrivateKey(pk) {
-  if (pk) {
-    if (pk.indexOf('0x') !== 0) pk = `0x${pk}`;
-    return new Wallet(pk, PROVIDER);  
-  }
-  return null;
+  if (pk.indexOf('0x') !== 0) pk = `0x${pk}`;
+  const wallet = new Wallet(pk, PROVIDER);
+  return wallet;  
 }
 
 export function formatBalance(balance: ethers.BigNumberish) {

@@ -133,7 +133,7 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
                   {transaction.block_signed_at &&
                     <>{moment(transaction.block_signed_at as string).fromNow()}</>}
                   {!transaction.block_signed_at &&
-                    <>{truncateString(transaction.tx_hash as string, 15)}</>}
+                    <>{truncateString(transaction.tx_hash as string, 7)}</>}
                 </Text>
               </VStack>
             </HStack>

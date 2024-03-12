@@ -57,7 +57,7 @@ import LandingPage from './pages/Landing';
 import LanguagePage from './pages/Language';
 import PrivacyPolicy from './pages/Policies';
 import QRReader from './pages/QRReader';
-import SetPassword from './pages/SetPassword';
+//import SetPassword from './pages/SetPassword';
 import SupportPage from './pages/SupportPage';
 import CreateNetwork from './pages/network/CreateNetwork';
 import NetworkDefault from './pages/network/NetworkDefault';
@@ -93,6 +93,7 @@ import * as Linking from 'expo-linking';
 import Loading from './pages/Loading';
 import Profile from './pages/social/Profile';
 import ConnectionManagement from './pages/walletConnect/ConnectionManagement';
+import ExportWallet from './pages/wallet/ExportWallet';
 //import TransactionFeed from './pages/wallet/TransactionFeed';
 
 const Stack = createNativeStackNavigator();
@@ -150,7 +151,17 @@ export const theme = extendTheme({
       800: '#1B1E3F',
       900: '#1B1E3F',
     },
+
   },
+  /*components: {
+    Button: {
+      variants: {
+        solid: {
+          color: "black"
+        }
+      }
+    }
+  }*/
 });
 
 export default function App(): JSX.Element {
@@ -407,9 +418,9 @@ export const AppWrapper = () => {
               headerTitleAlign: 'center',
               title: ' '//translations[language].SendTransaction.title, 
             }} ></Stack.Screen>
-            <Stack.Screen name="SetPassword" component={SetPassword} options={{
+            <Stack.Screen name="ExportWallet" component={ExportWallet} options={{
               headerTitleAlign: 'center',
-              title: translations[language as keyof typeof translations].SetPassword.title,
+              title: translations[language as keyof typeof translations].ExportWallet.title,
             }} ></Stack.Screen>
             <Stack.Screen name="ProfileList" component={ProfileList} options={{
               headerTitleAlign: 'center',

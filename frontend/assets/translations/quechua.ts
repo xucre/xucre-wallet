@@ -62,6 +62,7 @@ const values : TranslationType = {
     title: "New Network"
   },
   CreateWallet: {
+    add_to_google: "Google Wallet nisqaman yapay",
     instructions : 'Musuq billetera ruwachkaspa huk secuencia mnemÃ³nicas chaskinki mayqinkunachus "kikin contraseÃ±aykita" riqsichinku. Pipas kay qatiqniyuqqa mayqin musuq dispositivopipas billeteraykita wakmanta ruwayta atinman. Atikusqanman hina allinta waqaychay. Kay willakuymanqa qamllam haykunayki.',
     instructions_button: 'Qhipaman',
     instructions_nameWallet: 'Billeteraykipa sutinta churay',
@@ -75,6 +76,12 @@ const values : TranslationType = {
     name_entry_button_loadingtext: 'Kachay', 
     name_entry_input_placeholder: 'Belletera sutita churay', 
     name_wallet: 'Belletera suti',    
+  },
+  ExportWallet: {
+    button_loading: 'Paqarichiq',
+    instructions: 'Ama hina kaspa, yaykuna rimaykita yuyariy. Chayqa billeteraykita chifranqa chaymanta qamlla kutichiyta atikunki.',
+    invalid_wallet: 'Invalid Wallet Selected',
+    title: 'Export Wallet'
   },
   LanguagePage: { 
       menu_button: "AKLLAY", 
@@ -144,8 +151,20 @@ const values : TranslationType = {
     instructions: 'Qullqita chaskinapaq rakinakuy',
     toast_send: "WhatsApp allinta apachisqa!"
   },
+  RecoverMnemonic: {
+    instructions: 'Ama hina kaspa, Ã±awpaq billetera ruwayniykimanta mnemÃ³nicos nisqap qatiqninta qillqay.',
+    wallet_name_label: 'Wallet Suti',
+    mnemonic_label: 'Mnemónico nisqa'
+  },
+  RecoverPrivateKey: {
+    instructions: 'Please enter the name, password, and private key from the pass in your Google Wallet.',
+    wallet_name_label: 'Wallet Suti',
+    password_label: 'Kichana',
+    private_key_label: 'Sapaq Llave'
+  },
   RecoverWallet: { 
     instructions: 'Ama hina kaspa, Ã±awpaq billetera ruwayniykimanta mnemÃ³nicos nisqap qatiqninta qillqay.',
+    header: 'Recuperar Wallet nisqa',
     instructions_button: 'Kutichiy', 
     mnemonic_entry_input_placeholder: 'Huk ch\'usaqkunawan t\'aqasqa mnemonico rimayta qillqay',      
     mnemonic_not_complete: 'Mnemonico mana tupaq largo',
@@ -174,6 +193,7 @@ const values : TranslationType = {
     title: 'Llikakuna'
   },
   SelectWallet: {
+    export_button: "Hawaman apachiy Wallet",
     new_button: 'Musuq Billetera', 
     select_button: 'Akllay Wallet', 
     select_button_tooltip: 'Aswan akllanakuna',
@@ -205,7 +225,8 @@ const values : TranslationType = {
     form_old_header: 'Kunan Yaykuna rimay',
     form_save_button: 'Waqaychay',
     password_placeholder: 'yaykuna rimay',
-    title: 'ContraseÃ±a churay'
+    title: 'ContraseÃ±a churay',
+    update_button: "Contraseñata musuqyachiy",
   },
   SignEth: {
     approve_button: 'Aprobay',

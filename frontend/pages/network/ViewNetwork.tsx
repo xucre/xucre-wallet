@@ -19,7 +19,7 @@ import { useRecoilState } from "recoil";
 import { Border, Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import { activeNetwork, selectedNetwork, language as stateLanguage, } from "../../service/state";
-import { truncateString } from "../../service/utility";
+import { truncateString_old } from "../../service/utility";
 import { updateNetwork } from "../../store/network";
 
 export default function ViewNetwork({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -127,7 +127,7 @@ export default function ViewNetwork({ navigation, route }: { navigation: { navig
               <Text fontSize={28} fontWeight={'bold'}>{network.name}</Text>
               <Text fontSize={20}>Chain Id: {network.chainId}</Text>
               <Text fontSize={20}>Symbol: {network.symbol}</Text>
-              <Text fontSize={20}>RPC Url: {truncateString(network.rpcUrl, 22)}</Text>
+              <Text fontSize={20}>RPC Url: {truncateString_old(network.rpcUrl, 22)}</Text>
             </VStack>
 
             {isActiveNetwork ?

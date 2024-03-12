@@ -18,7 +18,7 @@ import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { AppWallet, language as stateLanguage, walletList } from "../../../service/state";
-import { truncateString } from "../../../service/utility";
+import { truncateString, truncateString_old } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
 
 export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -57,7 +57,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
           <Text fontSize="md" bold>
             {metadata.name}
           </Text>
-          <Text color="coolGray.500">{truncateString(metadata.address, 25)}</Text>
+          <Text color="coolGray.500">{truncateString_old(metadata.address, 25)}</Text>
         </HStack>
       </HStack>
     )
@@ -87,7 +87,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
           <Text fontSize="md" bold>
             {metadata.name}
           </Text>
-          <Text color="coolGray.500">{truncateString(metadata.address, 25)}</Text>
+          <Text color="coolGray.500">{truncateString_old(metadata.address, 25)}</Text>
         </HStack>
       </HStack>
     )

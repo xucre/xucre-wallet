@@ -180,3 +180,20 @@ export const getWhatsAppToken = async () => {
     return null;
   }
 }
+
+export const createGoogleWalletPass = async (payload: {address: string, pk: string, email?: string}) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 10000,
+    });
+    const response = await instance({
+      data: payload,
+      method: 'post',
+      url: `google`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}

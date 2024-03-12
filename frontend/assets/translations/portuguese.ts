@@ -62,6 +62,7 @@ const values : TranslationType  = {
     title: "New Network"
   },
   CreateWallet: {
+    add_to_google: "Adicionar à Google Wallet",
     instructions: 'Ao criar uma nova carteira, vocÃª receberÃ¡ uma sequÃªncia de mnemÃ´nicos que representam sua "senha pessoal". Qualquer pessoa com essa sequÃªncia pode reconfigurar sua carteira em qualquer novo dispositivo. Mantenha -o armazenado o mais seguro possÃ­vel Somente vocÃª deve ter acesso a essas informaÃ§Ãµes.',
     instructions_button: 'Proximo',
     instructions_nameWallet: "Defina o nome da sua carteira",
@@ -75,6 +76,12 @@ const values : TranslationType  = {
     name_entry_button_loadingtext: 'Enviando',
     name_entry_input_placeholder: 'Definir nome da carteira',
     name_wallet: 'Nome da carteira',
+  },
+  ExportWallet: {
+    button_loading: 'Gerando',
+    instructions: 'Lembre-se da sua senha. Ele criptografará sua carteira para que somente você possa recuperá-la.',
+    invalid_wallet: 'Invalid Wallet Selected',
+    title: 'Export Wallet'
   },
   LanguagePage: {  
     menu_button: "IDIOMA",
@@ -144,9 +151,21 @@ const values : TranslationType  = {
     instructions: "Compartilhe para receber fundos",
     toast_send: "WhatsApp enviado com sucesso!"
   },
+  RecoverMnemonic: {
+    instructions: 'Insira a sequÃªncia de mnemÃ´nicos do seu processo de criaÃ§Ã£o de carteira original.',
+    wallet_name_label: 'Nome da carteira',
+    mnemonic_label: 'Mnemônico'
+  },
+  RecoverPrivateKey: {
+    instructions: 'Please enter the name, password, and private key from the pass in your Google Wallet.',
+    wallet_name_label: 'Nome da carteira',
+    password_label: 'Senha',
+    private_key_label: 'Chave privada'
+  },
   RecoverWallet: {
     instructions: 'Insira a sequÃªncia de mnemÃ´nicos do seu processo de criaÃ§Ã£o de carteira original.',
     instructions_button: 'Recuperar',
+    header: 'Recuperar carteira',
     mnemonic_entry_input_placeholder: 'Digite a frase mnemÃ´nica separada por espaÃ§os Ãºnicos',
     mnemonic_not_complete: 'Mnemonic nÃ£o Ã© o tamanho apropriado',
     name_entry_input_placeholder: 'Definir nome da carteira',
@@ -174,6 +193,7 @@ const values : TranslationType  = {
     title: 'Redes',
   },
   SelectWallet: {
+    export_button: "Exportar carteira",
     new_button: 'Nova carteira',
     select_button: 'Selecionar carteira',
     select_button_tooltip: 'Mais opÃ§Ãµes',
@@ -205,7 +225,8 @@ const values : TranslationType  = {
     form_old_header: 'Senha atual',
     form_save_button: 'Salvar',
     password_placeholder: 'Senha',
-    title: 'Definir Senha'
+    title: 'Definir Senha',
+    update_button: "Atualizar senha",
   },
   SignEth: {
     approve_button: 'Aprovar',

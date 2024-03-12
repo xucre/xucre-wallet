@@ -16,6 +16,7 @@ import {
 } from "native-base";
 import React, { } from "react";
 import { useRecoilState } from "recoil";
+import { v4 } from "uuid";
 
 import { Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
@@ -24,6 +25,7 @@ import { activeWallet, AppWallet, language as stateLanguage, walletList } from "
 import { truncateStringStart } from "../../service/utility";
 import { storeActiveWallet, WalletInternal } from "../../store/wallet";
 import { RefreshControl } from "react-native";
+import DashboardLayout from "../../layouts/DashboardLayout";
 
 export default function SelectWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const {
@@ -39,6 +41,10 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
 
   const viewWallet = () => {
     navigation.navigate('ViewWallet');
+  }
+
+  const exportWallet = (address: string) => {
+    navigation.navigate("ExportWallet", { address });
   }
 
   const WalletItem = ({ metadata }: { metadata: AppWallet }) => {
@@ -68,7 +74,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
             </Pressable>
             <HStack alignItems="center" space={{ base: 2 }}>
               <Pressable onPress={openWallet}>
-                <Text color="coolGray.500">{truncateStringStart(metadata.address, 20)}</Text>
+                <Text color="coolGray.500">{truncateStringStart(metadata.address, 7)}</Text>
               </Pressable>
               <Tooltip label={translations[language as keyof typeof translations].SelectWallet.select_button_tooltip} openDelay={500}>
                 <Menu w="190" trigger={triggerProps => {
@@ -83,6 +89,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
                 }}
                 >
                   <Menu.Item onPress={() => { selectWallet() }}><Text>{translations[language as keyof typeof translations].SelectWallet.select_button}</Text></Menu.Item>
+                  <Menu.Item onPress={() => { exportWallet(metadata.address) }}><Text>{translations[language as keyof typeof translations].SelectWallet.export_button}</Text></Menu.Item>
                 </Menu>
               </Tooltip>
 
@@ -96,7 +103,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
   }
 
   return (
-    <>
+    <DashboardLayout title="">
       <Box
         _light={{ backgroundColor: Color.white }}
         _dark={{ backgroundColor: Color.black }}
@@ -107,7 +114,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
             renderItem={
               ({ item, index }) => {
                 return (
-                  <Box key={item.name + index} px={4} py={1}>
+                  <Box key={v4()} px={4} py={1}>
                     <WalletItem metadata={item} />
                     {(index + 1) !== walletState.length &&
                       <Divider orientation={'horizontal'} mt={4} _light={{
@@ -121,7 +128,6 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
                 )
               }
             }
-            keyExtractor={item => item.address}
           />
         </VStack>
         <Box
@@ -135,6 +141,6 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
           <Button onPress={createWallet} style={{ borderRadius: 100, marginLeft: 10, marginRight: 10 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? Color.black : Color.white} bold>{translations[language as keyof typeof translations].SelectWallet.new_button}</Text></Button>
         </Box>
       </Box>
-    </>
+    </DashboardLayout>
   )
 }

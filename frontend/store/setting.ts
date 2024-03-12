@@ -1,5 +1,6 @@
 import { Verify, SignClientTypes, ProposalTypes } from "@walletconnect/types";
 import { BigNumber } from "ethers";
+import crypto from 'crypto';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
 
@@ -54,6 +55,25 @@ export const validatePassword = async (_password: string) => {
     return false;
   }
   return true;
+}
+
+export const encryptPK = async (pk: string) => {
+  const credentials = await Keychain.getGenericPassword();
+  if (credentials) {
+    const cipher = crypto.createCipher('aes256', `${credentials.password}`);
+    let encrypted = cipher.update(pk);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return encrypted.toString('hex');
+  }
+
+  return null;
+}
+
+export const decryptPK = async (pk: string, password: string) => {
+  const decipher = crypto.createDecipher('aes256', `${password}`);
+  let decrypted = decipher.update(pk, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
 }
 
 export const storePassword = async (old: string, _password: string) => {

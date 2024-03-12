@@ -14,7 +14,7 @@ import { ImageSourcePropType, Linking } from 'react-native';
 //import SvgUri from 'react-native-svg-uri';
 
 import { getMetadata } from "../../service/blockdaemon";
-import { truncateString } from '../../service/utility';
+import { truncateString_old } from '../../service/utility';
 
 type CarousalType = {
   readonly imageUri: ImageSourcePropType;
@@ -87,7 +87,7 @@ function NftListItem({ contract, token, chain }: { contract: string, token: stri
           <Text
             _light={{ color: 'coolGray.500' }}
             _dark={{ color: 'coolGray.400' }}
-            fontWeight="normal">{truncateString(contract, 3, false)}</Text>
+            fontWeight="normal" >{truncateString_old(contract, 3, false)}</Text>
           <Tooltip label="More Options" openDelay={500}>
             <Menu w="190" trigger={triggerProps => {
               return <Pressable accessibilityLabel={'Options'} {...triggerProps}>

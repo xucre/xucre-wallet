@@ -9,7 +9,6 @@ import { getIconImage } from "../../service/api";
 import { activeNetwork, activeWallet } from "../../service/state";
 import { language as stateLanguage } from "../../service/state";
 
-import { truncateString } from "../../service/utility";
 import { Token } from '../../service/token';
 import { ItemsWithOpenQuote } from "../../types/history";
 

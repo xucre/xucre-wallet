@@ -19,7 +19,7 @@ import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { language as stateLanguage } from "../../../service/state";
-import { truncateStringStart } from "../../../service/utility";
+import { truncateStringStart, truncateStringStart_old } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
 
 export default function Connections({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -59,7 +59,7 @@ export default function Connections({ navigation, route }: { navigation: { navig
           }} />
           <VStack>
             <Text color={colorMode === 'dark' ? Color.white : Color.black}>{metadata.peerMetadata.name}</Text>
-            <Text color={'gray.500'}>{truncateStringStart(metadata.topic, 25)}</Text>
+            <Text color={'gray.500'}>{truncateStringStart_old(metadata.topic, 25)}</Text>
           </VStack>
         </HStack>
         <HStack alignItems="center" space={{ base: 2 }}>

@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
   WarningOutlineIcon,
+  useColorMode,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -14,9 +15,11 @@ import { useRecoilState } from "recoil";
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
 import { hasPassword, storePassword, validatePassword } from "../store/setting";
+import { Color } from "../../GlobalStyles";
 
-export default function SetPassword({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
+export default function SetPassword({ setIsExisting }: { setIsExisting: Function }) {
   const [existingPassword, setExistingPassword] = useState(false);
+  const { colorMode } = useColorMode();
   const [inputPw, setInputPw] = useState('');
   const handleChangeInputPw = (text: React.SetStateAction<string>) => setInputPw(text);
   const [confirmPw, setConfirmPw] = useState('');
@@ -24,6 +27,7 @@ export default function SetPassword({ navigation, route }: { navigation: { navig
   const [currentPw, setCurrentPw] = useState('');
   const handleChangeCurrentPw = (text: React.SetStateAction<string>) => setCurrentPw(text);
   const [isValid, setIsValid] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [pwMatch, setPwMatch] = useState(false);
 
   const [language,] = useRecoilState(stateLanguage);
@@ -56,13 +60,20 @@ export default function SetPassword({ navigation, route }: { navigation: { navig
   const save = async () => {
     const result = await storePassword(currentPw, inputPw);
     if (result.message === 'success') {
-      navigation.navigate('Home');
+      //navigation.navigate('Home');
+      setExistingPassword(true)
+      setIsOpen(false);
     }
   }
 
+  useEffect(() => {
+    setIsExisting(existingPassword)
+  }, [existingPassword])
+
+  const shouldBeOpen = (existingPassword && isOpen) || !existingPassword;
   return (
-    <ScrollView w={'full'} h={'full'} marginTop={5}>
-      <Box w="100%">
+    <Box w={'full'}>
+      {shouldBeOpen &&
         <FormControl>
           {existingPassword &&
             <>
@@ -88,7 +99,11 @@ export default function SetPassword({ navigation, route }: { navigation: { navig
           </Stack>
           <Button mx="4" my={4} onPress={() => { save() }} isDisabled={(existingPassword && !isValid && !pwMatch) || (!existingPassword && !pwMatch)}>{translations[language as keyof typeof translations].SetPassword.form_save_button}</Button>
         </FormControl>
-      </Box>
-    </ScrollView>
+      }
+
+      {!shouldBeOpen &&
+        <Button mx="4" my={4} onPress={() => { setIsOpen(true); setIsExisting(false); }} variant={'solid'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} ><Text color={colorMode === 'dark' ? Color.black : Color.white} bold>{translations[language as keyof typeof translations].SetPassword.update_button}</Text></Button>
+      }
+    </Box>
   );
 }

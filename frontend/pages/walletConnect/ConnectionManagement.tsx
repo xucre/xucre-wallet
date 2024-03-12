@@ -23,7 +23,6 @@ import { Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import GuestLayout from "../../layouts/GuestLayout";
 import { language as stateLanguage } from "../../service/state";
-import { truncateStringStart } from "../../service/utility";
 import { signClient } from "../../service/walletConnect";
 import { getAllNotifications } from "../../store/setting";
 import Request from "../../components/walletConnect/Request";

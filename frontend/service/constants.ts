@@ -344,3 +344,9 @@ export const actionToScheme = {
   "Unknown" : 'primary',
   "Approve From" : 'success', 
 }
+
+export const googleLogoUrls = {
+  'br': 'https://xucre-public.s3.sa-east-1.amazonaws.com/br_add_to_google_wallet-button.svg',
+  'en': 'https://xucre-public.s3.sa-east-1.amazonaws.com/en_add_to_google_wallet-button.svg',
+  'es': 'https://xucre-public.s3.sa-east-1.amazonaws.com/es_add_to_google_wallet-button.svg',
+}

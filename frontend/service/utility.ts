@@ -53,19 +53,19 @@ export const urlCheck = (websiteUrl: any) => {
     return urlRegEx.test(String(websiteUrl).toLowerCase());
 }
 
-const truncateStringBase = (str: string) => {
-  if (str.length > 17) {
-    return str.substr(0, 7) + '...' + str.substr(-7);
+const truncateStringBase = (str: string, num: number) => {
+  if (str.length > 10) {
+    return str.substr(0, num) + '...' + str.substr(-(num));
   }
   return str;
 }
 
 export const truncateString = (str: string, num: number, addDots = true) => {
-  return truncateStringBase(str);
+  return truncateStringBase(str,num);
 }
 
 export const truncateStringStart = (str: string, num: number, addDots = true) => {
-  return truncateStringBase(str);
+  return truncateStringBase(str,num);
 }
 
 export const truncateString_old = (str: string, num: number, addDots = true) => {

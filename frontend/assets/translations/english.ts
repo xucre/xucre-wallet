@@ -1,5 +1,6 @@
 import { TranslationType } from ".";
 import TransactionFeed from '../../components/transaction/TransactionFeed';
+import RecoverMnemonic from '../../components/wallet/RecoverMnemonic';
 /* eslint-disable sort-keys */
 const values : TranslationType = {
   AddToken: {
@@ -63,6 +64,7 @@ const values : TranslationType = {
     title: "New Network"
   },
   CreateWallet: {
+    add_to_google: "Add to Google Wallet",
     instructions: "When creating a new wallet you will receive a sequence of mnemonics which represent your \"personal password\". Anyone with this sequence may be able to reconfigure your wallet in any new device. Keep it stored as secure as possible. Only you should have access to this information.",
     instructions_button: "Next",
     instructions_nameWallet: "Set your wallet name",
@@ -76,6 +78,12 @@ const values : TranslationType = {
     name_entry_button_loadingtext: "Submitting",
     name_entry_input_placeholder: "Set Wallet Name",
     name_wallet: "Wallet name"
+  },
+  ExportWallet: {
+    button_loading: 'Generating',
+    instructions: 'Please remember your password. It will encrypt your wallet so only you can retrieve it.',
+    invalid_wallet: 'Invalid Wallet Selected',
+    title: 'Export Wallet'
   },
   LanguagePage: {
     menu_button: "LANGUAGE",
@@ -145,9 +153,23 @@ const values : TranslationType = {
     instructions: "Share to receive funds",
     toast_send: "WhatsApp sent successfully!"
   },
+  RecoverMnemonic: {
+    instructions: 'Please enter the name and the sequence of mnemonics from your original wallet creation process.',
+    wallet_name_label: 'Wallet Name',
+    mnemonic_label: 'Mnemonic'
+  },
+  RecoverPrivateKey: {
+    instructions: 'Please enter the name, password, and private key from the pass in your Google Wallet.',
+    wallet_name_label: 'Wallet Name',
+    password_label: 'Password',
+    private_key_label: 'Private Key'
+  },
   RecoverWallet: {
     instructions: "Please input the sequence of mnemonics from your original wallet creation process.",
     instructions_button: "Recover",
+    header: 'Recover Wallet',
+    mnemonic_button: "Mnemonic",
+    google_wallet_button: "Google Wallet Pass",
     mnemonic_entry_input_placeholder: "Enter mnemonic phrase separated by single spaces",
     mnemonic_not_complete: "Mnemonic not the appropriate length",
     name_entry_input_placeholder: "Set Wallet Name",
@@ -175,6 +197,7 @@ const values : TranslationType = {
     title: "Networks"
   },
   SelectWallet: {
+    export_button: "Export Wallet",
     new_button: "New Wallet",
     select_button: "Select Wallet",
     select_button_tooltip: "More Options",
@@ -206,6 +229,7 @@ const values : TranslationType = {
     form_old_header: "Current Password",
     form_save_button: "Save",
     password_placeholder: "password",
+    update_button: "Update Password",
     title: "Set Password"
   },
   SignEth: {
