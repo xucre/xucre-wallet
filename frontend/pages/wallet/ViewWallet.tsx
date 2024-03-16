@@ -61,6 +61,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const buttonConnect = translations[language as keyof typeof translations].Buttons_Header.connect;
   const buttonSwap = translations[language as keyof typeof translations].Buttons_Header.buttonswap;
   const buttonProfile = translations[language as keyof typeof translations].Buttons_Header.profile;
+  const buttonRamp = translations[language as keyof typeof translations].Buttons_Header.ramp;
 
   const tokenMetadataMap = network.chainId === 1 ? ethTokens : network.chainId === 137 ? polygonTokens : {};
 
@@ -175,6 +176,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('AddToken');
   }
 
+  const rampWallet = () => {
+    navigation.navigate('Ramp');
+  }
+
+
   const receiveFunds = () => {
     navigation.navigate('QRWallet');
   }
@@ -250,6 +256,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       icon: "qr-code-2",
       text: buttonConnect,
     },
+    {
+      action: rampWallet,
+      icon: 'call-merge',
+      text: buttonRamp
+    }
   ];
 
   return (
@@ -294,7 +305,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                     _stack={{
                       flexDirection: 'column'
                     }}
-                    flex={.25}
+                    flex={.20}
                     startIcon={
                       <Icon
                         as={MaterialIcons}

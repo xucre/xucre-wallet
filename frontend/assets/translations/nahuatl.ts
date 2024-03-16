@@ -32,7 +32,8 @@ const values : TranslationType  = {
     nft: "NFT",
     receive: "Tla-celia",
     send: "Ihuaa",
-    profile: "Profile"
+    profile: "Perfil",
+    ramp: "En rampa"
   },
   ConnectionRequest: {
     approve_button: 'Ninocaqui',
