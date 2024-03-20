@@ -1,5 +1,4 @@
 
-import { ethers, getDefaultProvider, Wallet } from 'ethers';
 import { Text } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -17,17 +16,6 @@ export default function BuyToken({ navigation, route }: { navigation: { navigate
   const [network,] = useRecoilState(activeNetwork);
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet,] = useRecoilState(activeWallet);
-  const [wallet, setWallet] = useState({} as Wallet);
-  const [provider, setProvider] = useState({} as ethers.providers.JsonRpcProvider);
-  useEffect(() => {
-    if (_wallet.name != '' && network) {
-      const _provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
-      setProvider(_provider);
-      //const newWallet = _wallet.wallet.connect(_provider);
-      //setWallet(newWallet);
-    }
-  }, [_wallet, network]);
-
   useEffect(() => {
     const runAsync = async () => {
 

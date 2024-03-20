@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 import { Network, constructDefaultNetworks } from "../service/network";

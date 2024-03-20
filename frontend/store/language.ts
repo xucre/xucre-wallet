@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 export const storeLanguage = async (language: string) => {
