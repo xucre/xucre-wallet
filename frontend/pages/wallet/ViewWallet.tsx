@@ -255,12 +255,12 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       action: connectWallet,
       icon: "qr-code-2",
       text: buttonConnect,
-    },
+    }/*,
     {
       action: rampWallet,
       icon: 'call-merge',
       text: buttonRamp
-    }
+    }*/
   ];
 
   return (

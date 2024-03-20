@@ -190,6 +190,9 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                 }
 
                 <SetPassword setIsExisting={(_isExisting: boolean) => { setPasswordSet(_isExisting) }} />
+                {!passwordSet &&
+                  <Box></Box>
+                }
               </Stack>
             }
           </>

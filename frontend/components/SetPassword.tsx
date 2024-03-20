@@ -107,7 +107,7 @@ export default function SetPassword({ setIsExisting }: { setIsExisting: Function
             onPress={() => { save() }}
             isDisabled={(existingPassword && !isValid && !pwMatch) || (!existingPassword && !pwMatch)}
           >
-            {translations[language as keyof typeof translations].SetPassword.form_save_button}
+            <Text color={colorMode === 'dark' ? Color.black : Color.white} bold> {translations[language as keyof typeof translations].SetPassword.form_save_button}</Text>
           </Button>
         </FormControl>
       }
