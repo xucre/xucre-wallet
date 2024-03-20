@@ -1,5 +1,4 @@
 /* eslint-disable functional/prefer-readonly-type */
-import ethers, {Wallet} from 'ethers';
 import {
   atom,
 } from 'recoil';

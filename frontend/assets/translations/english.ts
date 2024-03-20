@@ -35,6 +35,7 @@ const values : TranslationType = {
     receive: "Receive",
     send: "Send",
     profile: "Profile",
+    ramp: "Ramp"
   },
   ConnectionRequest: {
     approve_button: "Approve",

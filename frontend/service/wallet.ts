@@ -54,3 +54,7 @@ export function calculateFee({ gasUsed, gasPrice }: {gasUsed: number, gasPrice: 
 export function estimateFee({ gasLimit, gasPrice }: {gasLimit: number, gasPrice: number}) {
   return BigNumber.from(String(gasLimit)).mul(String(gasPrice));
 }
+
+export async function exportWallet(pk : string) {
+
+}

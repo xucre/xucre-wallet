@@ -1,5 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { BigNumber, ethers, getDefaultProvider, Wallet } from "ethers";
+import { BigNumber } from "ethers";
 import { Avatar, HStack, Icon, IconButton, Menu, Pressable, Skeleton, Text, Tooltip, useColorMode, VStack, } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";

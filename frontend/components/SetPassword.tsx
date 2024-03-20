@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   FormControl,
+  IconButton,
   Input,
   ScrollView,
   Stack,
@@ -16,6 +17,7 @@ import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
 import { hasPassword, storePassword, validatePassword } from "../store/setting";
 import { Color } from "../../GlobalStyles";
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function SetPassword({ setIsExisting }: { setIsExisting: Function }) {
   const [existingPassword, setExistingPassword] = useState(false);
@@ -97,12 +99,33 @@ export default function SetPassword({ setIsExisting }: { setIsExisting: Function
             <FormControl.Label><Text>{translations[language as keyof typeof translations].SetPassword.form_confirmation}</Text></FormControl.Label>
             <Input value={confirmPw} onChangeText={handleChangeConfirmPw} shadow={2} type="password" placeholder={translations[language as keyof typeof translations].SetPassword.password_placeholder} />
           </Stack>
-          <Button mx="4" my={4} onPress={() => { save() }} isDisabled={(existingPassword && !isValid && !pwMatch) || (!existingPassword && !pwMatch)}>{translations[language as keyof typeof translations].SetPassword.form_save_button}</Button>
+          <Button
+            mx="4"
+            my={4}
+            variant={'solid'}
+            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+            onPress={() => { save() }}
+            isDisabled={(existingPassword && !isValid && !pwMatch) || (!existingPassword && !pwMatch)}
+          >
+            <Text color={colorMode === 'dark' ? Color.black : Color.white} bold> {translations[language as keyof typeof translations].SetPassword.form_save_button}</Text>
+          </Button>
         </FormControl>
       }
 
       {!shouldBeOpen &&
-        <Button mx="4" my={4} onPress={() => { setIsOpen(true); setIsExisting(false); }} variant={'solid'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} ><Text color={colorMode === 'dark' ? Color.black : Color.white} bold>{translations[language as keyof typeof translations].SetPassword.update_button}</Text></Button>
+        <Stack direction={'row'} justifyContent={'space-between'}>
+          <Box></Box>
+          <IconButton
+            variant={'outline'}
+            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+            _icon={{
+              as: MaterialIcons,
+              name: "lock"
+            }}
+            onPress={() => { setIsOpen(true); setIsExisting(false); }}
+          />
+          {/*<Button w={'full'} mx="4" my={4} onPress={() => { setIsOpen(true); setIsExisting(false); }} variant={'solid'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} ><Text color={colorMode === 'dark' ? Color.black : Color.white} bold>{translations[language as keyof typeof translations].SetPassword.update_button}</Text></Button>*/}
+        </Stack>
       }
     </Box>
   );

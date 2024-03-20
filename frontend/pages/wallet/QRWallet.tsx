@@ -60,7 +60,7 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
   const getPermission = () => {
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-        buttonPositive: 'Please accept bare mortal',
+        buttonPositive: 'Accept',
         message: 'This app would like to view your contacts.',
         title: 'Contacts',
       }).then(res => {

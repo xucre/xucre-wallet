@@ -21,9 +21,10 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Linking, RefreshControl } from "react-native";
+import { Linking, PermissionsAndroid, Platform, RefreshControl } from "react-native";
 import { Area, Chart, HorizontalAxis, Line, Tooltip } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
+import { writeAsStringAsync, readAsStringAsync, makeDirectoryAsync, readDirectoryAsync, documentDirectory, StorageAccessFramework, FileSystemRequestDirectoryPermissionsResult } from "expo-file-system"
 
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
@@ -43,7 +44,8 @@ import SetPassword from "../../components/SetPassword";
 import { Color } from "../../../GlobalStyles";
 import { googleLogoUrls } from "../../service/constants";
 import { SvgUri } from "react-native-svg";
-import { encryptPK } from "../../store/setting";
+import { encryptPK, getKeyLocation, storeKeyLocation } from "../../store/setting";
+import walletTemplate from '../../assets/templates/exportWallet'
 
 
 export default function ExportWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -59,8 +61,40 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const [passwordSet, setPasswordSet] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [generatingPass, setGeneratingPass] = useState(false);
+  const [hasFileAccess, setHasFileAccess] = useState(true);
+  const [folderLocation, setFolderLocation] = useState({} as FileSystemRequestDirectoryPermissionsResult)
 
   useEffect(() => {
+    const runAsyncAndroid = async () => {
+      const keyLocation = await getKeyLocation();
+      if (!keyLocation.granted) {
+        const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+        if (permissions.granted) {
+          setFolderLocation(permissions);
+          await storeKeyLocation(permissions);
+        }
+      } else {
+        setFolderLocation(keyLocation);
+      }
+    }
+    if (Platform.OS === 'android' && Platform.Version < 33) {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, {
+        buttonPositive: 'Accepted',
+        message: 'This app would like to access files.',
+        title: 'Files',
+      }).then((result) => {
+        console.log('PermissionsAndroid', result as string);
+        if (result === PermissionsAndroid.RESULTS.GRANTED) {
+          setHasFileAccess(true);
+        } else {
+          setHasFileAccess(false);
+        }
+      })
+    } else if (Platform.OS === 'android') {
+      runAsyncAndroid();
+    }
+
     return () => {
       setIsComponentMounted(false);
     }
@@ -80,23 +114,30 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const isValidWallet = wallet && wallet.address;
 
   const exportWallet = async () => {
+    //const result = await readDirectoryAsync(documentDirectory as string);
+
     try {
       setGeneratingPass(true)
       const pk = await encryptPK(wallet.privateKey);
       if (pk) {
-        const { pass } = await createGoogleWalletPass({ address: wallet.address, pk, email: v4() });
-        const supported = await Linking.canOpenURL(pass);
-        if (supported) {
-          setGeneratingPass(false);
-          await Linking.openURL(pass);
-        }
+        const uri = folderLocation.granted ? folderLocation.directoryUri : '';
+        const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.name.split(' ').join('_')}`, 'text/html');
+        //console.log('file created', file);
+        const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, walletTemplate(walletMetadata.name, pk));
+        //const result2 = await writeAsStringAsync(documentDirectory + 'wallet', 'test');
+        //console.log('data written', result2);
+
+        setGeneratingPass(false);
       }
       setGeneratingPass(false);
     } catch (err) {
       setGeneratingPass(false);
     }
 
+
   }
+
+
 
   return (
     <DashboardLayout title={''}>
@@ -129,35 +170,19 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                     >
                       {translations[language as keyof typeof translations].ExportWallet.instructions}
                     </Text>
-                    <Button variant={'unstyled'} onPress={exportWallet} isLoading={generatingPass}
+                    <Button variant={'solid'} onPress={exportWallet} isLoading={generatingPass}
                       _loading={{
                         _text: {
-                          color: colorMode === 'dark' ? Color.white : Color.black
+                          color: colorMode === 'dark' ? Color.black : Color.white
                         }
                       }} _spinner={{
                         color: colorMode === 'dark' ? Color.white : Color.black
-                      }} isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading} >
-                      {language === 'pt' &&
-                        <SvgUri
-                          height={40}
-                          uri={googleLogoUrls.br}
-                          accessibilityLabel="Adicionar à Carteira virtual do Google"
-                        />
-                      }
-                      {language === 'en' &&
-                        <SvgUri
-                          height={40}
-                          uri={googleLogoUrls.en}
-                          accessibilityLabel="Add to Google Wallet"
-                        />
-                      }
-                      {language !== 'en' && language !== 'pt' &&
-                        <SvgUri
-                          height={40}
-                          uri={googleLogoUrls.es}
-                          accessibilityLabel="Añadir a Google Wallet"
-                        />
-                      }
+                      }}
+                      isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading}
+                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+                      width={'full'}
+                    >
+                      <Text color={colorMode === 'dark' ? Color.black : Color.white} bold>Export</Text>
                     </Button>
 
 
@@ -165,6 +190,9 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                 }
 
                 <SetPassword setIsExisting={(_isExisting: boolean) => { setPasswordSet(_isExisting) }} />
+                {!passwordSet &&
+                  <Box></Box>
+                }
               </Stack>
             }
           </>

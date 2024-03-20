@@ -89,7 +89,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
                 }}
                 >
                   <Menu.Item onPress={() => { selectWallet() }}><Text>{translations[language as keyof typeof translations].SelectWallet.select_button}</Text></Menu.Item>
-                  <Menu.Item onPress={() => { exportWallet(metadata.address) }}><Text>{translations[language as keyof typeof translations].SelectWallet.export_button}</Text></Menu.Item>
+                  {<Menu.Item onPress={() => { exportWallet(metadata.address) }}><Text>{translations[language as keyof typeof translations].SelectWallet.export_button}</Text></Menu.Item>}
                 </Menu>
               </Tooltip>
 

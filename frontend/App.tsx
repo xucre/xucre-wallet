@@ -94,6 +94,7 @@ import Loading from './pages/Loading';
 import Profile from './pages/social/Profile';
 import ConnectionManagement from './pages/walletConnect/ConnectionManagement';
 import ExportWallet from './pages/wallet/ExportWallet';
+import RampWidget from './pages/ramp/RampWidget';
 //import TransactionFeed from './pages/wallet/TransactionFeed';
 
 const Stack = createNativeStackNavigator();
@@ -429,6 +430,11 @@ export const AppWrapper = () => {
             <Stack.Screen name="ViewProfile" component={Profile} options={{
               headerTitleAlign: 'center',
               title: 'Profile'//translations[language as keyof typeof translations].ProfileList.title,
+            }} ></Stack.Screen>
+
+            <Stack.Screen name="Ramp" component={RampWidget} options={{
+              headerTitleAlign: 'center',
+              title: ''//translations[language as keyof typeof translations].ProfileList.title,
             }} ></Stack.Screen>
             {/*<Stack.Screen name="TransactionFeed" component={TransactionFeed} options={{
               headerTitleAlign: 'center',

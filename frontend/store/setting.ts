@@ -3,6 +3,7 @@ import { BigNumber } from "ethers";
 import crypto from 'crypto';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
+import { FileSystemRequestDirectoryPermissionsResult } from "expo-file-system";
 
 export const storeTheme = async (mode: string | null | undefined) => {
   await EncryptedStorage.setItem(
@@ -178,3 +179,16 @@ export const getAllNotifications = async () => {
 
   return null;
 };
+
+export const getKeyLocation = async () => {
+  const location = await EncryptedStorage.getItem("key_location");
+  if (!location) return {} as FileSystemRequestDirectoryPermissionsResult;
+  return JSON.parse(location as string) as FileSystemRequestDirectoryPermissionsResult;
+}
+
+export const storeKeyLocation = async (location: FileSystemRequestDirectoryPermissionsResult) => {
+  await EncryptedStorage.setItem(
+    "key_location",
+    JSON.stringify(location)
+  );
+}
