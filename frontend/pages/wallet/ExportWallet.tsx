@@ -24,7 +24,7 @@ import React, { useEffect, useState } from "react";
 import { Linking, PermissionsAndroid, Platform, RefreshControl } from "react-native";
 import { Area, Chart, HorizontalAxis, Line, Tooltip } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
-import { writeAsStringAsync, readAsStringAsync, makeDirectoryAsync, readDirectoryAsync, documentDirectory, StorageAccessFramework } from "expo-file-system"
+import { writeAsStringAsync, readAsStringAsync, makeDirectoryAsync, readDirectoryAsync, documentDirectory, StorageAccessFramework, FileSystemRequestDirectoryPermissionsResult } from "expo-file-system"
 
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
@@ -44,7 +44,8 @@ import SetPassword from "../../components/SetPassword";
 import { Color } from "../../../GlobalStyles";
 import { googleLogoUrls } from "../../service/constants";
 import { SvgUri } from "react-native-svg";
-import { encryptPK } from "../../store/setting";
+import { encryptPK, getKeyLocation, storeKeyLocation } from "../../store/setting";
+import walletTemplate from '../../assets/templates/exportWallet'
 
 
 export default function ExportWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -61,20 +62,21 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [generatingPass, setGeneratingPass] = useState(false);
   const [hasFileAccess, setHasFileAccess] = useState(true);
+  const [folderLocation, setFolderLocation] = useState({} as FileSystemRequestDirectoryPermissionsResult)
 
   useEffect(() => {
     const runAsyncAndroid = async () => {
-      //const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync('content://com.android.externalstorage.documents/tree/primary%3AXucreKeys');
+      const keyLocation = await getKeyLocation();
+      if (!keyLocation.granted) {
+        const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
 
-      //if (permissions.granted) {
-      // Gets SAF URI from response
-      //const uri = permissions.directoryUri;
-      //console.log(uri);
-      // Gets all files inside of selected directory
-      const files = await StorageAccessFramework.readDirectoryAsync('content://com.android.externalstorage.documents/tree/primary%3AXucreKeys');
-      console.log(files);
-
-      //}
+        if (permissions.granted) {
+          setFolderLocation(permissions);
+          await storeKeyLocation(permissions);
+        }
+      } else {
+        setFolderLocation(keyLocation);
+      }
     }
     if (Platform.OS === 'android' && Platform.Version < 33) {
       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, {
@@ -112,24 +114,25 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const isValidWallet = wallet && wallet.address;
 
   const exportWallet = async () => {
-    const result = await readDirectoryAsync(documentDirectory as string);
-    const result2 = await writeAsStringAsync(documentDirectory + 'wallet', 'test');
-    console.log(result2);
-    /*try {
+    //const result = await readDirectoryAsync(documentDirectory as string);
+
+    try {
       setGeneratingPass(true)
       const pk = await encryptPK(wallet.privateKey);
       if (pk) {
-        const { pass } = await createGoogleWalletPass({ address: wallet.address, pk, email: v4() });
-        const supported = await Linking.canOpenURL(pass);
-        if (supported) {
-          setGeneratingPass(false);
-          await Linking.openURL(pass);
-        }
+        const uri = folderLocation.granted ? folderLocation.directoryUri : '';
+        const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.name.split(' ').join('_')}`, 'text/html');
+        //console.log('file created', file);
+        const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, walletTemplate(walletMetadata.name, pk));
+        //const result2 = await writeAsStringAsync(documentDirectory + 'wallet', 'test');
+        //console.log('data written', result2);
+
+        setGeneratingPass(false);
       }
       setGeneratingPass(false);
     } catch (err) {
       setGeneratingPass(false);
-    }*/
+    }
 
 
   }
@@ -170,12 +173,16 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                     <Button variant={'solid'} onPress={exportWallet} isLoading={generatingPass}
                       _loading={{
                         _text: {
-                          color: colorMode === 'dark' ? Color.white : Color.black
+                          color: colorMode === 'dark' ? Color.black : Color.white
                         }
                       }} _spinner={{
                         color: colorMode === 'dark' ? Color.white : Color.black
-                      }} isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading} >
-                      <Text>Export</Text>
+                      }}
+                      isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading}
+                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
+                      width={'full'}
+                    >
+                      <Text color={colorMode === 'dark' ? Color.black : Color.white} bold>Export</Text>
                     </Button>
 
 
