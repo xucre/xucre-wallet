@@ -1,5 +1,4 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { ethers } from 'ethers';
 import {
   AlertDialog,
   ArrowBackIcon,

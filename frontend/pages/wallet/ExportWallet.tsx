@@ -21,9 +21,10 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Linking, RefreshControl } from "react-native";
+import { Linking, PermissionsAndroid, Platform, RefreshControl } from "react-native";
 import { Area, Chart, HorizontalAxis, Line, Tooltip } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
+import { writeAsStringAsync, readAsStringAsync, makeDirectoryAsync, readDirectoryAsync, documentDirectory, StorageAccessFramework } from "expo-file-system"
 
 import translations from "../../assets/translations";
 import MobileFooter from "../../components/Footer";
@@ -59,8 +60,39 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const [passwordSet, setPasswordSet] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [generatingPass, setGeneratingPass] = useState(false);
+  const [hasFileAccess, setHasFileAccess] = useState(true);
 
   useEffect(() => {
+    const runAsyncAndroid = async () => {
+      //const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync('content://com.android.externalstorage.documents/tree/primary%3AXucreKeys');
+
+      //if (permissions.granted) {
+      // Gets SAF URI from response
+      //const uri = permissions.directoryUri;
+      //console.log(uri);
+      // Gets all files inside of selected directory
+      const files = await StorageAccessFramework.readDirectoryAsync('content://com.android.externalstorage.documents/tree/primary%3AXucreKeys');
+      console.log(files);
+
+      //}
+    }
+    if (Platform.OS === 'android' && Platform.Version < 33) {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, {
+        buttonPositive: 'Accepted',
+        message: 'This app would like to access files.',
+        title: 'Files',
+      }).then((result) => {
+        console.log('PermissionsAndroid', result as string);
+        if (result === PermissionsAndroid.RESULTS.GRANTED) {
+          setHasFileAccess(true);
+        } else {
+          setHasFileAccess(false);
+        }
+      })
+    } else if (Platform.OS === 'android') {
+      runAsyncAndroid();
+    }
+
     return () => {
       setIsComponentMounted(false);
     }
@@ -80,7 +112,10 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const isValidWallet = wallet && wallet.address;
 
   const exportWallet = async () => {
-    try {
+    const result = await readDirectoryAsync(documentDirectory as string);
+    const result2 = await writeAsStringAsync(documentDirectory + 'wallet', 'test');
+    console.log(result2);
+    /*try {
       setGeneratingPass(true)
       const pk = await encryptPK(wallet.privateKey);
       if (pk) {
@@ -94,9 +129,12 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
       setGeneratingPass(false);
     } catch (err) {
       setGeneratingPass(false);
-    }
+    }*/
+
 
   }
+
+
 
   return (
     <DashboardLayout title={''}>
@@ -129,7 +167,7 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                     >
                       {translations[language as keyof typeof translations].ExportWallet.instructions}
                     </Text>
-                    <Button variant={'unstyled'} onPress={exportWallet} isLoading={generatingPass}
+                    <Button variant={'solid'} onPress={exportWallet} isLoading={generatingPass}
                       _loading={{
                         _text: {
                           color: colorMode === 'dark' ? Color.white : Color.black
@@ -137,27 +175,7 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                       }} _spinner={{
                         color: colorMode === 'dark' ? Color.white : Color.black
                       }} isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading} >
-                      {language === 'pt' &&
-                        <SvgUri
-                          height={40}
-                          uri={googleLogoUrls.br}
-                          accessibilityLabel="Adicionar à Carteira virtual do Google"
-                        />
-                      }
-                      {language === 'en' &&
-                        <SvgUri
-                          height={40}
-                          uri={googleLogoUrls.en}
-                          accessibilityLabel="Add to Google Wallet"
-                        />
-                      }
-                      {language !== 'en' && language !== 'pt' &&
-                        <SvgUri
-                          height={40}
-                          uri={googleLogoUrls.es}
-                          accessibilityLabel="Añadir a Google Wallet"
-                        />
-                      }
+                      <Text>Export</Text>
                     </Button>
 
 

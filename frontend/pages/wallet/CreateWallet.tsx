@@ -28,7 +28,6 @@ import {
   loadWalletFromMnemonics,
 } from "../../service/wallet";
 import { storeWallet, WalletInternal } from '../../store/wallet';
-import { Wallet } from "ethers";
 
 export default function CreateWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const setWalletList = useSetRecoilState(walletList);

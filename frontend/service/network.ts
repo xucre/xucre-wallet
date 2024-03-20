@@ -1,8 +1,6 @@
-import { defaultPath, entropyToMnemonic, HDNode, Mnemonic } from "@ethersproject/hdnode";
-import { BigNumber, providers, utils, Wallet, wordlists } from 'ethers';
+
 const network = (process.env.NODE_ENV === 'production') ? 'mainnet' : 'rinkeby';
 
-const PROVIDER = providers.getDefaultProvider(network);
 
 export type Network = {
   blockExplorer?: string;

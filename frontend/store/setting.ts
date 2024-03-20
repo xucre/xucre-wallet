@@ -178,3 +178,7 @@ export const getAllNotifications = async () => {
 
   return null;
 };
+
+export const getKeyLocation = async () => {
+  
+}
