@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -22,6 +23,8 @@
     "@react-native-community/netinfo": "9.3.10",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.16",
+    "@testing-library/react-native": "^12.4.4",
+    "@types/jest": "^29.5.12",
     "@walletconnect/jsonrpc-utils": "^1.0.8",
     "@walletconnect/react-native-compat": "^2.10.4",
     "@walletconnect/sign-client": "^2.10.4",
@@ -38,10 +41,13 @@
     "expo-barcode-scanner": "~12.5.3",
     "expo-build-properties": "~0.8.3",
     "expo-clipboard": "~4.3.1",
+    "expo-file-system": "~15.4.5",
     "expo-font": "~11.4.0",
     "expo-linking": "~5.0.2",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
+    "jest": "^29.2.1",
+    "jest-expo": "~49.0.0",
     "moment": "^2.29.4",
     "nanoid": "^5.0.2",
     "native-base": "^3.4.28",
@@ -69,17 +75,23 @@
     "react-qr-code": "^2.0.12",
     "recoil": "^0.7.7",
     "styled-components": "^5.3.11",
-    "uuid": "^9.0.1",
-    "expo-file-system": "~15.4.5"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/preset-typescript": "^7.24.1",
     "@expo/cli": "^0.10.15",
     "@types/react": "~18.2.14",
     "@types/uuid": "^9.0.6",
+    "jest": "^29.7.0",
     "react-native-dotenv": "^3.4.9",
     "typescript": "^5.1.3"
   },
   "private": true,
-  "react-native": {}
+  "react-native": {},
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@notifee/.*)"
+    ]
+  }
 }
