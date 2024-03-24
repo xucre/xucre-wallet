@@ -1,12 +1,18 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { AppWrapper } from '../App';
+import App, { AppWrapper } from '../App';
 
-describe('AppWrapper', () => {
+describe('App', () => {
   it('renders without crashing', () => {
-    render(<AppWrapper />);
+    render(<App />);
     // Add your assertions here
   });
 
   // Add more test cases as needed
 });
+
+jest.mock('uuid', () => {
+  return {
+    v4: jest.fn(() => 1)
+  }
+})

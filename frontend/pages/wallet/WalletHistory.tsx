@@ -106,6 +106,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
       setRefreshing(false);
 
     } catch (err) {
+      console.log(err);
       setTimeout(() => {
         //getData();
       }, 1000)

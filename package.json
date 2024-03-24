@@ -17,7 +17,6 @@
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@lens-protocol/react-native-lens-ui-kit": "^0.2.9",
     "@notifee/react-native": "^7.8.0",
-    "@ramp-network/react-native-sdk": "^1.0.2",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/netinfo": "9.3.10",
@@ -91,7 +90,12 @@
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@notifee/.*)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@notifee/react-native/.*|@walletconnect/react-native-compat/.*|@lens-protocol/react-native-lens-ui-kit/.*|array-shuffle/.*|@ramp-network/react-native-sdk/.*)"
+    ],
+    "setupFilesAfterEnv": [
+      "./frontend/__mocks__/@notifee/react-native.js",
+      "./frontend/__mocks__/react-native-encrypted-storage/index.js",
+      "./frontend/__mocks__/react-native-geolocation-service/index.js"
     ]
   }
 }
