@@ -20,6 +20,7 @@ import { getNetworks } from "../../store/network";
 import { addToken } from "../../store/token";
 import { Network } from "../../service/network";
 import { Color } from "../../../GlobalStyles";
+import ContainedButton from "../../components/ui/ContainedButton";
 
 
 export default function AddToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -146,16 +147,14 @@ export default function AddToken({ navigation, route }: { navigation: { navigate
           placeholder={translations[language as keyof typeof translations].AddToken.address_placeholder}
         />
 
-        <Button
+        <ContainedButton
+          buttonText={translations[language as keyof typeof translations].AddToken.submit_button}
           mt={6}
           w="90%"
-          colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
           onPress={() => { saveToken(); }}
           isLoading={loading}
           disabled={name.length === 0 || chainId.length === 0 || address.length === 0 || type.length === 0}
-        >
-          <Text color={'white'}>{translations[language as keyof typeof translations].AddToken.submit_button}</Text>
-        </Button>
+        />
       </VStack>
     </Box>
   );

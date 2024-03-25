@@ -18,6 +18,7 @@ import translations from "../../assets/translations";
 import { Network } from "../../service/network";
 import { networkList, language as stateLanguage } from "../../service/state";
 import { storeNetwork, } from "../../store/network";
+import ContainedButton from "../../components/ui/ContainedButton";
 
 
 export default function CreateWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -102,9 +103,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
           <Input value={symbol} onChange={handleSymbolChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.symbol_placeholder} />
           <Input value={blockExplorer} onChange={handleExplorerChange} placeholder={translations[language as keyof typeof translations].CreateNetwork.explorer_placeholder} />
           <Button.Group>
-            <Button w={'100%'} mt={4} style={{ borderRadius: 100 }} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => { saveNetwork(); }} isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0}>
-              <Text fontWeight={'bold'} style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>{translations[language as keyof typeof translations].CreateNetwork.submit_button}</Text>
-            </Button>
+            <ContainedButton isLoading={loading} disabled={name.length === 0 || chainId.length === 0 || rpcUrl.length === 0 || symbol.length === 0} width={'full'} onPress={() => { saveNetwork() }} style={{ marginTop: 4 }} buttonText={translations[language as keyof typeof translations].CreateNetwork.submit_button} />
           </Button.Group>
 
         </VStack>

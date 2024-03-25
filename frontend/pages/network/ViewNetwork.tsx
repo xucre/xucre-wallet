@@ -21,6 +21,7 @@ import translations from "../../assets/translations";
 import { activeNetwork, selectedNetwork, language as stateLanguage, } from "../../service/state";
 import { truncateString_old } from "../../service/utility";
 import { updateNetwork } from "../../store/network";
+import ContainedButton from "../../components/ui/ContainedButton";
 
 export default function ViewNetwork({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -121,7 +122,7 @@ export default function ViewNetwork({ navigation, route }: { navigation: { navig
                 </Avatar>
               </VStack>
 
-              <Button onPress={() => { setIsEditing(true) }} ml={'auto'} py={0} px={8} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewNetwork.edit_button}</Text></Button>
+              <ContainedButton buttonText={translations[language as keyof typeof translations].ViewNetwork.edit_button} onPress={() => { setIsEditing(true) }} ml={'auto'} py={0} px={8} />
             </HStack>
             <VStack space={4} px={2} py={4} >
               <Text fontSize={28} fontWeight={'bold'}>{network.name}</Text>

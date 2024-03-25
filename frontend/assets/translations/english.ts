@@ -81,6 +81,7 @@ const values : TranslationType = {
     name_wallet: "Wallet name"
   },
   ExportWallet: {
+    button: 'Export',
     button_loading: 'Generating',
     instructions: 'Please remember your password. It will encrypt your wallet so only you can retrieve it.',
     invalid_wallet: 'Invalid Wallet Selected',
@@ -171,6 +172,7 @@ const values : TranslationType = {
     header: 'Recover Wallet',
     mnemonic_button: "Mnemonic",
     google_wallet_button: "Google Wallet Pass",
+    private_key_button: "Private Key",
     mnemonic_entry_input_placeholder: "Enter mnemonic phrase separated by single spaces",
     mnemonic_not_complete: "Mnemonic not the appropriate length",
     name_entry_input_placeholder: "Set Wallet Name",

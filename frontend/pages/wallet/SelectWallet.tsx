@@ -85,7 +85,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
           left={0}
           width={'full'}
         >
-          <ContainedButton onPress={createWallet} style={{ marginLeft: 10, marginRight: 10 }} buttonText={translations[language as keyof typeof translations].SelectWallet.new_button} />
+          <ContainedButton width={''} onPress={createWallet} style={{ marginLeft: 10, marginRight: 10 }} buttonText={translations[language as keyof typeof translations].SelectWallet.new_button} />
         </Box>
       </Box>
     </DashboardLayout>

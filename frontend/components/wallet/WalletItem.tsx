@@ -5,6 +5,7 @@ import { AppWallet, language as stateLanguage } from "../../service/state";
 import { truncateStringStart } from "../../service/utility";
 import { exportWallet } from "../../service/wallet";
 import { useRecoilState } from "recoil";
+import translations from "../../assets/translations";
 
 
 export default function WalletItem({ metadata, setActiveWallet, storeActiveWallet, viewWallet }: { metadata: AppWallet, setActiveWallet: Function, storeActiveWallet: Function, viewWallet: Function }) {

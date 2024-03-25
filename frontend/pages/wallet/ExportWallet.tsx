@@ -46,6 +46,7 @@ import { googleLogoUrls } from "../../service/constants";
 import { SvgUri } from "react-native-svg";
 import { encryptPK, getKeyLocation, storeKeyLocation } from "../../store/setting";
 import walletTemplate from '../../assets/templates/exportWallet'
+import ContainedButton from "../../components/ui/ContainedButton";
 
 
 export default function ExportWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -170,22 +171,11 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                     >
                       {translations[language as keyof typeof translations].ExportWallet.instructions}
                     </Text>
-                    <Button variant={'solid'} onPress={exportWallet} isLoading={generatingPass}
-                      _loading={{
-                        _text: {
-                          color: colorMode === 'dark' ? Color.black : Color.white
-                        }
-                      }} _spinner={{
-                        color: colorMode === 'dark' ? Color.white : Color.black
-                      }}
+                    <ContainedButton onPress={exportWallet} isLoading={generatingPass}
+                      buttonText={translations[language as keyof typeof translations].ExportWallet.button}
                       isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading}
-                      colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
                       width={'full'}
-                    >
-                      <Text color={colorMode === 'dark' ? Color.black : Color.white} bold>Export</Text>
-                    </Button>
-
-
+                    />
                   </VStack>
                 }
 
