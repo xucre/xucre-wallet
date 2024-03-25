@@ -7,29 +7,13 @@ import { RecoilRoot } from 'recoil';
 import { activeWallet, AppWallet } from '../../../service/state';
 import { RecoilObserver } from '../../../service/testUtils';
 
+import Wrapper from '../../../components/TestWrapper';
 describe('ViewWallet', () => {
   const mockNavigation = {
     navigate: jest.fn(),
   };
 
   const mockRoute = {};
-  const testState = {
-    address: process.env.TEST_ADDRESS,
-    name: 'testWallet',
-    wallet: process.env.TEST_PRIVATE_KEY
-  } as AppWallet;
-  const Wrapper = ({ children }: { children: any }) => {
-    return (
-      <RecoilRoot>
-        <RecoilObserver node={activeWallet} _value={testState} />
-        <NativeBaseProvider>
-          <NavigationContainer>
-            {children}
-          </NavigationContainer>
-        </NativeBaseProvider>
-      </RecoilRoot>
-    )
-  }
 
   it('should render the wallet name', () => {
     const { getByText } = render(

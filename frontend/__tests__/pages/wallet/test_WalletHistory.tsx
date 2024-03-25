@@ -7,29 +7,14 @@ import { NativeBaseProvider } from 'native-base';
 import { RecoilObserver } from '../../../service/testUtils';
 import { AppWallet } from '../../../service/state';
 import { activeWallet } from '../../../service/state';
+import Wrapper from '../../../components/TestWrapper';
+
 describe('WalletHistory', () => {
   const mockNavigation = {
     navigate: jest.fn(),
   };
 
   const mockRoute = {};
-  const testState = {
-    address: process.env.TEST_ADDRESS,
-    name: 'testWallet',
-    wallet: process.env.TEST_PRIVATE_KEY
-  } as AppWallet;
-  const Wrapper = ({ children }: { children: any }) => {
-    return (
-      <RecoilRoot>
-        <RecoilObserver node={activeWallet} _value={testState} />
-        <NativeBaseProvider>
-          <NavigationContainer>
-            {children}
-          </NavigationContainer>
-        </NativeBaseProvider>
-      </RecoilRoot>
-    )
-  }
 
   it('should render the total balance', () => {
     const { getByText } = render(
