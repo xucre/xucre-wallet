@@ -28,6 +28,7 @@ import {
   loadWalletFromMnemonics,
 } from "../../service/wallet";
 import { storeWallet, WalletInternal } from '../../store/wallet';
+import ContainedButton from "../../components/ui/ContainedButton";
 
 export default function CreateWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const setWalletList = useSetRecoilState(walletList);
@@ -108,17 +109,12 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
         >
           {translations[language as keyof typeof translations].CreateWallet.instructions}
         </Text>
-        <Button
+        <ContainedButton
           width={'90%'}
-          style={styles.buttonContainer}
-          colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
           onPress={createMnemonics}
           isLoading={loading}
-        >
-          <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white }}>
-            {translations[language as keyof typeof translations].CreateWallet.instructions_button}
-          </Text>
-        </Button>
+          buttonText={translations[language as keyof typeof translations].CreateWallet.instructions_button}
+        />
       </VStack>
     );
   }
@@ -512,11 +508,12 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
               <MnemonicList></MnemonicList>
               <Box>
                 <Button.Group >
-                  <Button mx={5} width={'90%'} style={styles.buttonContainer} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={nextStep}>
-                    <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }}>
-                      {translations[language as keyof typeof translations].CreateWallet.mnemonic_confirm_button}
-                    </Text>
-                  </Button>
+                  <ContainedButton
+                    mx={5}
+                    width={'90%'}
+                    onPress={nextStep}
+                    buttonText={translations[language as keyof typeof translations].CreateWallet.mnemonic_confirm_button}
+                  />
                 </Button.Group>
               </Box>
             </VStack>
@@ -582,8 +579,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
                 }}>{translations[language as keyof typeof translations].CreateWallet.add_to_google}</Text>
               </Checkbox>
             </HStack>
-            <Button
-              style={styles.buttonContainer}
+            <ContainedButton
               onPress={() => {
                 saveWallet();
               }}
@@ -593,17 +589,12 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
                   .name_entry_button_loadingtext
               }
               my={4}
-
               width={'90%'}
               disabled={
                 confirmMnemonics.length < mnemonics.length || name.length === 0
               }
-              colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-            >
-              <Text style={{ color: colorMode === 'dark' ? Color.black : Color.white, fontWeight: "bold" }} textAlign={'center'}>
-                {translations[language as keyof typeof translations].CreateWallet.name_entry_button}
-              </Text>
-            </Button>
+              buttonText={translations[language as keyof typeof translations].CreateWallet.name_entry_button}
+            />
           </VStack>
         )}
       </KeyboardAvoidingView>

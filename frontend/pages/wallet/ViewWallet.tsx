@@ -2,7 +2,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { BigNumber, ethers, getDefaultProvider, Wallet } from 'ethers';
 import {
   Box,
-  Button,
   Center,
   FlatList,
   HStack,
@@ -36,6 +35,7 @@ import polygonTokens from '../../assets/json/matic_tokens.json'
 import { useIsFocused } from '@react-navigation/native';
 import { Linking } from "react-native";
 import { isSpam } from "../../store/spam";
+import SquareButton from "../../components/ui/SquareButton";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -298,32 +298,12 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             {
               middleButtons.map((btn, i) => {
                 return (
-                  <Button
+                  <SquareButton
                     key={'middleButtons' + i}
-                    variant="solid"
-                    backgroundColor={'gray.700'}
-                    _stack={{
-                      flexDirection: 'column'
-                    }}
-                    flex={.20}
-                    startIcon={
-                      <Icon
-                        as={MaterialIcons}
-                        name={btn.icon}
-                        color={'white'}
-                        size={7}
-                      />
-                    }
-                    _text={{
-                      color: 'white'
-                    }}
-                    paddingY={4}
-                    paddingX={3}
-                    borderRadius={10}
+                    icon={btn.icon}
+                    buttonText={btn.text}
                     onPress={btn.action}
-                  >
-                    <Text color={'white'} fontSize={12}>{btn.text}</Text>
-                  </Button>
+                  />
                 )
               })
             }
@@ -332,7 +312,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           <VStack space="5" px={2} mb={10}>
             {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
               <Box m={6} height={'2/3'}>
-                {/*<Button onPress={addToken} my={0} width={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}><Text color={colorMode === 'dark' ? 'black' : 'white'}>{translations[language as keyof typeof translations].ViewWallet.new_button}</Text></Button>*/}
                 <FlatList data={tokens} refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
@@ -344,9 +323,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                 }
                 />
               </Box>
-            }
-            {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[1] && wallet.address !== '' &&
-              <TokenBalancesListView address={wallet.address} />*/
             }
           </VStack>
 

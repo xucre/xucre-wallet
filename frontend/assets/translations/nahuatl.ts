@@ -82,6 +82,7 @@ const values : TranslationType  = {
     button_loading: 'Generando',
     instructions: 'Por favor recuerde su contraseña. Cifrará su billetera para que solo usted pueda recuperarla.',
     invalid_wallet: 'Invalid Wallet Selected',
+    button: 'Export',
     title: 'Export Wallet'
   },
   LanguagePage: {
@@ -172,6 +173,7 @@ const values : TranslationType  = {
     name_entry_input_placeholder:'Ahaquiaa toocaa de la Tlahcuiloolaamapetlaacaltoon-tli',
     save_button: 'Tla-piya',
     save_button_loadingtext: 'Enviando',
+    private_key_button: "Llave privada",
   },
   Requests: {
     delete_button: 'Pohpoloaa',

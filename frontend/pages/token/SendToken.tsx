@@ -37,6 +37,7 @@ import { getTokenByChain } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
 import { WalletInternal } from "../../store/wallet";
 import { xucreToken } from "../../service/constants";
+import ContainedButton from "../../components/ui/ContainedButton";
 
 export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const toast = useToast();
@@ -437,23 +438,13 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
                 </Box>
                 <Box>
                   <Box>
-                    <Button
-                      style={styles.buttonContainer}
+                    <ContainedButton
+                      buttonText={translations[language as keyof typeof translations].SendToken.submit_button}
                       w={"full"}
-                      colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-                      onPress={() => {
-                        send();
-                      }}
+                      onPress={() => { send(); }}
                       isLoading={loading}
                       disabled={address.length === 0 || type.length === 0 || notEnough}
-                    >
-                      <Text
-                        color={colorMode === "dark" ? Color.black : Color.white}
-                        fontWeight={"bold"}
-                      >
-                        {translations[language as keyof typeof translations].SendToken.submit_button}
-                      </Text>
-                    </Button>
+                    />
                   </Box>
                 </Box>
               </>

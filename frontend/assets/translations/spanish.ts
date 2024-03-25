@@ -80,6 +80,7 @@ const values : TranslationType = {
   },
   ExportWallet: {
     button_loading: 'Generando',
+    button: 'Export',
     instructions: 'Por favor recuerde su contraseña. Cifrará su billetera para que solo usted pueda recuperarla.',
     invalid_wallet: 'Invalid Wallet Selected',
     title: 'Export Wallet'
@@ -167,6 +168,7 @@ const values : TranslationType = {
     instructions: "Porfavor ingrese la secuencia de mnemónicos del proceso de creacion de su wallet original.",
     header: 'Recuperar billetera',
     instructions_button: "Recuperar",
+    private_key_button: "Llave privada",
     mnemonic_entry_input_placeholder: "Ingrese frase mnemónica separada por espacios",
     mnemonic_not_complete: "El mnemónicos no tiene la longitud adecuada",
     name_entry_input_placeholder: "Ingrese Nombre de la billetera",

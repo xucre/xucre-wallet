@@ -80,6 +80,7 @@ const values : TranslationType = {
   },
   ExportWallet: {
     button_loading: 'Paqarichiq',
+    button: 'Export',
     instructions: 'Ama hina kaspa, yaykuna rimaykita yuyariy. Chayqa billeteraykita chifranqa chaymanta qamlla kutichiyta atikunki.',
     invalid_wallet: 'Invalid Wallet Selected',
     title: 'Export Wallet'
@@ -167,6 +168,7 @@ const values : TranslationType = {
     instructions: 'Ama hina kaspa, Ã±awpaq billetera ruwayniykimanta mnemÃ³nicos nisqap qatiqninta qillqay.',
     header: 'Recuperar Wallet nisqa',
     instructions_button: 'Kutichiy', 
+    private_key_button: "Sapaq Llave",
     mnemonic_entry_input_placeholder: 'Huk ch\'usaqkunawan t\'aqasqa mnemonico rimayta qillqay',      
     mnemonic_not_complete: 'Mnemonico mana tupaq largo',
     name_entry_input_placeholder: 'Belletera sutita churay',

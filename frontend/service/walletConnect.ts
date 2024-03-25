@@ -1,6 +1,5 @@
 import notifee, { AndroidLaunchActivityFlag } from '@notifee/react-native';
 import SignClient from '@walletconnect/sign-client';
-import { nanoid } from 'nanoid';
 import {AppState} from 'react-native';
 
 
@@ -73,7 +72,6 @@ export const registerListeners = () => {
   
   if (signClient) {
     signClient.on("session_proposal", (event) => {
-      const id = nanoid();
       if (AppState.currentState === 'active') {
         navigate('ConnectionRequest', {
           requestDetails: event
@@ -90,7 +88,6 @@ export const registerListeners = () => {
 
     signClient.on("session_request", (event) => {
       // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
-      //const id = nanoid();
       addNotification(String(event.id), event);
       if (
         event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||

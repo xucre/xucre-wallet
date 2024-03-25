@@ -80,6 +80,7 @@ const values : TranslationType  = {
   },
   ExportWallet: {
     button_loading: 'Gerando',
+    button: 'Export',
     instructions: 'Lembre-se da sua senha. Ele criptografará sua carteira para que somente você possa recuperá-la.',
     invalid_wallet: 'Invalid Wallet Selected',
     title: 'Export Wallet'
@@ -167,6 +168,7 @@ const values : TranslationType  = {
     instructions: 'Insira a sequÃªncia de mnemÃ´nicos do seu processo de criaÃ§Ã£o de carteira original.',
     instructions_button: 'Recuperar',
     header: 'Recuperar carteira',
+    private_key_button: "Chave privada",
     mnemonic_entry_input_placeholder: 'Digite a frase mnemÃ´nica separada por espaÃ§os Ãºnicos',
     mnemonic_not_complete: 'Mnemonic nÃ£o Ã© o tamanho apropriado',
     name_entry_input_placeholder: 'Definir nome da carteira',

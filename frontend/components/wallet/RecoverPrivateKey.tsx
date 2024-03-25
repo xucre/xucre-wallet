@@ -26,6 +26,7 @@ import { AppWallet, language as stateLanguage, walletList } from "../../service/
 import { loadWalletFromPrivateKey } from '../../service/wallet'
 import { storeWallet, WalletInternal } from "../../store/wallet";
 import { decryptPK } from "../../store/setting";
+import OutlinedButton from "../ui/OutlinedButton";
 
 
 export default function RecoverPrivateKey({ navigation }: { navigation: { navigate: Function } }) {
@@ -116,9 +117,16 @@ export default function RecoverPrivateKey({ navigation }: { navigation: { naviga
           <TextArea value={privateKey} onChangeText={text => handlePrivateKeyChange(text)} w="full" autoCompleteType={false} />
         </VStack>
         <Button.Group>
-          <Button w={'90%'} borderRadius={'full'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => { saveWallet(); }} isLoading={loading} isLoadingText={translations[language as keyof typeof translations].RecoverWallet.save_button_loadingtext} isDisabled={!isComplete || name.length === 0} _disabled={{ backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400' }}>
-            <Text bold color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language as keyof typeof translations].RecoverWallet.save_button}</Text>
-          </Button>
+          <OutlinedButton
+            variant={'ghost'}
+            w={'90%'}
+            py={4}
+            onPress={() => { saveWallet(); }}
+            isLoading={loading}
+            isLoadingText={translations[language as keyof typeof translations].RecoverWallet.save_button_loadingtext}
+            isDisabled={!isComplete || name.length === 0}
+            buttonText={translations[language as keyof typeof translations].RecoverWallet.save_button}
+          />
         </Button.Group>
       </VStack>
     </Center>
