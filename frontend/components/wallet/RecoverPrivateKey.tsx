@@ -19,6 +19,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet } from 'react-native';
 import { useRecoilState, useSetRecoilState, } from "recoil";
+import * as DocumentPicker from 'expo-document-picker';
 
 import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
@@ -27,6 +28,7 @@ import { loadWalletFromPrivateKey } from '../../service/wallet'
 import { storeWallet, WalletInternal } from "../../store/wallet";
 import { decryptPK } from "../../store/setting";
 import OutlinedButton from "../ui/OutlinedButton";
+import { StorageAccessFramework } from "expo-file-system";
 
 
 export default function RecoverPrivateKey({ navigation }: { navigation: { navigate: Function } }) {
@@ -38,7 +40,8 @@ export default function RecoverPrivateKey({ navigation }: { navigation: { naviga
   const [privateKey, setPrivateKey] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
-  const isComplete = privateKey.length > 0 && password.length > 0;
+  const [file, setFile] = useState('');
+  const isComplete = file.length > 0 && password.length > 0;
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   useEffect(() => {
     return () => {
@@ -93,6 +96,18 @@ export default function RecoverPrivateKey({ navigation }: { navigation: { naviga
 
   };
 
+  const selectFile = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: 'text/plain',
+      copyToCacheDirectory: true,
+      multiple: false
+    });
+    if (result.assets && result.assets.length > 0) {
+      const result2 = await StorageAccessFramework.readAsStringAsync(result?.assets[0].uri);
+      setFile(result2);
+    }
+  }
+
   return (
     <Center mt={5}>
       <VStack w="full" alignItems="center" flex="1" justifyContent="flex-start">
@@ -110,11 +125,27 @@ export default function RecoverPrivateKey({ navigation }: { navigation: { naviga
           </Text>
           <Input type={'password'} minH={12} value={password} placeholder={translations[language as keyof typeof translations].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handlePasswordChange(text)} w="full" />
         </VStack>
-        <VStack py={3} space={2}>
-          <Text textAlign={'center'}>
-            {translations[language as keyof typeof translations].RecoverPrivateKey.private_key_label}
-          </Text>
-          <TextArea value={privateKey} onChangeText={text => handlePrivateKeyChange(text)} w="full" autoCompleteType={false} />
+        <VStack py={3} space={2} w="90%">
+          {file.length === 0 &&
+            <OutlinedButton
+              variant={'contained'}
+              w={'full'}
+              textAlign={'center'}
+              py={4}
+              mb={8}
+              onPress={() => { selectFile(); }}
+              buttonText={translations[language as keyof typeof translations].RecoverWallet.select_button || 'Select File'}
+            />
+          }
+          {file.length > 0 &&
+            <>
+              <Text textAlign={'center'}>
+                {translations[language as keyof typeof translations].RecoverPrivateKey.private_key_label}
+              </Text>
+              <TextArea value={file} isDisabled={true} w="full" autoCompleteType={false} />
+            </>
+          }
+
         </VStack>
         <Button.Group>
           <OutlinedButton

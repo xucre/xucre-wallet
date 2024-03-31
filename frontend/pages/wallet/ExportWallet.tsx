@@ -64,20 +64,11 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const [generatingPass, setGeneratingPass] = useState(false);
   const [hasFileAccess, setHasFileAccess] = useState(true);
   const [folderLocation, setFolderLocation] = useState({} as FileSystemRequestDirectoryPermissionsResult)
+  const [folderSelected, setFolderSelected] = useState(false);
 
   useEffect(() => {
     const runAsyncAndroid = async () => {
-      const keyLocation = await getKeyLocation();
-      if (!keyLocation.granted) {
-        const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
 
-        if (permissions.granted) {
-          setFolderLocation(permissions);
-          await storeKeyLocation(permissions);
-        }
-      } else {
-        setFolderLocation(keyLocation);
-      }
     }
     if (Platform.OS === 'android' && Platform.Version < 33) {
       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, {
@@ -93,7 +84,7 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
         }
       })
     } else if (Platform.OS === 'android') {
-      runAsyncAndroid();
+      //runAsyncAndroid();
     }
 
     return () => {
@@ -114,6 +105,25 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
 
   const isValidWallet = wallet && wallet.address;
 
+  const selectFolder = async () => {
+    if (Platform.OS === 'android') {
+      const keyLocation = await getKeyLocation();
+      if (!keyLocation.granted) {
+        const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+        if (permissions.granted) {
+          setFolderLocation(permissions);
+          await storeKeyLocation(permissions);
+        }
+      } else {
+        setFolderLocation(keyLocation);
+      }
+      setFolderSelected(true);
+    } else {
+      setFolderSelected(true);
+    }
+  }
+
   const exportWallet = async () => {
     //const result = await readDirectoryAsync(documentDirectory as string);
 
@@ -122,11 +132,11 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
       const pk = await encryptPK(wallet.privateKey);
       if (pk) {
         const uri = folderLocation.granted ? folderLocation.directoryUri : '';
-        const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.name.split(' ').join('_')}`, 'text/html');
-        //console.log('file created', file);
-        const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, walletTemplate(walletMetadata.name, pk));
-        //const result2 = await writeAsStringAsync(documentDirectory + 'wallet', 'test');
-        //console.log('data written', result2);
+        const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.address}`, 'text/plain');
+        // used to create a html file version
+        // const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.name.split(' ').join('_')}`, 'text/html');
+        //const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, walletTemplate(walletMetadata.name, pk));
+        const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, pk);
 
         setGeneratingPass(false);
       }
@@ -171,11 +181,18 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
                     >
                       {translations[language as keyof typeof translations].ExportWallet.instructions}
                     </Text>
-                    <ContainedButton onPress={exportWallet} isLoading={generatingPass}
-                      buttonText={translations[language as keyof typeof translations].ExportWallet.button}
-                      isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading}
-                      width={'full'}
-                    />
+                    {!folderSelected ?
+                      <ContainedButton onPress={selectFolder}
+                        buttonText={translations[language as keyof typeof translations].ExportWallet.folder_button}
+                        width={'full'}
+                      /> :
+                      <ContainedButton onPress={exportWallet} isLoading={generatingPass}
+                        buttonText={translations[language as keyof typeof translations].ExportWallet.button}
+                        isLoadingText={translations[language as keyof typeof translations].ExportWallet.button_loading}
+                        width={'full'}
+                      />
+                    }
+
                   </VStack>
                 }
 

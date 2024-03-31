@@ -1,15 +1,21 @@
-import { HStack, VStack, Tooltip, Menu, Icon, Text } from "native-base";
+import { HStack, VStack, Tooltip, Menu, Icon, Text, Avatar, useColorMode } from 'native-base';
 import { MaterialIcons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import { AppWallet, language as stateLanguage } from "../../service/state";
 import { truncateStringStart } from "../../service/utility";
-import { exportWallet } from "../../service/wallet";
 import { useRecoilState } from "recoil";
 import translations from "../../assets/translations";
 
+import Multichain_dark from "../../assets/images/new_multii_logo_white.png";
+import Multichain_light from "../../assets/images/new_multii_logo_black.png";
+import Eth from "../../assets/images/eth_logo.png";
+import Eth_dark from "../../assets/images/eth_logo_dark.png";
+import { Color } from '../../../GlobalStyles';
 
-export default function WalletItem({ metadata, setActiveWallet, storeActiveWallet, viewWallet }: { metadata: AppWallet, setActiveWallet: Function, storeActiveWallet: Function, viewWallet: Function }) {
+
+export default function WalletItem({ metadata, setActiveWallet, storeActiveWallet, viewWallet, exportWallet }: { metadata: AppWallet, setActiveWallet: Function, storeActiveWallet: Function, viewWallet: Function, exportWallet: Function }) {
   const [language,] = useRecoilState(stateLanguage);
+  const { colorMode } = useColorMode();
   const selectWallet = () => {
     setActiveWallet(metadata);
     storeActiveWallet(metadata);
@@ -27,6 +33,11 @@ export default function WalletItem({ metadata, setActiveWallet, storeActiveWalle
 
           <Pressable onPress={openWallet}>
             <HStack alignItems="center" space={{ base: 3, md: 6 }}>
+              <Avatar size="sm" source={
+                colorMode === 'dark' ? Eth_dark : Eth
+              } bg={Color.transparent} _image={{
+
+              }} />
               <VStack space={1}>
                 <Text fontSize="md" bold>
                   {metadata.name}

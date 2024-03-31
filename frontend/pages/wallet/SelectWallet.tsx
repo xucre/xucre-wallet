@@ -62,7 +62,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
               ({ item, index }) => {
                 return (
                   <Box key={v4()} px={4} py={1}>
-                    <WalletItem metadata={item} setActiveWallet={setActiveWallet} storeActiveWallet={storeActiveWallet} viewWallet={viewWallet} />
+                    <WalletItem metadata={item} setActiveWallet={setActiveWallet} storeActiveWallet={storeActiveWallet} exportWallet={exportWallet} viewWallet={viewWallet} />
                     {(index + 1) !== walletState.length &&
                       <Divider orientation={'horizontal'} mt={4} _light={{
                         bg: "muted.800"

@@ -79,11 +79,12 @@ const values : TranslationType = {
     name_wallet: "Nombre de la Billetera"
   },
   ExportWallet: {
+    folder_button: 'Seleccionar carpeta',
     button_loading: 'Generando',
-    button: 'Export',
+    button: 'Exportar',
     instructions: 'Por favor recuerde su contraseña. Cifrará su billetera para que solo usted pueda recuperarla.',
     invalid_wallet: 'Invalid Wallet Selected',
-    title: 'Export Wallet'
+    title: 'Exportar billetera'
   },
   LanguagePage: {
     menu_button: 'IDIOMA',
@@ -168,12 +169,13 @@ const values : TranslationType = {
     instructions: "Porfavor ingrese la secuencia de mnemónicos del proceso de creacion de su wallet original.",
     header: 'Recuperar billetera',
     instructions_button: "Recuperar",
-    private_key_button: "Llave privada",
+    private_key_button: "Del archivo",
     mnemonic_entry_input_placeholder: "Ingrese frase mnemónica separada por espacios",
     mnemonic_not_complete: "El mnemónicos no tiene la longitud adecuada",
     name_entry_input_placeholder: "Ingrese Nombre de la billetera",
     save_button: "Guardar",
-    save_button_loadingtext: "Enviando"
+    save_button_loadingtext: "Enviando",
+    select_button: "Seleccione Archivo",
   },
 
   Requests: {
