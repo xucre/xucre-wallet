@@ -18,6 +18,7 @@ import { language as stateLanguage } from "../service/state";
 import { hasPassword, storePassword, validatePassword } from "../store/setting";
 import { Color } from "../../GlobalStyles";
 import { MaterialIcons } from '@expo/vector-icons';
+import ContainedButton from "./ui/ContainedButton";
 
 export default function SetPassword({ setIsExisting }: { setIsExisting: Function }) {
   const [existingPassword, setExistingPassword] = useState(false);
@@ -99,16 +100,13 @@ export default function SetPassword({ setIsExisting }: { setIsExisting: Function
             <FormControl.Label><Text>{translations[language as keyof typeof translations].SetPassword.form_confirmation}</Text></FormControl.Label>
             <Input value={confirmPw} onChangeText={handleChangeConfirmPw} shadow={2} type="password" placeholder={translations[language as keyof typeof translations].SetPassword.password_placeholder} />
           </Stack>
-          <Button
+          <ContainedButton
+            buttonText={translations[language as keyof typeof translations].SetPassword.form_save_button}
+            onPress={() => { save() }}
             mx="4"
             my={4}
-            variant={'solid'}
-            colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}
-            onPress={() => { save() }}
             isDisabled={(existingPassword && !isValid && !pwMatch) || (!existingPassword && !pwMatch)}
-          >
-            <Text color={colorMode === 'dark' ? Color.black : Color.white} bold> {translations[language as keyof typeof translations].SetPassword.form_save_button}</Text>
-          </Button>
+          />
         </FormControl>
       }
 

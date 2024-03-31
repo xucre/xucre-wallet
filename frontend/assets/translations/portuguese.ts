@@ -79,10 +79,12 @@ const values : TranslationType  = {
     name_wallet: 'Nome da carteira',
   },
   ExportWallet: {
+    folder_button: 'Selecionar Pasta',
     button_loading: 'Gerando',
+    button: 'Exportar',
     instructions: 'Lembre-se da sua senha. Ele criptografará sua carteira para que somente você possa recuperá-la.',
     invalid_wallet: 'Invalid Wallet Selected',
-    title: 'Export Wallet'
+    title: 'Exportar carteira'
   },
   LanguagePage: {  
     menu_button: "IDIOMA",
@@ -167,11 +169,13 @@ const values : TranslationType  = {
     instructions: 'Insira a sequÃªncia de mnemÃ´nicos do seu processo de criaÃ§Ã£o de carteira original.',
     instructions_button: 'Recuperar',
     header: 'Recuperar carteira',
+    private_key_button: "De arquivo",
     mnemonic_entry_input_placeholder: 'Digite a frase mnemÃ´nica separada por espaÃ§os Ãºnicos',
     mnemonic_not_complete: 'Mnemonic nÃ£o Ã© o tamanho apropriado',
     name_entry_input_placeholder: 'Definir nome da carteira',
     save_button: 'Salvar',
-    save_button_loadingtext: 'Enviando'
+    save_button_loadingtext: 'Enviando',
+    select_button: "Selecione Arquivo",
   },
   Requests: {
     delete_button: 'Excluir',

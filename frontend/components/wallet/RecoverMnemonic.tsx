@@ -24,6 +24,8 @@ import translations from "../../assets/translations";
 import { AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromMnemonics } from '../../service/wallet'
 import { storeWallet, WalletInternal } from "../../store/wallet";
+import ContainedButton from "../ui/ContainedButton";
+import OutlinedButton from "../ui/OutlinedButton";
 
 
 export default function RecoverMnemonic({ navigation }: { navigation: { navigate: Function } }) {
@@ -221,9 +223,11 @@ export default function RecoverMnemonic({ navigation }: { navigation: { navigate
 
   };
 
+  const isDisabled = !mnemonicMatchComplete || name.length === 0;
+
   return (
     <Box h={'full'}>
-      <VStack w="full" alignItems="center" flex="1" justifyContent="flex-start">
+      <VStack w="full" py={10} alignItems="center" flex="1" justifyContent="flex-start">
         <Text >{translations[language as keyof typeof translations].RecoverMnemonic.instructions}</Text>
         <VStack py={3} space={2}>
           <Text textAlign={'center'}>
@@ -234,17 +238,27 @@ export default function RecoverMnemonic({ navigation }: { navigation: { navigate
         </VStack>
 
         <Box py={3}>
-          <Text textAlign={'center'}>
-            {translations[language as keyof typeof translations].RecoverMnemonic.wallet_name_label}
+          <Text textAlign={'center'} py={4}>
+            {translations[language as keyof typeof translations].RecoverMnemonic.mnemonic_label}
           </Text>
           <Input minH={12} value={mnemonic} placeholder={translations[language as keyof typeof translations].RecoverWallet.mnemonic_entry_input_placeholder} onChangeText={text => handleMnemonicChange(text)} w="full" />
           <ConfirmMnemonicList />
         </Box>
-        <Button.Group>
-          <Button w={'90%'} colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} onPress={() => { saveWallet(); }} isLoading={loading} isLoadingText={translations[language as keyof typeof translations].RecoverWallet.save_button_loadingtext} isDisabled={!mnemonicMatchComplete || name.length === 0} _disabled={{ backgroundColor: 'coolGray.400', bgColor: 'coolGray.400', color: 'coolGray.400' }}>
-            <Text color={colorMode === 'dark' ? Color.black : Color.white}>{translations[language as keyof typeof translations].RecoverWallet.save_button}</Text>
-          </Button>
-        </Button.Group>
+        {!isDisabled &&
+          <Button.Group>
+            <OutlinedButton
+              variant={'ghost'}
+              w={'90%'}
+              py={4}
+              onPress={() => { saveWallet(); }}
+              isLoading={loading}
+              isLoadingText={translations[language as keyof typeof translations].RecoverWallet.save_button_loadingtext}
+              isDisabled={isDisabled}
+              buttonText={translations[language as keyof typeof translations].RecoverWallet.save_button}
+            />
+          </Button.Group>
+        }
+
       </VStack>
     </Box>
   );

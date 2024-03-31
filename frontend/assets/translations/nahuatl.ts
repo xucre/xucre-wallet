@@ -79,10 +79,12 @@ const values : TranslationType  = {
     name_wallet: "Toocaa tla Tlahcuiloolaamapetlaacaltoon-tli",
   },
   ExportWallet: {
+    folder_button: 'Seleccionar carpeta',
     button_loading: 'Generando',
     instructions: 'Por favor recuerde su contraseña. Cifrará su billetera para que solo usted pueda recuperarla.',
     invalid_wallet: 'Invalid Wallet Selected',
-    title: 'Export Wallet'
+    button: 'Exportar',
+    title: 'Exportar billetera'
   },
   LanguagePage: {
     menu_button: "TLAHTOLLI",
@@ -172,6 +174,8 @@ const values : TranslationType  = {
     name_entry_input_placeholder:'Ahaquiaa toocaa de la Tlahcuiloolaamapetlaacaltoon-tli',
     save_button: 'Tla-piya',
     save_button_loadingtext: 'Enviando',
+    private_key_button: "Del archivo",
+    select_button: "Seleccione Archivo",
   },
   Requests: {
     delete_button: 'Pohpoloaa',

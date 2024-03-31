@@ -4,7 +4,7 @@ import { Box, Center, Text } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { Button, Linking, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import RampSdk, { RampEventTypes } from '@ramp-network/react-native-sdk';
+//import RampSdk from '@ramp-network/react-native-sdk';
 
 import { activeWallet } from '../../service/state';
 import translations from "../../assets/translations";
@@ -20,13 +20,13 @@ export default function RampWidget({ navigation }: { navigation: { navigate: Fun
   const [wallet, setWallet] = useState({} as Wallet);
   const [scanned, setScanned] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
-  const ramp = new RampSdk().on('*', (event) => {
+  /*const ramp = new RampSdk().on('*', (event) => {
     if (event.type === 'WIDGET_CLOSE') {
       navigation.goBack();
     }
-  });
+  });*/
   useEffect(() => {
-    if (_wallet && ramp) {
+    if (_wallet) {
       /*ramp.show({
         url: 'https://app.demo.ramp.network',
         hostAppName: 'Xucre Wallet',
@@ -45,7 +45,7 @@ export default function RampWidget({ navigation }: { navigation: { navigate: Fun
       runAsync();
 
     }
-  }, [_wallet, ramp]);
+  }, [_wallet]);
 
   return (
     <View style={styles.container}>

@@ -27,6 +27,8 @@ import { loadWalletFromMnemonics } from '../../service/wallet'
 import { storeWallet, WalletInternal } from "../../store/wallet";
 import RecoverMnemonic from "../../components/wallet/RecoverMnemonic";
 import RecoverPrivateKey from "../../components/wallet/RecoverPrivateKey";
+import ContainedButton from "../../components/ui/ContainedButton";
+import OutlinedButton from "../../components/ui/OutlinedButton";
 
 
 export default function RecoverWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -55,24 +57,21 @@ export default function RecoverWallet({ navigation, route }: { navigation: { nav
             <Heading mb={5} fontWeight={'normal'}><Text>{translations[language as keyof typeof translations].RecoverWallet.header}</Text></Heading>
           </Center>
           <VStack space={2} alignContent={'center'} mt={{ base: 0 }}>
-            <Button
+            <ContainedButton
               variant={'solid'}
               py={6}
               rounded={100}
               onPress={createMnemonics}
               isLoading={loading}
-            >
-              <Text bold>{translations[language as keyof typeof translations].RecoverWallet.mnemonic_button}</Text>
-            </Button>
-            <Button
-              variant="outline"
+              buttonText={translations[language as keyof typeof translations].RecoverWallet.mnemonic_button}
+            />
+            <OutlinedButton
+              variant={'outlined'}
               py={6}
-              rounded={100}
               onPress={createPrivateKey}
               isLoading={loading}
-            >
-              <Text bold>{translations[language as keyof typeof translations].RecoverWallet.google_wallet_button}</Text>
-            </Button>
+              buttonText={translations[language as keyof typeof translations].RecoverWallet.private_key_button}
+            />
           </VStack>
         </VStack>
       </Box>
