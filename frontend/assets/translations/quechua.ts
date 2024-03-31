@@ -79,11 +79,12 @@ const values : TranslationType = {
     name_wallet: 'Belletera suti',    
   },
   ExportWallet: {
+    folder_button: 'Carpeta akllay',
     button_loading: 'Paqarichiq',
-    button: 'Export',
+    button: 'Hawaman apachiy',
     instructions: 'Ama hina kaspa, yaykuna rimaykita yuyariy. Chayqa billeteraykita chifranqa chaymanta qamlla kutichiyta atikunki.',
     invalid_wallet: 'Invalid Wallet Selected',
-    title: 'Export Wallet'
+    title: 'Hawaman apachiy Wallet'
   },
   LanguagePage: { 
       menu_button: "AKLLAY", 
@@ -168,12 +169,13 @@ const values : TranslationType = {
     instructions: 'Ama hina kaspa, Ã±awpaq billetera ruwayniykimanta mnemÃ³nicos nisqap qatiqninta qillqay.',
     header: 'Recuperar Wallet nisqa',
     instructions_button: 'Kutichiy', 
-    private_key_button: "Sapaq Llave",
+    private_key_button: "Archivomanta",
     mnemonic_entry_input_placeholder: 'Huk ch\'usaqkunawan t\'aqasqa mnemonico rimayta qillqay',      
     mnemonic_not_complete: 'Mnemonico mana tupaq largo',
     name_entry_input_placeholder: 'Belletera sutita churay',
     save_button: 'Waqaychay', 
-    save_button_loadingtext: 'Kachasqa'
+    save_button_loadingtext: 'Kachasqa',
+    select_button: "Willayta akllay",
   }, 
   Requests: {
     delete_button: 'Chinkachiy',
