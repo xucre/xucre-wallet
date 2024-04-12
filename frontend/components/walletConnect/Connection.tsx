@@ -32,6 +32,10 @@ export default function Connection({ metadata, getPairs }: { metadata: any, getP
     await signClient.core.pairing.disconnect({ topic: metadata.topic });
     getPairs();
   }
+
+  useEffect(() => {
+    console.log(metadata);
+  }, [])
   if (!metadata) return (<></>)
   return (
     <HStack alignItems="center" justifyContent="space-between" p={3} my={2} borderRadius={25} _dark={{ bgColor: Color.gray_400 }} _light={{ bgColor: Color.lightgray_100 }}>
@@ -40,8 +44,8 @@ export default function Connection({ metadata, getPairs }: { metadata: any, getP
           uri: metadata?.peerMetadata?.icons[0] || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
         }} />
         <VStack>
-          <Text color={colorMode === 'dark' ? Color.white : Color.black}>{metadata.peerMetadata.name}</Text>
-          <Text color={'gray.500'}>{truncateStringStart_old(metadata.topic, 25)}</Text>
+          <Text color={colorMode === 'dark' ? Color.white : Color.black}>{metadata?.peerMetadata?.name}</Text>
+          <Text color={'gray.500'}>{truncateStringStart_old(metadata?.topic, 25)}</Text>
         </VStack>
       </HStack>
       <HStack alignItems="center" space={{ base: 2 }}>

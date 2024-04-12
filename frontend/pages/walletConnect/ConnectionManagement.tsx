@@ -92,7 +92,6 @@ export default function ConnectionManagement({ navigation, route }: { navigation
 
   const getRequests = async () => {
     const _requests = await getAllNotifications();
-
     const _pairings = signClient.core.pairing.getPairings();
     const _pairingMap = _pairings.reduce((returnVal: any, val: { topic: any; }, i: any) => {
       return { ...returnVal, [val.topic]: val };

@@ -98,7 +98,7 @@ export default function Loader() {
         if (initialNotification) {
           // Add logic here that retrieves the event from storage and implements the WC Listener logic
           const event = await getNotification(initialNotification.pressAction.id);
-
+          console.log('event', event);
           if (event !== null && event.params.request.method !== null) {
             //await deleteNotification(initialNotification.pressAction.id);
             if (
@@ -164,6 +164,8 @@ export default function Loader() {
       } else {
         navigate('SelectWallet', {});
       }
+    } else {
+      //console.log('no navigation triggered');
     }
   }
 

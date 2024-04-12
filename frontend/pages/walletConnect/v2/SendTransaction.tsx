@@ -12,7 +12,7 @@ import {
   useColorMode,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 import { Color } from "../../../../GlobalStyles";
@@ -23,9 +23,9 @@ import { language as stateLanguage, walletList } from "../../../service/state";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 
-export default function SendTransaction({navigation, route}: {navigation: {navigate: Function}, route: any}) {
-  const {colorMode} = useColorMode();
-  const {requestDetails} = route.params;
+export default function SendTransaction({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
+  const { colorMode } = useColorMode();
+  const { requestDetails } = route.params;
   const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
@@ -33,9 +33,9 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
   const [amount, setAmount] = useState(BigNumber.from(0));
   const [value, setValue] = useState({});
   const [walletAddress, setWalletAddress] = useState('');
-  const [walletState, ] = useRecoilState(walletList);
+  const [walletState,] = useRecoilState(walletList);
   const [viewData, setViewData] = useState(false);
-  const [language, ] = useRecoilState(stateLanguage);
+  const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
@@ -48,7 +48,7 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
-      
+
       setMethod(request['params']['request']['method']);
       setWalletAddress(request['params']['request']['params'][0]['from']);
       setTo(request['params']['request']['params'][0]['to']);
@@ -57,9 +57,9 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
     }
   }, [request])
 
-  const StyledItem = ({label, value} : {label:string,value:string}) => {
+  const StyledItem = ({ label, value }: { label: string, value: string }) => {
     return (
-      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{bgColor: 'coolGray.800'}} _light={{bgColor: 'coolGray.300'}}>   
+      <HStack alignItems="center" justifyContent="space-between" p={3} py={4} borderRadius={25} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
         <VStack space={0}>
           <Text fontSize="sm" color="coolGray.500">
             {label}
@@ -74,25 +74,25 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
     return (
       <FormControl>
         <FormControl.Label>{translations[language as keyof typeof translations].LegacySendTransaction.amount}</FormControl.Label>
-        <Input fontSize={'5xl'} variant="underlined" value={ethers.utils.formatEther(amount)} isReadOnly={true}/>
+        <Input fontSize={'5xl'} variant="underlined" value={ethers.utils.formatEther(amount)} isReadOnly={true} />
       </FormControl>
     )
   }
 
-  const CustomTextAreaOverlay = ({ data } :{data: string}) => {
+  const CustomTextAreaOverlay = ({ data }: { data: string }) => {
     return (
-      <Box borderRadius={'md'} w={'full'} borderColor={'gray.300'} borderStyle={'solid'} h={'1/4'} borderWidth={1}> 
+      <Box borderRadius={'md'} w={'full'} borderColor={'gray.300'} borderStyle={'solid'} h={'1/4'} borderWidth={1}>
         <ScrollView w={'full'} maxH={'full'}>
           <Text color={'gray.500'}>{data}</Text>
         </ScrollView>
       </Box>
-      
+
     );
   };
 
   const approve = async () => {
     const response = await approveEIP155Request(request, walletState);
-    await signClient.respond({
+    await signClient.respondSessionRequest({
       response,
       topic: request['topic'],
     })
@@ -106,7 +106,7 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
 
   const reject = async () => {
     const response = rejectEIP155Request(request)
-    await signClient.respond({
+    await signClient.respondSessionRequest({
       response,
       topic: request['topic'],
     })
@@ -115,17 +115,17 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');    
+    navigation.navigate('ViewWallet');
   }
 
   return (
     <GuestLayout>
-      <Center         
+      <Center
         _light={{ backgroundColor: Color.white }}
         _dark={{ backgroundColor: Color.black }}
         height={'100%'}
       >
-        {request && request['params'] && 
+        {request && request['params'] &&
           <VStack>
             <VStack>
               {/*<Center mt={5}>          
@@ -134,18 +134,18 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
               <Box mx={2} px={2} >
                 <StyledAmount />
                 <HStack alignItems={'flex-end'}>
-                  {!viewData && 
+                  {!viewData &&
                     <Button variant={'ghost'} onPress={() => setViewData(true)}>{translations[language as keyof typeof translations].SendTransaction.view_data}</Button>
                   }
-                  {viewData && 
+                  {viewData &&
                     <Button variant={'ghost'} onPress={() => setViewData(false)}>{translations[language as keyof typeof translations].SendTransaction.hide_data}</Button>
                   }
                 </HStack>
-                {viewData && 
+                {viewData &&
                   <CustomTextAreaOverlay data={JSON.stringify(value)} />
                 }
               </Box>
-              
+
               {/*<Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
                 <ScrollView height={'50%'} width={'100%'} >
                   <Text>{JSON.stringify(value)}</Text>                    
@@ -157,11 +157,11 @@ export default function SendTransaction({navigation, route}: {navigation: {navig
               </VStack>
             </VStack>
             <Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}  >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white } fontWeight={'bold'}>{translations[language as keyof typeof translations].LegacySendTransaction.approve_button}</Text></Button>
+              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language as keyof typeof translations].LegacySendTransaction.approve_button}</Text></Button>
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SendTransaction.reject_button}</Text></Button>
             </Button.Group>
           </VStack>
-        }        
+        }
       </Center>
     </GuestLayout>
   );

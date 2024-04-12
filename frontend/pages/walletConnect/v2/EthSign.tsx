@@ -7,27 +7,27 @@ import {
   Text,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 import { Color } from "../../../../GlobalStyles";
 import translations from "../../../assets/translations";
-import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data"; 
+import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 
-export default function EthSign({navigation, route}: {navigation: {navigate: Function}, route: any}) {
-  const {requestDetails} = route.params;
+export default function EthSign({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
+  const { requestDetails } = route.params;
   const [request, setRequest] = useState({} as any);
   const [method, setMethod] = useState('');
   const [value, setValue] = useState({} as any);
   const [walletAddress, setWalletAddress] = useState('');
-  const [walletState, ] = useRecoilState(walletList);
+  const [walletState,] = useRecoilState(walletList);
   const [page, setPage] = useState(0);
-  const [language, ] = useRecoilState(stateLanguage);
+  const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
@@ -54,7 +54,7 @@ export default function EthSign({navigation, route}: {navigation: {navigate: Fun
 
   const approve = async () => {
     const response = await approveEIP155Request(request, walletState);
-    await signClient.respond({
+    await signClient.respondSessionRequest({
       response,
       topic: request['topic'],
     })
@@ -68,7 +68,7 @@ export default function EthSign({navigation, route}: {navigation: {navigate: Fun
 
   const reject = async () => {
     const response = rejectEIP155Request(request)
-    await signClient.respond({
+    await signClient.respondSessionRequest({
       response,
       topic: request['topic'],
     })
@@ -77,37 +77,37 @@ export default function EthSign({navigation, route}: {navigation: {navigate: Fun
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');    
+    navigation.navigate('ViewWallet');
   }
 
   return (
     <GuestLayout>
-      <Box         
+      <Box
         _light={{ backgroundColor: Color.white }}
         _dark={{ backgroundColor: Color.black }}
         height={'100%'}
       >
-        {request && request['params'] && 
+        {request && request['params'] &&
           <Box>
             <VStack height={'90%'}>
-              <Center mt={5}>          
-                <Heading size="md" mb={4}><Text>{translations[language as keyof typeof translations].SignEth.header}</Text></Heading>              
+              <Center mt={5}>
+                <Heading size="md" mb={4}><Text>{translations[language as keyof typeof translations].SignEth.header}</Text></Heading>
               </Center>
-              
-                <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
-                  <ScrollView height={'50%'} width={'100%'} >
-                    <Text>{JSON.stringify(value)}</Text>                    
-                  </ScrollView>
-                </Box>
-              
-              
+
+              <Box m={2} p={2} rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1">
+                <ScrollView height={'50%'} width={'100%'} >
+                  <Text>{JSON.stringify(value)}</Text>
+                </ScrollView>
+              </Box>
+
+
             </VStack>
             <Button.Group isAttached colorScheme="blue" >
               <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignEth.approve_button}</Text></Button>
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignEth.reject_button}</Text></Button>
             </Button.Group>
           </Box>
-        }        
+        }
       </Box>
     </GuestLayout>
   );

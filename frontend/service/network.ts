@@ -32,6 +32,13 @@ export const constructDefaultNetworks = () => {
       name: 'Polygon Testnet',
       rpcUrl: 'wss://polygon-mumbai.g.alchemy.com/v2/Lhg7TLiuGtQ3-HMJWB3NO_ok2Nlu01um',
       symbol: 'MATIC',
-    } as Network
+    } as Network,
+    {
+      blockExplorer: 'https://celoscan.io/',
+      chainId: 42220,
+      name: 'Celo',
+      rpcUrl: 'https://celo-mainnet.infura.io/v3/e595b78c8e394eb99874eeb62d7e5080',
+      symbol: 'CELO',
+    } as Network,
   ];
 }

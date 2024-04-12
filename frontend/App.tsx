@@ -246,7 +246,8 @@ export const AppWrapper = () => {
       name === 'SendTransaction' ||
       name === 'SignEth' ||
       name === 'SignTyped' ||
-      name === 'PrivacyPolicy'
+      name === 'PrivacyPolicy' ||
+      name === 'BuyToken'
     ) {
       return true;
     }
@@ -260,18 +261,23 @@ export const AppWrapper = () => {
 
   Linking.addEventListener('url', async (req) => {
     const parsedUrl = parseUrl(req.url);
-    try {
-      if (signClient) {
-        if (parsedUrl.query.uri) {
-          await signClient.pair({ uri: parsedUrl.query.uri })
-        } else {
-          await signClient.pair({ uri: req.url });
-        }
+    if (parsedUrl.resource === 'ViewWallet') {
+      navigate('SelectWallet', {});
+    } else {
+      try {
+        if (signClient) {
+          if (parsedUrl.query.uri) {
+            await signClient.pair({ uri: parsedUrl.query.uri })
+          } else {
+            await signClient.pair({ uri: req.url });
+          }
 
+        }
+      } catch (e) {
+        //(e);
       }
-    } catch (e) {
-      //(e);
     }
+
   })
 
   return (
@@ -443,7 +449,7 @@ export const AppWrapper = () => {
           </Stack.Navigator>
         </NavigationContainer>
       </LensProvider>
-      <Listener />
+      {/*<Listener />*/}
     </SafeAreaProvider>
   )
 }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { env } from './constants';
 
 const BASEURL = env.REACT_APP_API_URL;
-export const swapUrl = 'https://swap.xucre.net/';
+export const swapUrl = (color: string) => `https://swap.xucre.net/swap?wallet=xucre&color=${color}`;
 
 export const getNftJson = async (type: string) => {
   try {
