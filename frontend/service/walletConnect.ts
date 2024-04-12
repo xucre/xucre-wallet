@@ -1,7 +1,7 @@
 import notifee, { AndroidLaunchActivityFlag } from '@notifee/react-native';
-import SignClient from '@walletconnect/sign-client';
+import { Core } from '@walletconnect/core'
+import { Web3Wallet, IWeb3Wallet, Web3WalletTypes } from '@walletconnect/web3wallet'
 import {AppState} from 'react-native';
-
 
 import translations from "../assets/translations";
 import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
@@ -10,10 +10,15 @@ import { addNotification, deleteNotification } from '../store/setting';
 
 import { navigate } from './RootNavigation';
 import { env } from './constants';
-import { SignClientTypes } from '@walletconnect/types';
+import { getWallets } from '../store/wallet';
+import { buildApprovedNamespaces } from '@walletconnect/utils';
+const core = new Core({
+  projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID
+})
 
 // eslint-disable-next-line functional/no-let
-export let signClient: SignClient;
+export let signClient:IWeb3Wallet;
+let hasLoaded = false;
 
 async function onDisplayNotification(id: string, translation_setting: string) {
   const _language = await getLanguage();
@@ -44,35 +49,62 @@ async function onDisplayNotification(id: string, translation_setting: string) {
   
   await notifee.displayNotification(notificationPayload);
 }
-export async function createSignClient() {
-  try {
-    const initConfig = {
-      metadata: {
-        description: 'Xucre Wallet',
-        icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
-        name: 'Xucre Wallet',
-        url: env.REACT_APP_XUCRE_WALLET_SCHEME,
-        redirect: {
-          native: env.REACT_APP_XUCRE_WALLET_SCHEME
-        }
-      },    
-      projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-      relayUrl: 'wss://relay.walletconnect.com'
-    };
-    signClient = await SignClient.init(initConfig)
-    registerListeners();
-    return signClient;
-  } catch (err) {
-    return;
-  }
-  
+
+const approveAutomatically = async (request: Web3WalletTypes.SessionProposal) => {
+  const walletList = await getWallets();
+  const accountList = walletList.map((wallet) => {
+    return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`];
+  })
+  const chainList = ['eip155:1', 'eip155:137'];
+
+  const eventList = ['eth_sendTransaction', 'personal_sign', 'eth_sign'];
+
+  const methodList = [EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4, EIP155_SIGNING_METHODS.PERSONAL_SIGN, EIP155_SIGNING_METHODS.ETH_SIGN]
+
+  const payload = buildApprovedNamespaces({
+    proposal: request['params'],
+    supportedNamespaces: {
+      eip155: {
+        chains: chainList || ['eip155:1', 'eip155:137'],
+        accounts: accountList.flat(),
+        events: eventList,
+        methods: methodList,
+      },
+    },
+  });
+
+  const { topic, acknowledged } = await signClient.approveSession({
+    id: request['params']['id'],
+    namespaces: payload
+  });
+
+
 }
 
-export const registerListeners = () => {
+export async function createSignClient() {
   
+  if (hasLoaded) return signClient;
+
+  const initConfig = {
+    core,
+    metadata: {
+      description: 'Xucre Wallet',
+      icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
+      name: 'Xucre Wallet',
+      url: env.REACT_APP_XUCRE_WALLET_SCHEME,
+      redirect: {
+        native: env.REACT_APP_XUCRE_WALLET_SCHEME
+      }
+    },    
+  };
+  
+  signClient = await Web3Wallet.init(initConfig);
+  //signClient = await SignClient.init(initConfig)
   if (signClient) {
     signClient.on("session_proposal", (event) => {
-      if (AppState.currentState === 'active') {
+      /*if (event.verifyContext.verified.origin === 'https://swap.xucre.net') {
+        approveAutomatically(event);
+      } else*/ if (AppState.currentState === 'active') {
         navigate('ConnectionRequest', {
           requestDetails: event
         })
@@ -80,10 +112,6 @@ export const registerListeners = () => {
         addNotification(String(event.id), event);
         onDisplayNotification(String(event.id), 'session_proposal');
       }
-    });
-
-    signClient.on("session_event", (event) => {
-      // Handle session events, such as "chainChanged", "accountsChanged", etc.
     });
 
     signClient.on("session_request", (event) => {
@@ -138,31 +166,10 @@ export const registerListeners = () => {
       }
     });
 
-    signClient.on("session_ping", (event) => {
-      // React to session ping event
-    });
 
     signClient.on("session_delete", (event) => {
       // React to session delete event
       signClient.core.pairing.disconnect({ topic: event.topic });
-    });
-
-    signClient.on("session_update", ({ topic, params }) => {
-      // React to session delete event
-      const { namespaces } = params;
-      const _session = signClient.session.get(topic)
-      // Overwrite the `namespaces` of the existing session with the incoming one.
-      const updatedSession = { ..._session, namespaces }
-      // Integrate the updated session state into your dapp state.
-      //onSessionUpdate(updatedSession)
-    });
-
-    signClient.on("session_extend", (event) => {
-      // React to session delete event
-    });
-
-    signClient.on("session_request_sent", (event) => {
-      // React to session delete event
     });
 
     signClient.on("proposal_expire", (event) => {
@@ -171,17 +178,11 @@ export const registerListeners = () => {
         navigate('ViewWallet', {});
       } 
     });
-
-    signClient.core.pairing.events.on("pairing_delete", ({ id, topic }) => {
-      //
-    });
-
-    signClient.core.pairing.events.on("pairing_ping", ({ id, topic }) => {
-    });
-
-    signClient.core.pairing.events.on("pairing_expire", ({ id, topic }) => {
-    });
-  } else {
   }
+  hasLoaded = true;  
+
+  return signClient;
+ 
+  
 }
 

@@ -22,6 +22,7 @@ import GuestLayout from "../../../layouts/GuestLayout";
 import { language as stateLanguage } from "../../../service/state";
 import { signClient } from "../../../service/walletConnect";
 import { deleteNotification, getAllNotifications } from "../../../store/setting";
+import { PairingTypes } from '@walletconnect/types'
 
 export default function Requests({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [requests, setRequests] = useState([] as any[]);

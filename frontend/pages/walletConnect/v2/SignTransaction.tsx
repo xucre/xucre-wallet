@@ -85,7 +85,7 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
 
   const approve = async () => {
     const response = await approveEIP155Request(request, walletState);
-    const clientResponse = await signClient.respond({
+    const clientResponse = await signClient.respondSessionRequest({
       response,
       topic: request['topic'],
     })
@@ -99,7 +99,7 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
 
   const reject = async () => {
     const response = rejectEIP155Request(request)
-    await signClient.respond({
+    await signClient.respondSessionRequest({
       response,
       topic: request['topic'],
     })

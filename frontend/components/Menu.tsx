@@ -68,15 +68,28 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
   useEffect(() => {
     const runAsync = async () => {
       const _networks = await getNetworks();
+
+      const defaultNetworks = constructDefaultNetworks();
       //await storeNetworks([])
       if (!Array.isArray(_networks) || _networks.length === 0) {
-        const _newNetworks = constructDefaultNetworks();
-        setNetworkList(_newNetworks);
-        await storeNetworks(_newNetworks);
+        setNetworkList(defaultNetworks);
+        await storeNetworks(defaultNetworks);
         if (!_activeNetwork) {
-          setActiveNetwork(_newNetworks[0]);
-          await storeActiveNetwork(_newNetworks[0]);
+          setActiveNetwork(defaultNetworks[0]);
+          await storeActiveNetwork(defaultNetworks[0]);
         }
+      } else {
+        const mergedNetworkList = defaultNetworks.reduce((finalV, nwrk) => {
+          const found = finalV.find((n) => n.chainId === nwrk.chainId);
+          if (!found) {
+            return [...finalV, nwrk];
+          } else {
+            return finalV;
+          }
+        }, _networks)
+
+        setNetworkList(mergedNetworkList);
+        await storeNetworks(mergedNetworkList);
       }
       if (!_activeNetwork) {
         const currentNetwork = await getActiveNetwork();

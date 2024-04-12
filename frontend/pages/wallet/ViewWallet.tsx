@@ -176,8 +176,12 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('AddToken');
   }
 
-  const rampWallet = () => {
-    navigation.navigate('Ramp');
+  const rampWallet = async () => {
+    //navigation.navigate('Ramp');
+    const hostApiKey = 'u3tz8szbe6xef5o647ufwtqd65235wfttw8aq8ob';
+    const hostAppName = 'Xucre Wallet';
+    const hostLogoUrl = 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre_logo.png';
+    await Linking.openURL(`https://app.demo.ramp.network?hostApiKey=${hostApiKey}&hostAppName=${hostAppName}&hostLogoUrl=${hostLogoUrl}&userAddress=${_wallet.address}`);
   }
 
 
@@ -202,14 +206,14 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   }
 
   const buyTokens = async () => {
-    //navigation.navigate('SwapToken');
-    const supported = await Linking.canOpenURL(swapUrl);
+    navigation.navigate('BuyToken');
+    //const supported = await Linking.canOpenURL(swapUrl);
 
-    if (supported) {
-      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-      // by some browser in the mobile
-      await Linking.openURL(swapUrl);
-    }
+    //if (supported) {
+    // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+    // by some browser in the mobile
+    //await Linking.openURL(swapUrl);
+    //}
   }
 
   const connectWallet = () => {

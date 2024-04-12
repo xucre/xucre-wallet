@@ -44,12 +44,13 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
   ];
 
   const openSwap = async () => {
-    const supported = await Linking.canOpenURL(swapUrl);
+
+    const supported = await Linking.canOpenURL(swapUrl(colorMode as string));
 
     if (supported) {
       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
       // by some browser in the mobile
-      await Linking.openURL(swapUrl);
+      await Linking.openURL(swapUrl(colorMode as string));
     }
   }
 
@@ -59,8 +60,8 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         navigation.navigate('ViewWallet');
         break;
       case swapButton:
-        //navigation.navigate('SwapToken');
-        openSwap();
+        navigation.navigate('BuyToken');
+        //openSwap();
         break;
       case historyButton:
         navigation.navigate('WalletHistory');

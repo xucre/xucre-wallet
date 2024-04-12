@@ -20,8 +20,11 @@ import GuestLayout from "../../../layouts/GuestLayout";
 import { AppWallet, language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString, truncateString_old } from "../../../service/utility";
 import { signClient } from "../../../service/walletConnect";
+import { buildApprovedNamespaces } from '@walletconnect/utils'
+import { BackHandler } from "react-native";
+import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 
-export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
+export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const { requestDetails } = route.params;
   const [request, setRequest] = useState({} as any);
   const [walletState,] = useRecoilState(walletList);
@@ -29,10 +32,11 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   const [page, setPage] = useState(0);
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
-  //{translations[language].ConnectionRequest.}
+
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
+        console.log(requestDetails);
         setRequest(requestDetails)
       }
     }
@@ -94,33 +98,40 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   }
 
   const approve = async () => {
-    const accountList = selectedWallets.map((wallet) => {
-      if (request['params']['requiredNamespaces']['eip155']) {
-        return request['params']['requiredNamespaces']['eip155']['chains'].map((chain: string) => {
-          return chain + ':' + wallet.address;
-        })
-      } else if (request['params']['optionalNamespaces']['eip155']) {
-        return request['params']['optionalNamespaces']['eip155']['chains'].map((chain: string) => {
-          return chain + ':' + wallet.address;
-        })
-      }
-      return wallet.address;
+    const accountList = selectedWallets.flatMap((wallet) => {
+      return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`];
     })
-    const payload = {
-      id: request['params']['id'],
-      namespaces: {
+    const chainList = ['eip155:1', 'eip155:137'];
+
+    const eventList = ['eth_sendTransaction', 'personal_sign', 'eth_sign'];
+
+    const methodList = [EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4, EIP155_SIGNING_METHODS.PERSONAL_SIGN, EIP155_SIGNING_METHODS.ETH_SIGN]
+
+    const payload = buildApprovedNamespaces({
+      proposal: request['params'],
+      supportedNamespaces: {
         eip155: {
+          chains: chainList || ['eip155:1', 'eip155:137'],
           accounts: accountList.flat(),
-          events: request['params']['requiredNamespaces']['eip155'] ? request['params']['requiredNamespaces']['eip155']['events'] : request['params']['optionalNamespaces']['eip155']['events'],
-          methods: request['params']['requiredNamespaces']['eip155'] ? request['params']['requiredNamespaces']['eip155']['methods'] : request['params']['optionalNamespaces']['eip155']['methods'],
+          events: eventList,
+          methods: methodList,
         },
       },
-    };
+    });
 
-    const { topic, acknowledged } = await signClient.approve(payload);
-    const session = await acknowledged();
-    //const pairings = signClient.core.pairing.getPairings();
-    navigation.navigate('ViewWallet');
+    const { topic, acknowledged } = await signClient.approveSession({
+      id: request['params']['id'],
+      namespaces: payload
+    });
+
+    if (request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net') {
+      navigation.goBack();
+    } else {
+      navigation.navigate('ViewWallet');
+      BackHandler.exitApp();
+    }
+
+    //navigation.navigate('ViewWallet');
   }
 
   const reject = async () => {
@@ -131,9 +142,10 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
         message: translations[language as keyof typeof translations].ConnectionRequest.rejected,
       },
     }
-
-    await signClient.reject(payload);
+    await signClient.rejectSession(payload);
     navigation.navigate('ViewWallet');
+    BackHandler.exitApp();
+    //navigation.navigate('ViewWallet');
   }
 
   return (

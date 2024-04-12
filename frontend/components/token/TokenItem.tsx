@@ -24,6 +24,7 @@ import { addToSpam, isSpam } from "../../store/spam";
 type AlchemyMetadata = {
   readonly logo?: string;
   readonly symbol?: string;
+  readonly name?: string;
 }
 
 export default function TokenItem({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
@@ -50,9 +51,9 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
       getRawBalance();
     }
 
-    if (!token.name || token.name === 'N/A') {
-      getMetadata();
-    }
+    //if (!token.name || token.name === 'N/A') {
+    getMetadata();
+    //}
 
     _isSpam();
     //setAvatar('');
@@ -102,30 +103,40 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
 
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
-    const isSvg = isSVGFormatImage(alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png');
+    //const _img = alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
+    const _img = alchemyMetadata.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
+    try {
+      const isSvg = isSVGFormatImage(_img);
+      return (
+        <>
+          {loading &&
+            <Skeleton rounded={'full'} size={10} fadeDuration={1} />
+          }
+          {isSvg &&
+            <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" size={10}>
+              <CustomIcon data={_img} size={40} />
+            </Avatar>
+          }
+          {!isSvg &&
+            <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" source={{
+              uri: _img
+            }} size={10}>
+              <Text>{iname}</Text>
+            </Avatar>
+          }
+        </>
 
-    return (
-      <>
-        {loading &&
-          <Skeleton rounded={'full'} size={10} fadeDuration={1} />
-        }
-        {isSvg &&
-          <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" size={10}>
-            <CustomIcon data={alchemyMetadata.logo || token.logo || avatar} size={40} />
-          </Avatar>
-        }
-        {!isSvg &&
-          <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" source={{
-            uri: alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png'
-          }} size={10}>
-            <Text>{iname}</Text>
-          </Avatar>
-        }
-      </>
 
+        //<Icon name="poly" style={{ alignSelf: 'center', color: icon_color, fontSize: 25, justifyContent: 'center',marginBottom:0, marginTop:-100,  }}/>
+      )
+    } catch {
+      return <Avatar _image={{ onLoadEnd: () => { setLoading(false) } }} style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" source={{
+        uri: 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png'
+      }} size={10}>
+        <Text>{iname}</Text>
+      </Avatar>
+    }
 
-      //<Icon name="poly" style={{ alignSelf: 'center', color: icon_color, fontSize: 25, justifyContent: 'center',marginBottom:0, marginTop:-100,  }}/>
-    )
   }
 
   const sendToken = () => {
