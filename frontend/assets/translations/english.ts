@@ -46,6 +46,7 @@ const values : TranslationType = {
     wallet_select_instructions: "Select wallet(s) to connect"
   },
   Connections: {
+    title: "Connections",
     delete_button: "Disconnect"
   },
   ConnectManagement: {
@@ -182,8 +183,18 @@ const values : TranslationType = {
     select_button: "Select File",
   },
   Requests: {
+    title: "Requests",
     delete_button: 'Delete',
     expired_text: 'Expired'
+  },
+  SelectExtension: {
+    ethichub_description: 'Invest in sustainable agriculture projects',
+    title: 'dApps',
+    ramp_title: 'Ramp',
+    ramp_description: 'Buy and sell crypto with fiat',
+    swap_title: 'Swap',
+    swap_description: 'Swap ERC20 tokens across any chain',
+    ubeswap_description: 'Swap on the Celo Network',
   },
   SelectLanguage: {
     en: "English",
@@ -309,6 +320,14 @@ const values : TranslationType = {
     button: "Send WhatsApp notification",
     Send_Button: "Send Whatsapp",
     notificationNumber: "Please enter the country code including the + sign"
+  },
+  ui: {
+    open: "Open",
+    close: "Close",
+    cancel: "Cancel",
+    confirm: "Confirm",
+    featured: 'Featured',
+    all: 'All',
   },
   totalBalance:{
     title: "Total Balance"

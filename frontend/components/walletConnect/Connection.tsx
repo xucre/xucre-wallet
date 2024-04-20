@@ -33,9 +33,6 @@ export default function Connection({ metadata, getPairs }: { metadata: any, getP
     getPairs();
   }
 
-  useEffect(() => {
-    console.log(metadata);
-  }, [])
   if (!metadata) return (<></>)
   return (
     <HStack alignItems="center" justifyContent="space-between" p={3} my={2} borderRadius={25} _dark={{ bgColor: Color.gray_400 }} _light={{ bgColor: Color.lightgray_100 }}>

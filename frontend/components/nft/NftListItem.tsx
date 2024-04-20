@@ -21,7 +21,7 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftListItem({ contract, token, chain }: { contract: string, token: string, chain: string }) {
+function NftListItemComponent({ contract, token, chain }: { contract: string, token: string, chain: string }) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '', subtitle: '' });
   const [url, setUrl] = useState('');
@@ -128,4 +128,5 @@ function NftListItem({ contract, token, chain }: { contract: string, token: stri
   );
 }
 
+const NftListItem = React.memo(NftListItemComponent);
 export default NftListItem;

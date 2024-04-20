@@ -14,7 +14,7 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftItemLarge({ item }: { item: { description: string, image: string, key: string, name: string, url: string } }) {
+function NftItemLargeComponent({ item }: { item: { description: string, image: string, key: string, name: string, url: string } }) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '' });
   const [url, setUrl] = useState('');
@@ -114,4 +114,5 @@ function NftItemLarge({ item }: { item: { description: string, image: string, ke
   );
 }
 
+const NftItemLarge = React.memo(NftItemLargeComponent);
 export default NftItemLarge;

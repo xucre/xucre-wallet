@@ -38,6 +38,7 @@ import {
 } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { LensProvider, Theme } from '@lens-protocol/react-native-lens-ui-kit';
+import { LinearGradient } from 'expo-linear-gradient';
 
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -94,7 +95,10 @@ import Loading from './pages/Loading';
 import Profile from './pages/social/Profile';
 import ConnectionManagement from './pages/walletConnect/ConnectionManagement';
 import ExportWallet from './pages/wallet/ExportWallet';
-import RampWidget from './pages/ramp/RampWidget';
+import RampWidget from './pages/extensions/ramp/RampWidget';
+import SelectExtension from './pages/extensions/SelectExtension';
+import Ubeswap from './pages/extensions/ubeswap/Ubeswap';
+import EthicHub from './pages/extensions/ethichub/EthicHub';
 //import TransactionFeed from './pages/wallet/TransactionFeed';
 
 const Stack = createNativeStackNavigator();
@@ -168,11 +172,15 @@ export const theme = extendTheme({
 export default function App(): JSX.Element {
   //const StackNavigator = createThemedComponent(Stack.Navigator);
 
-
+  const config = {
+    dependencies: {
+      'linear-gradient': LinearGradient
+    }
+  };
   return (
     //<DAppProvider config={finalConfig}>
     <RecoilRoot>
-      <NativeBaseProvider theme={theme}>
+      <NativeBaseProvider theme={theme} config={config}>
         <AppWrapper />
       </NativeBaseProvider>
     </RecoilRoot>
@@ -247,7 +255,8 @@ export const AppWrapper = () => {
       name === 'SignEth' ||
       name === 'SignTyped' ||
       name === 'PrivacyPolicy' ||
-      name === 'BuyToken'
+      name === 'BuyToken' ||
+      name === 'SwapToken'
     ) {
       return true;
     }
@@ -365,7 +374,7 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>
             <Stack.Screen name="SwapToken" component={SwapToken} options={{
               headerTitleAlign: 'center',
-              title: translations[language as keyof typeof translations]?.SwapToken?.title,
+              title: ''//translations[language as keyof typeof translations]?.SwapToken?.title,
             }} ></Stack.Screen>
             <Stack.Screen name="BuyToken" component={BuyToken} options={{
               headerTitleAlign: 'center',
@@ -396,11 +405,11 @@ export const AppWrapper = () => {
             }} ></Stack.Screen>
             <Stack.Screen name="Connections" component={Connections} options={{
               headerTitleAlign: 'center',
-              title: 'Connections',
+              title: translations[language as keyof typeof translations].Connections.title,
             }} ></Stack.Screen>
             <Stack.Screen name="Requests" component={Requests} options={{
               headerTitleAlign: 'center',
-              title: 'Requests',
+              title: translations[language as keyof typeof translations].Requests.title,
             }} ></Stack.Screen>
             <Stack.Screen name="ConnectionManagement" component={ConnectionManagement} options={{
               headerTitleAlign: 'center',
@@ -441,6 +450,18 @@ export const AppWrapper = () => {
             <Stack.Screen name="Ramp" component={RampWidget} options={{
               headerTitleAlign: 'center',
               title: ''//translations[language as keyof typeof translations].ProfileList.title,
+            }} ></Stack.Screen>
+            <Stack.Screen name="Extensions" component={SelectExtension} options={{
+              headerTitleAlign: 'center',
+              title: translations[language as keyof typeof translations].SelectExtension.title,
+            }} ></Stack.Screen>
+            <Stack.Screen name="Ubeswap" component={Ubeswap} options={{
+              headerTitleAlign: 'center',
+              title: ''//translations[language as keyof typeof translations].SelectExtension.title,
+            }} ></Stack.Screen>
+            <Stack.Screen name="EthicHub" component={EthicHub} options={{
+              headerTitleAlign: 'center',
+              title: ''//translations[language as keyof typeof translations].SelectExtension.title,
             }} ></Stack.Screen>
             {/*<Stack.Screen name="TransactionFeed" component={TransactionFeed} options={{
               headerTitleAlign: 'center',

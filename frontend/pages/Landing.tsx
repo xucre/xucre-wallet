@@ -78,23 +78,20 @@ export default function LandingPage({ navigation, route }: { navigation: { navig
         />*/
       }
       <Box
-        _light={{ bg: '#1B1E3F' }}
-        _dark={{ bg: '#D4E815' }}
+        bg='#D4E815'
       />
       <Center
         flex="1"
         my="auto"
         p={{ md: 8 }}
-        _dark={{ bg: '#D4E815' }}
-        _light={{ bg: '#1B1E3F' }}
+        bg='#D4E815'
       >
         <Stack
           flex={{ base: '1', md: undefined }}
           direction={{ base: 'column', md: 'row' }}
         >
           <Box
-            _light={{ backgroundColor: '#1B1E3F' }}
-            _dark={{ backgroundColor: '#D4E815' }}
+            backgroundColor={'#D4E815'}
             height={'100%'}
           >
             <VStack
@@ -104,30 +101,17 @@ export default function LandingPage({ navigation, route }: { navigation: { navig
               alignSelf="center"
               position='relative'
               top={'40%'}
-              _light={{ backgroundColor: '#1B1E3F' }}
-              _dark={{ backgroundColor: '#D4E815' }}
+              backgroundColor={'#D4E815'}
             >
 
               <Pressable onPressIn={toWalletSelect}>
-                <Hidden colorMode="light">
-                  <Box >
-                    <Image
-                      style={{ height: 80, width: 80 }}
-                      source={require('../assets/images/icon-black.png')}
-                      alt="XucreWallet"
-                    />
-                  </Box>
-                </Hidden>
-
-                <Hidden colorMode="dark">
-                  <Box >
-                    <Image
-                      style={{ height: 80, width: 80 }}
-                      source={require('../assets/images/icon-white.png')}
-                      alt="XucreWallet"
-                    />
-                  </Box>
-                </Hidden>
+                <Box >
+                  <Image
+                    style={{ height: 80, width: 80 }}
+                    source={require('../assets/images/icon-black.png')}
+                    alt="XucreWallet"
+                  />
+                </Box>
               </Pressable>
             </VStack>
             <VStack
@@ -138,8 +122,7 @@ export default function LandingPage({ navigation, route }: { navigation: { navig
               bottom={'0%'}
               left={0}
               zIndex={-1000}
-              _light={{ backgroundColor: '#1B1E3F' }}
-              _dark={{ backgroundColor: '#D4E815' }}
+              backgroundColor={'#D4E815'}
             >
               {Dimensions.get('screen').height < 1000 && false &&
                 <Image

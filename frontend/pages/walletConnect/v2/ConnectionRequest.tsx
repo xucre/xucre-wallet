@@ -19,7 +19,7 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { AppWallet, language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString, truncateString_old } from "../../../service/utility";
-import { signClient } from "../../../service/walletConnect";
+import { parseRequestParams, signClient } from "../../../service/walletConnect";
 import { buildApprovedNamespaces } from '@walletconnect/utils'
 import { BackHandler } from "react-native";
 import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
@@ -36,7 +36,6 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   useEffect(() => {
     const runAsync = async () => {
       if (requestDetails) {
-        console.log(requestDetails);
         setRequest(requestDetails)
       }
     }
@@ -99,22 +98,17 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
 
   const approve = async () => {
     const accountList = selectedWallets.flatMap((wallet) => {
-      return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`];
+      return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`, `eip155:42220:${wallet.address}`];
     })
-    const chainList = ['eip155:1', 'eip155:137'];
-
-    const eventList = ['eth_sendTransaction', 'personal_sign', 'eth_sign'];
-
-    const methodList = [EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4, EIP155_SIGNING_METHODS.PERSONAL_SIGN, EIP155_SIGNING_METHODS.ETH_SIGN]
-
+    const params = parseRequestParams(request['params']);
     const payload = buildApprovedNamespaces({
       proposal: request['params'],
       supportedNamespaces: {
         eip155: {
-          chains: chainList || ['eip155:1', 'eip155:137'],
+          chains: params.chainList,
           accounts: accountList.flat(),
-          events: eventList,
-          methods: methodList,
+          events: params.eventList,
+          methods: params.methodList,
         },
       },
     });
@@ -124,7 +118,11 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       namespaces: payload
     });
 
-    if (request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net') {
+    if (
+      request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net' ||
+      request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org' ||
+      request['verifyContext']['verified']['origin'] === 'https://ethix.ethichub.com'
+    ) {
       navigation.goBack();
     } else {
       navigation.navigate('ViewWallet');

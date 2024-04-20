@@ -78,7 +78,8 @@
     "react-qr-code": "^2.0.12",
     "recoil": "^0.7.7",
     "styled-components": "^5.3.11",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "expo-linear-gradient": "~12.3.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.24.1",

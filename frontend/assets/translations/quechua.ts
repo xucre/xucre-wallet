@@ -44,6 +44,7 @@ const values : TranslationType = {
     wallet_select_instructions: 'Belletera(s) akllay'
   },
   Connections: {
+    title: "T’inkisqakuna",
     delete_button: "Disconnect"
   },
   ConnectManagement: {
@@ -178,8 +179,18 @@ const values : TranslationType = {
     select_button: "Willayta akllay",
   }, 
   Requests: {
+    title: "Mañakuykuna",
     delete_button: 'Chinkachiy',
     expired_text: 'Tukusqa'
+  },
+  SelectExtension: {
+    ethichub_description: 'Proyectos de agricultura sostenible nisqapi qullqi churay',
+    title: 'Mast’ariykuna',
+    ramp_title: 'Rampa',
+    ramp_description: 'Fiat nisqawan cripto nisqa rantiy hinaspa rantiy',
+    swap_title: 'Intercambio',
+    swap_description: 'ERC20 tokenkunata mayqin kadenapipas tikray',
+    ubeswap_description: 'Celo nisqapi ERC20 nisqa fichakunata cambiay',
   },
   SelectLanguage : {
     en: 'InglÃ©s',
@@ -305,6 +316,14 @@ const values : TranslationType = {
     button: "Kachay WhatsApp Willana",
     Send_Button: "Kachay Whatsapp",
     notificationNumber: "Ama hina kaspa, mama llaqtap chikuta + qillqawan qillqay"
+  },
+  ui: {
+    open: "Kichasqa",
+    close: "Wichqay",
+    cancel: "Sayachiy",
+    confirm: "Yuyachiy",
+    featured: 'Riqsisqa',
+    all: 'Llapan',
   },
   totalBalance:{
     title: "Allin pachapi"

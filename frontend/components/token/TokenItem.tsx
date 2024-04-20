@@ -12,11 +12,7 @@ import { language as stateLanguage } from "../../service/state";
 import { Token } from "../../service/token";
 import { isSVGFormatImage, truncateString_old } from "../../service/utility";
 import { coinIconNames, tokenIconNames } from '../../store/network';
-import { deleteToken } from "../../store/token";
-import { NavigationState } from "@react-navigation/native";
-import { WalletInternal } from "../../store/wallet";
 import { SvgUri } from "react-native-svg";
-import { iconBackground } from "../../assets/styles/themeContext";
 import { getTokenMetadata } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
 import { addToSpam, isSpam } from "../../store/spam";
@@ -27,7 +23,7 @@ type AlchemyMetadata = {
   readonly name?: string;
 }
 
-export default function TokenItem({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
+function TokenItemComponent({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
   const { colorMode } = useColorMode();
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
@@ -191,3 +187,6 @@ export default function TokenItem({ navigation, token, refreshList, wallet }: { 
     </HStack>
   )
 }
+
+const TokenItem = React.memo(TokenItemComponent);
+export default TokenItem;

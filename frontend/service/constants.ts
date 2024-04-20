@@ -29,6 +29,8 @@ import {
   REACT_APP_XUCRE_WALLET_SCHEME
 } from '@env';
 import { LogMap } from './transaction';
+import { Extension } from '../types/extensions';
+import translations from '../assets/translations';
 
 export const env = {
   HARDHAT_PORT: process.env.HARDHAT_PORT || HARDHAT_PORT,
@@ -75,11 +77,12 @@ export const basicSvg = {
 
 export const levels = ['bronze', 'silver', 'gold'];
 
-export const chainNames = ['matic-mumbai', 'matic-mainnet', 'eth-mainnet'];
+export const chainNames = ['matic-mumbai', 'matic-mainnet', 'eth-mainnet', 'celo-mainnet'];
 export const chainIdToNameMap = {
   1: 'eth-mainnet',
   137:'matic-mainnet', 
   80001: 'matic-mumbai', 
+  42220: 'celo-mainnet',
 };
 
 export const xucreToken = {chainId: 137, address: '0x924442A46EAC25646b520Da8D78218Ae8FF437C2', name: 'Xucre',type: 'token', isNotSpammable: true}
@@ -350,3 +353,49 @@ export const googleLogoUrls = {
   'en': 'https://xucre-public.s3.sa-east-1.amazonaws.com/en_add_to_google_wallet-button.svg',
   'es': 'https://xucre-public.s3.sa-east-1.amazonaws.com/es_add_to_google_wallet-button.svg',
 }
+
+export const extensionList = (language: string) => {
+  const languageKey = language as keyof typeof translations;
+  return [
+    {
+      title: translations[languageKey].SelectExtension.swap_title,
+      description: translations[languageKey].SelectExtension.swap_description,
+      page: 'SwapToken',
+      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-black.png',
+      featuredImage: 'https://xucre-public.s3.sa-east-1.amazonaws.com/logo-long.png',
+      color: '#D4E815'
+    },/*
+    {
+      title: 'WarpCast',
+      description: translations[languageKey].SelectExtension.ethichub_description,
+      page: 'External',
+      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/ethichub.png',
+      featuredImage: '',
+      color: '#062F4F'
+    },*/
+    /*{
+      title: translations[languageKey].SelectExtension.ramp_title,
+      description: translations[languageKey].SelectExtension.ramp_description,
+      page: 'Ramp',
+      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/ramp.png',
+      featuredImage: '',
+      color: '#D4E815'
+    },*/
+    {
+      title: 'Ubeswap',
+      description: translations[languageKey].SelectExtension.ubeswap_description,
+      page: 'Ubeswap',
+      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/ubeswap2.png',
+      featuredImage: '',
+      color: '#F1EFF9'
+    },
+    {
+      title: 'Ethic Hub',
+      description: translations[languageKey].SelectExtension.ethichub_description,
+      page: 'EthicHub',
+      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/ethichub.png',
+      featuredImage: '',
+      color: '#062F4F'
+    },
+  ] as Extension[];
+} 

@@ -76,7 +76,6 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
         message: 'This app would like to access files.',
         title: 'Files',
       }).then((result) => {
-        console.log('PermissionsAndroid', result as string);
         if (result === PermissionsAndroid.RESULTS.GRANTED) {
           setHasFileAccess(true);
         } else {

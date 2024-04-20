@@ -3,6 +3,7 @@ import Nahuatl from './nahuatl';
 import Portuguese from './portuguese';
 import Quechua from './quechua';
 import Spanish from './spanish';
+import SelectExtension from '../../pages/extensions/SelectExtension';
 
 export interface TranslationType {
   AddToken: any,
@@ -14,6 +15,7 @@ export interface TranslationType {
   ConnectManagement: any,
   CreateNetwork: any,
   CreateWallet: any,
+  SelectExtension: any,
   ExportWallet: any,
   LanguagePage: any,
   LegacyEthSign: any,
@@ -58,6 +60,7 @@ export interface TranslationType {
   WhatsAppNotification: any,
   totalBalance: any,
   termsConditions: any,
+  ui: any
 }
 
 

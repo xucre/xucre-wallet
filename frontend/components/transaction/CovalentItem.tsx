@@ -16,7 +16,7 @@ import { getIsSpam } from "../../service/api";
 import { actionToScheme } from "../../service/constants";
 import { storeParsedTransaction } from "../../store/transactionFeedItem";
 
-export default function CovalentItem({ navigation, transaction }: { navigation: { navigate: Function }, transaction: CovalentTransactionV3 }) {
+function CovalentItemComponent({ navigation, transaction }: { navigation: { navigate: Function }, transaction: CovalentTransactionV3 }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const wallet = useRecoilValue(activeWallet);
@@ -155,3 +155,6 @@ export default function CovalentItem({ navigation, transaction }: { navigation: 
     </Pressable>
   )
 }
+
+const CovalentItem = React.memo(CovalentItemComponent);
+export default CovalentItem;

@@ -44,6 +44,7 @@ const values : TranslationType = {
     wallet_select_instructions: "Seleccionar Billetera(s)"
   },
   Connections: {
+    title: "Conexiones",
     delete_button: "Disconnect"
   },
   ConnectManagement: {
@@ -177,12 +178,20 @@ const values : TranslationType = {
     save_button_loadingtext: "Enviando",
     select_button: "Seleccione Archivo",
   },
-
   Requests: {
+    title: "Peticiones",
     delete_button: 'Borrar',
     expired_text: 'Caducado'
   },
-
+  SelectExtension: {
+    ethichub_description: 'Invertir en proyectos de agricultura sostenible',
+    title: 'Extensiones',
+    ramp_title: 'Rampa',
+    ramp_description: 'Compra y vende criptomonedas con fiat',
+    swap_title: 'Intercambio',
+    swap_description: 'Intercambia tokens ERC20 en cualquier cadena',
+    ubeswap_description: 'Intercambiar tokens ERC20 en Celo',
+  },
   SelectLanguage: {
     en: "Inglés",
     es: "Español",
@@ -307,6 +316,14 @@ const values : TranslationType = {
     button: "Enviar notificación de WhatsApp",
     Send_Button: "Enviar Whatsapp",
     notificationNumber: "Por favor ingrese el código del país incluyendo el signo +"
+  },
+  ui: {
+    open: "Abierto",
+    close: "Cerrar",
+    cancel: "Cancelar",
+    confirm: "Confirmar",
+    featured: 'Presentado',
+    all: 'Todo',
   },
   totalBalance:{
     title: "Balance total"
