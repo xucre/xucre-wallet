@@ -6,11 +6,11 @@ import { Button, Linking, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import RampSdk from '@ramp-network/react-native-sdk';
 
-import { activeWallet } from '../../service/state';
-import translations from "../../assets/translations";
-import { language as stateLanguage } from "../../service/state";
+import { activeWallet } from '../../../service/state';
+import translations from "../../../assets/translations";
+import { language as stateLanguage } from "../../../service/state";
 import { Wallet } from 'ethers';
-import { WalletInternal } from '../../store/wallet';
+import { WalletInternal } from '../../../store/wallet';
 
 
 

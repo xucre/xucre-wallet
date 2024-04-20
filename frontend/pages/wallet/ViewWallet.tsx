@@ -201,8 +201,8 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('NFT');
   }
 
-  const openProfile = () => {
-    navigation.navigate('ProfileList');
+  const openExtensions = () => {
+    navigation.navigate('Extensions');
   }
 
   const buyTokens = async () => {
@@ -248,9 +248,9 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       text: buttonReceive,
     },
     {
-      action: buyTokens,
-      icon: "monetization-on",
-      text: buttonBuy,
+      action: openExtensions,
+      icon: "apps",
+      text: 'Apps'//buttonBuy,
       // action: openProfile,
       // icon: "person",
       // text: buttonProfile

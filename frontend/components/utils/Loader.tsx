@@ -16,13 +16,14 @@ import { getLanguage, storeLanguage } from "../../store/language";
 import { deleteNotification, getNotification, getTheme, storeTheme } from '../../store/setting';
 import { hasSignedPrivacyPolicy } from '../../store/setting';
 import { getActiveNetwork } from '../../store/network';
+import { getActiveWallet } from '../../store/wallet';
 
 
 export default function Loader() {
   const appState = useRef(AppState.currentState);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [languageDefault, setLanguageDefault] = useState(false);
-  const [_wallet,] = useRecoilState(activeWallet);
+  const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [, setActiveNetwork] = useRecoilState(activeNetwork)
   const [languageState, setLanguageState] = useRecoilState(stateLanguage);
   const [hasSigned, setHasSigned] = useState(false);
@@ -32,38 +33,51 @@ export default function Loader() {
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [loading, setLoading] = useState(true);
   //const [hasBooted, setHasBooted] = useState(false);
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      Montserrat_400Regular,
+      Montserrat_700Bold
+    });
+  }
 
+  const loadData = async () => {
+    const _language = await getLanguage();
+    const _hasSigned = await hasSignedPrivacyPolicy();
+    const _activeNetwork = await getActiveNetwork();
+    const _wallet2 = await getActiveWallet();
+    if (isComponentMounted) {
+      setFontsLoaded(true);
+
+      setHasSigned(_hasSigned);
+      if (_language) {
+        setLanguageState(_language);
+      } else {
+        setLanguageState('en');
+        setLanguageDefault(true);
+      }
+
+      if (_activeNetwork) {
+        setActiveNetwork(_activeNetwork);
+      }
+
+      if (_wallet2) {
+        setActiveWallet(_wallet2[0]);
+      }
+
+      setLoading(false);
+    }
+  }
+
+  const loadFontsAndData = async () => {
+    await loadFonts();
+    await loadData();
+  }
 
   //Loading Fonts
   useEffect(() => {
-    const callAsync = async () => {
-      await Font.loadAsync({
-        Montserrat_400Regular,
-        Montserrat_700Bold
-      });
-      const _language = await getLanguage();
-      const _hasSigned = await hasSignedPrivacyPolicy();
-      const _activeNetwork = await getActiveNetwork();
-      if (isComponentMounted) {
-        setFontsLoaded(true);
 
-        setHasSigned(_hasSigned);
-        if (_language) {
-          setLanguageState(_language);
-        } else {
-          setLanguageState('en');
-          setLanguageDefault(true);
-        }
-
-        if (_activeNetwork) {
-          setActiveNetwork(_activeNetwork);
-        }
-
-        setLoading(false);
-      }
-    }
     if (isComponentMounted) {
-      callAsync();
+      loadFontsAndData();
     }
 
     return () => {
@@ -98,7 +112,7 @@ export default function Loader() {
         if (initialNotification) {
           // Add logic here that retrieves the event from storage and implements the WC Listener logic
           const event = await getNotification(initialNotification.pressAction.id);
-          console.log('event', event);
+
           if (event !== null && event.params.request.method !== null) {
             //await deleteNotification(initialNotification.pressAction.id);
             if (
@@ -164,8 +178,6 @@ export default function Loader() {
       } else {
         navigate('SelectWallet', {});
       }
-    } else {
-      //console.log('no navigation triggered');
     }
   }
 

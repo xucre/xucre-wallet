@@ -44,6 +44,7 @@ const values : TranslationType  = {
     wallet_select_instructions: 'Ihitta Tlahcuiloolaamapetlaacaltoon-tli(s)',
   },
   Connections: {
+    title: "Conexiones",
     delete_button: "Disconnect"
   },
   ConnectManagement: {
@@ -178,8 +179,18 @@ const values : TranslationType  = {
     select_button: "Seleccione Archivo",
   },
   Requests: {
+    title: "Peticiones",
     delete_button: 'Pohpoloaa',
     expired_text: 'tla-tzonquiixtiaa'
+  },
+  SelectExtension: {
+    ethichub_description: 'Invertir en proyectos de agricultura sostenible',
+    title: 'Extensiones',
+    ramp_title: 'Rampa',
+    ramp_description: 'Compra y vende criptomonedas con fiat',
+    swap_title: 'Intercambio',
+    swap_description: 'Intercambia tokens ERC20 en cualquier cadena',
+    ubeswap_description: 'Intercambiar tokens ERC20 en Celo',
   },
   SelectLanguage: {
     en: 'Inglés',
@@ -305,6 +316,14 @@ const values : TranslationType  = {
     button: "Ihuaa WhatsApp tenemachtiliztli",
     Send_Button: "Ihuaa WhatsApp",
     notificationNumber: "Mak'ij nuk'uj che ri' jun b'anik'oj taq chi' ri' +"
+  },
+  ui: {
+    open: "Abierto",
+    close: "Cerrar",
+    cancel: "Cancelar",
+    confirm: "Confirmar",
+    featured: 'Presentado',
+    all: 'Todo',
   },
   totalBalance:{
     title: "Tlalpochcalli"

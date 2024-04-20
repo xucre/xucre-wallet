@@ -81,6 +81,81 @@ const approveAutomatically = async (request: Web3WalletTypes.SessionProposal) =>
 
 }
 
+const sessionProposal = (event: Web3WalletTypes.SessionProposal) => {
+  if (AppState.currentState === 'active') {
+    navigate('ConnectionRequest', {
+      requestDetails: event
+    })
+  } else {
+    addNotification(String(event.id), event);
+    onDisplayNotification(String(event.id), 'session_proposal');
+  }
+}
+
+const sessionRequest = (event: Web3WalletTypes.SessionRequest) => {
+  // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
+  addNotification(String(event.id), event);
+  if (
+    event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
+    event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
+    event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4
+  ) {
+    if (AppState.currentState === 'active') {
+      navigate('SignTyped', {
+        requestDetails: event
+      })
+    } else {
+      onDisplayNotification(String(event.id), 'session_request_sign_tx');
+    }
+  } else if(
+    event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN ||
+    event.params.request.method === EIP155_SIGNING_METHODS.PERSONAL_SIGN
+  ) {
+    if (AppState.currentState === 'active') {
+      navigate('SignEth', {
+        requestDetails: event
+      })
+    } else {
+      onDisplayNotification(String(event.id), 'session_request_sign_tx');
+    }
+  } else if(
+    event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
+  ) {
+    if (AppState.currentState === 'active') {
+      navigate('SignTransaction', {
+        requestDetails: event
+      })
+    } else {
+      onDisplayNotification(String(event.id), 'session_request_sign_tx');
+    }
+    
+  } else if(
+    event.params.request.method === EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION
+  ) {
+    if (AppState.currentState === 'active') {
+      navigate('SendTransaction', {
+        requestDetails: event
+      })
+    } else {
+      onDisplayNotification(String(event.id), 'session_request_send_tx');
+    }
+  } else {
+    //
+  }
+}
+
+const sessionDelete = (event: Web3WalletTypes.SessionDelete) => {
+  // React to session delete event
+  signClient.core.pairing.disconnect({ topic: event.topic });
+}
+
+const proposalExpire = (event: Web3WalletTypes.ProposalExpire) => {
+  deleteNotification(String(event.id))
+  if (AppState.currentState === 'active') {
+    navigate('ViewWallet', {});
+  } 
+}
+
 export async function createSignClient() {
   
   if (hasLoaded) return signClient;
@@ -101,83 +176,10 @@ export async function createSignClient() {
   signClient = await Web3Wallet.init(initConfig);
   //signClient = await SignClient.init(initConfig)
   if (signClient) {
-    signClient.on("session_proposal", (event) => {
-      /*if (event.verifyContext.verified.origin === 'https://swap.xucre.net') {
-        approveAutomatically(event);
-      } else*/ if (AppState.currentState === 'active') {
-        navigate('ConnectionRequest', {
-          requestDetails: event
-        })
-      } else {
-        addNotification(String(event.id), event);
-        onDisplayNotification(String(event.id), 'session_proposal');
-      }
-    });
-
-    signClient.on("session_request", (event) => {
-      // Handle session method requests, such as "eth_sign", "eth_sendTransaction", etc.
-      addNotification(String(event.id), event);
-      if (
-        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA ||
-        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3 ||
-        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4
-      ) {
-        if (AppState.currentState === 'active') {
-          navigate('SignTyped', {
-            requestDetails: event
-          })
-        } else {
-          onDisplayNotification(String(event.id), 'session_request_sign_tx');
-        }
-      } else if(
-        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN ||
-        event.params.request.method === EIP155_SIGNING_METHODS.PERSONAL_SIGN
-      ) {
-        if (AppState.currentState === 'active') {
-          navigate('SignEth', {
-            requestDetails: event
-          })
-        } else {
-          onDisplayNotification(String(event.id), 'session_request_sign_tx');
-        }
-      } else if(
-        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION
-      ) {
-        if (AppState.currentState === 'active') {
-          navigate('SignTransaction', {
-            requestDetails: event
-          })
-        } else {
-          onDisplayNotification(String(event.id), 'session_request_sign_tx');
-        }
-        
-      } else if(
-        event.params.request.method === EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION
-      ) {
-        if (AppState.currentState === 'active') {
-          navigate('SendTransaction', {
-            requestDetails: event
-          })
-        } else {
-          onDisplayNotification(String(event.id), 'session_request_send_tx');
-        }
-      } else {
-        //
-      }
-    });
-
-
-    signClient.on("session_delete", (event) => {
-      // React to session delete event
-      signClient.core.pairing.disconnect({ topic: event.topic });
-    });
-
-    signClient.on("proposal_expire", (event) => {
-      deleteNotification(String(event.id))
-      if (AppState.currentState === 'active') {
-        navigate('ViewWallet', {});
-      } 
-    });
+    signClient.on("session_proposal", sessionProposal);
+    signClient.on("session_request", sessionRequest);
+    signClient.on("session_delete", sessionDelete);
+    signClient.on("proposal_expire", proposalExpire);
   }
   hasLoaded = true;  
 
@@ -186,3 +188,15 @@ export async function createSignClient() {
   
 }
 
+export function parseRequestParams(params: {optionalNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}, requiredNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}}) {
+  const { optionalNamespaces, requiredNamespaces } = params;
+  const chainList = requiredNamespaces.eip155.chains || optionalNamespaces.eip155.chains || ['eip155:1', 'eip155:137'];
+  const eventList = requiredNamespaces.eip155.events || optionalNamespaces.eip155.events || ['eth_sendTransaction', 'personal_sign', 'eth_sign'];
+  const methodList = requiredNamespaces.eip155.methods || optionalNamespaces.eip155.methods || [EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4, EIP155_SIGNING_METHODS.PERSONAL_SIGN, EIP155_SIGNING_METHODS.ETH_SIGN];
+
+  return {
+    chainList,
+    eventList,
+    methodList
+  };
+}

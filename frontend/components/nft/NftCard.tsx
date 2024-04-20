@@ -23,7 +23,7 @@ type CarousalType = {
   readonly name: string;
 };
 
-function NftCard({ contract, token, chain }: { contract: string, token: string, chain: string }) {
+function NftCardComponent({ contract, token, chain }: { contract: string, token: string, chain: string }) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '' });
   const [url, setUrl] = useState('');
@@ -165,4 +165,6 @@ function NftCard({ contract, token, chain }: { contract: string, token: string, 
   );
 }
 
+
+const NftCard = React.memo(NftCardComponent);
 export default NftCard;

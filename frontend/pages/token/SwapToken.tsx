@@ -1,11 +1,11 @@
 
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
-import { Text, useColorMode } from 'native-base';
+import { ScrollView, Text, useColorMode } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 //import { renderToString } from 'react-dom/server';
 //import { WebView } from "react-native-webview";
-import { Linking } from 'react-native';
+import { Linking, RefreshControl } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import translations from "../../assets/translations";
@@ -55,15 +55,25 @@ export default function SwapToken({ navigation, route }: { navigation: { navigat
   }, [network])
 
   //const url = 'https://app.uniswap.org/#/swap';
-  const url = 'https://xucre-swap.vercel.app/';
-  return (
-    <>
-      {false &&
-        <WebView
-          source={{ uri: url }}
-        />
-      }
+  let webViewRef: any = useRef(null);
+  const onRefresh = () => {
+    if (webViewRef.current) {
 
-    </>
+      webViewRef.current.clearCache(true)
+      webViewRef.current.reload();
+    }
+  }
+  const url = 'https://swap.xucre.net/?wallet=xucre';
+  //const url = 'https://app.uniswap.org/#/swap'
+  return (
+    <WebView
+      height={'100%'}
+      source={{ uri: url }}
+      ref={(ref) => {
+        if (ref) {
+          webViewRef.current = ref
+        }
+      }}
+    />
   )
 }
