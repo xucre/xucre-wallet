@@ -28,7 +28,6 @@ export default function BuyToken({ navigation, route }: { navigation: { navigate
   }, [network])
 
   const url = swapUrl(colorMode as string);
-  console.log(url);
   return (
     <>
       <WebView

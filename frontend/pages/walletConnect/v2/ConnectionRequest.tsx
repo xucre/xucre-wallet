@@ -21,7 +21,7 @@ import { AppWallet, language as stateLanguage, walletList } from "../../../servi
 import { truncateString, truncateString_old } from "../../../service/utility";
 import { parseRequestParams, signClient } from "../../../service/walletConnect";
 import { buildApprovedNamespaces } from '@walletconnect/utils'
-import { BackHandler } from "react-native";
+import { BackHandler, Linking } from "react-native";
 import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import ErrorToast from "../../../components/utils/ErrorToast";
 
@@ -98,16 +98,29 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
     )
   }
 
-  const goBack = () => {
+  const goBack = async () => {
     if (
-      request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net' ||
-      request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org' ||
+      request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net'
+    ) {
+      navigation.navigate('SwapToken');
+    } else if (
+      request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org'
+    ) {
+      navigation.navigate('Ubeswap');
+    } else if (
       request['verifyContext']['verified']['origin'] === 'https://ethix.ethichub.com'
     ) {
-      navigation.goBack();
+      navigation.navigate('EthicHub');
     } else {
-      navigation.navigate('ViewWallet');
-      BackHandler.exitApp();
+      const supported = await Linking.canOpenURL(request['verifyContext']['verified']['origin']);
+
+      if (supported) {
+        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+        // by some browser in the mobile
+        await Linking.openURL(request['verifyContext']['verified']['origin']);
+      } else {
+        navigation.goBack()
+      }
     }
   }
 
@@ -142,10 +155,6 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
       }
-
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 2000);
     }
 
 
@@ -169,10 +178,6 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
       }
-
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 2000);
     }
   }
 
