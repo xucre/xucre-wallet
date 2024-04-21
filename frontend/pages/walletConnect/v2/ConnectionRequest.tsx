@@ -113,10 +113,11 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
 
   const approve = async () => {
     try {
+      const params = parseRequestParams(request['params']);
       const accountList = selectedWallets.flatMap((wallet) => {
+        return params.chainList.map((chain) => `${chain}:${wallet.address}`);
         return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`, `eip155:42220:${wallet.address}`];
       })
-      const params = parseRequestParams(request['params']);
       const payload = buildApprovedNamespaces({
         proposal: request['params'],
         supportedNamespaces: {
