@@ -119,13 +119,13 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
 
   useEffect(() => {
     if (wallet.address && isFocused) {
-      setCurrentHoldings({
+      /*setCurrentHoldings({
         meta: {
           'date': ''
         },
         x: 0,
         y: 0
-      });
+      });*/
       getData();
     }
   }, [wallet, chainName, isFocused])
