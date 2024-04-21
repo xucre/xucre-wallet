@@ -23,6 +23,7 @@ import { parseRequestParams, signClient } from "../../../service/walletConnect";
 import { buildApprovedNamespaces } from '@walletconnect/utils'
 import { BackHandler } from "react-native";
 import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
+import ErrorToast from "../../../components/utils/ErrorToast";
 
 export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const { requestDetails } = route.params;
@@ -32,6 +33,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   const [page, setPage] = useState(0);
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const runAsync = async () => {
@@ -96,28 +98,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
     )
   }
 
-  const approve = async () => {
-    const accountList = selectedWallets.flatMap((wallet) => {
-      return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`, `eip155:42220:${wallet.address}`];
-    })
-    const params = parseRequestParams(request['params']);
-    const payload = buildApprovedNamespaces({
-      proposal: request['params'],
-      supportedNamespaces: {
-        eip155: {
-          chains: params.chainList,
-          accounts: accountList.flat(),
-          events: params.eventList,
-          methods: params.methodList,
-        },
-      },
-    });
-
-    const { topic, acknowledged } = await signClient.approveSession({
-      id: request['params']['id'],
-      namespaces: payload
-    });
-
+  const goBack = () => {
     if (
       request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net' ||
       request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org' ||
@@ -128,22 +109,70 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       navigation.navigate('ViewWallet');
       BackHandler.exitApp();
     }
+  }
+
+  const approve = async () => {
+    try {
+      const accountList = selectedWallets.flatMap((wallet) => {
+        return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`, `eip155:42220:${wallet.address}`];
+      })
+      const params = parseRequestParams(request['params']);
+      const payload = buildApprovedNamespaces({
+        proposal: request['params'],
+        supportedNamespaces: {
+          eip155: {
+            chains: params.chainList,
+            accounts: accountList.flat(),
+            events: params.eventList,
+            methods: params.methodList,
+          },
+        },
+      });
+
+      const { topic, acknowledged } = await signClient.approveSession({
+        id: request['params']['id'],
+        namespaces: payload
+      });
+
+      goBack();
+    } catch (error: any) {
+      if (typeof error === "string") {
+        setErrorMessage(error);
+      } else if (error instanceof Error) {
+        setErrorMessage(error.message);
+      }
+
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 2000);
+    }
+
 
     //navigation.navigate('ViewWallet');
   }
 
   const reject = async () => {
-    const payload = {
-      id: request['params']['id'],
-      reason: {
-        code: 1,
-        message: translations[language as keyof typeof translations].ConnectionRequest.rejected,
-      },
+    try {
+      const payload = {
+        id: request['params']['id'],
+        reason: {
+          code: 1,
+          message: translations[language as keyof typeof translations].ConnectionRequest.rejected,
+        },
+      }
+      await signClient.rejectSession(payload);
+      goBack();
+    } catch (error: any) {
+      if (typeof error === "string") {
+        setErrorMessage(error);
+      } else if (error instanceof Error) {
+        setErrorMessage(error.message);
+      }
+
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 2000);
     }
-    await signClient.rejectSession(payload);
-    navigation.navigate('ViewWallet');
-    BackHandler.exitApp();
-    //navigation.navigate('ViewWallet');
   }
 
   return (
@@ -221,6 +250,9 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].ConnectionRequest.reject_button}</Text></Button>
             </Button.Group>
           </>
+        }
+        {errorMessage.length > 0 &&
+          <ErrorToast errorMessage={errorMessage} />
         }
       </VStack>
     </GuestLayout>
