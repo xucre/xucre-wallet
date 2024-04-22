@@ -190,9 +190,9 @@ export async function createSignClient() {
 
 export function parseRequestParams(params: {optionalNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}, requiredNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}}) {
   const { optionalNamespaces, requiredNamespaces } = params;
-  const chainList = requiredNamespaces.eip155.chains || optionalNamespaces.eip155.chains || ['eip155:1', 'eip155:137'];
-  const eventList = requiredNamespaces.eip155.events || optionalNamespaces.eip155.events || ['eth_sendTransaction', 'personal_sign', 'eth_sign'];
-  const methodList = requiredNamespaces.eip155.methods || optionalNamespaces.eip155.methods || [EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4, EIP155_SIGNING_METHODS.PERSONAL_SIGN, EIP155_SIGNING_METHODS.ETH_SIGN];
+  const chainList = requiredNamespaces?.eip155?.chains || optionalNamespaces?.eip155?.chains || ['eip155:1'];
+  const eventList = requiredNamespaces?.eip155?.events || optionalNamespaces?.eip155?.events || ['eth_sendTransaction', 'personal_sign', 'eth_sign'];
+  const methodList = requiredNamespaces?.eip155?.methods || optionalNamespaces?.eip155?.methods || [EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4, EIP155_SIGNING_METHODS.PERSONAL_SIGN, EIP155_SIGNING_METHODS.ETH_SIGN];
 
   return {
     chainList,

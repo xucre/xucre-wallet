@@ -8,6 +8,7 @@ import {
   HStack,
   Text,
   useColorMode,
+  useToast,
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import ErrorToast from "../../../components/utils/ErrorToast";
 
 export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
+  const toast = useToast();
   const { requestDetails } = route.params;
   const [request, setRequest] = useState({} as any);
   const [walletState,] = useRecoilState(walletList);
@@ -33,7 +35,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   const [page, setPage] = useState(0);
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
-  const [errorMessage, setErrorMessage] = useState('');
+  //const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const runAsync = async () => {
@@ -129,7 +131,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       const params = parseRequestParams(request['params']);
       const accountList = selectedWallets.flatMap((wallet) => {
         return params.chainList.map((chain) => `${chain}:${wallet.address}`);
-        return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`, `eip155:42220:${wallet.address}`];
+        //return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`, `eip155:42220:${wallet.address}`];
       })
       const payload = buildApprovedNamespaces({
         proposal: request['params'],
@@ -151,9 +153,15 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       goBack();
     } catch (error: any) {
       if (typeof error === "string") {
-        setErrorMessage(error);
+        //setErrorMessage(error);
+        toast.show({
+          description: error
+        })
       } else if (error instanceof Error) {
-        setErrorMessage(error.message);
+        //setErrorMessage(error.message);
+        toast.show({
+          description: error.message
+        })
       }
     }
 
@@ -174,9 +182,15 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       goBack();
     } catch (error: any) {
       if (typeof error === "string") {
-        setErrorMessage(error);
+        //setErrorMessage(error);
+        toast.show({
+          description: error
+        })
       } else if (error instanceof Error) {
-        setErrorMessage(error.message);
+        //setErrorMessage(error.message);
+        toast.show({
+          description: error.message
+        })
       }
     }
   }
@@ -257,9 +271,9 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
             </Button.Group>
           </>
         }
-        {errorMessage.length > 0 &&
+        {/*errorMessage.length > 0 &&
           <ErrorToast errorMessage={errorMessage} />
-        }
+        */}
       </VStack>
     </GuestLayout>
   );

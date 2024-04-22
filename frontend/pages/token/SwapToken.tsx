@@ -63,8 +63,7 @@ export default function SwapToken({ navigation, route }: { navigation: { navigat
       webViewRef.current.reload();
     }
   }
-  const url = 'https://swap.xucre.net/?wallet=xucre';
-  //const url = 'https://app.uniswap.org/#/swap'
+  const url = 'https://swap.xucre.net/swap?wallet=xucre';
   return (
     <WebView
       height={'100%'}
