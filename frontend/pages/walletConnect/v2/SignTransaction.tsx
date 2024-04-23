@@ -17,16 +17,21 @@ import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { signClient } from "../../../service/walletConnect";
+import { goBack, signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
+import { Linking } from "react-native";
+import ContainedButton from "../../../components/ui/ContainedButton";
+import OutlinedButton from "../../../components/ui/OutlinedButton";
+import GhostButton from "../../../components/ui/GhostButton";
 
-export default function SignTransaction({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
+export default function SignTransaction({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const { requestDetails } = route.params;
   const { colorMode } = useColorMode();
   const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
   const [method, setMethod] = useState('');
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState({});
   const [walletAddress, setWalletAddress] = useState('');
   const [walletState,] = useRecoilState(walletList);
@@ -84,6 +89,7 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
   };
 
   const approve = async () => {
+    setLoading(true);
     const response = await approveEIP155Request(request, walletState);
     const clientResponse = await signClient.respondSessionRequest({
       response,
@@ -94,10 +100,12 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');
+    goBack(request, navigation);
+    setLoading(false);
   }
 
   const reject = async () => {
+    setLoading(true);
     const response = rejectEIP155Request(request)
     await signClient.respondSessionRequest({
       response,
@@ -108,7 +116,8 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');
+    goBack(request, navigation);
+    setLoading(false);
   }
 
   return (
@@ -146,10 +155,15 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
                 <StyledItem label={translations[language as keyof typeof translations].SendTransaction.from} value={walletAddress} />
               </VStack>
             </VStack>
-            <Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}  >
+
+            <VStack space={1}>
+              <ContainedButton isLoading={loading} buttonText={translations[language as keyof typeof translations].SignTransaction.approve_button} onPress={approve} />
+              <GhostButton isLoading={loading} buttonText={translations[language as keyof typeof translations].SignTransaction.reject_button} onPress={reject} />
+            </VStack>
+            {/*<Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}  >
               <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language as keyof typeof translations].SignTransaction.approve_button}</Text></Button>
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignTransaction.reject_button}</Text></Button>
-            </Button.Group>
+            </Button.Group>*/}
           </VStack>
         }
       </Box>

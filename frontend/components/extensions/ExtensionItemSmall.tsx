@@ -1,6 +1,6 @@
 import { HStack, Avatar, Text, useColorMode, VStack, Badge, Box } from "native-base";
 import { useState, useEffect } from "react";
-import { Pressable } from "react-native";
+import { Linking, Pressable } from "react-native";
 import { Extension } from "../../types/extensions";
 import React from "react";
 import { language as stateLanguage } from "../../service/state";
@@ -11,8 +11,14 @@ const ExtensionItemComponent = ({ metadata, navigation }: { metadata: Extension,
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
   const openExtension = async () => {
-    //viewNetwork();
-    navigation.navigate(metadata.page);
+    if (metadata.externalUrl) {
+      const supported = await Linking.canOpenURL(metadata.externalUrl);
+      if (supported) {
+        await Linking.openURL(metadata.externalUrl);
+      }
+    } else {
+      navigation.navigate(metadata.page);
+    }
   }
 
   const openNetwork = () => {

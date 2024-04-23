@@ -1,7 +1,7 @@
 import notifee, { AndroidLaunchActivityFlag } from '@notifee/react-native';
 import { Core } from '@walletconnect/core'
 import { Web3Wallet, IWeb3Wallet, Web3WalletTypes } from '@walletconnect/web3wallet'
-import {AppState} from 'react-native';
+import {AppState, Linking} from 'react-native';
 
 import translations from "../assets/translations";
 import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
@@ -199,4 +199,23 @@ export function parseRequestParams(params: {optionalNamespaces: {eip155: {"chain
     eventList,
     methodList
   };
+}
+
+export async function goBack (request: any, navigation: {navigate: Function}) {
+  if (
+    request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net'
+  ) {
+    navigation.navigate('SwapToken');
+  } else if (
+    
+    request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org'
+  ) {
+    navigation.navigate('Ubeswap');
+  } else if (
+    request['verifyContext']['verified']['origin'] === 'https://ethix.ethichub.com'
+  ) {
+    navigation.navigate('EthicHub');
+  } else {
+    navigation.navigate('ViewWallet');
+  }
 }

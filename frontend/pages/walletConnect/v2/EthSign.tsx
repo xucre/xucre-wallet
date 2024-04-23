@@ -16,8 +16,10 @@ import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { signClient } from "../../../service/walletConnect";
+import { goBack, signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
+import ContainedButton from "../../../components/ui/ContainedButton";
+import GhostButton from "../../../components/ui/GhostButton";
 
 export default function EthSign({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { requestDetails } = route.params;
@@ -27,6 +29,7 @@ export default function EthSign({ navigation, route }: { navigation: { navigate:
   const [walletAddress, setWalletAddress] = useState('');
   const [walletState,] = useRecoilState(walletList);
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
     const runAsync = async () => {
@@ -53,6 +56,7 @@ export default function EthSign({ navigation, route }: { navigation: { navigate:
 
 
   const approve = async () => {
+    setLoading(true);
     const response = await approveEIP155Request(request, walletState);
     await signClient.respondSessionRequest({
       response,
@@ -63,10 +67,12 @@ export default function EthSign({ navigation, route }: { navigation: { navigate:
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');
+    setLoading(false);
+    goBack(request, navigation);
   }
 
   const reject = async () => {
+    setLoading(true);
     const response = rejectEIP155Request(request)
     await signClient.respondSessionRequest({
       response,
@@ -77,7 +83,8 @@ export default function EthSign({ navigation, route }: { navigation: { navigate:
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');
+    setLoading(false);
+    goBack(request, navigation);
   }
 
   return (
@@ -89,7 +96,7 @@ export default function EthSign({ navigation, route }: { navigation: { navigate:
       >
         {request && request['params'] &&
           <Box>
-            <VStack height={'90%'}>
+            <VStack height={'3/4'}>
               <Center mt={5}>
                 <Heading size="md" mb={4}><Text>{translations[language as keyof typeof translations].SignEth.header}</Text></Heading>
               </Center>
@@ -102,10 +109,10 @@ export default function EthSign({ navigation, route }: { navigation: { navigate:
 
 
             </VStack>
-            <Button.Group isAttached colorScheme="blue" >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignEth.approve_button}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SignEth.reject_button}</Text></Button>
-            </Button.Group>
+            <VStack space={1}>
+              <ContainedButton isLoading={loading} buttonText={translations[language as keyof typeof translations].SignEth.approve_button} onPress={approve} />
+              <GhostButton isLoading={loading} buttonText={translations[language as keyof typeof translations].SignEth.reject_button} onPress={reject} />
+            </VStack>
           </Box>
         }
       </Box>

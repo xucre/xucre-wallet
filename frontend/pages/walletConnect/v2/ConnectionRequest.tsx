@@ -20,11 +20,14 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { AppWallet, language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString, truncateString_old } from "../../../service/utility";
-import { parseRequestParams, signClient } from "../../../service/walletConnect";
+import { goBack, parseRequestParams, signClient } from "../../../service/walletConnect";
 import { buildApprovedNamespaces } from '@walletconnect/utils'
 import { BackHandler, Linking } from "react-native";
 import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import ErrorToast from "../../../components/utils/ErrorToast";
+import ContainedButton from "../../../components/ui/ContainedButton";
+import OutlinedButton from "../../../components/ui/OutlinedButton";
+import GhostButton from "../../../components/ui/GhostButton";
 
 export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const toast = useToast();
@@ -34,6 +37,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   const [selectedWallets, setSelectedWallets] = useState([] as AppWallet[]);
   const [page, setPage] = useState(0);
   const [language,] = useRecoilState(stateLanguage);
+  const [loading, setLoading] = useState(false);
   const { colorMode } = useColorMode();
   //const [errorMessage, setErrorMessage] = useState('');
 
@@ -100,33 +104,8 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
     )
   }
 
-  const goBack = async () => {
-    if (
-      request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net'
-    ) {
-      navigation.navigate('SwapToken');
-    } else if (
-      request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org'
-    ) {
-      navigation.navigate('Ubeswap');
-    } else if (
-      request['verifyContext']['verified']['origin'] === 'https://ethix.ethichub.com'
-    ) {
-      navigation.navigate('EthicHub');
-    } else {
-      const supported = await Linking.canOpenURL(request['verifyContext']['verified']['origin']);
-
-      if (supported) {
-        // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-        // by some browser in the mobile
-        await Linking.openURL(request['verifyContext']['verified']['origin']);
-      } else {
-        navigation.goBack()
-      }
-    }
-  }
-
   const approve = async () => {
+    setLoading(true);
     try {
       const params = parseRequestParams(request['params']);
       const accountList = selectedWallets.flatMap((wallet) => {
@@ -150,7 +129,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
         namespaces: payload
       });
 
-      goBack();
+      goBack(request, navigation);
     } catch (error: any) {
       if (typeof error === "string") {
         //setErrorMessage(error);
@@ -165,11 +144,13 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
       }
     }
 
+    setLoading(false);
 
     //navigation.navigate('ViewWallet');
   }
 
   const reject = async () => {
+    setLoading(true);
     try {
       const payload = {
         id: request['params']['id'],
@@ -179,7 +160,7 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
         },
       }
       await signClient.rejectSession(payload);
-      goBack();
+      goBack(request, navigation);
     } catch (error: any) {
       if (typeof error === "string") {
         //setErrorMessage(error);
@@ -193,6 +174,8 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
         })
       }
     }
+
+    setLoading(false);
   }
 
   return (
@@ -265,10 +248,14 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
                 }
               </Center>
             </VStack>
-            <Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} >
+            <VStack space={4} mt={10}>
+              <ContainedButton isLoading={loading} buttonText={translations[language as keyof typeof translations].ConnectionRequest.approve_button} onPress={approve} />
+              <GhostButton isLoading={loading} buttonText={translations[language as keyof typeof translations].ConnectionRequest.reject_button} onPress={reject} />
+            </VStack>
+            {/*<Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'} >
               <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language as keyof typeof translations].ConnectionRequest.approve_button}</Text></Button>
               <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].ConnectionRequest.reject_button}</Text></Button>
-            </Button.Group>
+              </Button.Group>*/}
           </>
         }
         {/*errorMessage.length > 0 &&

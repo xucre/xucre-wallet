@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { env } from './constants';
 import { ExtendedBalance, Holding, OutputObject } from '../types/history';
+import dayjs from 'dayjs';
 
 //Static References
 
@@ -125,16 +126,16 @@ export const processJsonData = (jsonData: { error: any; data: { items: any[]; };
     let mostRecentOpenQuote: ExtendedBalance | null = null;
 
     item.holdings.forEach((holding: Holding) => {
-      const date = holding.timestamp.split("T")[0];
-      if (holding.open) {
-        const existingEntry = output.openQuotesByDay.find((entry) => entry.date === date);
+      const date = dayjs(holding.timestamp);
+      if (holding.open && holding.open.quote) {
+        const existingEntry = output.openQuotesByDay.find((entry) => dayjs(entry.date).isSame(date, 'day'));
 
         if (existingEntry) {
           existingEntry.totalQuote += holding.open.quote;
           existingEntry.quoteRate = holding.quote_rate;
         } else {
           output.openQuotesByDay.push({
-            date, totalQuote: holding.open.quote,
+            date: date.format('MM/DD/YYYY'), totalQuote: holding.open.quote,
             quoteRate: holding.quote_rate
           });
         }

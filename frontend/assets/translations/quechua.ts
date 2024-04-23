@@ -191,6 +191,7 @@ const values : TranslationType = {
     swap_title: 'Intercambio',
     swap_description: 'ERC20 tokenkunata mayqin kadenapipas tikray',
     ubeswap_description: 'Celo nisqapi ERC20 nisqa fichakunata cambiay',
+    warpcast_description: 'Farcaster Llikaman portal',
   },
   SelectLanguage : {
     en: 'InglÃ©s',

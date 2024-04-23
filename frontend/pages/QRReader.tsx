@@ -2,17 +2,17 @@ import { parseUri } from '@walletconnect/utils'
 import { BarCodeScanner, PermissionStatus } from 'expo-barcode-scanner';
 import { Box, Center, Text } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet,  View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
 import { createSignClient, signClient } from '../service/walletConnect';
 
-export default function QRReader({navigation}: {navigation: {navigate: Function}}) {
+export default function QRReader({ navigation }: { navigation: { navigate: Function } }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
-  const [language, ] = useRecoilState(stateLanguage);
+  const [language,] = useRecoilState(stateLanguage);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -23,11 +23,14 @@ export default function QRReader({navigation}: {navigation: {navigate: Function}
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = async ({ type, data } : {type: any, data: string}) => {
+  const handleBarCodeScanned = async ({ type, data }: { type: any, data: string }) => {
     setScanned(true);
     const { version, relay } = parseUri(data);
     try {
-      signClient.pair({uri: data});
+      if (data && relay) {
+        signClient.pair({ uri: data });
+      }
+
     } catch (e) {
       //
     }

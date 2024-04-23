@@ -358,21 +358,22 @@ export const extensionList = (language: string) => {
   const languageKey = language as keyof typeof translations;
   return [
     {
+      title: 'WarpCast',
+      description: translations[languageKey].SelectExtension.warpcast_description,
+      page: 'External',
+      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/warpcast.png',
+      featuredImage: 'https://xucre-public.s3.sa-east-1.amazonaws.com/warpcast_featured.png',
+      color: '#472A8F',
+      externalUrl: 'https://warpcast.com/~/invite-page/391437?id=b72b3348'
+    },
+    {
       title: translations[languageKey].SelectExtension.swap_title,
       description: translations[languageKey].SelectExtension.swap_description,
       page: 'SwapToken',
       logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-black.png',
       featuredImage: 'https://xucre-public.s3.sa-east-1.amazonaws.com/logo-long.png',
       color: '#D4E815'
-    },/*
-    {
-      title: 'WarpCast',
-      description: translations[languageKey].SelectExtension.ethichub_description,
-      page: 'External',
-      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/ethichub.png',
-      featuredImage: '',
-      color: '#062F4F'
-    },*/
+    },
     /*{
       title: translations[languageKey].SelectExtension.ramp_title,
       description: translations[languageKey].SelectExtension.ramp_description,

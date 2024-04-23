@@ -20,8 +20,10 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { signClient } from "../../../service/walletConnect";
+import { goBack, signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
+import ContainedButton from '../../../components/ui/ContainedButton';
+import GhostButton from '../../../components/ui/GhostButton';
 
 export default function SendTransaction({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -35,6 +37,7 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
   const [walletAddress, setWalletAddress] = useState('');
   const [walletState,] = useRecoilState(walletList);
   const [viewData, setViewData] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
     const runAsync = async () => {
@@ -91,6 +94,7 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
   };
 
   const approve = async () => {
+    setLoading(true);
     const response = await approveEIP155Request(request, walletState);
     await signClient.respondSessionRequest({
       response,
@@ -101,10 +105,12 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');
+    setLoading(false);
+    goBack(request, navigation);
   }
 
   const reject = async () => {
+    setLoading(true);
     const response = rejectEIP155Request(request)
     await signClient.respondSessionRequest({
       response,
@@ -115,7 +121,8 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
     } catch (err) {
       //
     }
-    navigation.navigate('ViewWallet');
+    setLoading(false);
+    goBack(request, navigation);
   }
 
   return (
@@ -156,10 +163,11 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
                 <StyledItem label={translations[language as keyof typeof translations].SendTransaction.to} value={to} />
               </VStack>
             </VStack>
-            <Button.Group isAttached colorScheme={colorMode === 'dark' ? 'primary' : 'tertiary'}  >
-              <Button onPress={approve} variant={'solid'} rounded="none" size={'1/2'} my={6}><Text color={colorMode === 'dark' ? Color.black : Color.white} fontWeight={'bold'}>{translations[language as keyof typeof translations].LegacySendTransaction.approve_button}</Text></Button>
-              <Button onPress={reject} variant={'outline'} rounded="none" size={'1/2'} my={6}><Text>{translations[language as keyof typeof translations].SendTransaction.reject_button}</Text></Button>
-            </Button.Group>
+
+            <VStack space={1}>
+              <ContainedButton isLoading={loading} buttonText={translations[language as keyof typeof translations].SendTransaction.approve_button} onPress={approve} />
+              <GhostButton isLoading={loading} buttonText={translations[language as keyof typeof translations].SendTransaction.reject_button} onPress={reject} />
+            </VStack>
           </VStack>
         }
       </Center>

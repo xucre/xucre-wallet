@@ -1,6 +1,8 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { BigNumber, ethers, getDefaultProvider, Wallet } from "ethers";
-import moment from 'moment';
+//import moment from 'moment';
+import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Avatar, Badge, Box, Center, createIcon, HStack, Icon, IconButton, Menu, Pressable, Spinner, Text, Tooltip, useColorMode, VStack, } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
 import { Linking } from "react-native";
@@ -15,6 +17,8 @@ import { WalletInternal } from "../../store/wallet";
 import { getIsSpam } from "../../service/api";
 import { actionToScheme } from "../../service/constants";
 import { storeParsedTransaction } from "../../store/transactionFeedItem";
+
+dayjs.extend(relativeTime);
 
 function CovalentItemComponent({ navigation, transaction }: { navigation: { navigate: Function }, transaction: CovalentTransactionV3 }) {
   const { colorMode } = useColorMode();
@@ -131,7 +135,7 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
                 <ItemAction />
                 <Text fontSize="sm">
                   {transaction.block_signed_at &&
-                    <>{moment(transaction.block_signed_at as string).fromNow()}</>}
+                    <>{dayjs(transaction.block_signed_at as string).fromNow()}</>}
                   {!transaction.block_signed_at &&
                     <>{truncateString(transaction.tx_hash as string, 7)}</>}
                 </Text>

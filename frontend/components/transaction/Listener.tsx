@@ -8,7 +8,7 @@ import {
   useToast,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
@@ -16,7 +16,7 @@ import { language as stateLanguage, transactionList } from "../../service/state"
 import { Transaction } from "../../service/transaction";
 import { updateTransaction } from "../../store/transaction";
 
-export default function Listener () {
+export default function Listener() {
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const toast = useToast();
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Listener () {
     colorMode
   } = useColorMode();
 
-  const [language, ] = useRecoilState(stateLanguage);
+  const [language,] = useRecoilState(stateLanguage);
   const [transactions, setTransactionList] = useRecoilState(transactionList);
   const [_transactions, setTransactions] = useState([] as any[]);
   const successToast = {
@@ -49,10 +49,10 @@ export default function Listener () {
     const runAsync = async () => {
       if (_transactions.length > 0) {
         await Promise.all(_transactions.map(async (transaction) => {
-          
+
           const result = await transaction.wait();
           if (result.status === 1) {
-            const toastItem = {...successToast, description: transaction.hash, id:transaction.hash};
+            const toastItem = { ...successToast, description: transaction.hash, id: transaction.hash };
             toast.show({
               render: ({
                 id
@@ -72,11 +72,11 @@ export default function Listener () {
               to: transaction.to,
               value: transaction.value,
             } as Transaction;
-            
+
             await updateTransaction(_transaction);
-            return _transaction;            
+            return _transaction;
           } else if (result.status === 0) {
-            const toastItem = {...failureToast, description: transaction.hash, id:transaction.hash};
+            const toastItem = { ...failureToast, description: transaction.hash, id: transaction.hash };
             toast.show({
               render: ({
                 id
@@ -102,7 +102,7 @@ export default function Listener () {
         setTransactionList([]);
       }
     }
-    runAsync();
+    //runAsync();
   }, [_transactions]);
 
   useEffect(() => {
@@ -116,7 +116,7 @@ export default function Listener () {
     title,
     description,
     isClosable
-  } : {
+  }: {
     id: any;
     status: string | (string & {}) | undefined;
     variant: string | ("solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | null)[] | { base?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; sm?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; md?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; lg?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; xl?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; '2xl'?: "solid" | "outline" | (string & {}) | "subtle" | "left-accent" | "top-accent" | "outline-light" | undefined; } | null | undefined;
@@ -134,8 +134,8 @@ export default function Listener () {
             </Text>
           </HStack>
           {isClosable ? <IconButton variant="unstyled" icon={<CloseIcon size="3" />} _icon={{
-          color: variant === "solid" ? "lightText" : "darkText"
-        }} onPress={() => toast.close(id)} /> : null}
+            color: variant === "solid" ? "lightText" : "darkText"
+          }} onPress={() => toast.close(id)} /> : null}
         </HStack>
         <Text px="6" color={variant === "solid" ? "lightText" : variant !== "outline" ? "darkText" : null}>
           {description}
@@ -145,9 +145,9 @@ export default function Listener () {
 
   return (
     <>
-      
+
     </>
-    
+
   );
 }
 

@@ -3,7 +3,8 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
-import moment from "moment";
+//import moment from "moment";
+import dayjs from "dayjs";
 import {
   Box,
   Button,
@@ -50,7 +51,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   //const [network,] = useRecoilState(activeNetwork);
   const [currentHoldings, setCurrentHoldings] = useState({
     meta: {
-      'date': ''
+      'date': '01 Jan 2024 14:31:46 -0700'
     },
     x: 0,
     y: 0
@@ -96,7 +97,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
           meta: {
             'date': d.date
           },
-          x: moment(d.date).unix(),
+          x: d.date.length > 0 ? dayjs(d.date).unix() : dayjs().unix(),
           y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
         }
       });

@@ -195,6 +195,7 @@ const values : TranslationType = {
     swap_title: 'Swap',
     swap_description: 'Swap ERC20 tokens across any chain',
     ubeswap_description: 'Swap on the Celo Network',
+    warpcast_description: 'Portal to Farcaster Network',
   },
   SelectLanguage: {
     en: "English",

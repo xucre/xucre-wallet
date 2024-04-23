@@ -12,7 +12,14 @@ const ExtensionItemComponent = ({ metadata, navigation }: { metadata: Extension,
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
   const openExtension = async () => {
-    navigation.navigate(metadata.page);
+    if (metadata.externalUrl) {
+      const supported = await Linking.canOpenURL(metadata.externalUrl);
+      if (supported) {
+        await Linking.openURL(metadata.externalUrl);
+      }
+    } else {
+      navigation.navigate(metadata.page);
+    }
   }
 
   const openNetwork = () => {

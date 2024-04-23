@@ -214,7 +214,10 @@ export const AppWrapper = () => {
     const runAsync = async () => {
       try {
         //('isdev', __DEV__)
-        await createSignClient();
+        if (!signClient) {
+          await createSignClient();
+        }
+
       } catch (err) {
         //('error creating sign client', err);
       }
@@ -275,10 +278,12 @@ export const AppWrapper = () => {
     } else {
       try {
         if (signClient) {
-          if (parsedUrl.query.uri) {
+          if (parsedUrl.query.requestId) {
+            //  do nothing
+          } else if (parsedUrl.query.uri) {
             await signClient.pair({ uri: parsedUrl.query.uri })
           } else {
-            await signClient.pair({ uri: req.url });
+            //await signClient.pair({ uri: req.url });
           }
 
         }

@@ -37,6 +37,7 @@
     "big-integer": "^1.6.51",
     "buffer": "^6.0.3",
     "cryptr": "^6.3.0",
+    "dayjs": "^1.11.10",
     "ethers": "^5.6.9",
     "expo": "~49.0.13",
     "expo-app-loading": "^2.1.1",
@@ -46,6 +47,7 @@
     "expo-document-picker": "~11.5.4",
     "expo-file-system": "~15.4.5",
     "expo-font": "~11.4.0",
+    "expo-linear-gradient": "~12.3.0",
     "expo-linking": "~5.0.2",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
@@ -78,8 +80,7 @@
     "react-qr-code": "^2.0.12",
     "recoil": "^0.7.7",
     "styled-components": "^5.3.11",
-    "uuid": "^9.0.1",
-    "expo-linear-gradient": "~12.3.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.24.1",

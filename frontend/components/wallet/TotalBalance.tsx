@@ -3,7 +3,8 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { ethers, Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
-import moment from "moment";
+//import moment from "moment";
+import daysjs from 'dayjs';
 import {
   Badge,
   Box,
@@ -43,7 +44,7 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
   const currency = 'USD';
   const [currentHoldings, setCurrentHoldings] = useState({
     meta: {
-      'date': ''
+      'date': '01 Jan 2024 14:31:46 -0700'
     },
     x: 0,
     y: 0
@@ -52,12 +53,12 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
     percent: '0%',
     trend: 'flat',
     y: '0.00',
-
   })
 
   const getData = async (runCount = 0) => {
     try {
       const historyResults = await getWalletHistory(wallet.address, chainName as string);
+
       const outputData = processJsonData(historyResults);
       // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
       const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, _i) => {
@@ -71,13 +72,14 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
       } as OpenQuotes)
       // END TESTING PORTION
       const finalQuotes = openQuotes.quotes.map((d) => {
-        return {
+        const finalQuote = {
           meta: {
             'date': d.date
           },
-          x: moment(d.date).unix(),
+          x: d.date.length > 0 ? daysjs(d.date).unix() : daysjs().unix(),
           y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
-        }
+        };
+        return finalQuote
       });
       if (finalQuotes.length > 0) {
         setCurrentHoldings(finalQuotes[0]);
