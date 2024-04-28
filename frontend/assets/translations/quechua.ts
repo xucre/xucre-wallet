@@ -292,14 +292,18 @@ const values : TranslationType = {
     title: 'Llika',
     use_network: 'Llika llamk\'achiyta'
   },
+  ViewToken: {
+    current_balance: 'Kunan Pacha Saldo',
+    current_price: 'Kunan Precio (USD)',
+  },
   ViewWallet: { 
     clear_button: 'Rantinakuykunata ch\'uyanchana', 
     holdings_placeholder: 'Qolqe hap\'inakunata churay',
     new_button: 'Token yapay', 
     no_network_error: 'No Network Selected',
     tab_list: [
-              'Holdings nisqa', 
-              'Transacciones nisqakuna'
+      'Holdings nisqa', 
+      'Transacciones nisqakuna'
     ],
     title: 'Belletera',
     transactions_placeholder: 'Ruranamanta willayta churay',

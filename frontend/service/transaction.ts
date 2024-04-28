@@ -5,8 +5,9 @@ import erc20 from '../assets/contracts/erc20.abi.json'
 import erc721 from '../assets/contracts/erc721.abi.json'
 import erc1155 from '../assets/contracts/erc1155.abi.json'
 import { logTopicMap } from './constants';
-import { getParsedTransaction } from '../store/transactionFeedItem';
+import { getParsedTransaction, storeParsedTransaction } from '../store/transactionFeedItem';
 import { getIsSpam } from './api';
+import unknown from '../../assets/index';
 
 export type Transaction = {
   readonly hash: string;
@@ -208,7 +209,7 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
   const addressType = await checkAddressType(toAddress, provider);
 
   if (addressType === 'Wallet') {
-    return {
+    const walletTransaction = {
       transactionId: transaction.tx_hash,
       contractType: 'Wallet', 
       eventType: 'Transfer',
@@ -218,6 +219,8 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       valueRaw: BigNumber.from(transaction.value),
       spam: false
     } as ParsedTransaction;
+    await storeParsedTransaction(wallet.address, _network.chainId, { ...walletTransaction });
+    return walletTransaction;
   }
 
   const matchedLog : ethers.providers.Log | undefined = receipt.logs.find((log) => {
@@ -232,7 +235,7 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
   if (!matchedLog) {
     const isSpam = await getIsSpam(transaction.to_address, _network.chainId);
 
-    return {
+    const unknownTransaction = {
       ...UNKNOWN_TRANSACTION, 
       transactionId: transaction.tx_hash,
       contractAddress: transaction.to_address,
@@ -240,10 +243,13 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       valueRaw: BigNumber.from(transaction.value),
       spam: isSpam === true
     };
+
+    await storeParsedTransaction(wallet.address, _network.chainId, { ...unknownTransaction });
+    return unknownTransaction;
   }
   const parsedLog : ParsedTransaction | null = parseLog(wallet, transaction, matchedLog, addressType);
   if (!parsedLog) {
-    return {
+    const unknownTransaction = {
       ...UNKNOWN_TRANSACTION, 
       transactionId: transaction.tx_hash,
       contractAddress: transaction.to_address,
@@ -251,7 +257,11 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       valueRaw: BigNumber.from(transaction.value),
       spam: false
     };
+    await storeParsedTransaction(wallet.address, _network.chainId, { ...unknownTransaction });
+    return unknownTransaction;
   }
+
+  await storeParsedTransaction(wallet.address, _network.chainId, { ...parsedLog });
   return parsedLog;
 }
 

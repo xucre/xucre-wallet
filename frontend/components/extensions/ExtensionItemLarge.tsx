@@ -43,7 +43,7 @@ const ExtensionItemComponent = ({ metadata, navigation }: { metadata: Extension,
             end: [0, 1]
           }
         }} width={'full'} justifyContent={'start'} alignItems={'center'} rounded="lg" >
-          <Image source={{ uri: metadata.featuredImage }} alt="image base" resizeMode="cover" width={'5/6'} height={'5/6'} top={0} />
+          <Image source={{ uri: metadata.featuredImage }} alt="image base" resizeMode={'contain'} width={'5/6'} height={'5/6'} top={0} />
         </Box>
         <HStack alignItems="center" justifyContent="space-between" pr={3} py={0} my={0} mt={-60} borderRadius={15}>
           <HStack alignItems="center" space={{ base: 3, md: 6 }} py={2}>

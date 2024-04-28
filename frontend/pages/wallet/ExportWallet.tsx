@@ -35,7 +35,7 @@ import { chainIdToNameMap, chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { ChartData, ExtendedBalance, Holding, ItemsWithOpenQuote, OpenQuotes, OutputObject } from "../../types/history";
 import { WalletInternal } from "../../store/wallet";
-import { processJsonData, truncateString } from '../../service/utility';
+import { truncateString } from '../../service/utility';
 import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
 import TransactionFeed from "../../components/transaction/TransactionFeed";
 import { useIsFocused } from "@react-navigation/native";

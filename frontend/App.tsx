@@ -99,6 +99,7 @@ import RampWidget from './pages/extensions/ramp/RampWidget';
 import SelectExtension from './pages/extensions/SelectExtension';
 import Ubeswap from './pages/extensions/ubeswap/Ubeswap';
 import EthicHub from './pages/extensions/ethichub/EthicHub';
+import ViewToken from './pages/token/ViewToken';
 //import TransactionFeed from './pages/wallet/TransactionFeed';
 
 const Stack = createNativeStackNavigator();
@@ -378,6 +379,10 @@ export const AppWrapper = () => {
               title: '',
             }} ></Stack.Screen>
             <Stack.Screen name="SwapToken" component={SwapToken} options={{
+              headerTitleAlign: 'center',
+              title: ''//translations[language as keyof typeof translations]?.SwapToken?.title,
+            }} ></Stack.Screen>
+            <Stack.Screen name="ViewToken" component={ViewToken} options={{
               headerTitleAlign: 'center',
               title: ''//translations[language as keyof typeof translations]?.SwapToken?.title,
             }} ></Stack.Screen>

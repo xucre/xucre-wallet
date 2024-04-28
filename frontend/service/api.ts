@@ -127,6 +127,26 @@ export const getTokenMetadata = async (address: string, chainName: any) => {
   }
 }
 
+export const getTokenTransferHistory = async (wallet: string, token: string, chainName: any) => {
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 10000,
+    });
+    const response = await instance({
+      method: 'get',
+      params: {
+        chainName,
+        wallet,
+        token,
+      },
+      url: `tokens/transfer`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
 
 export const getIsSpam = async (address: string, chainId: number) => {
   try {

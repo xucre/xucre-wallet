@@ -292,6 +292,10 @@ const values : TranslationType  = {
     title: 'Rede',
     use_network: 'Use Rede'
   },
+  ViewToken: {
+    current_balance: 'Saldo Atual',
+    current_price: 'Preço Atual (USD)',
+  },
   ViewWallet: {
     clear_button: 'Limpar transaÃ§Ãµes',
     holdings_placeholder: 'Inserir Holdings de moedas',

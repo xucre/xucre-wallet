@@ -292,6 +292,10 @@ const values : TranslationType  = {
     title: "Maatla-tl",
     use_network: "Tequitiltiaa maatla-tl"
   },
+  ViewToken: {
+    current_balance: 'Saldo Actual',
+    current_price: 'Precio Aactual (USD)',
+  },
   ViewWallet: {
     clear_button: "Tlatoma tlapeepeehuiliz-tli",
     holdings_placeholder: "Ahaquiaa tlacohcoohualooni",

@@ -10,3 +10,15 @@ export type Token = {
   readonly symbol?: string;
   readonly isNotSpammable?: boolean;
 }
+
+export type SerializedToken = {
+  readonly address: string;
+  readonly amount?: string;
+  readonly chainId: number;
+  readonly name: string;
+  readonly type: string;
+  readonly logo?: string;
+  readonly decimals?: number;
+  readonly symbol?: string;
+  readonly isNotSpammable?: boolean;
+}

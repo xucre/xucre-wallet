@@ -26,12 +26,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../assets/translations";
-import { Network } from "../service/network";
-import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../service/state";
+import translations from "../../assets/translations";
+import { Network } from "../../service/network";
+import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../../service/state";
 
 
-export default function NetworkIcon({ navigation, close }: { navigation: { navigate: Function }, close: Function }) {
+export default function NetworkIcon({ navigation, close, isInline }: { navigation: { navigate: Function }, close: Function, isInline: boolean }) {
   const [language,] = useRecoilState(stateLanguage);
   const [network, setSelectedNetwork] = useRecoilState(selectedNetwork);
   const { colorMode } = useColorMode();
@@ -56,12 +56,18 @@ export default function NetworkIcon({ navigation, close }: { navigation: { navig
   }, [avatar])
   return (
     <>
-      {avatar !== '' &&
+      {avatar !== '' && !isInline &&
         <Button variant={'unstyled'} onPress={() => { navigation.navigate('SelectNetwork'); close(false); }}>
           <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
             uri: avatar
           }} />
         </Button>
+      }
+
+      {avatar !== '' && isInline &&
+        <Avatar size="sm" mt={-2} source={{
+          uri: avatar
+        }} />
       }
     </>
 

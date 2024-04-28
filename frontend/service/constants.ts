@@ -343,9 +343,11 @@ export const logTopicMap = {
 
 export const actionToScheme = {
   "Recieve": 'success',
-  "Send": 'warning',
+  "Send": 'info',
   "Unknown" : 'primary',
   "Approve From" : 'success', 
+  "IN" : 'success',
+  "OUT": 'info'
 }
 
 export const googleLogoUrls = {
@@ -364,7 +366,7 @@ export const extensionList = (language: string) => {
       logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/warpcast.png',
       featuredImage: 'https://xucre-public.s3.sa-east-1.amazonaws.com/warpcast_featured.png',
       color: '#472A8F',
-      externalUrl: 'https://warpcast.com/~/invite-page/391437?id=b72b3348'
+      externalUrl: 'https://warpcast.com/~/invite-page/498434?id=d9716549'
     },
     {
       title: translations[languageKey].SelectExtension.swap_title,

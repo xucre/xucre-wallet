@@ -32,7 +32,7 @@ import { storeTheme } from '../store/setting';
 import { getWallets } from "../store/wallet";
 
 
-import NetworkIcon from './NetworkIcon';
+import NetworkIcon from './utils/NetworkIcon';
 import PasswordPage, { needsAuth } from "./Password";
 
 export default function SideBar({ navigation, route, setScheme }: { navigation: { navigate: Function }, route: any, setScheme: Function }) {
@@ -297,7 +297,7 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
             </Pressable>
 
             {/*<SelectLanguage />*/}
-            {<NetworkIcon navigation={navigation} close={setDrawerStatus} />}
+            {<NetworkIcon navigation={navigation} isInline={false} close={setDrawerStatus} />}
             {<ToggleDarkMode setScheme={setScheme} />}
             {/*<BackButton setDrawerStatus={setDrawerStatus}/>*/}
           </HStack>

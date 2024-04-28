@@ -23,11 +23,14 @@ import translations from "../../assets/translations";
 import { getWalletHistory } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
 import { activeNetwork, activeWallet, networkList, language as stateLanguage } from "../../service/state";
-import { ExtendedBalance, Holding, OpenQuotes, OutputObject } from "../../types/history";
+import { ChartData, ExtendedBalance, Holding, OpenQuotes, OutputObject } from "../../types/history";
 import { WalletInternal } from "../../store/wallet";
 import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
-import { processJsonData } from "../../service/utility";
+import { processCovalentJsonData } from "../../service/utility";
 import { useIsFocused } from '@react-navigation/native';
+import dayjs from "dayjs";
+import { getActiveNetwork } from "../../store/network";
+import NetworkIcon from "../utils/NetworkIcon";
 
 export default function TotalBalance({ navigate }: { navigate: Function }) {
   const { colorMode } = useColorMode();
@@ -44,7 +47,7 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
   const currency = 'USD';
   const [currentHoldings, setCurrentHoldings] = useState({
     meta: {
-      'date': '01 Jan 2024 14:31:46 -0700'
+      'date': '01/01/2024'
     },
     x: 0,
     y: 0
@@ -55,64 +58,39 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
     y: '0.00',
   })
 
-  const getData = async (runCount = 0) => {
+  const getData = async () => {
     try {
-      const historyResults = await getWalletHistory(wallet.address, chainName as string);
-
-      const outputData = processJsonData(historyResults);
-      // ONLY FOR TESTING - USED TO FILL CHART VALUES WHEN ALL ARE EMPTY
-      const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, _i) => {
-        return {
-          ...finalVal,
-          quotes: [...finalVal.quotes, d]
-        } as OpenQuotes;
-      }, {
-        direction: 'down',
-        quotes: []
-      } as OpenQuotes)
-      // END TESTING PORTION
-      const finalQuotes = openQuotes.quotes.map((d) => {
-        const finalQuote = {
-          meta: {
-            'date': d.date
-          },
-          x: d.date.length > 0 ? daysjs(d.date).unix() : daysjs().unix(),
-          y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
-        };
-        return finalQuote
-      });
+      const _network = await getActiveNetwork();
+      const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
+      const historyResults = await getWalletHistory(wallet.address, chainName);
+      const { quotes: finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
       if (finalQuotes.length > 0) {
-        setCurrentHoldings(finalQuotes[0]);
-        if (finalQuotes.length > 1) {
-          const percent = (((finalQuotes[1].y - finalQuotes[0].y) / finalQuotes[0].y) || 0).toFixed(0) + '%';
-          const trend = finalQuotes[1].y > finalQuotes[0].y ? 'up' : finalQuotes[1].y < finalQuotes[0].y ? 'down' : 'flat';
-          const y = (finalQuotes[1].y - finalQuotes[0].y).toFixed(2);
-          setSecondToLastHoldings({
-            percent,
-            trend,
-            y: y || ''
-          })
-        } else {
-          const percent = '0%';
-          const trend = 'flat';
-          const y = '';
-          setSecondToLastHoldings({
-            percent,
-            trend,
-            y: y || ''
-          })
-        }
-
-      } else {
-        setTimeout(() => {
-          if (runCount < 4) getData(runCount + 1);
-        }, 1000)
+        const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
+          if (returnVal[d.x]) {
+            return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
+          }
+          return { ...returnVal, [d.x]: d };
+        }, {} as { [key: number]: ChartData });
+        const _quotes = Object.values(quoteMap);
+        const lastQuote = _quotes[_quotes.length - 1];
+        setCurrentHoldings(lastQuote);
+        const secondToLastQuote = _quotes[_quotes.length - 2];
+        const percent = (((secondToLastQuote.y - lastQuote.y) / _quotes[0].y) || 0).toFixed(0) + '%';
+        const trend = secondToLastQuote.y > lastQuote.y ? 'up' : secondToLastQuote.y < lastQuote.y ? 'down' : 'flat';
+        const y = (secondToLastQuote.y - lastQuote.y).toFixed(2);
+        setSecondToLastHoldings({
+          percent,
+          trend,
+          y: y || ''
+        })
       }
-    } catch (err) {
+    } catch (err: any) {
+      //const err2 = err as Error;
     }
-
   }
 
+  const emptyFunction = () => { };
+  const emptyNavigation = { navigate: emptyFunction };
   useEffect(() => {
     if (_wallet.name !== '' && network) {
       setWallet(new WalletInternal(_wallet.wallet));
@@ -121,13 +99,6 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
 
   useEffect(() => {
     if (wallet.address && isFocused) {
-      /*setCurrentHoldings({
-        meta: {
-          'date': ''
-        },
-        x: 0,
-        y: 0
-      });*/
       getData();
     }
   }, [wallet, chainName, isFocused])
@@ -148,9 +119,10 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
 
             <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} paddingTop={3}>{translations[language as keyof typeof translations].totalBalance.title}</Text>
 
-            <HStack paddingBottom={0} space={1}>
+            <HStack paddingBottom={0} space={1} alignItems={'center'}>
               <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >{CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}{currentHoldings ? formatCurrency(currentHoldings.y.toString()) : '0.00'}</Text></Heading>
-              <Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>
+              <NetworkIcon navigation={emptyNavigation} isInline={true} close={emptyFunction} />
+              {/*<Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>*/}
 
             </HStack>
 

@@ -22,20 +22,15 @@ import TokenItem from '../../components/token/TokenItem';
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getTokenItems, storeTokenItems } from "../../store/tokenItem";
-import { getTokenBalances, getWalletTransactions, swapUrl } from "../../service/api";
-import { chainIdToNameMap, xucreToken } from "../../service/constants";
 import { activeNetwork, activeWallet, language as stateLanguage, walletList } from '../../service/state';
-import { CovalentTransaction } from "../../service/transaction";
-import { Token } from "../../service/token";
+
 import { WalletInternal } from "../../store/wallet";
 import { getActiveNetwork } from "../../store/network";
 import { Color } from "../../../GlobalStyles";
-import ethTokens from '../../assets/json/eth_tokens.json'
-import polygonTokens from '../../assets/json/matic_tokens.json'
 import { useIsFocused } from '@react-navigation/native';
 import { Linking } from "react-native";
-import { isSpam } from "../../store/spam";
 import SquareButton from "../../components/ui/SquareButton";
+import useTokens from "../../hooks/useTokens";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -48,7 +43,8 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [_wallet,] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const network = useRecoilValue(activeNetwork);
-  const [tokens, setTokens] = useState([] as Token[]);
+  //const [tokens, setTokens] = useState([] as Token[]);
+  const { tokens, reset } = useTokens();
   const [isComponentMounted, setIsComponentMounted] = useState(true);
 
   const tabList = translations[language as keyof typeof translations].ViewWallet.tab_list;
@@ -63,72 +59,6 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const buttonProfile = translations[language as keyof typeof translations].Buttons_Header.profile;
   const buttonRamp = translations[language as keyof typeof translations].Buttons_Header.ramp;
 
-  const tokenMetadataMap = network.chainId === 1 ? ethTokens : network.chainId === 137 ? polygonTokens : {};
-
-  const syncTokens = async () => {
-    try {
-
-      const _network = await getActiveNetwork();
-
-      const _tokens = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap])).tokenBalances;
-
-      //const _provider = getDefaultProvider(_network.rpcUrl);
-
-      //const walletBalance = await wallet.connect(_provider).getBalance();
-
-      const coinToken = {
-        address: ethers.constants.AddressZero,
-        //amount: walletBalance,
-        chainId: _network.chainId,
-        name: _network.name,
-        symbol: _network.symbol || 'NA',
-        type: 'coin',
-        isNotSpammable: true
-      };
-      if (!_tokens) {
-        if (isComponentMounted) {
-          if (_network.chainId === xucreToken.chainId) {
-            setTokens([xucreToken, coinToken]);
-            return;
-          }
-          setTokens([coinToken]);
-          return;
-        }
-      } else {
-        const tokenList = [..._tokens.map((token: { contractAddress: string; tokenBalance: any; }) => {
-          const tokenMetadata = tokenMetadataMap[token.contractAddress.toLowerCase() as keyof typeof tokenMetadataMap];
-          const _token = {
-            //@ts-ignore
-            name: tokenMetadata?.name || 'N/A',
-            amount: BigNumber.from(token.tokenBalance || 0),
-            chainId: _network.chainId,
-            address: token.contractAddress,//ethers.utils.getAddress(token.contractAddress),
-            type: 'token',
-            //@ts-ignore
-            logo: tokenMetadata?.logo || undefined,
-            //@ts-ignore
-            symbol: tokenMetadata?.symbol || 'N/A',
-            isNotSpammable: false
-          } as Token
-          return _token;
-        }).values(), coinToken];
-        const finalTokens = tokenList.sort((a, b) => {
-          if (a.amount && b.amount) {
-            return (a.amount.gt(b.amount)) ? -1 : 1
-          } else if (a) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-        setTokens(finalTokens);
-        return;
-      }
-    } catch (err) {
-    }
-
-  }
-
   useEffect(() => {
     if (_wallet.name === '' && _walletList.length === 0) {
       navigation.navigate('SelectWallet');
@@ -139,35 +69,13 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       } else {
         setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
       }
-
-      setTimeout(async () => {
-        /*const _tokens = await getTokenItems(_wallet.address, network.chainId);
-        if (_tokens && _tokens.length > 0) {
-          const finalTokens = [..._tokens.map((token) => {
-            return {
-              ...token,
-              amount: BigNumber.from(token.amount?.hex || 0)
-            } as Token;
-          }).values()];
-
-          setTokens(finalTokens);
-        } else {
-          syncTokens();
-        }*/
-        syncTokens();
-
-      }, 1000)
     }
   }, [_wallet, _walletList, network]);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    //setTokens([]);
-    //setTransactions([]);
-    //await refreshNetwork();
     setTimeout(async () => {
-      await syncTokens();
-      //await syncTransactions();
+      await reset();
       setRefreshing(false);
     }, 500)
   }, []);
@@ -207,24 +115,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
   const buyTokens = async () => {
     navigation.navigate('BuyToken');
-    //const supported = await Linking.canOpenURL(swapUrl);
-
-    //if (supported) {
-    // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-    // by some browser in the mobile
-    //await Linking.openURL(swapUrl);
-    //}
   }
 
   const connectWallet = () => {
     navigation.navigate('ConnectionManagement');
   }
-
-  useEffect(() => {
-    if (isFocused && wallet.address) {
-      //onRefresh();
-    }
-  }, [isFocused])
 
   useEffect(() => {
     const runAsync = async () => {

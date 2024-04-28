@@ -2,8 +2,9 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 import { env } from './constants';
-import { ExtendedBalance, Holding, OutputObject } from '../types/history';
+import { ExtendedBalance, Holding, OpenQuotes, OutputObject } from '../types/history';
 import dayjs from 'dayjs';
+import { ethers } from 'ethers';
 
 //Static References
 
@@ -111,7 +112,9 @@ export const convertDollarAmountToCurrency = (dollarValue: number, conversionRat
   return conversionRate * dollarValue;
 }
 
-export const processJsonData = (jsonData: { error: any; data: { items: any[]; }; } | null) => {
+export const processCovalentJsonData = (jsonData: { error: any; data: { items: any[]; }; } | null, tokenAddress: string | null) => {
+  const conversionRate = 1;
+  const currency = 'USD';
   const output: OutputObject = {
     isTokenValue: false,
     itemsWithRecentOpenQuote: [],
@@ -119,48 +122,78 @@ export const processJsonData = (jsonData: { error: any; data: { items: any[]; };
   };
 
   if (jsonData === null || jsonData.error) {
-    return output;
+    return {quotes: [], isReady: true};
   }
 
   jsonData.data.items.forEach((item) => {
     let mostRecentOpenQuote: ExtendedBalance | null = null;
+    if ((tokenAddress && compareAddresses(item.contract_address, tokenAddress)) || !tokenAddress) {
+      item.holdings.forEach((holding: Holding) => {
+        const date = dayjs(holding.timestamp);
+        if (holding.open && holding.open.quote) {
+          const existingEntry = output.openQuotesByDay.find((entry) => dayjs(entry.date).isSame(date, 'day'));
 
-    item.holdings.forEach((holding: Holding) => {
-      const date = dayjs(holding.timestamp);
-      if (holding.open && holding.open.quote) {
-        const existingEntry = output.openQuotesByDay.find((entry) => dayjs(entry.date).isSame(date, 'day'));
+          if (existingEntry) {
+            existingEntry.totalQuote += holding.open.quote;
+            existingEntry.quoteRate = holding.quote_rate;
+          } else {
+            output.openQuotesByDay.push({
+              date: date.format('MM/DD/YYYY'), totalQuote: holding.open.quote,
+              quoteRate: holding.quote_rate
+            });
+          }
 
-        if (existingEntry) {
-          existingEntry.totalQuote += holding.open.quote;
-          existingEntry.quoteRate = holding.quote_rate;
-        } else {
-          output.openQuotesByDay.push({
-            date: date.format('MM/DD/YYYY'), totalQuote: holding.open.quote,
-            quoteRate: holding.quote_rate
-          });
+          if (!mostRecentOpenQuote || mostRecentOpenQuote.timestamp as number < parseFloat(holding.timestamp)) {
+            mostRecentOpenQuote = holding.open;
+          }
         }
-
-        if (!mostRecentOpenQuote || mostRecentOpenQuote.timestamp as number < parseFloat(holding.timestamp)) {
-          mostRecentOpenQuote = holding.open;
-        }
-      }
-    });
-
-    if (mostRecentOpenQuote) {
-      output.itemsWithRecentOpenQuote.push({
-        contract: {
-          address: item.contract_address,
-          name: item.contract_name,
-          ticker_symbol: item.contract_ticker_symbol,
-        },
-        mostRecentOpenQuote,
       });
+
+      if (mostRecentOpenQuote) {
+        output.itemsWithRecentOpenQuote.push({
+          contract: {
+            address: item.contract_address,
+            name: item.contract_name,
+            ticker_symbol: item.contract_ticker_symbol,
+          },
+          mostRecentOpenQuote,
+        });
+      }
     }
   });
+  const isReady = output === null || output.openQuotesByDay[0].totalQuote === null || output.openQuotesByDay[0].totalQuote === 0;
 
-  return output;
+  const openQuotes = output.openQuotesByDay.reduce((finalVal, d, _i) => {
+    return {
+      ...finalVal,
+      quotes: [...finalVal.quotes, d]
+    } as OpenQuotes;
+  }, {
+    direction: 'down',
+    quotes: []
+  } as OpenQuotes)
+  
+  const finalQuotes = openQuotes.quotes.map((d) => {
+    const finalQuote = {
+      meta: {
+        'date': d.date
+      },
+      x: d.date.length > 0 ? dayjs(d.date, "MM/DD/YYYY").unix() : dayjs().unix(),
+      y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
+    };
+    return finalQuote
+  });
+
+  return {quotes: finalQuotes, isReady: isReady};
 }
 
 export const isSVGFormatImage = (url: string) => {
   return url.endsWith(".svg");
+}
+
+export const compareAddresses = (address1: string, address2: string) => {
+  if (ethers.utils.getAddress(address2) === ethers.constants.AddressZero) {
+    return ethers.utils.getAddress(address1) === ethers.utils.getAddress('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') || ethers.utils.getAddress(address1) === ethers.utils.getAddress('0x0000000000000000000000000000000000001010');
+  }
+  return ethers.utils.getAddress(address1) === ethers.utils.getAddress(address2);
 }

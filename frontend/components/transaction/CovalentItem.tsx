@@ -41,7 +41,7 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
     try {
       setLoading(true);
       const result: ParsedTransaction = await parseTransaction(new WalletInternal(wallet.wallet), transaction, network);
-      await storeParsedTransaction(wallet.address, network.chainId, { ...result });
+      //await storeParsedTransaction(wallet.address, network.chainId, { ...result });
       setTransactionDetails({ ...result });
     } catch (err) {
     } finally {

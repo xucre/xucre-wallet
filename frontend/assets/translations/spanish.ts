@@ -292,6 +292,10 @@ const values : TranslationType = {
     title: "Redes",
     use_network: "Usar Red"
   },
+  ViewToken: {
+    current_balance: 'Saldo Actual',
+    current_price: 'Precio Actual (USD)',
+  },
   ViewWallet: {
     clear_button: "Limpiar Transacciones",
     holdings_placeholder: "Insertar existencias de monedas",
@@ -319,7 +323,7 @@ const values : TranslationType = {
     notificationNumber: "Por favor ingrese el código del país incluyendo el signo +"
   },
   ui: {
-    open: "Abierto",
+    open: "Abrir",
     close: "Cerrar",
     cancel: "Cancelar",
     confirm: "Confirmar",

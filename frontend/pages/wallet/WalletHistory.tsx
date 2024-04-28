@@ -5,6 +5,7 @@ import { Wallet } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 //import moment from "moment";
 import dayjs from "dayjs";
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import {
   Box,
   Button,
@@ -32,12 +33,13 @@ import { chainIdToNameMap, chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, language as stateLanguage } from "../../service/state";
 import { ChartData, ExtendedBalance, Holding, ItemsWithOpenQuote, OpenQuotes, OutputObject } from "../../types/history";
 import { WalletInternal } from "../../store/wallet";
-import { processJsonData } from "../../service/utility";
+import { processCovalentJsonData } from "../../service/utility";
 import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
 import TransactionFeed from "../../components/transaction/TransactionFeed";
 import { useIsFocused } from "@react-navigation/native";
 import { getActiveNetwork } from "../../store/network";
-
+import { Color } from "../../../GlobalStyles";
+dayjs.extend(customParseFormat);
 
 export default function WalletHistory({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -51,12 +53,12 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   //const [network,] = useRecoilState(activeNetwork);
   const [currentHoldings, setCurrentHoldings] = useState({
     meta: {
-      'date': '01 Jan 2024 14:31:46 -0700'
+      'date': '01/01/2024'
     },
     x: 0,
     y: 0
   } as ChartData);
-  const [holdings, setHoldings] = useState([] as ItemsWithOpenQuote[]);
+  //const [holdings, setHoldings] = useState([] as ItemsWithOpenQuote[]);
   const [chartData, setChartData] = useState([] as ChartData[]);
   const [isZeroData, setIsZeroData] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
@@ -76,41 +78,33 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
   const getData = async () => {
     try {
+      setRefreshing(true);
       const _network = await getActiveNetwork();
       const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
       const historyResults = await getWalletHistory(wallet.address, chainName);
-      const outputData = processJsonData(historyResults);
-      const isReady = outputData === null || outputData.openQuotesByDay[0].totalQuote === null || outputData.openQuotesByDay[0].totalQuote === 0;
-      const openQuotes = outputData.openQuotesByDay.reduce((finalVal, d, _i) => {
-        return {
-          ...finalVal,
-          quotes: [...finalVal.quotes, d]
-        } as OpenQuotes;
-      }, {
-        direction: 'down',
-        quotes: []
-      } as OpenQuotes);
+      const { quotes: finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
+      //const finalQuotes = result.quotes;
+      if (finalQuotes.length > 0) {
+        const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
+          if (returnVal[d.x]) {
+            return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
+          }
+          return { ...returnVal, [d.x]: d };
+        }, {} as { [key: number]: ChartData });
+        const _quotes = Object.values(quoteMap);
+        setCurrentHoldings(_quotes[_quotes.length - 1]);
+        setIsZeroData(isReady);
 
-      setHoldings(outputData.itemsWithRecentOpenQuote);
-      const finalQuotes = openQuotes.quotes.map((d) => {
-        return {
-          meta: {
-            'date': d.date
-          },
-          x: d.date.length > 0 ? dayjs(d.date).unix() : dayjs().unix(),
-          y: Math.round(((d.totalQuote * conversionRate) + Number.EPSILON) * 100) / 100
+        if (_quotes.length > 7) {
+          setChartData(_quotes.reverse().splice(0, 7));
+        } else {
+          setChartData(_quotes.reverse());
         }
-      });
-      setCurrentHoldings(finalQuotes[0]);
-      setChartData(finalQuotes);
-      setIsZeroData(isReady);
+
+      }
       setRefreshing(false);
-
-    } catch (err) {
-      setTimeout(() => {
-        //getData();
-      }, 1000)
-
+    } catch (err: any) {
+      //const err2 = err as Error;
     }
   }
 
@@ -124,16 +118,19 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
   useEffect(() => {
     if (wallet.address) {
-      setRefreshing(true);
+      //setRefreshing(true);
       getData();
     }
-  }, [])
+  }, [wallet])
 
+  const empty = () => {
+    //console.log('empty');
+  }
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     //setHoldings([]);
     //setChartData([]);
-    getData();
+    //getData();
     /*setTimeout(async () => {
       setRefreshing(false);
     }, 100)*/
@@ -152,13 +149,12 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   }
   return (
     <DashboardLayout title={_wallet.name}>
-      <Box
+      <VStack
         _light={{ backgroundColor: 'white' }}
         _dark={{ backgroundColor: 'black' }}
         height={'full'}
         safeAreaBottom
       >
-
         {chartData.length > 0 &&
           <Box padding={0} borderRadius={10} marginX={2} >
             <HStack space={2} justifyContent={'space-between'}>
@@ -173,13 +169,32 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
             <Chart
               // eslint-disable-next-line react-native/no-inline-styles
-              style={{ minHeight: 150, width: '100%' }}
+              style={{ minHeight: 250, width: '100%' }}
               data={chartData}
               yDomain={isZeroData ? { max: 20, min: -20 } : { max: getMaxValue(), min: 0 }}
-              padding={{ bottom: 20, left: 10, right: 10, top: 50 }}
+              padding={{ bottom: 20, left: 15, right: 15, top: 50 }}
             >
-              <HorizontalAxis />
-              <Area theme={{ gradient: { from: { color: colorMode === 'dark' ? '#D4E815' : '#6b21a8' }, to: { color: colorMode === 'dark' ? 'black' : 'white', opacity: 0.4 } } }} />
+              <HorizontalAxis tickCount={7} tickValues={chartData.map((v) => v.x)} theme={{
+                labels: {
+                  visible: true,
+                  label: {
+                    color: colorMode === 'dark' ? Color.white : Color.black,
+                    fontSize: 12,
+                  },
+                  formatter: (v) => dayjs(v, 'X').format('ddd')
+                  //formatter?: (value: number) => string;
+                },
+                grid: {
+                  visible: true,
+                  stroke: {
+                    color: '#ccc',
+                    width: 1,
+                    opacity: 1,
+                    dashArray: [5, 5]
+                  },
+                },
+              }} />
+              <Area smoothing={'bezier'} theme={{ gradient: { from: { color: colorMode === 'dark' ? '#D4E815' : '#6b21a8' }, to: { color: colorMode === 'dark' ? 'black' : 'white', opacity: 0.4 } } }} />
               <Line
                 tooltipComponent={
                   <Tooltip theme={{
@@ -200,7 +215,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
                     },
                   }} />
                 }
-                smoothing={'cubic-spline'}
+                smoothing={'bezier'}
                 theme={{
                   scatter: {
                     default: {
@@ -218,14 +233,16 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
                     width: 1
                   },
                 }}
+
               />
             </Chart>
           </Box>
         }
-        <TransactionFeed navigation={navigation} />
-
-        <MobileFooter navigation={navigation}></MobileFooter>
-      </Box>
+        {
+          <TransactionFeed navigation={navigation} tokenAddress={null} updateDefault={empty} />
+        }
+        {/*<MobileFooter navigation={navigation}></MobileFooter>*/}
+      </VStack>
     </DashboardLayout>
   )
 }

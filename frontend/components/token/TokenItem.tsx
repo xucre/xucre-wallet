@@ -9,19 +9,14 @@ import erc20Abi from '../../../contracts/erc20.abi.json';
 import translations from "../../assets/translations";
 import { activeNetwork, activeWallet } from "../../service/state";
 import { language as stateLanguage } from "../../service/state";
-import { Token } from "../../service/token";
+import { SerializedToken, Token } from "../../service/token";
 import { isSVGFormatImage, truncateString_old } from "../../service/utility";
 import { coinIconNames, tokenIconNames } from '../../store/network';
 import { SvgUri } from "react-native-svg";
 import { getTokenMetadata } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
 import { addToSpam, isSpam } from "../../store/spam";
-
-type AlchemyMetadata = {
-  readonly logo?: string;
-  readonly symbol?: string;
-  readonly name?: string;
-}
+import { AlchemyMetadata } from "../../types/token";
 
 function TokenItemComponent({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
   const { colorMode } = useColorMode();
@@ -136,7 +131,11 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
   }
 
   const sendToken = () => {
-    navigation.navigate('SendToken', { token })
+    navigation.navigate('SendToken', { token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata.decimals || 18 } as SerializedToken })
+  }
+
+  const viewToken = () => {
+    navigation.navigate('ViewToken', { token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata.decimals || 18 } as SerializedToken })
   }
 
   const blacklistToken = async () => {
@@ -150,22 +149,21 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
 
   return (
     <HStack alignItems="center" justifyContent="space-between" py={2}>
-      <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-        <TokenIcon iname={token.type == 'coin' ? coinIconNames[token.chainId as keyof typeof coinIconNames] : truncateString_old(token.address, 3) as string} />
-
-        <VStack>
-          <Pressable>
+      <Pressable onPress={() => { viewToken() }}>
+        <HStack alignItems="center" space={{ base: 3, md: 6 }}>
+          <TokenIcon iname={token.type == 'coin' ? coinIconNames[token.chainId as keyof typeof coinIconNames] : truncateString_old(token.address, 3) as string} />
+          <VStack>
             <Text fontSize="md" bold>
               {computedSymbol}
             </Text>
-          </Pressable>
-        </VStack>
-      </HStack>
+          </VStack>
+        </HStack>
+      </Pressable>
       <HStack alignItems="center" space={{ base: 2 }}>
         <Text
           _light={{ color: 'coolGray.500' }}
           _dark={{ color: 'coolGray.400' }}
-          fontWeight="normal">{token.amount ? ethers.utils.formatEther(token.amount as BigNumberish || rawAmount) : !rawAmount.isZero() ? ethers.utils.formatEther(rawAmount) : '0.00'}</Text>
+          fontWeight="normal">{token.amount ? ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata.decimals) : !rawAmount.isZero() ? ethers.utils.formatUnits(rawAmount, alchemyMetadata.decimals) : '0.00'}</Text>
         <Tooltip label="More Options" openDelay={500}>
           <Menu w="190" trigger={triggerProps => {
             return <Pressable accessibilityLabel={translations[language as keyof typeof translations].TokenItem.menu_accessiblity_label} {...triggerProps}>

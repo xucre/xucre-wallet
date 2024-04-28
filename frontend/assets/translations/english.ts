@@ -296,6 +296,10 @@ const values : TranslationType = {
     title: "Network",
     use_network: "Use Network"
   },
+  ViewToken: {
+    current_balance: 'Current Balance',
+    current_price: 'Current Price (USD)',
+  },
   ViewWallet: {
     clear_button: "Clear Transactions",
     holdings_placeholder: "Insert Coin Holdings",
@@ -315,7 +319,7 @@ const values : TranslationType = {
   },
   WalletHistory: {
     title: "History",
-    total_balance: 'Total Balance'
+    total_balance: 'Current Balance'
   },
   WhatsAppNotification:{
     button: "Send WhatsApp notification",

@@ -36,21 +36,28 @@ import { Transaction } from "../../service/transaction";
 import { getTokenByChain } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
 import { WalletInternal } from "../../store/wallet";
-import { xucreToken } from "../../service/constants";
+import { chainIdToNameMap, xucreToken } from "../../service/constants";
 import ContainedButton from "../../components/ui/ContainedButton";
+import ethTokens from '../../assets/json/eth_tokens.json'
+import polygonTokens from '../../assets/json/matic_tokens.json'
+import { getActiveNetwork } from "../../store/network";
+import { getTokenBalances, getTokenMetadata } from "../../service/api";
+import { AlchemyMetadata } from "../../types/token";
+import { isSpam } from "../../store/spam";
+import useTokens from "../../hooks/useTokens";
 
 export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const toast = useToast();
   const [language] = useRecoilState(stateLanguage);
   const token = route.params?.token;
   const [selectedToken, setSelectedToken] = useState({} as Token);
-  const [tokens, setTokens] = useState([] as readonly Token[]);
-  const [network] = useRecoilState(activeNetwork);
+  const { tokens } = useTokens();
   const [pendingTransactions, setTransactionList] = useRecoilState(
     transactionList
   );
   const [loading, setLoading] = useState(false);
   const [loadingStage, setLoadingStage] = useState('');
+  const [alchemyMetadata, setAlchemyMetadata] = useState({} as AlchemyMetadata);
   const [amount, setAmount] = useState("0");
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [gasBalance, setGasBalance] = useState(BigNumber.from(0))
@@ -71,49 +78,10 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
 
-  useEffect(() => {
-    const runAsync = async () => {
-      const _tokens = await getTokenByChain(network.chainId);
-      const coinToken = {
-        address: "",
-        amount: BigNumber.from(0),
-        chainId: network.chainId,
-        name: network.symbol,
-        type: "coin",
-      };
-      if (_tokens) {
-        const tokenList = [coinToken, ..._tokens as Token[]];
-        if (tokenList.find((tok) => {
-          return tok.address === xucreToken.address && tok.chainId === xucreToken.chainId
-        })) {
-          setTokens(tokenList);
-          return;
-        } else {
-          if (network.chainId === xucreToken.chainId) {
-            setTokens([xucreToken, ...tokenList]);
-            return;
-          }
-          setTokens([...tokenList as Token[]]);
-          return;
-        }
-      } else {
-        if (network.chainId === xucreToken.chainId) {
-          setTokens([xucreToken, coinToken]);
-          return;
-        }
-        setTokens([coinToken]);
-        return;
-      }
-    };
-
-    if (network) {
-      runAsync();
-    }
-  }, [network]);
 
   useEffect(() => {
     if (token) {
-      setSelectedToken(token);
+      setSelectedToken({ ...token, amount: BigNumber.from(token.amount) } as Token);
     }
   }, [token, wallet]);
 
@@ -123,13 +91,9 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
 
       const walletBalance = await wallet.getBalance();
       setGasBalance(walletBalance);
-      if (selectedToken.type === 'coin' && wallet.address) {
-        setBalance(walletBalance);
-      } else if (selectedToken.type === 'token' && wallet.address) {
-        const contract = new ethers.Contract(selectedToken.address, erc20Abi, provider);
-        const _balance = await contract.balanceOf((wallet.address));
-        setBalance(_balance);
-      }
+      setBalance(selectedToken.amount || BigNumber.from(0));
+      const result = await getTokenMetadata(token.address, chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap]);
+      setAlchemyMetadata(result as AlchemyMetadata);
     }
     if (selectedToken && wallet && wallet.address) {
       runAsync();
@@ -137,18 +101,22 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   }, [selectedToken, wallet])
 
   useEffect(() => {
-    if (_wallet.name != "" && network) {
-      const _provider = getDefaultProvider(network.rpcUrl);
+    const runAsync = async () => {
+      const _network = await getActiveNetwork();
+      const _provider = getDefaultProvider(_network.rpcUrl);
       setProvider(_provider);
       const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
       setWallet(newWallet);
     }
-  }, [_wallet, network]);
+    if (_wallet.name != "") {
+      runAsync();
+    }
+  }, [_wallet]);
 
   useEffect(() => {
     if (amount) {
       try {
-        const isTooMuch = ethers.utils.parseEther(amount).gt(balance);
+        const isTooMuch = ethers.utils.parseUnits(amount, alchemyMetadata.decimals).gt(balance);
         setNotEnough(isTooMuch);
       } catch (err) {
       }
@@ -207,7 +175,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             const contract = _contract.connect(wallet);
             const gasEstimate = await contract.estimateGas.transfer(
               ethers.utils.getAddress(address),
-              ethers.utils.parseEther(amount)
+              ethers.utils.parseUnits(amount, alchemyMetadata.decimals)
             )
             if (gasEstimate.gt(gasBalance)) {
               setLoading(false);
@@ -217,7 +185,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             }
             const _submitted = await contract.transfer(
               ethers.utils.getAddress(address),
-              ethers.utils.parseEther(amount),
+              ethers.utils.parseUnits(amount, alchemyMetadata.decimals),
               {
                 gasLimit: gasEstimate, // Use the estimated gas
                 gasPrice: await provider.getGasPrice(),
@@ -252,7 +220,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
           } else if (selectedToken.type === "coin" && wallet.address) {
             const tx = {
               to: address,
-              value: ethers.utils.parseEther(amount)
+              value: ethers.utils.parseUnits(amount, alchemyMetadata.decimals)
             }
 
             const gasEstimate = await wallet.estimateGas(tx);
@@ -400,7 +368,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
                     colorMode === "dark" ? styles.textoImput : lightStyles.textoImput
                   }
                   fontSize={35}
-                  keyboardType="numeric"
+                  inputMode="numeric"
                   w="90%"
                   h="30%"
                   mb={2}
@@ -436,7 +404,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
                     }
                   </HStack>
                 </Box>
-                <Box>
+                <Box w={'5/6'}>
                   <Box>
                     <ContainedButton
                       buttonText={translations[language as keyof typeof translations].SendToken.submit_button}

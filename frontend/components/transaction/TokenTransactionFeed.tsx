@@ -11,24 +11,26 @@ import { SvgUri } from 'react-native-svg';
 
 import { activeNetwork, activeWallet, language as stateLanguage } from "../../service/state";
 import DashboardLayout from "../../layouts/DashboardLayout";
-import { getWalletTransactions } from "../../service/api";
+import { getTokenTransferHistory, getWalletTransactions } from "../../service/api";
 import { CovalentTransaction, CovalentTransactionV3 } from "../../service/transaction";
 import { chainIdToNameMap } from "../../service/constants";
 import { Pressable, RefreshControl } from "react-native";
 import CovalentItem from './CovalentItem';
 import { getActiveNetwork } from "../../store/network";
 import { useIsFocused } from "@react-navigation/native";
-import { getFeedItems, storeFeedItems } from "../../store/transactionFeedItem";
 import { ethers } from "ethers";
 import { compareAddresses } from "../../service/utility";
+import { CovalentTokenHistoryItem, CovalentTransferHistory } from "../../types/token";
+import { getTokenHistoryItems, storeTokenHistoryItems } from "../../store/token";
+import CovalentTransferItem from "./CovalentTransferItem";
 
-export default function TransactionFeed({ navigation, tokenAddress, updateDefault }: { navigation: { navigate: Function }, tokenAddress: string | null, updateDefault: Function | null }) {
+export default function TransactionFeed({ navigation, tokenAddress }: { navigation: { navigate: Function }, tokenAddress: string }) {
   const isFocused = useIsFocused();
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = useState(false);
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
-  const [transactions, setTransactions] = useState([] as CovalentTransactionV3[]);
+  const [transactions, setTransactions] = useState([] as CovalentTokenHistoryItem[]);
   //{translations[language].BasePage.title}
   useEffect(() => {
     if (_wallet) {
@@ -39,7 +41,7 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
   useEffect(() => {
     const runAsync = async () => {
       const _network = await getActiveNetwork();
-      storeFeedItems(_wallet.address, _network.chainId, transactions);
+      storeTokenHistoryItems(_wallet.address, tokenAddress, _network.chainId, transactions);
     }
     if (transactions.length > 0) {
       runAsync();
@@ -50,9 +52,10 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
     setRefreshing(true);
     setTimeout(async () => {
       const _network = await getActiveNetwork();
-      const _transactions = await getWalletTransactions(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
-      if (_transactions && _transactions.covalent.items) {
-        setTransactions(_transactions.covalent.items as CovalentTransactionV3[]);
+      const _transactions = await getTokenTransferHistory(_wallet.address, tokenAddress, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
+
+      if (_transactions && _transactions.items) {
+        setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
       }
       setRefreshing(false);
     }, 100)
@@ -61,7 +64,7 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
 
   useEffect(() => {
     const runAsync = async () => {
-      const _transactions = await getFeedItems(_wallet.address, network.chainId);
+      const _transactions = await getTokenHistoryItems(_wallet.address, tokenAddress, network.chainId);
       if (_transactions && _transactions.length > 0) {
         setTransactions(_transactions);
       }
@@ -72,21 +75,17 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
       runAsync();
     }
   }, [])
-  const filteredTransactions = transactions.filter((transaction) =>
-    (tokenAddress &&
-      (compareAddresses(transaction.to_address, tokenAddress) || compareAddresses(transaction.from_address, tokenAddress))
-    ) || !tokenAddress);
   return (
     <Box paddingY={4}>
-      <FlatList data={filteredTransactions} refreshControl={
+      <FlatList data={transactions} refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={syncTransactions}
         />
       } renderItem={
-        ({ item, index }) => <CovalentItem key={item.tx_hash} transaction={item} navigation={navigation} />
+        ({ item, index }) => <CovalentTransferItem key={item.tx_hash} transaction={item} navigation={navigation} />
       }
-        keyExtractor={item => item.tx_hash}
+        keyExtractor={item => `${item.tx_hash}:${item}`}
       />
       {transactions.length === 0 &&
         <Pressable onPress={() => {

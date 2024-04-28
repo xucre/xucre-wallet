@@ -46,6 +46,7 @@ export interface TranslationType {
   TokenItem: any,
   TransactionFeed: any,
   ViewNetwork: any,
+  ViewToken: any,
   ViewWallet: {
     clear_button: string,
     holdings_placeholder: string,
