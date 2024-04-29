@@ -128,18 +128,25 @@ export const processCovalentJsonData = (jsonData: { error: any; data: { items: a
   jsonData.data.items.forEach((item) => {
     let mostRecentOpenQuote: ExtendedBalance | null = null;
     if ((tokenAddress && compareAddresses(item.contract_address, tokenAddress)) || !tokenAddress) {
+      const decimals = item.contract_decimals;
+      const tickerSymbol = item.contract_ticker_symbol;
       item.holdings.forEach((holding: Holding) => {
         const date = dayjs(holding.timestamp);
-        if (holding.open && holding.open.quote) {
+        if (holding.open) {
           const existingEntry = output.openQuotesByDay.find((entry) => dayjs(entry.date).isSame(date, 'day'));
-
+          if (holding.open.quote === null) {
+            output.isTokenValue = true;
+          }
           if (existingEntry) {
-            existingEntry.totalQuote += holding.open.quote;
-            existingEntry.quoteRate = holding.quote_rate;
+            existingEntry.totalQuote += holding.open.quote || Number(ethers.utils.formatUnits(holding.open.balance, decimals));
+            existingEntry.quoteRate = holding.quote_rate || 1;
+            existingEntry.isTokenValue = holding.open.quote === null;
           } else {
             output.openQuotesByDay.push({
-              date: date.format('MM/DD/YYYY'), totalQuote: holding.open.quote,
-              quoteRate: holding.quote_rate
+              date: date.format('MM/DD/YYYY'), 
+              totalQuote: holding.open.quote || Number(ethers.utils.formatUnits(holding.open.balance, decimals)),
+              quoteRate: holding.quote_rate || 1,
+              isTokenValue: holding.open.quote === null,
             });
           }
 
@@ -184,7 +191,7 @@ export const processCovalentJsonData = (jsonData: { error: any; data: { items: a
     return finalQuote
   });
 
-  return {quotes: finalQuotes, isReady: isReady};
+  return {quotes: finalQuotes, isReady: isReady, isTokenValue: output.isTokenValue, openQuotes: openQuotes};
 }
 
 export const isSVGFormatImage = (url: string) => {

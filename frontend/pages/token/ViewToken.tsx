@@ -68,6 +68,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
   //const [holdings, setHoldings] = useState([] as ItemsWithOpenQuote[]);
   const [chartData, setChartData] = useState([] as ChartData[]);
   const [isZeroData, setIsZeroData] = useState(false);
+  const [isChartDataRaw, setIsChartDataRaw] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
   const conversionRate = 1;
   const currency = 'USD';
@@ -95,9 +96,10 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
       const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
       const historyResults = await getWalletHistory(wallet.address, chainName);
 
-      const { quotes: finalQuotes, isReady } = processCovalentJsonData(historyResults, token.address);
-
+      const { quotes: finalQuotes, isReady, isTokenValue } = processCovalentJsonData(historyResults, token.address);
       if (finalQuotes.length > 0) {
+        setIsChartDataRaw(isTokenValue as boolean)
+
         const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
           if (returnVal[d.x]) {
             return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
@@ -117,6 +119,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
       }
       setRefreshing(false);
     } catch (err: any) {
+      //console.log(err);
       //const err2 = err as Error;
     }
   }
@@ -232,11 +235,11 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
               </HStack>
               <Pressable onPress={flipShowUsd}>
                 <VStack>
-                  <Text fontSize={'md'} justifyContent={'flex-end'} alignItems={'flex-end'} color={colorMode === 'dark' ? 'coolGray.400' : 'dark.300'} paddingTop={3} >{showUsd ? translations[language as keyof typeof translations].ViewToken.current_price : translations[language as keyof typeof translations].ViewToken.current_balance}</Text>
+                  <Text fontSize={'md'} justifyContent={'flex-end'} alignItems={'flex-end'} color={colorMode === 'dark' ? 'coolGray.400' : 'dark.300'} paddingTop={3} >{showUsd && !isChartDataRaw ? translations[language as keyof typeof translations].ViewToken.current_price : translations[language as keyof typeof translations].ViewToken.current_balance}</Text>
                   <HStack paddingBottom={0} space={1} justifyContent={'flex-end'} alignItems={'flex-end'} >
                     <Heading textAlign={'right'} borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} alignContent={'flex-end'} justifyContent={'flex-end'} borderBottomWidth={2}>
                       <Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} textAlign={'right'} alignContent={'flex-end'}>
-                        {showUsd ? CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] + (currentHoldings ? currentHoldings.y.toFixed(2) : '0.00') : truncateString_old(ethers.utils.formatUnits(token.amount, token.decimals), 11, false)}
+                        {showUsd && !isChartDataRaw ? CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] + (currentHoldings ? currentHoldings.y.toFixed(2) : '0.00') : truncateString_old(ethers.utils.formatUnits(token.amount, token.decimals), 11, false)}
                       </Text>
                     </Heading>
                   </HStack>
@@ -278,7 +281,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
                   tooltipComponent={
                     <Tooltip theme={{
                       formatter: (value) => {
-                        return CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] + value.y
+                        return !isChartDataRaw ? CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] : '' + value.y
                       },
                       label: {
                         color: colorMode === 'dark' ? 'black' : 'white',

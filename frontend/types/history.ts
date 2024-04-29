@@ -4,7 +4,7 @@ export type OpenQuotes = {
   quotes: QuoteValue[]
 }
 
-export type QuoteValue = { date: string; totalQuote: number; }
+export type QuoteValue = { date: string; totalQuote: number; isTokenValue: boolean; }
 export type HoldingBalance = {balance: number; quote: number;}
 export interface ExtendedBalance extends HoldingBalance {
   timestamp?: number
@@ -54,6 +54,7 @@ export type OutputObject = {
     quoteRate: any;
     date: string;
     totalQuote: number;
+    isTokenValue: boolean,
   }[];
   itemsWithRecentOpenQuote: ItemsWithOpenQuote[];
 };

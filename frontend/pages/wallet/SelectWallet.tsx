@@ -81,7 +81,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
           safeAreaBottom
           alignSelf="center"
           position='absolute'
-          bottom={'0%'}
+          bottom={'2%'}
           left={0}
           width={'full'}
         >

@@ -75,7 +75,8 @@ function CovalentTransferItemComponent({ navigation, transaction }: { navigation
 
   const getItemAmount = () => {
     return transaction.transfers.length > 0 ?
-      transaction.transfers[0].delta_quote + ' ' + transaction.transfers[0].contract_ticker_symbol :
+      //(transaction.transfers[0].delta_quote ? transaction.transfers[0].delta_quote : ethers.utils.formatUnits(transaction.transfers[0].delta, transaction.transfers[0].contract_decimals)) + ' ' + transaction.transfers[0].contract_ticker_symbol :
+      ethers.utils.formatUnits(transaction.transfers[0].delta, transaction.transfers[0].contract_decimals) + ' ' + transaction.transfers[0].contract_ticker_symbol :
       ethers.utils.formatEther(transaction.value) + ' ' + transaction.gas_metadata.contract_ticker_symbol
   }
 

@@ -46,9 +46,6 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
   const conversionRate = 1;
   const currency = 'USD';
   const [currentHoldings, setCurrentHoldings] = useState({
-    meta: {
-      'date': '01/01/2024'
-    },
     x: 0,
     y: 0
   });
@@ -63,14 +60,21 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
       const _network = await getActiveNetwork();
       const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
       const historyResults = await getWalletHistory(wallet.address, chainName);
-      const { quotes: finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
-      if (finalQuotes.length > 0) {
-        const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
-          if (returnVal[d.x]) {
-            return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
+      const { openQuotes: _finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
+      if (_finalQuotes && _finalQuotes.quotes.length > 0) {
+        const finalQuotes = _finalQuotes.quotes;
+        const quoteMap = finalQuotes.sort((a, b) => dayjs(a.date).isBefore(dayjs(b.date)) ? 1 : -1).reduce((returnVal, d) => {
+          if (returnVal[d.date]) {
+            if (!d.isTokenValue) {
+              return { ...returnVal, [d.date]: { ...returnVal[d.date], y: returnVal[d.date].y + d.totalQuote } }
+            }
+            return returnVal;
           }
-          return { ...returnVal, [d.x]: d };
-        }, {} as { [key: number]: ChartData });
+          if (!d.isTokenValue) {
+            return { ...returnVal, [d.date]: { x: dayjs(d.date).unix(), y: d.totalQuote } };
+          }
+          return returnVal;
+        }, {} as { [key: string]: { x: number, y: number } });
         const _quotes = Object.values(quoteMap);
         const lastQuote = _quotes[_quotes.length - 1];
         setCurrentHoldings(lastQuote);

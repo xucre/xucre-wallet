@@ -13,10 +13,10 @@ const ExtensionItemComponent = ({ metadata, navigation }: { metadata: Extension,
   const { colorMode } = useColorMode();
   const openExtension = async () => {
     if (metadata.externalUrl) {
-      //const supported = await Linking.canOpenURL(metadata.externalUrl);
-      //if (supported) {
-      await Linking.openURL(metadata.externalUrl);
-      //}
+      const supported = await Linking.canOpenURL(metadata.externalUrl);
+      if (supported) {
+        await Linking.openURL(metadata.externalUrl);
+      }
     } else {
       navigation.navigate(metadata.page);
     }
