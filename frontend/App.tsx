@@ -196,6 +196,7 @@ export const AppWrapper = () => {
   const [scheme, setScheme] = useState('');
   const [routeState, setRouteState] = useState('');
   const [language,] = useRecoilState(stateLanguage);
+  const [linking, setLinking] = useState<any>();
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
       //('notifee foregrounde event', type);
@@ -247,6 +248,33 @@ export const AppWrapper = () => {
     }
 
     runAsync();
+    const prefix = Linking.createURL('/');
+    setLinking({
+      prefixes: [prefix],
+    });
+
+    Linking.addEventListener('url', async (req) => {
+      const parsedUrl = parseUrl(req.url);
+      if (parsedUrl.resource === 'ViewWallet') {
+        navigate('SelectWallet', {});
+      } else {
+        try {
+          if (signClient) {
+            if (parsedUrl.query.requestId) {
+              //  do nothing
+            } else if (parsedUrl.query.uri) {
+              await signClient.pair({ uri: parsedUrl.query.uri })
+            } else if (parsedUrl.protocol === 'wc') {
+              await signClient.pair({ uri: req.url })
+            }
+
+          }
+        } catch (e) {
+          //console.log(e);
+        }
+      }
+
+    })
   }, []);
 
   const hideHeader = (name: string) => {
@@ -267,33 +295,7 @@ export const AppWrapper = () => {
     return false;
   }
 
-  const prefix = Linking.createURL('/');
-  const linking = {
-    prefixes: [prefix],
-  };
 
-  Linking.addEventListener('url', async (req) => {
-    const parsedUrl = parseUrl(req.url);
-    if (parsedUrl.resource === 'ViewWallet') {
-      navigate('SelectWallet', {});
-    } else {
-      try {
-        if (signClient) {
-          if (parsedUrl.query.requestId) {
-            //  do nothing
-          } else if (parsedUrl.query.uri) {
-            await signClient.pair({ uri: parsedUrl.query.uri })
-          } else {
-            //await signClient.pair({ uri: req.url });
-          }
-
-        }
-      } catch (e) {
-        //(e);
-      }
-    }
-
-  })
 
   return (
     <SafeAreaProvider>
