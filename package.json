@@ -17,7 +17,6 @@
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@lens-protocol/react-native-lens-ui-kit": "^0.2.9",
     "@notifee/react-native": "^7.8.0",
-    "@ramp-network/react-native-sdk": "^1.0.2",
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/netinfo": "9.3.10",
@@ -80,7 +79,9 @@
     "react-qr-code": "^2.0.12",
     "recoil": "^0.7.7",
     "styled-components": "^5.3.11",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "expo-asset": "~8.10.1",
+    "expo-sharing": "~11.5.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.24.1",

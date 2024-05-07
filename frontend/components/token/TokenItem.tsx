@@ -143,7 +143,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
     refreshList();
   }
 
-  const computedSymbol = alchemyMetadata.symbol ? truncateString_old(alchemyMetadata.symbol, 8) : (token.symbol || token.name || 'N/A');
+  const computedSymbol = alchemyMetadata?.symbol ? truncateString_old(alchemyMetadata.symbol, 8) : (token?.symbol || token?.name || 'N/A');
 
   if (amISpam) return <></>
 

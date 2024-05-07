@@ -5,6 +5,7 @@ import { Wallet } from 'ethers';
 import { v4 } from "uuid";
 import * as Clipboard from 'expo-clipboard';
 import moment from "moment";
+import { Asset } from 'expo-asset';
 import {
   Box,
   Button,
@@ -24,22 +25,15 @@ import React, { useEffect, useState } from "react";
 import { Linking, PermissionsAndroid, Platform, RefreshControl } from "react-native";
 import { Area, Chart, HorizontalAxis, Line, Tooltip } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
-import { writeAsStringAsync, readAsStringAsync, makeDirectoryAsync, readDirectoryAsync, documentDirectory, StorageAccessFramework, FileSystemRequestDirectoryPermissionsResult } from "expo-file-system"
+import * as FileSystem from 'expo-file-system'
+import { shareAsync } from 'expo-sharing'
+import { writeAsStringAsync, readAsStringAsync, makeDirectoryAsync, readDirectoryAsync, bundleDirectory, documentDirectory, StorageAccessFramework, FileSystemRequestDirectoryPermissionsResult } from "expo-file-system"
 
 import translations from "../../assets/translations";
-import MobileFooter from "../../components/Footer";
-import SummaryItem from "../../components/token/SummaryItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { createGoogleWalletPass, getWalletHistory } from "../../service/api";
-import { chainIdToNameMap, chainNames } from "../../service/constants";
 import { activeNetwork, activeWallet, AppWallet, language as stateLanguage, walletList } from "../../service/state";
-import { ChartData, ExtendedBalance, Holding, ItemsWithOpenQuote, OpenQuotes, OutputObject } from "../../types/history";
 import { WalletInternal } from "../../store/wallet";
 import { truncateString } from '../../service/utility';
-import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
-import TransactionFeed from "../../components/transaction/TransactionFeed";
-import { useIsFocused } from "@react-navigation/native";
-import { getActiveNetwork } from "../../store/network";
 import SetPassword from "../../components/SetPassword";
 import { Color } from "../../../GlobalStyles";
 import { googleLogoUrls } from "../../service/constants";
@@ -84,6 +78,8 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
       })
     } else if (Platform.OS === 'android') {
       //runAsyncAndroid();
+    } else if (Platform.OS === 'ios') {
+      setFolderSelected(true);
     }
 
     return () => {
@@ -119,6 +115,9 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
       }
       setFolderSelected(true);
     } else {
+      const keyLocation = await getKeyLocation();
+      setFolderLocation(keyLocation);
+
       setFolderSelected(true);
     }
   }
@@ -130,12 +129,21 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
       setGeneratingPass(true)
       const pk = await encryptPK(wallet.privateKey);
       if (pk) {
-        const uri = folderLocation.granted ? folderLocation.directoryUri : '';
-        const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.address}`, 'text/plain');
+        const uri = folderLocation.granted ? folderLocation.directoryUri : documentDirectory;
+        if (Platform.OS === 'ios') {
+          const fileUrl = `${uri}${walletMetadata.address}`;
+          const file = await writeAsStringAsync(fileUrl, pk);
+          const list = await readDirectoryAsync(`${uri}`);
+          const result = await shareAsync(fileUrl, { mimeType: 'text/plain' })
+        } else if (Platform.OS === 'android') {
+          const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.address}`, 'text/plain');
+          const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, pk);
+        }
+        //const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.address}`, 'text/plain');
         // used to create a html file version
         // const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.name.split(' ').join('_')}`, 'text/html');
         //const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, walletTemplate(walletMetadata.name, pk));
-        const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, pk);
+        //const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, pk);
 
         setGeneratingPass(false);
       }

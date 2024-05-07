@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable react-native/no-inline-styles */
 import {
   Badge,
   Box,
@@ -17,11 +15,9 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Platform, StyleSheet } from 'react-native';
 import { useRecoilState, useSetRecoilState, } from "recoil";
 import * as DocumentPicker from 'expo-document-picker';
 
-import { Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import { AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { loadWalletFromPrivateKey } from '../../service/wallet'
@@ -98,7 +94,7 @@ export default function RecoverPrivateKey({ navigation }: { navigation: { naviga
 
   const selectFile = async () => {
     const result = await DocumentPicker.getDocumentAsync({
-      type: 'text/plain',
+      type: '*/*',
       copyToCacheDirectory: true,
       multiple: false
     });
