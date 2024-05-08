@@ -248,6 +248,7 @@ export const AppWrapper = () => {
     }
 
     runAsync();
+    //Linking.resolveScheme({ scheme: 'com.xucre.expo.client' })
     const prefix = Linking.createURL('/');
     setLinking({
       prefixes: [prefix],
