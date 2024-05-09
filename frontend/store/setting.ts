@@ -6,6 +6,7 @@ import * as Keychain from 'react-native-keychain';
 import { FileSystemRequestDirectoryPermissionsResult } from "expo-file-system";
 
 export const storeTheme = async (mode: string | null | undefined) => {
+  if (!mode) return;
   await EncryptedStorage.setItem(
     "theme_mode",
     mode as string
@@ -18,6 +19,7 @@ export const getTheme = async () => {
 }
  
 export const storeWCLegacyUrl = async (url: string) => {
+  if (!url) return;
   await EncryptedStorage.setItem(
     "wc_legacy_url",
     url
@@ -187,6 +189,7 @@ export const getKeyLocation = async () => {
 }
 
 export const storeKeyLocation = async (location: FileSystemRequestDirectoryPermissionsResult) => {
+  if (!location) return;
   await EncryptedStorage.setItem(
     "key_location",
     JSON.stringify(location)

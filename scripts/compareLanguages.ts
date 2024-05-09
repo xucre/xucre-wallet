@@ -25,16 +25,16 @@ type Differences = {
   };
 };
 
-function compareJsonObjectsWithLodash(obj1, obj2): Differences {
+function compareJsonObjectsWithLodash(obj1: any, obj2: any): Differences {
   const differences: Differences = {};
 
-  function compare(objA: unknown, objB: unknown, path: string) {
+  function compare(objA: any, objB: any, path: string) {
     if (_.isObject(objA) && _.isObject(objB)) {
       const keysA = _.keys(objA);
       const keysB = _.keys(objB);
       const allKeys = _.union(keysA, keysB);
 
-      allKeys.forEach((key) => {
+      allKeys.forEach((key: string) => {
         const objAHasKey = _.has(objA, key);
         const objBHasKey = _.has(objB, key);
 

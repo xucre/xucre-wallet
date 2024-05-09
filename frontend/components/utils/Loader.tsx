@@ -192,12 +192,12 @@ export default function Loader() {
     if (!loading) {
       setTimeout(() => {
         handleLoad();
-      }, 3000)
+      }, 1000)
     }
   }, [loading])
 
   if (!fontsLoaded) {
-    return null;
+    return <></>;
   }
   return (
     <>

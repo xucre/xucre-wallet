@@ -1,7 +1,7 @@
 import notifee, { AndroidLaunchActivityFlag } from '@notifee/react-native';
 import { Core } from '@walletconnect/core'
 import { Web3Wallet, IWeb3Wallet, Web3WalletTypes } from '@walletconnect/web3wallet'
-import {AppState, Linking} from 'react-native';
+import {AppState, Linking, Platform} from 'react-native';
 
 import translations from "../assets/translations";
 import { EIP155_SIGNING_METHODS } from "../data/EIP1155Data";
@@ -159,19 +159,20 @@ const proposalExpire = (event: Web3WalletTypes.ProposalExpire) => {
 export async function createSignClient() {
   
   if (hasLoaded) return signClient;
-
+  const scheme = Platform.OS === 'android' ? env.REACT_APP_XUCRE_WALLET_SCHEME : env.REACT_APP_XUCRE_WALLET_SCHEME_IOS;
+  
   const initConfig = {
-    core,
+    core: { ...core, opts: { relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL } },
     metadata: {
       description: 'Xucre Wallet',
       icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
       name: 'Xucre Wallet',
-      url: env.REACT_APP_XUCRE_WALLET_SCHEME,
+      url: scheme,
       redirect: {
-        native: env.REACT_APP_XUCRE_WALLET_SCHEME
+        native: scheme
       }
-    },    
-  };
+    },
+  } as unknown as Web3WalletTypes.Options;
   
   signClient = await Web3Wallet.init(initConfig);
   //signClient = await SignClient.init(initConfig)
@@ -183,9 +184,7 @@ export async function createSignClient() {
   }
   hasLoaded = true;  
 
-  return signClient;
- 
-  
+  return signClient;  
 }
 
 export function parseRequestParams(params: {optionalNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}, requiredNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}}) {

@@ -8,13 +8,13 @@ export class WalletInternal extends Wallet {
 
 export const storeWallet = async (wallet: AppWallet) => {
   const _wallets = await EncryptedStorage.getItem("wallet_list");
-  if (!_wallets) {
+  if (!_wallets && !wallet) {
     await EncryptedStorage.setItem(
       "wallet_list",
       JSON.stringify([wallet])
     );
     await storeActiveWallet(wallet);
-  } else {
+  } else if (!wallet) {
     const wallets = JSON.parse(_wallets as string);
     if (Array.isArray(wallets)) {
       await EncryptedStorage.setItem(
@@ -63,6 +63,7 @@ export const getActiveWallet = async () => {
 }
 
 export const storeActiveWallet = async (wallet: AppWallet) => {
+  if (!wallet) return;
   await EncryptedStorage.setItem(
     "active_wallet",
     JSON.stringify([wallet])

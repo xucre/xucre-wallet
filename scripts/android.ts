@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import * as child_process from 'child_process';
+/*import * as child_process from 'child_process';
 
 import * as appRootPath from 'app-root-path';
 import * as chokidar from 'chokidar';
@@ -13,4 +13,4 @@ chokidar.watch('contracts').on('all', () => {
 child_process.execSync('npx kill-port 8545', opts);
 child_process.execSync('adb reverse tcp:8545 tcp:8545', opts);
 
-child_process.execSync('npx hardhat node --hostname 0.0.0.0 & expo run:android &', opts);
+child_process.execSync('npx hardhat node --hostname 0.0.0.0 & expo run:android &', opts);*/

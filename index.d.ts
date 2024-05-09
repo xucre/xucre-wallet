@@ -22,6 +22,7 @@ declare module '@env' {
   export const REACT_APP_CHAIN_RPC_URL_MUMBAI: string;
   export const REACT_APP_XUCRE_ADDRESS: string;
   export const REACT_APP_XUCRE_WALLET_SCHEME: string;
+  export const REACT_APP_XUCRE_WALLET_SCHEME_IOS: string;
   export const REACT_APP_WALLET_CONNECT_PROJECT_ID: string;
   export const REACT_APP_WALLET_CONNECT_RELAY_URL: string;
   export const REACT_APP_BLOCKSPAN_API_KEY: string;

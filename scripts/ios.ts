@@ -1,4 +1,4 @@
-import 'dotenv/config';
+/*import 'dotenv/config';
 import * as child_process from 'child_process';
 
 import * as appRootPath from 'app-root-path';
@@ -11,4 +11,4 @@ chokidar.watch('contracts').on('all', () => {
 });
 
 child_process.execSync('npx kill-port 8545', opts);
-child_process.execSync('npx hardhat node --hostname 0.0.0.0 & expo run:ios &', opts);
+child_process.execSync('npx hardhat node --hostname 0.0.0.0 & expo run:ios &', opts);*/

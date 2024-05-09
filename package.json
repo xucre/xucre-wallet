@@ -97,7 +97,7 @@
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@notifee/react-native/.*|@walletconnect/react-native-compat/.*|@lens-protocol/react-native-lens-ui-kit/.*|array-shuffle/.*|@ramp-network/react-native-sdk/.*)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@notifee/react-native/.*|@walletconnect/react-native-compat/.*|@lens-protocol/react-native-lens-ui-kit/.*|array-shuffle/.*)"
     ],
     "setupFilesAfterEnv": [
       "./frontend/__mocks__/@notifee/react-native.js",
