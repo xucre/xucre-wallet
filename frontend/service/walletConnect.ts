@@ -1,6 +1,6 @@
 import notifee, { AndroidLaunchActivityFlag } from '@notifee/react-native';
 import { Core } from '@walletconnect/core'
-import { Web3Wallet, IWeb3Wallet, Web3WalletTypes } from '@walletconnect/web3wallet'
+import Client, { Web3Wallet, IWeb3Wallet, Web3WalletTypes } from '@walletconnect/web3wallet'
 import {AppState, Linking, Platform} from 'react-native';
 
 import translations from "../assets/translations";
@@ -13,11 +13,12 @@ import { env } from './constants';
 import { getWallets } from '../store/wallet';
 import { buildApprovedNamespaces } from '@walletconnect/utils';
 const core = new Core({
-  projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID
+  projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
+  //relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
 })
 
 // eslint-disable-next-line functional/no-let
-export let signClient:IWeb3Wallet;
+export let signClient:Client;
 let hasLoaded = false;
 
 async function onDisplayNotification(id: string, translation_setting: string) {
@@ -162,7 +163,7 @@ export async function createSignClient() {
   const scheme = Platform.OS === 'android' ? env.REACT_APP_XUCRE_WALLET_SCHEME : env.REACT_APP_XUCRE_WALLET_SCHEME_IOS;
   
   const initConfig = {
-    core: { ...core, opts: { relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL } },
+    core,
     metadata: {
       description: 'Xucre Wallet',
       icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
@@ -175,6 +176,7 @@ export async function createSignClient() {
   } as unknown as Web3WalletTypes.Options;
   
   signClient = await Web3Wallet.init(initConfig);
+  //console.log(signClient)
   //signClient = await SignClient.init(initConfig)
   if (signClient) {
     signClient.on("session_proposal", sessionProposal);
@@ -184,7 +186,8 @@ export async function createSignClient() {
   }
   hasLoaded = true;  
 
-  return signClient;  
+  return signClient;
+  
 }
 
 export function parseRequestParams(params: {optionalNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}, requiredNamespaces: {eip155: {"chains": string[], "events": string[], "methods": string[]}}}) {
