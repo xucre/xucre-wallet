@@ -32,7 +32,7 @@ import {
   transactionList,
 } from "../../service/state";
 import { Token } from "../../service/token";
-import { Transaction } from "../../service/transaction";
+import { Transaction, waitForTransaction } from "../../service/transaction";
 import { getTokenByChain } from "../../store/token";
 import { addTransaction } from "../../store/transaction";
 import { WalletInternal } from "../../store/wallet";
@@ -92,10 +92,10 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
       const walletBalance = await wallet.getBalance();
       setGasBalance(walletBalance);
       setBalance(selectedToken.amount || BigNumber.from(0));
-      const result = await getTokenMetadata(token.address, chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap]);
+      const result = await getTokenMetadata(selectedToken.address, chainIdToNameMap[selectedToken.chainId as keyof typeof chainIdToNameMap]);
       setAlchemyMetadata(result as AlchemyMetadata);
     }
-    if (selectedToken && wallet && wallet.address) {
+    if (selectedToken.address && wallet && wallet.address) {
       runAsync();
     }
   }, [selectedToken, wallet])
@@ -219,12 +219,11 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             setLoadingStage('');
           } else if (selectedToken.type === "coin" && wallet.address) {
             const tx = {
-              to: address,
-              value: ethers.utils.parseUnits(amount, alchemyMetadata.decimals)
-            }
+              to: ethers.utils.getAddress(address),
+              value: ethers.utils.parseEther(amount)
+            } as ethers.providers.TransactionRequest;
 
             const gasEstimate = await wallet.estimateGas(tx);
-
             if (gasEstimate.gt(gasBalance)) {
               setLoading(false);
               setError('Not enough gas for this transaction');
@@ -232,10 +231,10 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
               return;
             }
             // Sending ether
-            const _submitted = await wallet.sendTransaction(tx)
+            const _submitted = await wallet.sendTransaction({ ...tx, gasLimit: gasEstimate, gasPrice: (await wallet.getGasPrice()).mul(2) });
 
             setLoadingStage('confirm');
-            await _submitted.wait();
+            const result = await waitForTransaction(provider, _submitted);
 
             const _transaction = {
               chainId: _submitted.chainId,

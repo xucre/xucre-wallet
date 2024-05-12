@@ -14,7 +14,7 @@ import {
   useColorMode,
   VStack,
 } from "native-base";
-import React, { } from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { v4 } from "uuid";
 
@@ -23,7 +23,7 @@ import translations from "../../assets/translations";
 import GuestLayout from '../../layouts/GuestLayout';
 import { activeWallet, AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { truncateStringStart } from "../../service/utility";
-import { storeActiveWallet, WalletInternal } from "../../store/wallet";
+import { storeActiveWallet, WalletInternal, getWallets, storeWallet } from '../../store/wallet';
 import { RefreshControl } from "react-native";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import WalletItem from "../../components/wallet/WalletItem";
@@ -35,7 +35,7 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
   } = useColorMode();
   const [language,] = useRecoilState(stateLanguage);
   const [walletState, setWalletState] = useRecoilState(walletList);
-  const [, setActiveWallet] = useRecoilState(activeWallet);
+  const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
 
   const createWallet = () => {
     navigation.navigate('NewWallet');

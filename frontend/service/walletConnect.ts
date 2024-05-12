@@ -12,9 +12,12 @@ import { navigate } from './RootNavigation';
 import { env } from './constants';
 import { getWallets } from '../store/wallet';
 import { buildApprovedNamespaces } from '@walletconnect/utils';
-const core = new Core({
+const core = Platform.OS === 'android' ? new Core({
   projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
   //relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
+}) : new Core({
+  projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
+  relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
 })
 
 // eslint-disable-next-line functional/no-let
@@ -162,7 +165,20 @@ export async function createSignClient() {
   if (hasLoaded) return signClient;
   const scheme = Platform.OS === 'android' ? env.REACT_APP_XUCRE_WALLET_SCHEME : env.REACT_APP_XUCRE_WALLET_SCHEME_IOS;
   
-  const initConfig = {
+  const initConfig = Platform.OS === 'ios' && !__DEV__ ? 
+  {
+    core: { ...core, opts: { relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL } }, 
+    metadata: {
+      description: 'Xucre Wallet',
+      icons: ['https://pixeltagimagehost.s3.us-west-1.amazonaws.com/xucre-icon.png'],
+      name: 'Xucre Wallet',
+      url: scheme,
+      redirect: {
+        native: scheme
+      }
+    },
+  } as unknown as Web3WalletTypes.Options : 
+  {
     core,
     metadata: {
       description: 'Xucre Wallet',
@@ -173,7 +189,7 @@ export async function createSignClient() {
         native: scheme
       }
     },
-  } as unknown as Web3WalletTypes.Options;
+  } as Web3WalletTypes.Options;
   
   signClient = await Web3Wallet.init(initConfig);
   //console.log(signClient)

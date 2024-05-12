@@ -22,6 +22,7 @@ import TokenItem from '../../components/token/TokenItem';
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getTokenItems, storeTokenItems } from "../../store/tokenItem";
+import { storeWallet } from "../../store/wallet";
 import { activeNetwork, activeWallet, language as stateLanguage, walletList } from '../../service/state';
 
 import { WalletInternal } from "../../store/wallet";
@@ -67,6 +68,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       if (_wallet.name === '') {
         setWallet(new WalletInternal(_walletList[0].wallet).connect(_provider));
       } else {
+        if (_wallet.address !== wallet.address) {
+          setTimeout(() => {
+            reset();
+          }, 1000)
+        }
         setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
       }
     }

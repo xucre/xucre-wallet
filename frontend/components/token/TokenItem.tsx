@@ -17,6 +17,7 @@ import { getTokenMetadata } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
 import { addToSpam, isSpam } from "../../store/spam";
 import { AlchemyMetadata } from "../../types/token";
+import { Platform } from "react-native";
 
 function TokenItemComponent({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
   const { colorMode } = useColorMode();
@@ -47,6 +48,10 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
     //}
 
     _isSpam();
+
+    if (Platform.OS === 'ios') {
+      setLoading(false);
+    }
     //setAvatar('');
   }, [token])
 
@@ -58,12 +63,10 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
         setRawAmount(walletBalance);
       } else if (token.type === 'coin') {
         const _provider = getDefaultProvider(network.rpcUrl);
-
         const walletBalance = await wallet.connect(_provider).getBalance();
         setRawAmount(walletBalance);
       }
     } catch (err) {
-
     }
 
 
@@ -75,6 +78,10 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
   }
 
   const _isSpam = async () => {
+    if (token.type === 'coin') {
+      setAmISpam(false);
+      return;
+    }
     setAmISpam(await isSpam(token.address, network.chainId));
   }
 
@@ -95,7 +102,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
     //const _img = alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
-    const _img = alchemyMetadata.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
+    const _img = alchemyMetadata?.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
     try {
       const isSvg = isSVGFormatImage(_img);
       return (
@@ -131,11 +138,11 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
   }
 
   const sendToken = () => {
-    navigation.navigate('SendToken', { token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata.decimals || 18 } as SerializedToken })
+    navigation.navigate('SendToken', { token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata?.decimals || 18 } as SerializedToken })
   }
 
   const viewToken = () => {
-    navigation.navigate('ViewToken', { token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata.decimals || 18 } as SerializedToken })
+    navigation.navigate('ViewToken', { token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata?.decimals || 18 } as SerializedToken })
   }
 
   const blacklistToken = async () => {
@@ -163,7 +170,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
         <Text
           _light={{ color: 'coolGray.500' }}
           _dark={{ color: 'coolGray.400' }}
-          fontWeight="normal">{token.amount ? ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata.decimals) : !rawAmount.isZero() ? ethers.utils.formatUnits(rawAmount, alchemyMetadata.decimals) : '0.00'}</Text>
+          fontWeight="normal">{token.amount ? ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata?.decimals || 18) : !rawAmount.isZero() ? ethers.utils.formatUnits(rawAmount, alchemyMetadata?.decimals || 18) : '0.00'}</Text>
         <Tooltip label="More Options" openDelay={500}>
           <Menu w="190" trigger={triggerProps => {
             return <Pressable accessibilityLabel={translations[language as keyof typeof translations].TokenItem.menu_accessiblity_label} {...triggerProps}>

@@ -572,13 +572,13 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
                 translations[language as keyof typeof translations].CreateWallet.name_entry_input_placeholder
               }
             />
-            <HStack space={6}>
+            {/*<HStack space={6}>
               <Checkbox shadow={2} value={exportWallet.toString()} accessibilityLabel="Add key to Google Wallet" >
                 <Text style={{
                   color: colorMode === 'dark' ? Color.white : Color.black,
                 }}>{translations[language as keyof typeof translations].CreateWallet.add_to_google}</Text>
               </Checkbox>
-            </HStack>
+              </HStack>*/}
             <ContainedButton
               onPress={() => {
                 saveWallet();

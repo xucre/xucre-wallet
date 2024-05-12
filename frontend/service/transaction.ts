@@ -8,6 +8,8 @@ import { logTopicMap } from './constants';
 import { getParsedTransaction, storeParsedTransaction } from '../store/transactionFeedItem';
 import { getIsSpam } from './api';
 import unknown from '../../assets/index';
+import { AppWallet } from './state';
+import { waitms } from './utility';
 
 export type Transaction = {
   readonly hash: string;
@@ -342,9 +344,23 @@ async function isContractAddress(address: string, provider: ethers.providers.Bas
   return code !== '0x'; // If code is not '0x', it's a contract
 }
 
-// Example usage
-// const transactionIds = ["0x..."]; // Add transaction IDs here
-// const providerUrl = "YOUR_PROVIDER_URL"; // Replace with your Ethereum provider URL
-// parseTransactions(transactionIds, providerUrl)
-//   .then(parsedTransactions => (parsedTransactions))
-//   .catch(error => console.error(error));
+export async function waitForTransaction(provider: ethers.providers.BaseProvider, tx: ethers.providers.TransactionResponse){
+  let finished = false;
+  const result = await Promise.race([
+      tx.wait(),
+      (async () => {
+          while (!finished) {
+              await waitms(3000);
+              const mempoolTx = await provider.getTransaction(tx.hash);
+              if (!mempoolTx){
+                  return null;
+              } 
+          }
+      })()
+  ]);
+  finished = true;
+  if (!result){
+      throw `Transaction ${tx.hash} failed`;
+  }
+  return result;
+}

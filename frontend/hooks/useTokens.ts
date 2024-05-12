@@ -10,6 +10,7 @@ import { getActiveNetwork } from '../store/network';
 import { isSpam } from '../store/spam';
 import { getActiveWallet, WalletInternal } from '../store/wallet';
 import { AppWallet } from '../service/state';
+import { BIOMETRY_TYPE } from 'react-native-keychain';
 
 function useTokens(initialValue = [] as Token[]) {
   const [tokens, setTokens] = useState(initialValue);
@@ -23,9 +24,26 @@ function useTokens(initialValue = [] as Token[]) {
       const _provider = getDefaultProvider(_network.rpcUrl);
       const _wallet = (await getActiveWallet())[0] as AppWallet;
       const wallet = new WalletInternal(_wallet.wallet).connect(_provider);
-      const _tokens_original = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap])).tokenBalances;
-      const _tokens = _tokens_original.filter((token: { tokenBalance: string; contractAddress: string; }) => BigNumber.from(token.tokenBalance).gt(0));
+      const tokenResponse = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]));
+
       const walletBalance = await wallet.connect(_provider).getBalance();
+      if (tokenResponse === null) {
+        const coinToken = {
+          address: ethers.constants.AddressZero,
+          amount: walletBalance || BigNumber.from(0),
+          chainId: _network.chainId,
+          name: _network.name,
+          symbol: _network.symbol || 'NA',
+          type: 'coin',
+          isNotSpammable: true
+        };
+        setTokens([coinToken]);
+        return;
+      }
+      const _tokens_original = tokenResponse.tokenBalances;
+      const _tokens = _tokens_original.filter((token: { tokenBalance: string; contractAddress: string; }) => BigNumber.from(token.tokenBalance).gt(0));
+      
+      //const walletBalance = await wallet.connect(_provider).getBalance();
 
       const coinToken = {
         address: ethers.constants.AddressZero,
@@ -90,6 +108,7 @@ function useTokens(initialValue = [] as Token[]) {
         return;
       }
     } catch (err) {
+      console.log(err);
     }
 
   }

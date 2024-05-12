@@ -204,3 +204,7 @@ export const compareAddresses = (address1: string, address2: string) => {
   }
   return ethers.utils.getAddress(address1) === ethers.utils.getAddress(address2);
 }
+
+export function waitms(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
