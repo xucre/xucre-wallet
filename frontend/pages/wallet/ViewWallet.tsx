@@ -76,7 +76,15 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
         setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
       }
     }
-  }, [_wallet, _walletList, network]);
+  }, [_wallet, _walletList]);
+
+  useEffect(() => {
+    if (tokens.length > 0 && tokens[0].chainId !== network.chainId) {
+      reset();
+    } else if (tokens.length === 0) {
+      reset();
+    }
+  }, [network])
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);

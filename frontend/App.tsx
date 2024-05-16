@@ -159,15 +159,6 @@ export const theme = extendTheme({
     },
 
   },
-  /*components: {
-    Button: {
-      variants: {
-        solid: {
-          color: "black"
-        }
-      }
-    }
-  }*/
 });
 
 export default function App(): JSX.Element {
@@ -221,7 +212,7 @@ export const AppWrapper = () => {
         //('error creating sign client', err);
       }
     }
-    setTimeout(() => { runAsync() }, 1000)
+    runAsync();
   }, []);
 
   useEffect(() => {

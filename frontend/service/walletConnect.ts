@@ -14,7 +14,7 @@ import { getWallets } from '../store/wallet';
 import { buildApprovedNamespaces } from '@walletconnect/utils';
 const core = Platform.OS === 'android' ? new Core({
   projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
-  //relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
+  relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
 }) : new Core({
   projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
   relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,

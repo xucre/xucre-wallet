@@ -21,14 +21,14 @@ import translations from "../assets/translations";
 import { storePrivacyPolicy } from "../store/setting";
 
 
-export default function Policies({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function Policies({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
     const [language] = useRecoilState(stateLanguage);
     const { colorMode } = useColorMode();
     const [checkValues, setcheckValues] = useState(false);
-    
+
     const [accept, setAccept] = useState(true)
 
-    useEffect(() =>{
+    useEffect(() => {
         setAccept(!checkValues)
     }, [checkValues])
 
@@ -49,13 +49,12 @@ export default function Policies({ navigation, route }: {navigation: {navigate: 
         <KeyboardAvoidingView
             h={{
                 base: "300px",
-                lg: "auto",
             }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
             <Box alignItems="center" my={10} w={"full"}>
                 <Text style={styles.support1}>
-                {translations[language as keyof typeof translations].termsConditions.title}
+                    {translations[language as keyof typeof translations].termsConditions.title}
                 </Text>
                 <VStack m={5}>
                     <ScrollView w={["300", "800"]}>
@@ -79,7 +78,7 @@ export default function Policies({ navigation, route }: {navigation: {navigate: 
                     onPress={acceptPolicy}
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
-                    {translations[language as keyof typeof translations].termsConditions.button_Accept}
+                        {translations[language as keyof typeof translations].termsConditions.button_Accept}
                     </Text>
                 </Button>
 
@@ -88,7 +87,7 @@ export default function Policies({ navigation, route }: {navigation: {navigate: 
                     mt={4}
                     width={"3/4"}
                     colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
-                   onPress={declinePolicy}
+                    onPress={declinePolicy}
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
                         {translations[language as keyof typeof translations].SupportPage.button_cancel}

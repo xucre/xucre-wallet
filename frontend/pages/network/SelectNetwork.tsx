@@ -31,7 +31,7 @@ import {
   language as stateLanguage,
 } from "../../service/state";
 import { deleteNetwork, getNetworks, storeActiveNetwork } from "../../store/network";
-import { Network } from "../../service/network";
+import { Network } from '../../service/network';
 
 export default function SelectNetwork({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [language,] = useRecoilState(stateLanguage);
@@ -71,7 +71,7 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
 
   }
 
-  const NetworkItem = ({ metadata }: { metadata: Network }) => {
+  const _NetworkItem = ({ metadata }: { metadata: Network }) => {
     const selectNetwork = async () => {
       setActiveNetwork(metadata);
       storeActiveNetwork(metadata);
@@ -96,21 +96,14 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
 
     const isActiveNetwork = _activeNetwork.chainId === metadata.chainId;
 
-    const [avatar, setAvatar] = useState('');
-    useEffect(() => {
-      if (metadata && metadata.symbol) {
-        setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + metadata.symbol.toLowerCase() + '.png');
-      } else {
-        setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png');
-      }
-    }, [metadata])
+    const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/' + metadata.symbol.toLowerCase() + '.png' || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png';
 
     return (
       <HStack alignItems="center" justifyContent="space-between" pr={3} py={1} borderRadius={15} _dark={{ bgColor: 'coolGray.800' }} _light={{ bgColor: 'coolGray.300' }}>
         <Pressable onPress={() => { selectNetwork() }}>
           <HStack alignItems="center" space={{ base: 3, md: 6 }}>
             <Avatar bg={colorMode === 'dark' ? 'coolGray.800' : 'coolGray.300'} size="md" ml="10px" mb="10px" mr="1" mt="4px" source={{
-              uri: avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+              uri: avatar
             }} >
               {isActiveNetwork && <Avatar.Badge bg="green.500" />}
             </Avatar>
@@ -141,7 +134,7 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
       </HStack>
     )
   }
-
+  const NetworkItem = React.memo(_NetworkItem)
   return (
     <GuestLayout >
 

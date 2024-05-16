@@ -116,6 +116,7 @@ export const coinIconNames = {
   1: 'eth',
   137: 'matic',
   80001: 'matic',
+  42220: 'celo'
 }
 
 export const tokenIconNames = {
