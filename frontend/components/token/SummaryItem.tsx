@@ -14,37 +14,20 @@ import { ItemsWithOpenQuote } from "../../types/history";
 
 export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
   const { colorMode } = useColorMode();
-  const [amount, setAmount] = useState(BigNumber.from(0));
   const [tokenImage, setTokenImage] = useState('');
-  const [language,] = useRecoilState(stateLanguage);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
-  useEffect(() => {
-    //
-  }, [tokenImage])
-  useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       try {
         if (token.contract.ticker_symbol) {
           const img = await getIconImage(token.contract.ticker_symbol.toLowerCase());
 
-          setTokenImage(img as string);
+          if (isMounted) setTokenImage(img as string);
         } else {
-          setLoading(false);
+          if (isMounted) setLoading(false);
         }
-
-        //const blob = new Blob([img.data], {type: "image/png"})
-        //const fileReaderInstance = new FileReader();
-        //fileReaderInstance.readAsDataURL(blob); 
-        //fileReaderInstance.onload = () => {
-        //setTokenImage(fileReaderInstance.result as string);
-        //}
-
       } catch (err) {
         //
       }
@@ -52,6 +35,8 @@ export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
     if (token.contract.ticker_symbol) {
       runAsync();
     }
+
+    return () => { isMounted = false };
   }, [token])
 
   const TokenIcon = ({ iname }: { iname: string }) => {

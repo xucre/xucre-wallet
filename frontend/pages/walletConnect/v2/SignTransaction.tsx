@@ -39,13 +39,15 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
   const [viewData, setViewData] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       if (requestDetails) {
-        setRequest(requestDetails);
+        if (isMounted) setRequest(requestDetails);
       }
     }
 
     runAsync();
+    return () => { isMounted = false }
   }, [requestDetails]);
 
   useEffect(() => {
@@ -59,10 +61,6 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
     }
 
   }, [request])
-
-  useEffect(() => {
-    //
-  }, [])
 
   const StyledItem = ({ label, value }: { label: string, value: string }) => {
     return (

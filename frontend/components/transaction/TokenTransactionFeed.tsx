@@ -33,18 +33,33 @@ export default function TransactionFeed({ navigation, tokenAddress }: { navigati
   const [transactions, setTransactions] = useState([] as CovalentTokenHistoryItem[]);
   //{translations[language].BasePage.title}
   useEffect(() => {
+    let isMounted = true;
     if (_wallet) {
-      syncTransactions();
+      if (isMounted) setRefreshing(true);
+      setTimeout(async () => {
+        const _network = await getActiveNetwork();
+        const _transactions = await getTokenTransferHistory(_wallet.address, tokenAddress, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
+
+        if (_transactions && _transactions.items) {
+          if (isMounted) setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
+        }
+        if (isMounted) setRefreshing(false);
+      }, 100)
     }
+    return () => { isMounted = false }
   }, [_wallet])
 
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       const _network = await getActiveNetwork();
-      storeTokenHistoryItems(_wallet.address, tokenAddress, _network.chainId, transactions);
+      if (isMounted) storeTokenHistoryItems(_wallet.address, tokenAddress, _network.chainId, transactions);
     }
     if (transactions.length > 0) {
       runAsync();
+    }
+    return () => {
+      isMounted = false;
     }
   }, [transactions])
 

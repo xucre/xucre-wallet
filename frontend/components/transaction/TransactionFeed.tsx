@@ -31,9 +31,22 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
   const [transactions, setTransactions] = useState([] as CovalentTransactionV3[]);
   //{translations[language].BasePage.title}
   useEffect(() => {
-    if (_wallet) {
-      syncTransactions();
+    let isMounted = true;
+    const runAsync = async () => {
+      if (_wallet) {
+        if (isMounted) setRefreshing(true);
+        setTimeout(async () => {
+          const _network = await getActiveNetwork();
+          const _transactions = await getWalletTransactions(_wallet.address, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
+          if (_transactions && _transactions.covalent.items) {
+            if (isMounted) setTransactions(_transactions.covalent.items as CovalentTransactionV3[]);
+          }
+          if (isMounted) setRefreshing(false);
+        }, 100)
+      }
     }
+    runAsync();
+    return () => { isMounted = false }
   }, [_wallet])
 
   useEffect(() => {

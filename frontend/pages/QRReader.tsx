@@ -15,12 +15,14 @@ export default function QRReader({ navigation }: { navigation: { navigate: Funct
   const [language,] = useRecoilState(stateLanguage);
 
   useEffect(() => {
+    let isMounted = true;
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === PermissionStatus.GRANTED);
+      if (isMounted) setHasPermission(status === PermissionStatus.GRANTED);
     };
     setScanned(false);
     getBarCodeScannerPermissions();
+    return () => { isMounted = false }
   }, []);
 
   const handleBarCodeScanned = async ({ type, data }: { type: any, data: string }) => {

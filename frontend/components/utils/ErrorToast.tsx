@@ -1,7 +1,7 @@
 import { Box, Button, Center, Text, useToast } from "native-base";
-import React, { useEffect } from "react";
+import React from "react";
 
-export default function ErrorToast({errorMessage} : {errorMessage: string}) {
+export default function ErrorToast({ errorMessage }: { errorMessage: string }) {
   const toast = useToast();
   return (
     <Center>
@@ -16,8 +16,8 @@ export default function ErrorToast({errorMessage} : {errorMessage: string}) {
           }
         })
       }
-      
+
     </Center>
   )
- 
+
 }

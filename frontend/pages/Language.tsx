@@ -17,18 +17,18 @@ import { hasSignedPrivacyPolicy } from "../store/setting";
 import ContainedButton from "../components/ui/ContainedButton";
 
 export default function LanguagePage({ navigation }: { navigation: { navigate: Function } }) {
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [languageVal, setLanguageVal] = useState('');
   const [hasSigned, setHasSigned] = useState(false);
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       const _hasSigned = await hasSignedPrivacyPolicy();
-      setHasSigned(_hasSigned);
+      if (isMounted) setHasSigned(_hasSigned);
     }
     runAsync();
 
     return () => {
-      setIsComponentMounted(false);
+      isMounted = false;
     }
   }, []);
 

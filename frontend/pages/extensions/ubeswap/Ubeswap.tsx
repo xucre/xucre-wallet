@@ -1,5 +1,5 @@
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import translations from "../../../assets/translations";

@@ -30,7 +30,6 @@ export default function Loader() {
   const {
     colorMode
   } = useColorMode();
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [loading, setLoading] = useState(true);
   //const [hasBooted, setHasBooted] = useState(false);
   const loadFonts = async () => {
@@ -40,48 +39,42 @@ export default function Loader() {
     });
   }
 
-  const loadData = async () => {
-    const _language = await getLanguage();
-    const _hasSigned = await hasSignedPrivacyPolicy();
-    const _activeNetwork = await getActiveNetwork();
-    const _wallet2 = await getActiveWallet();
-    if (isComponentMounted) {
-      setFontsLoaded(true);
-
-      setHasSigned(_hasSigned);
-      if (_language) {
-        setLanguageState(_language);
-      } else {
-        setLanguageState('en');
-        setLanguageDefault(true);
-      }
-
-      if (_activeNetwork) {
-        setActiveNetwork(_activeNetwork);
-      }
-
-      if (_wallet2) {
-        setActiveWallet(_wallet2[0]);
-      }
-
-      setLoading(false);
-    }
-  }
-
-  const loadFontsAndData = async () => {
-    await loadFonts();
-    await loadData();
-  }
-
   //Loading Fonts
   useEffect(() => {
-
-    if (isComponentMounted) {
-      loadFontsAndData();
+    let isMounted = true;
+    const runAsyncLoadFonts = async () => {
+      await loadFonts();
+      if (isMounted) {
+        setFontsLoaded(true);
+      }
     }
-
+    const runAsyncLoadData = async () => {
+      const _language = await getLanguage();
+      const _hasSigned = await hasSignedPrivacyPolicy();
+      const _activeNetwork = await getActiveNetwork();
+      const _wallet2 = await getActiveWallet();
+      if (isMounted) {
+        setFontsLoaded(true);
+        setHasSigned(_hasSigned);
+        if (_language) {
+          setLanguageState(_language);
+        } else {
+          setLanguageState('en');
+          setLanguageDefault(true);
+        }
+        if (_activeNetwork) {
+          setActiveNetwork(_activeNetwork);
+        }
+        if (_wallet2) {
+          setActiveWallet(_wallet2[0]);
+        }
+        setLoading(false);
+      }
+    }
+    runAsyncLoadFonts();
+    runAsyncLoadData();
     return () => {
-      setIsComponentMounted(false);
+      isMounted = false;
     }
   }, [])
 
@@ -196,19 +189,5 @@ export default function Loader() {
     }
   }, [loading])
 
-  if (!fontsLoaded) {
-    return <></>;
-  }
-  return (
-    <>
-      {
-        /*<StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'}
-        />*/
-      }
-    </>
-
-  )
+  return <></>;
 }

@@ -64,15 +64,8 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   const [notEnough, setNotEnough] = useState(false);
   const [address, setAddress] = useState("");
   const [type, setType] = useState("token");
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [checkValues, setcheckValues] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    };
-  }, []);
 
   const [_wallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
@@ -86,31 +79,35 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   }, [token, wallet]);
 
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       await wallet.provider.getNetwork();
 
       const walletBalance = await wallet.getBalance();
-      setGasBalance(walletBalance);
-      setBalance(selectedToken.amount || BigNumber.from(0));
+      if (isMounted) setGasBalance(walletBalance);
+      if (isMounted) setBalance(selectedToken.amount || BigNumber.from(0));
       const result = await getTokenMetadata(selectedToken.address, chainIdToNameMap[selectedToken.chainId as keyof typeof chainIdToNameMap]);
-      setAlchemyMetadata(result as AlchemyMetadata);
+      if (isMounted) setAlchemyMetadata(result as AlchemyMetadata);
     }
     if (selectedToken.address && wallet && wallet.address) {
       runAsync();
     }
+    return () => { isMounted = false }
   }, [selectedToken, wallet])
 
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       const _network = await getActiveNetwork();
       const _provider = getDefaultProvider(_network.rpcUrl);
-      setProvider(_provider);
+      if (isMounted) setProvider(_provider);
       const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
-      setWallet(newWallet);
+      if (isMounted) setWallet(newWallet);
     }
     if (_wallet.name != "") {
       runAsync();
     }
+    return () => { isMounted = false }
   }, [_wallet]);
 
   useEffect(() => {

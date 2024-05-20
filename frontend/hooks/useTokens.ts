@@ -9,13 +9,16 @@ import { chainIdToNameMap, xucreToken } from '../service/constants';
 import { getActiveNetwork } from '../store/network';
 import { isSpam } from '../store/spam';
 import { getActiveWallet, WalletInternal } from '../store/wallet';
-import { AppWallet } from '../service/state';
+import { activeNetwork, activeWallet, AppWallet } from '../service/state';
 import { BIOMETRY_TYPE } from 'react-native-keychain';
+import { useRecoilValue } from 'recoil';
 
 function useTokens(initialValue = [] as Token[]) {
   const [tokens, setTokens] = useState(initialValue);
+  const wallet = useRecoilValue(activeWallet);
+  const network = useRecoilValue(activeNetwork);
   
-  const syncTokens = async () => {
+  const syncTokens = async (save: boolean) => {
     try {
 
       const _network = await getActiveNetwork();
@@ -37,8 +40,8 @@ function useTokens(initialValue = [] as Token[]) {
           type: 'coin',
           isNotSpammable: true
         };
-        setTokens([coinToken]);
-        return;
+        if (save) setTokens([coinToken]);
+        return [coinToken];
       }
       const _tokens_original = tokenResponse.tokenBalances;
       const _tokens = _tokens_original.filter((token: { tokenBalance: string; contractAddress: string; }) => BigNumber.from(token.tokenBalance).gt(0));
@@ -56,11 +59,11 @@ function useTokens(initialValue = [] as Token[]) {
       };
       if (!_tokens) {
         if (_network.chainId === xucreToken.chainId) {
-          setTokens([xucreToken, coinToken]);
-          return;
+          if (save) setTokens([xucreToken, coinToken]);
+          return [xucreToken, coinToken];
         }
-        setTokens([coinToken]);
-        return;        
+        if (save) setTokens([coinToken]);
+        return [coinToken];        
       } else {
         const _tokenList = await _tokens.reduce(async (_tList: Token[], token: { contractAddress: string; tokenBalance: any; }) => {
           const tokenMetadata = tokenMetadataMap[token.contractAddress.toLowerCase() as keyof typeof tokenMetadataMap];
@@ -104,8 +107,8 @@ function useTokens(initialValue = [] as Token[]) {
             return 1;
           }
         });
-        setTokens(finalTokens);
-        return;
+        if (save) setTokens(finalTokens);
+        return finalTokens;
       }
     } catch (err) {
       console.log(err);
@@ -113,8 +116,15 @@ function useTokens(initialValue = [] as Token[]) {
 
   }
   useEffect(() => {
-    syncTokens();
-  }, [])
+    let isMounted = true;
+    const runAsync = async () => {
+      const _tokens = await syncTokens(false);
+      if (isMounted) setTokens(_tokens as Token[]);
+    }
+    
+    runAsync();
+    return () => { isMounted = false;}
+  }, [wallet, network]);
 
 
   return { tokens, reset: syncTokens };

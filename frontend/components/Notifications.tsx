@@ -3,29 +3,22 @@ import {
   IconButton,
   VStack,
 } from "native-base";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 
-export default function SelectLanguage () {
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
-
+export default function SelectLanguage() {
 
   return (
     <VStack>
-        {
-          // TODO: Style notification badge
-        }
-        <IconButton colorScheme={'dark'} key={'test1'} variant={'ghost'} _icon={{
-          as: MaterialIcons,
-          name: "notifications"
-        }} />
-      </VStack>
-    
+      {
+        // TODO: Style notification badge
+      }
+      <IconButton colorScheme={'dark'} key={'test1'} variant={'ghost'} _icon={{
+        as: MaterialIcons,
+        name: "notifications"
+      }} />
+    </VStack>
+
   );
 }
 

@@ -38,12 +38,7 @@ export default function RecoverPrivateKey({ navigation }: { navigation: { naviga
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState('');
   const isComplete = file.length > 0 && password.length > 0;
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
+
   const {
     colorMode
   } = useColorMode();

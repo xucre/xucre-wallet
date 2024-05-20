@@ -68,28 +68,15 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       if (_wallet.name === '') {
         setWallet(new WalletInternal(_walletList[0].wallet).connect(_provider));
       } else {
-        if (_wallet.address !== wallet.address) {
-          setTimeout(() => {
-            reset();
-          }, 1000)
-        }
         setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
       }
     }
   }, [_wallet, _walletList]);
 
-  useEffect(() => {
-    if (tokens.length > 0 && tokens[0].chainId !== network.chainId) {
-      reset();
-    } else if (tokens.length === 0) {
-      reset();
-    }
-  }, [network])
-
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     setTimeout(async () => {
-      await reset();
+      await reset(true);
       setRefreshing(false);
     }, 500)
   }, []);

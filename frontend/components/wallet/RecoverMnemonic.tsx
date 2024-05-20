@@ -38,12 +38,7 @@ export default function RecoverMnemonic({ navigation }: { navigation: { navigate
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [mnemonicMatchComplete, setMnemonicMatchComplete] = useState(false);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
+
   const {
     colorMode
   } = useColorMode();

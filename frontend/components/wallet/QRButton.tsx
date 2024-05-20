@@ -20,13 +20,7 @@ export default function QRButton({ address }: { address: string }) {
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
   //{translations[language].BasePage.title}
-  useEffect(() => {
-    const runAsync = async () => {
-      // do something
-    }
 
-    runAsync();
-  }, [])
   return (
     <>
       <IconButton onPress={() => setIsOpen(!isOpen)} colorScheme={'dark'} key={'copyButton'} variant={'ghost'} _icon={{

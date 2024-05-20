@@ -139,6 +139,13 @@ const values : TranslationType = {
     instructions: "Billeterayki",
     recover_button: 'Qillqata kutichiy', 
   }, 
+  NftDashboard: {
+    title: "NFTs",
+    collections: "Huñusqakuna",
+    trending: "Tendencia nisqapi",
+    your_list: "Listayki",
+    no_holdings: "Mana NFTkuna tarisqachu"
+  },
   PasswordComponent: {
     error_message: 'Mana allin yaykuna rimay',
     form_label: 'ContraseÃ±a',

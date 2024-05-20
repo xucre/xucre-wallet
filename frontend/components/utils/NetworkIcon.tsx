@@ -41,19 +41,12 @@ export default function NetworkIcon({ navigation, close, isInline }: { navigatio
   const isDark = colorMode === 'dark';
   //{translations[language].BasePage.title}
   useEffect(() => {
-    const runAsync = async () => {
-      //
-    }
     if (_activeNetwork.symbol && _activeNetwork.symbol !== '') {
       setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + _activeNetwork.symbol.toLowerCase() + '.png');
       setSelectedNetwork(_activeNetwork as Network)
     }
-    runAsync();
   }, [_activeNetwork, network])
 
-  useEffect(() => {
-    //
-  }, [avatar])
   return (
     <>
       {avatar !== '' && !isInline &&

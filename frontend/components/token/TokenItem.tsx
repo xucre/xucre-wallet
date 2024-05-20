@@ -31,40 +31,55 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
   const [amISpam, setAmISpam] = useState(true);
 
   useEffect(() => {
-    if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
-      setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
-    } else if (token.chainId && token.type === 'token' && tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames]) {
-      setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames].toLowerCase() + '.png');
-    } else {
-      //setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/placeholdericon.png');
+    let isMounted = true;
+    const runAsyncAvatar = async () => {
+      if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
+        setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
+      } else if (token.chainId && token.type === 'token' && tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames]) {
+        setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames].toLowerCase() + '.png');
+      } else {
+        //setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/placeholdericon.png');
+      }
+
+      if (Platform.OS === 'ios') {
+        if (isMounted) setLoading(false);
+      }
     }
-
-    if (!token.amount || token.amount.isZero()) {
-      getRawBalance();
+    const runAsyncMetadata = async () => {
+      const _metadata = await getMetadata(false);
+      if (isMounted) setAlchemyMetadata(_metadata as AlchemyMetadata);
     }
+    const runAsyncRawBalance = async () => {
+      if (!token.amount || token.amount.isZero()) {
+        const _rawBalance = await getRawBalance(false);
+        if (isMounted) setRawAmount(_rawBalance);
+      }
 
-    //if (!token.name || token.name === 'N/A') {
-    getMetadata();
-    //}
-
-    _isSpam();
-
-    if (Platform.OS === 'ios') {
-      setLoading(false);
     }
-    //setAvatar('');
+    const runAsyncRawSpam = async () => {
+      const _spam = await _isSpam(false);
+      if (isMounted) setAmISpam(_spam);
+    }
+    runAsyncAvatar();
+    runAsyncMetadata();
+    runAsyncRawBalance();
+    runAsyncRawSpam();
+
+    return () => { isMounted = false };
   }, [token])
 
-  const getRawBalance = async () => {
+  const getRawBalance = async (save: boolean) => {
     try {
       if (token.type === 'token') {
         const erc20 = new ethers.Contract(ethers.utils.getAddress(token.address), erc20Abi, wallet);
         const walletBalance = await erc20.balanceOf(ethers.utils.getAddress(wallet.address));
-        setRawAmount(walletBalance);
+        if (save) setRawAmount(walletBalance);
+        return walletBalance;
       } else if (token.type === 'coin') {
         const _provider = getDefaultProvider(network.rpcUrl);
         const walletBalance = await wallet.connect(_provider).getBalance();
-        setRawAmount(walletBalance);
+        if (save) setRawAmount(walletBalance);
+        return walletBalance;
       }
     } catch (err) {
     }
@@ -72,23 +87,21 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
 
   }
 
-  const getMetadata = async () => {
+  const getMetadata = async (save: boolean) => {
     const result = await getTokenMetadata(token.address, chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap]);
-    setAlchemyMetadata(result as AlchemyMetadata);
+    if (save) setAlchemyMetadata(result as AlchemyMetadata);
+    return result;
   }
 
-  const _isSpam = async () => {
+  const _isSpam = async (save: boolean) => {
     if (token.type === 'coin') {
-      setAmISpam(false);
-      return;
+      if (save) setAmISpam(false);
+      return false;
     }
-    setAmISpam(await isSpam(token.address, network.chainId));
+    const result = await isSpam(token.address, token.chainId);
+    if (save) setAmISpam(result);
+    return result;
   }
-
-  /*const removeToken = async () => {
-    const result = await deleteToken(token);
-    refreshList();
-  }*/
 
   const CustomIcon = ({ data, size }: { data: any, size: number }): JSX.Element => {
     return <SvgUri

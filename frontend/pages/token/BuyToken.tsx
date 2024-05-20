@@ -17,15 +17,6 @@ export default function BuyToken({ navigation, route }: { navigation: { navigate
   const [network,] = useRecoilState(activeNetwork);
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet,] = useRecoilState(activeWallet);
-  useEffect(() => {
-    const runAsync = async () => {
-
-    }
-    if (network) {
-      runAsync();
-    }
-
-  }, [network])
 
   const url = swapUrl(colorMode as string);
   return (

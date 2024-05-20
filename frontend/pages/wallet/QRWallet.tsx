@@ -55,77 +55,86 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
   const [showModal, setShowModal] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
-    getPermission();
+    let isMounted = true;
+    const runAsyncPermission = async () => {
+      const filteredContacts = await getPermission(false);
+      if (isMounted) {
+        if (allContacts.length === 0) setAllContacts(filteredContacts);
+        setContactList(filteredContacts);
+      }
+    };
+
+    const runAsyncLocation = async () => {
+      const position = await getLocation(false);
+      if (isMounted) {
+        setLocation(position);
+        if (position.coords) {
+          setlat(position.coords.latitude)
+          setlng(position.coords.longitude)
+        }
+      }
+      const localJson = await getLocal();
+      if (isMounted) { setlocal(localJson) }
+    }
+
+    runAsyncPermission();
+    runAsyncLocation();
+    return () => { isMounted = false }
   }, [isFocused]);
-  const getPermission = () => {
+
+  const getPermission = async (save: boolean) => {
     if (Platform.OS === 'android') {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+      const res = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
         buttonPositive: 'Accept',
         message: 'This app would like to view your contacts.',
         title: 'Contacts',
-      }).then(res => {
-        if (res == 'granted') {
-          getAll()
-            .then(con => {
-              // work with contacts
-              const filteredContacts = con.filter((item) => item.phoneNumbers.length)
-              filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1)
-              setAllContacts(filteredContacts);
-              setContactList(filteredContacts);
-            })
-            .catch(e => {
-              //
-            });
-        }
-      });
-      getLocation()
-    } else if (Platform.OS === 'ios') {
-      getAll().then(con => {
-        // work with contacts
+      })
+      if (res == 'granted') {
+        const con = await getAll();
         const filteredContacts = con.filter((item) => item.phoneNumbers.length)
         filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1)
+        if (save) {
+          if (allContacts.length === 0) setAllContacts(filteredContacts);
+          setContactList(filteredContacts);
+        }
+        return filteredContacts;
+      }
+    } else if (Platform.OS === 'ios') {
+      const con = await getAll();
+      // work with contacts
+      const filteredContacts = con.filter((item) => item.phoneNumbers.length)
+      filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1)
+      if (save) {
         setAllContacts(filteredContacts);
         setContactList(filteredContacts);
-      })
-        .catch(e => {
-          //
-        });
-      getLocation()
-    }
-
-  };
-
-
-  const getLocation = () => {
-
-    const result = requestLocationPermission();
-    result.then(res => {
-      if (res) {
-        Geolocation.getCurrentPosition(
-          position => {
-            setLocation(position);
-            setlat(position.coords.latitude)
-            setlng(position.coords.longitude)
-
-            setTimeout(getLocal, 3000);
-          },
-          error => {
-            // See error code charts below.
-            //setLocation();
-          },
-          { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 },
-        );
       }
-    });
+      return filteredContacts;
+    }
+    return [];
   };
 
-  const getLocal = () => {
+  const getLocation = async (save: boolean) => {
+    const res = await requestLocationPermission();
+    if (res) {
+      Geolocation.getCurrentPosition(
+        position => {
+          if (save) setLocation(position);
+          if (save) setlat(position.coords.latitude)
+          if (save) setlng(position.coords.longitude)
+          return position;
+        },
+        error => { },
+        { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 },
+      );
+    }
+    return {} as Geolocation.GeoPosition;
+  };
+
+  const getLocal = async () => {
     const url = 'http://api.geonames.org/countryCodeJSON?lat=' + lat + '&lng=' + lng + '&username=carevalo123'
-    fetch(url).then((response) => response.json()).then((json) => {
-      setlocal(json)
-    }).catch((error) => {
-      //
-    });
+    const response = await fetch(url)
+    const _json = await response.json();
+    return _json;
   }
 
   const openPage = (pageName: string, param1: any, param2: any, param3: any) => {
@@ -181,7 +190,7 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
       })
       setContactList(newData);
     } else {
-      getPermission();
+      getPermission(true);
     }
   }
 

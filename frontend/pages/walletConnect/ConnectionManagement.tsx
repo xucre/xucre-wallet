@@ -87,20 +87,32 @@ export default function ConnectionManagement({ navigation, route }: { navigation
 
   //{translations[language].ConnectionRequest.}
   useEffect(() => {
-    getRequests();
+    let isMounted = true;
+    const runAsync = async () => {
+      const { _requests, _pairings, _pairingMap } = await getRequests(false);
+      if (isMounted) {
+        setRequests(_requests || []);
+        setParingMap(_pairingMap);
+        setPairings(_pairings);
+      }
+    }
+    runAsync();
+    return () => { isMounted = false; }
   }, []);
 
-  const getRequests = async () => {
+  const getRequests = async (save: boolean) => {
     const _requests = await getAllNotifications();
     const _pairings = signClient.core.pairing.getPairings();
     const _pairingMap = _pairings.reduce((returnVal: any, val: { topic: any; }, i: any) => {
       return { ...returnVal, [val.topic]: val };
     }, {})
-    setRequests(_requests || []);
-    setParingMap(_pairingMap);
-    setPairings(_pairings);
+    if (save) {
+      setRequests(_requests || []);
+      setParingMap(_pairingMap);
+      setPairings(_pairings);
+    }
 
-
+    return { _requests, _pairings, _pairingMap };
   }
 
   const handleTabChange = (newTab: React.SetStateAction<string>) => {
@@ -109,13 +121,7 @@ export default function ConnectionManagement({ navigation, route }: { navigation
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await getRequests();
-    setRefreshing(false);
-  }
-
-  const onRefreshRequests = async () => {
-    setRefreshing(true);
-    await getRequests();
+    await getRequests(true);
     setRefreshing(false);
   }
 
