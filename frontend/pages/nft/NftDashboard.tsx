@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { useRecoilState } from "recoil";
 
+import translations from "../../assets/translations";
 import { Color } from "../../../GlobalStyles";
 import MobileFooter from "../../components/Footer";
 import NftItemLarge from "../../components/nft/NftItemLarge";
@@ -21,111 +22,80 @@ import { chainIdToNameMapNFT, getNfts } from "../../service/blockdaemon";
 import { AppWallet, language as stateLanguage } from "../../service/state";
 import { getActiveWallet } from "../../store/wallet";
 import { getActiveNetwork } from "../../store/network";
-
-export type NFT = { description: string, image: string, key: string, name: string, url: string }
-export type NFTHolding = { contract_address: string, id: string }
+import { NFT, NFTHolding } from "../../types/nft";
+import useNFTs from "../../hooks/useNFTs";
 
 export default function NftDashboard({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [chain, setChain] = useState('');
-  const [trendingRefreshing, setTrendingRefreshing] = useState(false);
-  const [collectionsRefreshing, setCollectionsRefreshing] = useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
   const [wallet, setActiveWallet] = useState({
     name: '',
     wallet: {}
   } as AppWallet);
   //const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [holdings, setHoldings] = useState([] as NFTHolding[]);
-  const [trending, setTrending] = useState([] as NFT[]);
-  const [collections, setCollections] = useState([] as NFT[]);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
+  const { trending, collections, trendingRefreshing, collectionsRefreshing, reset } = useNFTs();
+  const refreshing = trendingRefreshing || collectionsRefreshing;
+
   // Transitions
   const [displayTooltip, setDisplayTooltip] = useState(false);
 
-  const syncNfts = async () => {
+  const syncNfts = async (save: boolean) => {
     try {
       if (wallet.name.length > 0) {
-
         const _network = await getActiveNetwork();
         const _tokens = await getNfts(wallet.address, chainIdToNameMapNFT[_network.chainId as keyof typeof chainIdToNameMapNFT]);
-        if (isComponentMounted) {
+        if (save) {
           setChain(_tokens.chain);
           setHoldings(_tokens.results);
-          setRefreshing(false);
         }
+
+        return { _chain: _tokens.chain, _holdings: _tokens.results }
       }
     } catch (err) {
-      //
+
     }
+    return { _chain: '', _holdings: [] }
   }
 
-  const syncTrendingNfts = async () => {
-    try {
-      if (wallet.name.length > 0) {
-        const nftJsonTrending = await getNftJson('trending');
-        if (isComponentMounted) {
-          setTrending(nftJsonTrending.items);
-          setTrendingRefreshing(true);
-        }
-      }
-    } catch (err) {
-      //
-    }
-  }
-
-  const syncCollectionNfts = async () => {
-    try {
-      if (wallet.name.length > 0) {
-        const nftJsonCollections = await getNftJson('collections');
-        if (isComponentMounted) {
-          setCollections(nftJsonCollections.items);
-          setCollectionsRefreshing(true);
-        }
-      }
-    } catch (err) {
-      //
-    }
-  }
-
-
   useEffect(() => {
-    setTimeout(() => {
-      if (wallet.name.length > 0) {
-        setTrendingRefreshing(true);
-        setCollectionsRefreshing(true);
-        syncTrendingNfts();
-        syncCollectionNfts();
-        syncNfts();
-      }
-    }, 1000)
-  }, [wallet])
-
-  useEffect(() => {
-    if (trendingRefreshing && collectionsRefreshing) {
-      setRefreshing(false);
-    }
-  }, [trendingRefreshing, collectionsRefreshing])
-
-  useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
-      const _wallet = await getActiveWallet();
-      setActiveWallet(_wallet[0]);
+      if (wallet.name.length > 0) {
+        //reset();
+        const { _chain, _holdings } = await syncNfts(false);
+        if (isMounted) {
+          setChain(_chain);
+          setHoldings(_holdings);
+        }
+      }
     }
 
     runAsync();
+    return () => {
+      isMounted = false;
+    }
+  }, [wallet])
+
+  useEffect(() => {
+    let isMounted = true;
+    const runAsync = async () => {
+      const _wallet = await getActiveWallet();
+      if (isMounted) setActiveWallet(_wallet[0]);
+    }
+
+    runAsync();
+    return () => {
+      isMounted = false;
+    }
   }, [])
 
 
   const onRefresh = React.useCallback(async () => {
-
+    syncNfts(true);
+    reset();
   }, []);
 
   const addToken = () => {
@@ -155,7 +125,7 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
             fontSize="md"
             fontWeight="medium"
             m={2}
-          >Trending</Text>
+          >{translations[language as keyof typeof translations].NftDashboard.trending}</Text>
 
           <FlatList data={trending} horizontal={true} renderItem={
             ({ item: nft, index: i }) => <NftItemLarge key={nft.key + i} item={nft} />
@@ -169,7 +139,7 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
             fontSize="md"
             fontWeight="medium"
             m={2}
-          >Collections</Text>
+          >{translations[language as keyof typeof translations].NftDashboard.collections}</Text>
           <FlatList data={collections} horizontal={true} renderItem={
             ({ item: nft, index: i }) => <NftItemSmall key={nft.key + i} item={nft} />
           }
@@ -184,13 +154,16 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
             p={0}
             m={2}
             mt={0}
-          >Your List</Text>
+          >{translations[language as keyof typeof translations].NftDashboard.your_list}</Text>
 
-          <FlatList data={holdings} mb={20} mx={3} renderItem={
-            ({ item: nft, index: i }) => <NftListItem key={nft.contract_address + nft.id + i} token={nft.id} contract={nft.contract_address} chain={chain} />
+          {holdings.length > 0 ?
+            <FlatList data={holdings} mb={20} mx={3} renderItem={
+              ({ item: nft, index: i }) => <NftListItem key={nft.contract_address + nft.id + i} token={nft.id} contract={nft.contract_address} chain={chain} />
+            }
+              keyExtractor={item => item.contract_address + item.id}
+            /> : <Text fontWeight="medium" textAlign={'center'}>{translations[language as keyof typeof translations].NftDashboard.no_holdings}</Text>
           }
-            keyExtractor={item => item.contract_address + item.id}
-          />
+
         </ScrollView>
       }
 

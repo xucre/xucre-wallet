@@ -141,6 +141,13 @@ const values : TranslationType = {
     instructions: "Your Wallet",
     recover_button: "Recover Wallet"
   },
+  NftDashboard: {
+    title: "NFTs",
+    collections: "Collections",
+    trending: "Trending",
+    your_list: "Your List",
+    no_holdings: "No NFTs found"
+  },
   PasswordComponent: {
     error_message: "Invalid Password",
     form_label: "Password",

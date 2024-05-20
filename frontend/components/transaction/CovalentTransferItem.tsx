@@ -33,11 +33,6 @@ function CovalentTransferItemComponent({ navigation, transaction }: { navigation
     Linking.openURL(blockUrl);
   }
 
-  useEffect(() => {
-    //if (transaction && wallet.wallet.length > 0 && network.chainId) parseDetails();
-  }, [transaction, wallet, network])
-
-
   const CustomIcon = ({ data, size }: { data: any, size: number }): JSX.Element => {
     return <SvgUri
       width={size}

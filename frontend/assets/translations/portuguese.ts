@@ -139,6 +139,13 @@ const values : TranslationType  = {
     instructions: "Sua Carteira",
     recover_button: 'Recuperar Carteira',
   },
+  NftDashboard: {
+    title: "NFTs",
+    collections: "Coleções",
+    trending: "Tendendo",
+    your_list: "Sua lista",
+    no_holdings: "Nenhum NFT encontrado"
+  },
   PasswordComponent: {
     error_message: 'Senha Invalida',
     form_label: 'Senha ',

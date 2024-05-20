@@ -139,6 +139,13 @@ const values : TranslationType  = {
     instructions: 'Tla-yoocoya Yancuic o pahti usando mnemónicos',
     recover_button: 'Pahti Tlahcuiloolaamapetlaacaltoon-tli',
   },
+  NftDashboard: {
+    title: "NFTs",
+    collections: "Colecciones",
+    trending: "Tendencias",
+    your_list: "Tu lista",
+    no_holdings: "No se encontraron NFT"
+  },
   PasswordComponent: {
     error_message: 'Ichtacayooh invalida',
     form_label: 'Ichtacayooh',

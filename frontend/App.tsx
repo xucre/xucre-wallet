@@ -216,21 +216,26 @@ export const AppWrapper = () => {
   }, []);
 
   useEffect(() => {
-    if (scheme) {
+    let isMounted = true;
+    if (scheme && isMounted) {
       setColorMode(scheme);
+    }
+    return () => {
+      isMounted = false;
     }
   }, [scheme])
 
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       const clientTheme = await getTheme();
       if (!clientTheme) {
         await storeTheme('light');
-        setColorMode(clientTheme);
-        setScheme('light');
+        if (isMounted) setColorMode(clientTheme);
+        if (isMounted) setScheme('light');
       } else {
-        setColorMode(clientTheme);
-        setScheme(clientTheme);
+        if (isMounted) setColorMode(clientTheme);
+        if (isMounted) setScheme(clientTheme);
       }
     }
 
@@ -264,6 +269,10 @@ export const AppWrapper = () => {
       }
 
     })
+
+    return () => {
+      isMounted = false;
+    }
   }, []);
 
   const hideHeader = (name: string) => {
@@ -283,8 +292,6 @@ export const AppWrapper = () => {
     }
     return false;
   }
-
-
 
   return (
     <SafeAreaProvider>
@@ -399,7 +406,7 @@ export const AppWrapper = () => {
           }} ></Stack.Screen>
           <Stack.Screen name="NFT" component={NftDashboard} options={{
             headerTitleAlign: 'center',
-            title: translations[language as keyof typeof translations].SwapToken.title,
+            title: translations[language as keyof typeof translations].NftDashboard.title,
           }} ></Stack.Screen>
           <Stack.Screen name="QRReader" component={QRReader} options={{
             title: '',

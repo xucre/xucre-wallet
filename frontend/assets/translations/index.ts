@@ -4,6 +4,7 @@ import Portuguese from './portuguese';
 import Quechua from './quechua';
 import Spanish from './spanish';
 import SelectExtension from '../../pages/extensions/SelectExtension';
+import NftDashboard from '../../pages/nft/NftDashboard';
 
 export interface TranslationType {
   AddToken: any,
@@ -25,6 +26,7 @@ export interface TranslationType {
   Listener: any,
   Menu: any,
   NewWallet: any,
+  NftDashboard: any,
   PasswordComponent: any,
   QRReader: any,
   QRWallet: any,

@@ -11,6 +11,7 @@ import translations from "../../assets/translations";
 const ExtensionItemComponent = ({ metadata, navigation }: { metadata: Extension, navigation: { navigate: Function } }) => {
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
+
   const openExtension = async () => {
     if (metadata.externalUrl) {
       const supported = await Linking.canOpenURL(metadata.externalUrl);
