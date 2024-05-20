@@ -9,11 +9,14 @@ import { chainIdToNameMap, xucreToken } from '../service/constants';
 import { getActiveNetwork } from '../store/network';
 import { isSpam } from '../store/spam';
 import { getActiveWallet, WalletInternal } from '../store/wallet';
-import { AppWallet } from '../service/state';
+import { activeNetwork, activeWallet, AppWallet } from '../service/state';
 import { BIOMETRY_TYPE } from 'react-native-keychain';
+import { useRecoilValue } from 'recoil';
 
 function useTokens(initialValue = [] as Token[]) {
   const [tokens, setTokens] = useState(initialValue);
+  const wallet = useRecoilValue(activeWallet);
+  const network = useRecoilValue(activeNetwork);
   
   const syncTokens = async (save: boolean) => {
     try {
@@ -121,10 +124,10 @@ function useTokens(initialValue = [] as Token[]) {
     
     runAsync();
     return () => { isMounted = false;}
-  }, [])
+  }, [wallet, network]);
 
 
-  return { tokens, reset: syncTokens(true) };
+  return { tokens, reset: syncTokens };
 }
 
 export default useTokens;

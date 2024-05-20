@@ -42,12 +42,6 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
   const [mnemonicMatchError, setMnemonicMatchError] = useState(false);
   const [mnemonicMatchComplete, setMnemonicMatchComplete] = useState(false);
   const [exportWallet, setExportWallet] = useState(false);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    };
-  }, []);
   const { colorMode } = useColorMode();
 
   useEffect(() => {

@@ -23,8 +23,8 @@ export default function UnlimitWidget({ navigation }: { navigation: { navigate: 
     }
   });*/
   useEffect(() => {
+    let isMounted = true;
     if (_wallet) {
-
       const hostApiKey = 'u3tz8szbe6xef5o647ufwtqd65235wfttw8aq8ob';
       const hostAppName = 'Xucre Wallet';
       const hostLogoUrl = 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre_logo.png';
@@ -37,11 +37,12 @@ export default function UnlimitWidget({ navigation }: { navigation: { navigate: 
         hostApiKey: hostApiKey
       })*/
       const runAsync = async () => {
-        await Linking.openURL(`https://app.demo.ramp.network?hostApiKey=${hostApiKey}&hostAppName=${hostAppName}&hostLogoUrl=${hostLogoUrl}&userAddress=${_wallet.address}`);
+        if (isMounted) await Linking.openURL(`https://app.demo.ramp.network?hostApiKey=${hostApiKey}&hostAppName=${hostAppName}&hostLogoUrl=${hostLogoUrl}&userAddress=${_wallet.address}`);
       }
       runAsync();
 
     }
+    return () => { isMounted = false }
   }, [_wallet]);
 
   return (

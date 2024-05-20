@@ -27,7 +27,7 @@ import {
 import { getNetworks, storeActiveNetwork } from "../../store/network";
 import { Network } from "../../service/network";
 
-export default function NetworkDefault({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function NetworkDefault({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
     const [language,] = useRecoilState(stateLanguage);
     const { colorMode } = useColorMode();
     const [, setSelectedNetwork] = useRecoilState(selectedNetwork);
@@ -35,13 +35,15 @@ export default function NetworkDefault({ navigation, route }: {navigation: {navi
     const [, setActiveNetwork] = useRecoilState(activeNetwork);
     const [tokenImage, setTokenImage] = useState('');
     useEffect(() => {
+        let isMounted = true;
         const runAsync = async () => {
             const _networks = await getNetworks();
             if (Array.isArray(_networks)) {
-                setNetworks(_networks);
+                if (isMounted) setNetworks(_networks);
             }
         }
         runAsync();
+        return () => { isMounted = false }
     }, [tokenImage])
 
     const viewSelectWallet = () => {
@@ -61,7 +63,7 @@ export default function NetworkDefault({ navigation, route }: {navigation: {navi
 
     }
 
-    const NetworkItem = ({ metadata }: {metadata : Network}) => {
+    const NetworkItem = ({ metadata }: { metadata: Network }) => {
         const selectNetwork = () => {
             setActiveNetwork(metadata);
             storeActiveNetwork(metadata);

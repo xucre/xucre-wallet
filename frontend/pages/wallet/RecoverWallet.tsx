@@ -16,7 +16,7 @@ import {
   useToast,
   VStack,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Platform, StyleSheet } from 'react-native';
 import { useRecoilState, useSetRecoilState, } from "recoil";
 
@@ -35,12 +35,7 @@ export default function RecoverWallet({ navigation, route }: { navigation: { nav
   const [language,] = useRecoilState(stateLanguage);
   const [steps, setSteps] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
+
   const {
     colorMode
   } = useColorMode();

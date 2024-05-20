@@ -32,13 +32,15 @@ export default function EthSign({ navigation, route }: { navigation: { navigate:
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       if (requestDetails) {
-        setRequest(requestDetails);
+        if (isMounted) setRequest(requestDetails);
       }
     }
 
     runAsync();
+    return () => { isMounted = false }
   }, [requestDetails]);
 
   useEffect(() => {

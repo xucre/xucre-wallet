@@ -29,26 +29,32 @@ export default function Connections({ navigation, route }: { navigation: { navig
   const { colorMode } = useColorMode();
   //{translations[language].ConnectionRequest.}
   useEffect(() => {
-    //setPairings([])
-    getPairs();
+    let isMounted = true;
+    const runAsync = async () => {
+      const _pairings = await getPairs(true);
+      if (isMounted) setPairings(_pairings);
+    }
+    runAsync();
+    return () => { isMounted = false }
   }, []);
 
-  const getPairs = async () => {
+  const getPairs = async (save: boolean) => {
     const _pairings = signClient.core.pairing.getPairings();
-    setPairings(_pairings);
+    if (save) setPairings(_pairings);
+    return _pairings;
   }
 
   const Pair = ({ metadata }: { metadata: any }) => {
     //const address = metadata.wallet.address;
     useEffect(() => {
       const runAsync = async () => {
-        const res = await signClient.core.pairing.ping({ topic: metadata.topic })
+        await signClient.core.pairing.ping({ topic: metadata.topic })
       }
       runAsync();
     }, [metadata])
     const removePair = async () => {
       await signClient.core.pairing.disconnect({ topic: metadata.topic });
-      getPairs();
+      getPairs(true);
     }
     if (!metadata) return (<></>)
     return (

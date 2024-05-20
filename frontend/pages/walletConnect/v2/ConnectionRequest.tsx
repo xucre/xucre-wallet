@@ -42,13 +42,9 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   //const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const runAsync = async () => {
-      if (requestDetails) {
-        setRequest(requestDetails)
-      }
+    if (requestDetails) {
+      setRequest(requestDetails)
     }
-
-    runAsync();
   }, [requestDetails]);
 
   const nextPage = () => {

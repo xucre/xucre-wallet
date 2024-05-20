@@ -2,7 +2,7 @@
 import { Montserrat_400Regular, Montserrat_700Bold, useFonts } from '@expo-google-fonts/montserrat';
 import * as Font from 'expo-font';
 import { Box, Center, Hidden, HStack, Image, Pressable, Stack, StatusBar, Text, useColorMode, VStack } from 'native-base';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useRecoilState } from 'recoil';
 

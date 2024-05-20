@@ -61,30 +61,28 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
   const [folderSelected, setFolderSelected] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     const runAsyncAndroid = async () => {
-
-    }
-    if (Platform.OS === 'android' && Platform.Version < 33) {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, {
+      const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, {
         buttonPositive: 'Accepted',
         message: 'This app would like to access files.',
         title: 'Files',
-      }).then((result) => {
-        if (result === PermissionsAndroid.RESULTS.GRANTED) {
-          setHasFileAccess(true);
-        } else {
-          setHasFileAccess(false);
-        }
       })
+      if (result === PermissionsAndroid.RESULTS.GRANTED) {
+        if (isMounted) setHasFileAccess(true);
+      } else {
+        if (isMounted) setHasFileAccess(false);
+      }
+    }
+    if (Platform.OS === 'android' && Platform.Version < 33) {
+      runAsyncAndroid()
     } else if (Platform.OS === 'android') {
       //runAsyncAndroid();
     } else if (Platform.OS === 'ios') {
       setFolderSelected(true);
     }
 
-    return () => {
-      setIsComponentMounted(false);
-    }
+    return () => { isMounted = false }
   }, []);
 
   useEffect(() => {

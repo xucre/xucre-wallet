@@ -69,7 +69,6 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
   const [chartData, setChartData] = useState([] as ChartData[]);
   const [isZeroData, setIsZeroData] = useState(false);
   const [isChartDataRaw, setIsChartDataRaw] = useState(false);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
   const conversionRate = 1;
   const currency = 'USD';
   useEffect(() => {
@@ -78,51 +77,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
     } else if (token.chainId && token.type === 'token' && tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames]) {
       setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames].toLowerCase() + '.png');
     }
-    return () => {
-      setIsComponentMounted(false);
-    }
   }, []);
-
-  useEffect(() => {
-    if (isFocused && wallet.address) {
-      //onRefresh();
-    }
-  }, [isFocused])
-
-  const getData = async () => {
-    try {
-      setRefreshing(true);
-      const _network = await getActiveNetwork();
-      const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
-      const historyResults = await getWalletHistory(wallet.address, chainName);
-
-      const { quotes: finalQuotes, isReady, isTokenValue } = processCovalentJsonData(historyResults, token.address);
-      if (finalQuotes.length > 0) {
-        setIsChartDataRaw(isTokenValue as boolean)
-
-        const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
-          if (returnVal[d.x]) {
-            return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
-          }
-          return { ...returnVal, [d.x]: d };
-        }, {} as { [key: number]: ChartData });
-        const _quotes = Object.values(quoteMap);
-        setCurrentHoldings(_quotes[_quotes.length - 1]);
-        setIsZeroData(isReady);
-
-        if (_quotes.length > 7) {
-          setChartData(_quotes.reverse().splice(0, 7));
-        } else {
-          setChartData(_quotes.reverse());
-        }
-
-      }
-      setRefreshing(false);
-    } catch (err: any) {
-      //console.log(err);
-      //const err2 = err as Error;
-    }
-  }
 
   useEffect(() => {
     if (_wallet.name === '') {
@@ -133,10 +88,46 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
   }, [_wallet]);
 
   useEffect(() => {
+    let isMounted = true;
+    const runAsync = async () => {
+      try {
+        if (isMounted) setRefreshing(true);
+        const _network = await getActiveNetwork();
+        const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
+        const historyResults = await getWalletHistory(wallet.address, chainName);
+
+        const { quotes: finalQuotes, isReady, isTokenValue } = processCovalentJsonData(historyResults, token.address);
+        if (finalQuotes.length > 0) {
+          if (isMounted) setIsChartDataRaw(isTokenValue as boolean)
+
+          const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
+            if (returnVal[d.x]) {
+              return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
+            }
+            return { ...returnVal, [d.x]: d };
+          }, {} as { [key: number]: ChartData });
+          const _quotes = Object.values(quoteMap);
+          if (isMounted) setCurrentHoldings(_quotes[_quotes.length - 1]);
+          if (isMounted) setIsZeroData(isReady);
+
+          if (_quotes.length > 7) {
+            if (isMounted) setChartData(_quotes.reverse().splice(0, 7));
+          } else {
+            if (isMounted) setChartData(_quotes.reverse());
+          }
+
+        }
+        if (isMounted) setRefreshing(false);
+      } catch (err: any) {
+        //console.log(err);
+        //const err2 = err as Error;
+      }
+    }
     if (wallet.address) {
       //setRefreshing(true);
-      getData();
+      runAsync();
     }
+    return () => { isMounted = false }
   }, [wallet])
 
   const CustomIcon = ({ data, size }: { data: any, size: number }): JSX.Element => {
