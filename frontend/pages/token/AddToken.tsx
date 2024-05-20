@@ -32,17 +32,15 @@ export default function AddToken({ navigation, route }: { navigation: { navigate
   const [chainId, setChainId] = useState('');
   const [name, setName] = useState('');
   const [type, setType] = useState('token');
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
+
   useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
-  useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
-      setNetworks(await getNetworks())
+      const _networks = await getNetworks();
+      if (isMounted) setNetworks(_networks)
     }
     runAsync();
+    return () => { isMounted = false }
   }, [])
   const {
     colorMode

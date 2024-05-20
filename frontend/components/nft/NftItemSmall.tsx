@@ -3,10 +3,13 @@ import {
   Box,
   Pressable,
   Text,
+  Image,
+  Skeleton,
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
-import { NFT } from '../../pages/nft/NftDashboard';
+import { NFT } from '../../types/nft';
+
 //import SvgUri from 'react-native-svg-uri';
 
 
@@ -19,17 +22,22 @@ function NftItemSmallComponent({ item }: { item: NFT }) {
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '' });
   const [url, setUrl] = useState('');
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
+
   useEffect(() => {
-    return () => {
-      setIsComponentMounted(false)
+    let isMounted = true;
+    const runAsync = async () => {
+      if (isMounted) setUrl(item.url);
+      if (item.image.length > 0) {
+        await Image.prefetch(item.image);
+        if (isMounted) setChannelMetadata(item);
+      } else {
+        if (isMounted) setChannelMetadata({ ...item, image: 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-green.png' });
+      }
     }
-  }, []);
-
-
-  useEffect(() => {
-    setChannelMetadata(item);
-    setUrl(item.url);
+    runAsync();
+    return () => {
+      isMounted = false;
+    }
   }, [item]);
 
 
@@ -47,18 +55,19 @@ function NftItemSmallComponent({ item }: { item: NFT }) {
       <Pressable
         borderRadius="sm"
         padding={0}
-        pt={0}
-        width={{ base: 120, md: 250 }}
         mb={0}
+        pt={0}
+        width={150}
         textAlign={'center'}
         _light={{ bg: 'transparent' }}
         _dark={{ bg: 'transparent' }}
         onPress={accessLink}
       >
-        {image.length > 0 &&
+        {image.length > 0 ?
           <Avatar bg="transparent" alignSelf="center" size="lg" source={{
             uri: image
           }}></Avatar>
+          : <Skeleton rounded="full" alignSelf="center" size="10" />
         }
 
         <Box
@@ -76,21 +85,21 @@ function NftItemSmallComponent({ item }: { item: NFT }) {
           >
             {title}
           </Text>
-          <Text
+          {/*<Text
             fontSize="md"
             _light={{ color: 'coolGray.600' }}
             _dark={{ color: 'coolGray.400' }}
             textAlign={'center'}
           >
             {projectName}
-          </Text>
+          </Text>*/}
         </Box>
       </Pressable>
     );
   }
 
   return (
-    <Box m={0}>
+    <>
       {
         metadata.name != null &&
         <BetterCard
@@ -104,7 +113,7 @@ function NftItemSmallComponent({ item }: { item: NFT }) {
           }
         />
       }
-    </Box>
+    </>
 
   );
 }

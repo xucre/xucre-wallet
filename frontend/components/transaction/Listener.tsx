@@ -45,7 +45,7 @@ export default function Listener() {
     title: translations[language as keyof typeof translations].Listener.failure_message,
     variant: "solid",
   };
-  useEffect(() => {
+  /*useEffect(() => {
     const runAsync = async () => {
       if (_transactions.length > 0) {
         await Promise.all(_transactions.map(async (transaction) => {
@@ -103,10 +103,12 @@ export default function Listener() {
       }
     }
     //runAsync();
-  }, [_transactions]);
+  }, [_transactions]);*/
 
   useEffect(() => {
-    setTransactions(transactions);
+    let isMounted = true;
+    if (isMounted) setTransactions(transactions);
+    return () => { isMounted = false }
   }, [transactions])
 
   const ToastAlert = ({

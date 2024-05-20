@@ -41,13 +41,15 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
   const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
   const [tokenImage, setTokenImage] = useState('');
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       const _networks = await getNetworks();
       if (Array.isArray(_networks)) {
-        setNetworks(_networks);
+        if (isMounted) setNetworks(_networks);
       }
     }
     runAsync();
+    return () => { isMounted = false }
   }, [tokenImage])
 
   const createNetwork = () => {

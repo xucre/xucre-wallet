@@ -2,7 +2,7 @@
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
 import { ScrollView, Text, useColorMode } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 //import { renderToString } from 'react-dom/server';
 //import { WebView } from "react-native-webview";
 import { Linking, RefreshControl } from 'react-native';
@@ -29,30 +29,6 @@ export default function SwapToken({ navigation, route }: { navigation: { navigat
   const [wallet, setWallet] = useState({} as Wallet);
   const network = useRecoilValue(activeNetwork);
   const [tokens, setTokens] = useState([] as Token[]);
-  useEffect(() => {
-    const runAsync = async () => {
-      const _network = await getActiveNetwork();
-      const _provider = new ethers.providers.JsonRpcProvider(_network.rpcUrl);
-      //setProvider(_provider);
-      const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
-      setWallet(newWallet);
-    }
-    if (_wallet.name != '' && network) {
-      /*const _provider = new ethers.providers.JsonRpcProvider(network.rpcUrl);
-      setProvider(_provider);
-      const newWallet = new WalletInternal(_wallet.wallet).connect(_provider);
-      setWallet(newWallet);*/
-    }
-  }, [_wallet, network]);
-
-  useEffect(() => {
-    const runAsync = async () => {
-    }
-    if (network) {
-      runAsync();
-    }
-
-  }, [network])
 
   //const url = 'https://app.uniswap.org/#/swap';
   let webViewRef: any = useRef(null);

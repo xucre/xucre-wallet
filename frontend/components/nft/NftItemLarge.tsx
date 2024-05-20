@@ -2,6 +2,7 @@ import {
   Box,
   Image,
   Pressable,
+  Skeleton,
   Text,
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
@@ -18,17 +19,23 @@ function NftItemLargeComponent({ item }: { item: { description: string, image: s
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '' });
   const [url, setUrl] = useState('');
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
+
   useEffect(() => {
-    return () => {
-      setIsComponentMounted(false)
+    let isMounted = true;
+    const runAsync = async () => {
+      if (isMounted) setUrl(item.url);
+      if (item.image.length > 0) {
+        await Image.prefetch(item.image);
+        if (isMounted) setChannelMetadata(item);
+      } else {
+        if (isMounted) setChannelMetadata({ ...item, image: 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-green.png' });
+      }
     }
-  }, []);
+    runAsync();
 
-
-  useEffect(() => {
-    setChannelMetadata(item);
-    setUrl(item.url);
+    return () => {
+      isMounted = false;
+    }
   }, [item]);
 
 
@@ -48,26 +55,30 @@ function NftItemLargeComponent({ item }: { item: { description: string, image: s
         padding={0}
         pt={0}
         mx={1}
-        width={{ base: 180, md: 250 }}
-        textAlign={'center'}
+        mb={5}
         _light={{ bg: 'transparent' }}
         _dark={{ bg: 'transparent' }}
         onPress={accessLink}
       >
-        <Image
-          borderTopLeftRadius="md"
-          borderBottomRadius="md"
-          source={{
-            uri: image || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
-          }}
-          alt={title}
-          w={{ base: 192, md: 224 }}
-          h={200}
-          mt={0}
-        />
+        {image.length > 0 ?
+          <Image
+            borderTopLeftRadius="md"
+            borderBottomRadius="md"
+            source={{
+              uri: image || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+            }}
+            alt={title}
+            w={{ base: 192, md: 224 }}
+            h={200}
+            mt={0}
+          /> : <Skeleton h={200} w={{ base: 180, md: 200 }} mt={0} borderTopLeftRadius="md" borderBottomRadius="md" />
+        }
+
         <Box
           borderRadius="sm"
           p={3}
+          mb={0}
+          pb={0}
           pt={4}
           bg={'transparent'}
         >
@@ -86,6 +97,8 @@ function NftItemLargeComponent({ item }: { item: { description: string, image: s
             _light={{ color: 'coolGray.600' }}
             _dark={{ color: 'coolGray.400' }}
             textAlign={'center'}
+            mb={0}
+            pb={0}
           >
             {projectName}
           </Text>

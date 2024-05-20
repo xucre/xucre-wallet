@@ -9,7 +9,7 @@ import {
   useColorMode,
   VStack,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Platform, StyleSheet } from 'react-native';
 import { useRecoilState, } from "recoil";
 
@@ -30,12 +30,7 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
   const [name, setName] = useState('');
   const [rpcUrl, setRpcUrl] = useState('');
   const [symbol, setSymbol] = useState('');
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
+
   const {
     colorMode
   } = useColorMode();

@@ -35,39 +35,41 @@ type ContactType = {
 
 }
 
-export default function SendNotificationToken({ navigation, route }: {navigation: {navigate: Function}, route: any}) {
+export default function SendNotificationToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
     const { colorMode } = useColorMode();
     const [language] = useRecoilState(stateLanguage);
     const [contactList, setContactList] = useState([] as ContactType[]);
     const isFocused = useIsFocused();
     useEffect(() => {
-        getPermission();
+        let isMounted = true;
+        const runAsync = async () => {
+            const _contactList = await getPermission(false);
+            if (isMounted) setContactList(_contactList);
+        }
+        if (isFocused) {
+            runAsync();
+        }
+        return () => { isMounted = false };
     }, [isFocused]);
 
-    const getPermission = () => {
-        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+    const getPermission = async (save: boolean) => {
+        const res = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
             title: "Contacts",
             // eslint-disable-next-line sort-keys
             message: "This app would like to view your contacts.",
             // eslint-disable-next-line sort-keys
             buttonPositive: "Please accept bare mortal",
-        }).then((res) => {
-            if (res == "granted") {
-                Contact.getAll()
-                    .then((con) => {
-                        // work with contacts
-                        const filteredContacts = con.filter(
-                            (item) => item.phoneNumbers.length
-                        );
-                        filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1);
-                        setContactList(filteredContacts);
-                    })
-                    .catch((e) => {
-                        //
-                    });
-            }
-        });
+        })
+        if (res == "granted") {
+            const con = await Contact.getAll();
+            const filteredContacts = con.filter(
+                (item) => item.phoneNumbers.length
+            );
+            filteredContacts.sort((a, b) => a.displayName > b.displayName ? 1 : -1);
+            if (save) setContactList(filteredContacts);
+            return filteredContacts;
+        } return [];
     };
 
     const openPage = (pageName: string, param1: any, param2: any, param3: any, param4: any, param5: any) => {
@@ -88,7 +90,7 @@ export default function SendNotificationToken({ navigation, route }: {navigation
             })
             setContactList(newData);
         } else {
-            getPermission();
+            getPermission(true);
         }
     }
 
@@ -159,7 +161,7 @@ export default function SendNotificationToken({ navigation, route }: {navigation
                                                 const walletA = route.params.param2
                                                 const token = route.params.param3
                                                 const rqs = route.params.param4
-                                                openPage("CodeCountry", contactList, walletA,amount,rqs,token);
+                                                openPage("CodeCountry", contactList, walletA, amount, rqs, token);
 
                                             }}>
                                             <Image
@@ -183,7 +185,7 @@ export default function SendNotificationToken({ navigation, route }: {navigation
                             </ScrollView>
 
 
-                        
+
 
                         </View>
                     </Box>

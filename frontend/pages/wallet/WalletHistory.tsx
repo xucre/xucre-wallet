@@ -61,20 +61,8 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   //const [holdings, setHoldings] = useState([] as ItemsWithOpenQuote[]);
   const [chartData, setChartData] = useState([] as ChartData[]);
   const [isZeroData, setIsZeroData] = useState(false);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
   const conversionRate = 1;
   const currency = 'USD';
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isFocused && wallet.address) {
-      //onRefresh();
-    }
-  }, [isFocused])
 
   const getData = async () => {
     try {
@@ -109,18 +97,49 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   }
 
   useEffect(() => {
-    if (_wallet.name === '') {
-      //navigation.navigate('SelectWallet');
-    } else {
+    if (_wallet.name !== '') {
       setWallet(new WalletInternal(_wallet.wallet));
     }
   }, [_wallet]);
 
   useEffect(() => {
+    let isMounted = true;
+    const runAsync = async () => {
+      try {
+        if (isMounted) setRefreshing(true);
+        const _network = await getActiveNetwork();
+        const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
+        const historyResults = await getWalletHistory(wallet.address, chainName);
+        const { quotes: finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
+        //const finalQuotes = result.quotes;
+        if (finalQuotes.length > 0) {
+          const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
+            if (returnVal[d.x]) {
+              return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
+            }
+            return { ...returnVal, [d.x]: d };
+          }, {} as { [key: number]: ChartData });
+          const _quotes = Object.values(quoteMap);
+          if (isMounted) setCurrentHoldings(_quotes[_quotes.length - 1]);
+          if (isMounted) setIsZeroData(isReady);
+
+          if (_quotes.length > 7) {
+            if (isMounted) setChartData(_quotes.reverse().splice(0, 7));
+          } else {
+            if (isMounted) setChartData(_quotes.reverse());
+          }
+
+        }
+        if (isMounted) setRefreshing(false);
+      } catch (err: any) {
+        //const err2 = err as Error;
+      }
+    }
     if (wallet.address) {
       //setRefreshing(true);
-      getData();
+      runAsync();
     }
+    return () => { isMounted = false; }
   }, [wallet])
 
   const empty = () => {

@@ -25,29 +25,37 @@ function NftListItemComponent({ contract, token, chain }: { contract: string, to
   //`const theme = useTheme();
   const [metadata, setChannelMetadata] = useState({ description: '', image: '', key: '', name: '', subtitle: '' });
   const [url, setUrl] = useState('');
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
+
   useEffect(() => {
+    let isMounted = true;
+    const runAsync = async () => {
+      const { _metadata, _url } = await retrieveMetadata(false);
+      if (isMounted) {
+        setChannelMetadata(_metadata);
+        setUrl(_url);
+      }
+    }
+    runAsync();
     return () => {
-      setIsComponentMounted(false)
+      isMounted = false;
     }
   }, []);
 
-
-  useEffect(() => {
-    retrieveMetadata();
-  }, []);
-
-  const retrieveMetadata = async () => {
+  const retrieveMetadata = async (save: boolean) => {
     const result = await getMetadata(contract, token, chain);
-
-    setChannelMetadata({
+    const _metadata = {
       description: result.token_description,
       image: (result.cached_images && result?.cached_images.small_250_250) ? result.cached_images.small_250_250 : '',
       key: `${result.contract_address}/${result.id}`,
       name: result.token_name,
       subtitle: result.token_type,
-    })
-    setUrl(`https://opensea.io/assets/ethereum/${result.contract_address}/${result.id}`);
+    };
+    const _url = `https://opensea.io/assets/ethereum/${result.contract_address}/${result.id}`;
+    if (save) {
+      setChannelMetadata(_metadata);
+      setUrl(_url);
+    }
+    return { _metadata, _url };
   }
 
   const accessLink = async () => {

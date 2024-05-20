@@ -40,13 +40,15 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       if (requestDetails) {
-        setRequest(requestDetails);
+        if (isMounted) setRequest(requestDetails);
       }
     }
 
     runAsync();
+    return () => { isMounted = false }
   }, [requestDetails]);
 
   useEffect(() => {

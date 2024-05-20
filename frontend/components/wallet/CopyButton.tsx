@@ -15,13 +15,6 @@ export default function CopyButton({ address }: { address: string }) {
   const { colorMode } = useColorMode();
   const [displayTooltip, setDisplayTooltip] = useState(false);
   //{translations[language].BasePage.title}
-  useEffect(() => {
-    const runAsync = async () => {
-      // do something
-    }
-
-    runAsync();
-  }, [])
 
   const copyToClipboard = () => {
     Clipboard.setStringAsync(String(address));

@@ -34,18 +34,28 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
   }
 
   useEffect(() => {
-    if (transaction && wallet.wallet.length > 0 && network.chainId) parseDetails();
+    let isMounted = true;
+    const runAsyncParse = async () => {
+      if (transaction && wallet.wallet.length > 0 && network.chainId) {
+        if (isMounted) setLoading(true);
+        const _transactionDetails = await parseDetails();
+        if (isMounted) setTransactionDetails(_transactionDetails);
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    runAsyncParse();
+
+    return () => { isMounted = false }
   }, [transaction, wallet, network])
 
   const parseDetails = async () => {
     try {
-      setLoading(true);
       const result: ParsedTransaction = await parseTransaction(new WalletInternal(wallet.wallet), transaction, network);
       //await storeParsedTransaction(wallet.address, network.chainId, { ...result });
-      setTransactionDetails({ ...result });
+      return { ...result };
     } catch (err) {
-    } finally {
-      setLoading(false);
+      return {} as ParsedTransaction;
     }
 
   }

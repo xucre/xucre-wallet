@@ -17,17 +17,17 @@ import { language as stateLanguage } from "../../service/state";
 import translations from "../../assets/translations";
 import { useRecoilState } from "recoil";
 import { Color } from "../../../GlobalStyles";
-import { Button, useColorMode, Text} from "native-base";
+import { Button, useColorMode, Text } from "native-base";
 import PhoneInput from 'react-phone-number-input/react-native-input';
-import {Country} from 'react-phone-number-input';
+import { Country } from 'react-phone-number-input';
 // eslint-disable-next-line react-native/split-platform-components
 import { ToastAndroid } from 'react-native';
 import { RouteProp, ParamListBase, RouteConfigComponent } from "@react-navigation/native";
 
 
 
-const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, route: any}) => {
-  
+const CodeCountry = ({ navigation, route }: { navigation: { navigate: Function }, route: any }) => {
+
 
   const [language] = useRecoilState(stateLanguage);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -38,8 +38,10 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
   let _final: any;
   const phoneInput = useRef(null);
   useEffect(() => {
-      setPhoneNumber(route.params.param1.phoneNumbers[0].number);  
-  },[])
+    if (route.params.param1.phoneNumbers.length > 0) {
+      setPhoneNumber(route.params.param1.phoneNumbers[0].number);
+    }
+  }, [])
 
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -48,10 +50,10 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
   const navigationScreens = () => {
     if (route.params.param4 === "send") {
       navigation.navigate('SendNotificationToken');
-    }else{
+    } else {
       navigation.navigate('QRWallet');
     }
-    
+
   }
 
   if (route.params.param4 === "send") {
@@ -60,7 +62,7 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
       const regex = /^\+/;
       const isValidNumber = regex.test(phoneNumber);
 
-      isValidNumber ? (_final = phoneNumber, buttonPressSend()) :  ToastAndroid.show(translations[language as keyof typeof translations].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
+      isValidNumber ? (_final = phoneNumber, buttonPressSend()) : ToastAndroid.show(translations[language as keyof typeof translations].WhatsAppNotification.notificationNumber, ToastAndroid.TOP)
     };
     const buttonPressSend = async () => {
       const amoutAndName = route.params.param3 + " " + route.params.param5;
@@ -80,7 +82,7 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
 
   } else {
     const buttonPress = async () => {
-      
+
       whatsapp(
         _final,
         "share_address",
@@ -95,7 +97,7 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
     const formaterNumber = () => {
       const regex = /^\+/;
       const isValidNumber = regex.test(phoneNumber);
-      isValidNumber ? (_final = phoneNumber, buttonPress()) :  ToastAndroid.show(translations[language as keyof typeof translations].WhatsAppNotification.notificationNumber,ToastAndroid.TOP)
+      isValidNumber ? (_final = phoneNumber, buttonPress()) : ToastAndroid.show(translations[language as keyof typeof translations].WhatsAppNotification.notificationNumber, ToastAndroid.TOP)
     };
     return componentsView(formaterNumber);
   }
@@ -103,13 +105,13 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
   function componentsView(formaterNumber: Function) {
     return (
       <View style={styles.container}>
-        
+
         <PhoneInput
           international
           withCountryCallingCode
           value={route.params.param1.phoneNumbers[0].number}
-          onChange={(val) => {setPhoneNumber(val as string)}}          
-          labels={{"phone": "Phone"}}
+          onChange={(val) => { setPhoneNumber(val as string) }}
+          labels={{ "phone": "Phone" }}
           style={{
             borderBottomWidth: 1,
             borderColor: '#ccc',
@@ -148,7 +150,7 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
             </Text>
           </Button>
         </Button.Group>
-        
+
 
       </View>
     );
@@ -157,11 +159,11 @@ const CodeCountry = ({ navigation, route }: {navigation: {navigate: Function}, r
 };
 
 function VerificationLengaje(vLengaje: string) {
-  if(vLengaje === 'en' || vLengaje === 'nah' || vLengaje === 'qu'){
+  if (vLengaje === 'en' || vLengaje === 'nah' || vLengaje === 'qu') {
     return 'en_US'
-  }else if(vLengaje === 'es'){
+  } else if (vLengaje === 'es') {
     return 'es'
-  }else if(vLengaje === 'pt'){
+  } else if (vLengaje === 'pt') {
     return 'pt_BR'
   }
 
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
   textInput: {
     paddingVertical: 0,
   },
-  
+
 });
 
 export default CodeCountry;

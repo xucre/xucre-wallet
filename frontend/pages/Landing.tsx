@@ -21,7 +21,6 @@ export default function LandingPage({ navigation, route }: { navigation: { navig
   const {
     colorMode
   } = useColorMode();
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
   const [loading, setLoading] = useState(true);
 
   const toWalletSelect = () => {
@@ -41,10 +40,11 @@ export default function LandingPage({ navigation, route }: { navigation: { navig
 
   //Loading Fonts
   useEffect(() => {
+    let isMounted = true;
     const callAsync = async () => {
       const _language = await getLanguage();
       const _hasSigned = await hasSignedPrivacyPolicy();
-      if (isComponentMounted) {
+      if (isMounted) {
         setFontsLoaded(true);
 
         setHasSigned(_hasSigned);
@@ -58,25 +58,17 @@ export default function LandingPage({ navigation, route }: { navigation: { navig
         setLoading(false);
       }
     }
-    if (isComponentMounted) {
-      callAsync();
-    }
+
+    callAsync();
 
     return () => {
-      setIsComponentMounted(false);
+      isMounted = false;
     }
   }, [])
 
 
   return (
     <>
-      {
-        /*<StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'}
-        />*/
-      }
       <Box
         bg='#D4E815'
       />

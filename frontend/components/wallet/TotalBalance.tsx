@@ -55,44 +55,6 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
     y: '0.00',
   })
 
-  const getData = async () => {
-    try {
-      const _network = await getActiveNetwork();
-      const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
-      const historyResults = await getWalletHistory(wallet.address, chainName);
-      const { openQuotes: _finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
-      if (_finalQuotes && _finalQuotes.quotes.length > 0) {
-        const finalQuotes = _finalQuotes.quotes;
-        const quoteMap = finalQuotes.sort((a, b) => dayjs(a.date).isBefore(dayjs(b.date)) ? 1 : -1).reduce((returnVal, d) => {
-          if (returnVal[d.date]) {
-            if (!d.isTokenValue) {
-              return { ...returnVal, [d.date]: { ...returnVal[d.date], y: returnVal[d.date].y + d.totalQuote } }
-            }
-            return returnVal;
-          }
-          if (!d.isTokenValue) {
-            return { ...returnVal, [d.date]: { x: dayjs(d.date).unix(), y: d.totalQuote } };
-          }
-          return returnVal;
-        }, {} as { [key: string]: { x: number, y: number } });
-        const _quotes = Object.values(quoteMap);
-        const lastQuote = _quotes[_quotes.length - 1];
-        setCurrentHoldings(lastQuote);
-        const secondToLastQuote = _quotes[_quotes.length - 2];
-        const percent = (((secondToLastQuote.y - lastQuote.y) / _quotes[0].y) || 0).toFixed(0) + '%';
-        const trend = secondToLastQuote.y > lastQuote.y ? 'up' : secondToLastQuote.y < lastQuote.y ? 'down' : 'flat';
-        const y = (secondToLastQuote.y - lastQuote.y).toFixed(2);
-        setSecondToLastHoldings({
-          percent,
-          trend,
-          y: y || ''
-        })
-      }
-    } catch (err: any) {
-      //const err2 = err as Error;
-    }
-  }
-
   const emptyFunction = () => { };
   const emptyNavigation = { navigate: emptyFunction };
   useEffect(() => {
@@ -102,9 +64,44 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
   }, [_wallet, network]);
 
   useEffect(() => {
+    let isMounted = true;
+    const getData = async () => {
+      try {
+        const _network = await getActiveNetwork();
+        const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
+        const historyResults = await getWalletHistory(wallet.address, chainName);
+        const { openQuotes: _finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
+        if (_finalQuotes && _finalQuotes.quotes.length > 0) {
+          const finalQuotes = _finalQuotes.quotes;
+          const quoteMap = finalQuotes.sort((a, b) => dayjs(a.date).isBefore(dayjs(b.date)) ? 1 : -1).reduce((returnVal, d) => {
+            if (returnVal[d.date]) {
+              if (!d.isTokenValue) {
+                return { ...returnVal, [d.date]: { ...returnVal[d.date], y: returnVal[d.date].y + d.totalQuote } }
+              }
+              return returnVal;
+            }
+            if (!d.isTokenValue) {
+              return { ...returnVal, [d.date]: { x: dayjs(d.date).unix(), y: d.totalQuote } };
+            }
+            return returnVal;
+          }, {} as { [key: string]: { x: number, y: number } });
+          const _quotes = Object.values(quoteMap);
+          const lastQuote = _quotes[_quotes.length - 1];
+          if (isMounted) setCurrentHoldings(lastQuote);
+          const secondToLastQuote = _quotes[_quotes.length - 2];
+          const percent = (((secondToLastQuote.y - lastQuote.y) / _quotes[0].y) || 0).toFixed(0) + '%';
+          const trend = secondToLastQuote.y > lastQuote.y ? 'up' : secondToLastQuote.y < lastQuote.y ? 'down' : 'flat';
+          const y = (secondToLastQuote.y - lastQuote.y).toFixed(2);
+          if (isMounted) setSecondToLastHoldings({ percent, trend, y: y || '' })
+        }
+      } catch (err: any) {
+        //const err2 = err as Error;
+      }
+    }
     if (wallet.address && isFocused) {
       getData();
     }
+    return () => { isMounted = false }
   }, [wallet, chainName, isFocused])
 
   const formatCurrency = (amount: string) => {

@@ -40,43 +40,26 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
   const [drawerStatus, setDrawerStatus] = useState(false);
   const [authNeeded, setAuthNeeded] = useState(false);
   const [_language,] = useRecoilState(language);
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
-
-
-  useEffect(() => {
-    return () => {
-      setIsComponentMounted(false);
-    }
-  }, []);
-
   const {
     colorMode,
-    setColorMode
   } = useColorMode();
-
-  useEffect(() => {
-    const runAsync = async () => {
-      //
-    }
-
-    runAsync();
-  });
 
   const [, setWalletState] = useRecoilState(walletList);
   const [, setNetworkList] = useRecoilState(networkList);
   const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
   useEffect(() => {
+    let isMounted = true;
     const runAsync = async () => {
       const _networks = await getNetworks();
 
       const defaultNetworks = constructDefaultNetworks();
       //await storeNetworks([])
       if (!Array.isArray(_networks) || _networks.length === 0) {
-        setNetworkList(defaultNetworks);
-        await storeNetworks(defaultNetworks);
+        if (isMounted) setNetworkList(defaultNetworks);
+        if (isMounted) await storeNetworks(defaultNetworks);
         if (!_activeNetwork) {
-          setActiveNetwork(defaultNetworks[0]);
-          await storeActiveNetwork(defaultNetworks[0]);
+          if (isMounted) setActiveNetwork(defaultNetworks[0]);
+          if (isMounted) await storeActiveNetwork(defaultNetworks[0]);
         }
       } else {
         const mergedNetworkList = defaultNetworks.reduce((finalV, nwrk) => {
@@ -88,12 +71,12 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
           }
         }, _networks)
 
-        setNetworkList(mergedNetworkList);
-        await storeNetworks(mergedNetworkList);
+        if (isMounted) setNetworkList(mergedNetworkList);
+        if (isMounted) await storeNetworks(mergedNetworkList);
       }
       if (!_activeNetwork) {
         const currentNetwork = await getActiveNetwork();
-        setActiveNetwork(currentNetwork);
+        if (isMounted) setActiveNetwork(currentNetwork);
       }
 
       const _wallets = await getWallets();
@@ -105,7 +88,7 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
           }
         });
         if (loadedWallets) {
-          setWalletState(loadedWallets as AppWallet[]);
+          if (isMounted) setWalletState(loadedWallets as AppWallet[]);
         }
       } else {
         //navigate('NewWallet')
@@ -117,6 +100,9 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
     }
 
     runAsync();
+    return () => {
+      isMounted = false;
+    }
   }, [])
 
   const navigate = (_location: string) => {

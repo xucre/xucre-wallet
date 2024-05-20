@@ -12,18 +12,8 @@ import { activeWallet, language as stateLanguage } from "../../service/state";
 
 export default function ProfileList({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [language,] = useRecoilState(stateLanguage);
-  //{translations[language].BasePage.title}
-
-
   const [_wallet,] = useRecoilState(activeWallet);
 
-  useEffect(() => {
-    const runAsync = async () => {
-      // do something
-    }
-
-    runAsync();
-  }, [])
   return (
     <Profiles
       onProfilePress={

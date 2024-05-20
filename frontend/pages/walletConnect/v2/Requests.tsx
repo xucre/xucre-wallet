@@ -31,31 +31,37 @@ export default function Requests({ navigation, route }: { navigation: { navigate
   const { colorMode } = useColorMode();
   //{translations[language].ConnectionRequest.}
   useEffect(() => {
-    getRequests();
+    let isMounted = true;
+    const runAsync = async () => {
+      const { _requests, _pairingMap } = await getRequests(false);
+      if (isMounted) {
+        setRequests(_requests);
+        setParingMap(_pairingMap);
+      }
+    }
+    runAsync();
+    return () => { isMounted = false }
   }, []);
 
-  const getRequests = async () => {
+  const getRequests = async (save: boolean) => {
     const _requests = await getAllNotifications();
     if (_requests) {
       const _pairings = signClient.core.pairing.getPairings();
       const _pairingMap = _pairings.reduce((returnVal: any, val: { topic: any; }, i: any) => {
         return { ...returnVal, [val.topic]: val };
       }, {})
-      setRequests(_requests);
-      setParingMap(_pairingMap);
+      if (save) {
+        setRequests(_requests);
+        setParingMap(_pairingMap);
+      }
+      return { _requests, _pairingMap };
     }
-
+    return { _requests: [], _pairingMap: {} };
   }
 
   const Request = ({ event, metadata }: { event: any, metadata: any }) => {
     //const address = metadata.wallet.address;
     const [isDeleted, setIsDeleted] = useState(false);
-    useEffect(() => {
-      const runAsync = async () => {
-        //
-      }
-      runAsync();
-    }, [metadata, event])
 
     const deleteRequest = () => {
       setIsDeleted(true);
@@ -64,7 +70,7 @@ export default function Requests({ navigation, route }: { navigation: { navigate
 
     const executeDelete = async () => {
       await deleteNotification(String(event.id));
-      await getRequests();
+      await getRequests(true);
     }
 
     const openRequest = async () => {

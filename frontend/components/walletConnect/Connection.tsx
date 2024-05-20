@@ -12,7 +12,7 @@ import {
   useColorMode,
   VStack,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRecoilState } from "recoil";
 
 import { Color } from "../../../GlobalStyles";
