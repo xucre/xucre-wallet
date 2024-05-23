@@ -2,7 +2,7 @@
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
 import { ScrollView, Text, useColorMode } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 //import { renderToString } from 'react-dom/server';
 //import { WebView } from "react-native-webview";
 import { Linking, RefreshControl } from 'react-native';
@@ -16,6 +16,7 @@ import { WalletInternal } from '../../store/wallet';
 import { useIsFocused } from '@react-navigation/core';
 import { Token } from '../../service/token';
 import { getActiveNetwork } from '../../store/network';
+import { useMixpanel } from '../../Analytics';
 
 export default function SwapToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -29,7 +30,14 @@ export default function SwapToken({ navigation, route }: { navigation: { navigat
   const [wallet, setWallet] = useState({} as Wallet);
   const network = useRecoilValue(activeNetwork);
   const [tokens, setTokens] = useState([] as Token[]);
+  const mixpanel = useMixpanel();
 
+  useEffect(() => {
+    const runAsync = async () => {
+      await mixpanel.track("view_page", { "page": "Swap Token", "dApp": 'https://swap.xucre.net' });
+    }
+    runAsync();
+  }, [isFocused])
   //const url = 'https://app.uniswap.org/#/swap';
   let webViewRef: any = useRef(null);
   const onRefresh = () => {

@@ -161,6 +161,10 @@ export const theme = extendTheme({
   },
 });
 
+//Import Mixpanel API
+import { Mixpanel } from "mixpanel-react-native";
+import { MixpanelProvider } from './Analytics';
+
 export default function App(): JSX.Element {
   //const StackNavigator = createThemedComponent(Stack.Navigator);
 
@@ -169,11 +173,14 @@ export default function App(): JSX.Element {
       'linear-gradient': LinearGradient
     }
   };
+
   return (
     //<DAppProvider config={finalConfig}>
     <RecoilRoot>
       <NativeBaseProvider theme={theme} config={config}>
-        <AppWrapper />
+        <MixpanelProvider>
+          <AppWrapper />
+        </MixpanelProvider>
       </NativeBaseProvider>
     </RecoilRoot>
     //</DAppProvider>

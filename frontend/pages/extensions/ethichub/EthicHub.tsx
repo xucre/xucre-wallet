@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { WebView } from 'react-native-webview';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -9,12 +9,17 @@ import { WalletInternal } from '../../../store/wallet';
 import { useIsFocused } from '@react-navigation/core';
 import { Token } from '../../../service/token';
 import { getActiveNetwork } from '../../../store/network';
+import { useMixpanel } from '../../../Analytics';
 
 export default function EthicHub({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
-
+  const mixpanel = useMixpanel();
   const [language,] = useRecoilState(stateLanguage);
   const [_walletList,] = useRecoilState(walletList);
   const [_wallet,] = useRecoilState(activeWallet);
+
+  useEffect(() => {
+    mixpanel.track("view_page", { "page": "EthicHub", "dApp": 'https://ethix.ethichub.com' });
+  })
 
   let webViewRef: any = useRef(null);
   const onRefresh = () => {

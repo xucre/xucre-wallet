@@ -24,10 +24,12 @@ import { getActiveWallet } from "../../store/wallet";
 import { getActiveNetwork } from "../../store/network";
 import { NFT, NFTHolding } from "../../types/nft";
 import useNFTs from "../../hooks/useNFTs";
+import { useMixpanel } from "../../Analytics";
 
 export default function NftDashboard({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
+  const mixpanel = useMixpanel();
   const [language,] = useRecoilState(stateLanguage);
   const [chain, setChain] = useState('');
   const [wallet, setActiveWallet] = useState({
@@ -84,6 +86,8 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
     const runAsync = async () => {
       const _wallet = await getActiveWallet();
       if (isMounted) setActiveWallet(_wallet[0]);
+
+      await mixpanel.track("view_page", { "page": "NFT Dashboard" });
     }
 
     runAsync();

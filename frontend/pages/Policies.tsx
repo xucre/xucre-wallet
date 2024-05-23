@@ -19,10 +19,12 @@ import { Color, FontFamily, FontSize } from "../../GlobalStyles";
 import { language as stateLanguage } from "../service/state";
 import translations from "../assets/translations";
 import { storePrivacyPolicy } from "../store/setting";
+import { useMixpanel } from "../Analytics";
 
 
 export default function Policies({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
     const [language] = useRecoilState(stateLanguage);
+    const mixpanel = useMixpanel();
     const { colorMode } = useColorMode();
     const [checkValues, setcheckValues] = useState(false);
 
@@ -36,8 +38,13 @@ export default function Policies({ navigation, route }: { navigation: { navigate
         setcheckValues(!checkValues)
     }
 
+    useEffect(() => {
+        mixpanel.track("view_page", { "page": "Terms and Conditions" });
+    }, [])
+
     const acceptPolicy = async () => {
         await storePrivacyPolicy();
+        mixpanel.track("core_action", { "page": "Terms and Conditions", "action": "Accept" });
         navigation.navigate('ViewWallet')
     };
 

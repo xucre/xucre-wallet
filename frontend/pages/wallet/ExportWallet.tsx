@@ -41,11 +41,13 @@ import { SvgUri } from "react-native-svg";
 import { encryptPK, getKeyLocation, storeKeyLocation } from "../../store/setting";
 import walletTemplate from '../../assets/templates/exportWallet'
 import ContainedButton from "../../components/ui/ContainedButton";
+import { useMixpanel } from "../../Analytics";
 
 
 export default function ExportWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const address = route.params?.address;
+  const mixpanel = useMixpanel();
   const [loading, setLoading] = useState(true);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -81,6 +83,7 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
     } else if (Platform.OS === 'ios') {
       setFolderSelected(true);
     }
+    mixpanel.track("view_page", { "page": "Export Wallet" });
 
     return () => { isMounted = false }
   }, []);
@@ -137,13 +140,8 @@ export default function ExportWallet({ navigation, route }: { navigation: { navi
           const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.address}`, 'text/plain');
           const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, pk);
         }
-        //const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.address}`, 'text/plain');
-        // used to create a html file version
-        // const file = await StorageAccessFramework.createFileAsync(`${uri}`, `${walletMetadata.name.split(' ').join('_')}`, 'text/html');
-        //const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, walletTemplate(walletMetadata.name, pk));
-        //const result2 = await StorageAccessFramework.writeAsStringAsync(`${file}`, pk);
-
         setGeneratingPass(false);
+        mixpanel.track("core_action", { "page": "Export Wallet", "action": "Wallet Exported", "wallet": walletMetadata.address });
       }
       setGeneratingPass(false);
     } catch (err) {

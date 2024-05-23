@@ -36,6 +36,7 @@ import { getIconImage } from "../../service/api";
 import { activeWallet, language as stateLanguage } from "../../service/state";
 import CopyButton from "../../components/wallet/CopyButton";
 import QRButton from "../../components/wallet/QRButton";
+import { useMixpanel } from "../../Analytics";
 
 export default function QRWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
@@ -47,8 +48,7 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const initialFocusRef = React.useRef(null);
-
-
+  const mixpanel = useMixpanel();
   const [contactList, setContactList] = useState([] as Contact[]);
   const [allContacts, setAllContacts] = useState([] as Contact[]);
   const [viewWalletQR, setViewWalletQR] = useState(Boolean);
@@ -76,7 +76,10 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
       const localJson = await getLocal();
       if (isMounted) { setlocal(localJson) }
     }
-
+    const runAsync = async () => {
+      await mixpanel.track("view_page", { "page": "Recieve Token" });
+    }
+    runAsync();
     runAsyncPermission();
     runAsyncLocation();
     return () => { isMounted = false }

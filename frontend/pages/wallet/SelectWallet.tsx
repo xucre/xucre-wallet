@@ -28,6 +28,7 @@ import { RefreshControl } from "react-native";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import WalletItem from "../../components/wallet/WalletItem";
 import ContainedButton from "../../components/ui/ContainedButton";
+import { useMixpanel } from "../../Analytics";
 
 export default function SelectWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const {
@@ -36,6 +37,11 @@ export default function SelectWallet({ navigation, route }: { navigation: { navi
   const [language,] = useRecoilState(stateLanguage);
   const [walletState, setWalletState] = useRecoilState(walletList);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
+  const mixpanel = useMixpanel();
+
+  useEffect(() => {
+    mixpanel.track("view_page", { "page": "Select Wallet" });
+  }, [])
 
   const createWallet = () => {
     navigation.navigate('NewWallet');

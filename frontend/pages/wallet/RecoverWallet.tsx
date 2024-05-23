@@ -35,7 +35,6 @@ export default function RecoverWallet({ navigation, route }: { navigation: { nav
   const [language,] = useRecoilState(stateLanguage);
   const [steps, setSteps] = useState(0);
   const [loading, setLoading] = useState(false);
-
   const {
     colorMode
   } = useColorMode();

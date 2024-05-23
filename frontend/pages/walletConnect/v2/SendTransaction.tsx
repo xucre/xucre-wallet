@@ -24,10 +24,12 @@ import { goBack, signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 import ContainedButton from '../../../components/ui/ContainedButton';
 import GhostButton from '../../../components/ui/GhostButton';
+import { useMixpanel } from '../../../Analytics';
 
 export default function SendTransaction({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const { requestDetails } = route.params;
+  const mixpanel = useMixpanel();
   const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
@@ -47,13 +49,17 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
       }
     }
 
+    try {
+      // Send event to Mixpanel
+      mixpanel.track("view_page", { "page": "Send Transaction", "dApp": requestDetails['verifyContext']['origin'] });
+    } catch (err2: any) { }
+
     runAsync();
     return () => { isMounted = false }
   }, [requestDetails]);
 
   useEffect(() => {
     if (Object.keys(request).length > 0) {
-
       setMethod(request['params']['request']['method']);
       setWalletAddress(request['params']['request']['params'][0]['from']);
       setTo(request['params']['request']['params'][0]['to']);
@@ -107,6 +113,9 @@ export default function SendTransaction({ navigation, route }: { navigation: { n
     } catch (err) {
       //
     }
+    // Send event to Mixpanel
+    mixpanel.track("core_action", { "page": "Send Transaction", "action": "Transaction Approved", "wallet": walletAddress, "dApp": requestDetails['verifyContext']['origin'] });
+
     setLoading(false);
     goBack(request, navigation);
   }

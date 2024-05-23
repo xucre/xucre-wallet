@@ -43,10 +43,12 @@ import { coinIconNames, getActiveNetwork, tokenIconNames } from "../../store/net
 import { Color } from "../../../GlobalStyles";
 import TokenTransactionFeed from "../../components/transaction/TokenTransactionFeed";
 import { SvgUri } from "react-native-svg";
+import { useMixpanel } from "../../Analytics";
 dayjs.extend(customParseFormat);
 
 export default function ViewToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
+  const mixpanel = useMixpanel();
   const token = route.params?.token;
   const [avatar, setAvatar] = useState('');
   const isFocused = useIsFocused();
@@ -72,11 +74,15 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
   const conversionRate = 1;
   const currency = 'USD';
   useEffect(() => {
+    const runAsync = async () => {
+      await mixpanel.track("view_page", { "page": "View Token" });
+    }
     if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
       setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
     } else if (token.chainId && token.type === 'token' && tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames]) {
       setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames].toLowerCase() + '.png');
     }
+    runAsync();
   }, []);
 
   useEffect(() => {

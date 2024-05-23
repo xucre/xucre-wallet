@@ -45,11 +45,13 @@ import { getTokenBalances, getTokenMetadata } from "../../service/api";
 import { AlchemyMetadata } from "../../types/token";
 import { isSpam } from "../../store/spam";
 import useTokens from "../../hooks/useTokens";
+import { useMixpanel } from "../../Analytics";
 
 export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const toast = useToast();
   const [language] = useRecoilState(stateLanguage);
   const token = route.params?.token;
+  const mixpanel = useMixpanel();
   const [selectedToken, setSelectedToken] = useState({} as Token);
   const { tokens } = useTokens();
   const [pendingTransactions, setTransactionList] = useRecoilState(
@@ -71,6 +73,9 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   const [wallet, setWallet] = useState({} as Wallet);
   const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
 
+  useEffect(() => {
+    mixpanel.track("view_page", { "page": "Send Token" });
+  }, [])
 
   useEffect(() => {
     if (token) {
@@ -232,6 +237,9 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
 
             setLoadingStage('confirm');
             const result = await waitForTransaction(provider, _submitted);
+
+            // Send event to Mixpanel
+            mixpanel.track("core_action", { "page": "Send Token", "action": "Token Sent", "wallet": wallet.address });
 
             const _transaction = {
               chainId: _submitted.chainId,

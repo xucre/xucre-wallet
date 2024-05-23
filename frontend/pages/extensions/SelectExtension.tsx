@@ -3,7 +3,7 @@
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react-native/no-inline-styles */
 import { MaterialIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { Color } from "../../../GlobalStyles";
 
 import {
@@ -40,12 +40,19 @@ import MobileFooter from "../../components/Footer";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import ExtensionItemSmall from "../../components/extensions/ExtensionItemSmall";
 import ExtensionItemLarge from "../../components/extensions/ExtensionItemLarge";
+import { useMixpanel } from "../../Analytics";
 
 export default function SelectExtension({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
   const extensions = extensionList(language);
-
+  const mixpanel = useMixpanel();
+  useEffect(() => {
+    const runAsync = async () => {
+      await mixpanel.track("view_page", { "page": "Select Extension" });
+    }
+    runAsync();
+  }, [])
   return (
     <DashboardLayout title={''} >
       <Box

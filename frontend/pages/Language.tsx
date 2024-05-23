@@ -15,10 +15,12 @@ import { language as stateLanguage } from "../service/state";
 import { storeLanguage } from "../store/language";
 import { hasSignedPrivacyPolicy } from "../store/setting";
 import ContainedButton from "../components/ui/ContainedButton";
+import { useMixpanel } from "../Analytics";
 
 export default function LanguagePage({ navigation }: { navigation: { navigate: Function } }) {
   const [languageVal, setLanguageVal] = useState('');
   const [hasSigned, setHasSigned] = useState(false);
+  const mixpanel = useMixpanel();
   useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {
@@ -40,6 +42,8 @@ export default function LanguagePage({ navigation }: { navigation: { navigate: F
 
   const updateLanguage = async (_language: string) => {
     await storeLanguage(_language);
+
+    await mixpanel.track("view_page", { "page": "Language Page" });
     if (hasSigned) {
       navigation.navigate('SelectWallet');
     } else {
