@@ -1,0 +1,9 @@
+{
+  "view_page": { "page": "" },
+  "core_action": {
+    "page": "Create Wallet",
+    "action": "Wallet Created",
+    "wallet": "",
+    "dApp": ""
+  }
+}

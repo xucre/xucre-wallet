@@ -23,10 +23,12 @@ import { Linking } from "react-native";
 import ContainedButton from "../../../components/ui/ContainedButton";
 import OutlinedButton from "../../../components/ui/OutlinedButton";
 import GhostButton from "../../../components/ui/GhostButton";
+import { useMixpanel } from "../../../Analytics";
 
 export default function SignTransaction({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const { requestDetails } = route.params;
   const { colorMode } = useColorMode();
+  const mixpanel = useMixpanel();
   const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');
@@ -43,6 +45,7 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
     const runAsync = async () => {
       if (requestDetails) {
         if (isMounted) setRequest(requestDetails);
+        mixpanel.track("view_page", { "page": "Sign Transaction", "dApp": requestDetails['verifyContext']['origin'] });
       }
     }
 
@@ -98,6 +101,8 @@ export default function SignTransaction({ navigation, route }: { navigation: { n
     } catch (err) {
       //
     }
+    // Send event to Mixpanel
+    mixpanel.track("core_action", { "page": "Sign Transaction", "action": "Transaction Approved", "wallet": walletAddress, "dApp": requestDetails['verifyContext']['origin'] });
     goBack(request, navigation);
     setLoading(false);
   }

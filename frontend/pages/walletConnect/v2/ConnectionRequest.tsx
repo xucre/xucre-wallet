@@ -28,9 +28,11 @@ import ErrorToast from "../../../components/utils/ErrorToast";
 import ContainedButton from "../../../components/ui/ContainedButton";
 import OutlinedButton from "../../../components/ui/OutlinedButton";
 import GhostButton from "../../../components/ui/GhostButton";
+import { useMixpanel } from "../../../Analytics";
 
 export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const toast = useToast();
+  const mixpanel = useMixpanel();
   const { requestDetails } = route.params;
   const [request, setRequest] = useState({} as any);
   const [walletState,] = useRecoilState(walletList);
@@ -40,6 +42,11 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
   const [loading, setLoading] = useState(false);
   const { colorMode } = useColorMode();
   //const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    // Send event to Mixpanel
+    mixpanel.track("view_page", { "page": "Connection Request" });
+  }, []);
 
   useEffect(() => {
     if (requestDetails) {
@@ -125,6 +132,12 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
         namespaces: payload
       });
 
+      try {
+        // Send event to Mixpanel
+        mixpanel.track("core_action", { "page": "Connection Request", "action": "Connection Approved", "wallet": selectedWallets[0].address, "dApp": request['params']['proposer']['metadata']['name'] });
+      } catch (err2: any) { }
+
+
       goBack(request, navigation);
     } catch (error: any) {
       if (typeof error === "string") {
@@ -156,6 +169,8 @@ export default function ConnectionRequest({ navigation, route }: { navigation: {
         },
       }
       await signClient.rejectSession(payload);
+      // Send event to Mixpanel
+      mixpanel.track("core_action", { "page": "Connection Request", "action": "Connection Rejected" });
       goBack(request, navigation);
     } catch (error: any) {
       if (typeof error === "string") {

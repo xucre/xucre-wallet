@@ -32,10 +32,12 @@ import { useIsFocused } from '@react-navigation/native';
 import { Linking } from "react-native";
 import SquareButton from "../../components/ui/SquareButton";
 import useTokens from "../../hooks/useTokens";
+import { useMixpanel } from "../../Analytics";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const isFocused = useIsFocused();
+  const mixpanel = useMixpanel();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -131,6 +133,13 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       runAsync();
     }
   }, [tokens])
+
+  useEffect(() => {
+    const runAsync = async () => {
+      await mixpanel.track("view_page", { "page": "View Wallet" });
+    }
+    runAsync();
+  }, [])
 
   const middleButtons = [
     {

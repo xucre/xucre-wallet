@@ -39,6 +39,7 @@ import TransactionFeed from "../../components/transaction/TransactionFeed";
 import { useIsFocused } from "@react-navigation/native";
 import { getActiveNetwork } from "../../store/network";
 import { Color } from "../../../GlobalStyles";
+import { useMixpanel } from "../../Analytics";
 dayjs.extend(customParseFormat);
 
 export default function WalletHistory({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -50,6 +51,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   const [chainName, setChainName] = useState('matic-mumbai');
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
+  const mixpanel = useMixpanel();
   //const [network,] = useRecoilState(activeNetwork);
   const [currentHoldings, setCurrentHoldings] = useState({
     meta: {
@@ -141,6 +143,13 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
     }
     return () => { isMounted = false; }
   }, [wallet])
+
+  useEffect(() => {
+    const runAsync = async () => {
+      await mixpanel.track("view_page", { "page": "Wallet History" });
+    }
+    runAsync();
+  }, [])
 
   const empty = () => {
     //console.log('empty');

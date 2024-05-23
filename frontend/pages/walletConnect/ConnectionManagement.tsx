@@ -29,6 +29,7 @@ import Request from "../../components/walletConnect/Request";
 import Connection from "../../components/walletConnect/Connection";
 import { RefreshControl } from "react-native";
 import ScannerButton from "../../components/walletConnect/ScannerButton";
+import { useMixpanel } from "../../Analytics";
 
 function TabItem({
   tabName,
@@ -78,6 +79,7 @@ export default function ConnectionManagement({ navigation, route }: { navigation
 
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
+  const mixpanel = useMixpanel();
   const [pairings, setPairings] = useState([] as any[]);
   const [requests, setRequests] = useState([] as any[]);
   const [paringMap, setParingMap] = useState({} as any);
@@ -94,6 +96,8 @@ export default function ConnectionManagement({ navigation, route }: { navigation
         setRequests(_requests || []);
         setParingMap(_pairingMap);
         setPairings(_pairings);
+        // Send event to Mixpanel
+        mixpanel.track("view_page", { "page": "Connection Management" });
       }
     }
     runAsync();

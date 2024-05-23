@@ -32,6 +32,7 @@ import {
 } from "../../service/state";
 import { deleteNetwork, getNetworks, storeActiveNetwork } from "../../store/network";
 import { Network } from '../../service/network';
+import { useMixpanel } from "../../Analytics";
 
 export default function SelectNetwork({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [language,] = useRecoilState(stateLanguage);
@@ -40,10 +41,12 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
   const [networks, setNetworks] = useRecoilState(networkList);
   const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
   const [tokenImage, setTokenImage] = useState('');
+  const mixpanel = useMixpanel();
   useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {
       const _networks = await getNetworks();
+      await mixpanel.track("view_page", { "page": "Select Network" });
       if (Array.isArray(_networks)) {
         if (isMounted) setNetworks(_networks);
       }

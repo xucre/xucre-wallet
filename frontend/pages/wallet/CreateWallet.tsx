@@ -29,6 +29,7 @@ import {
 } from "../../service/wallet";
 import { storeWallet, WalletInternal } from '../../store/wallet';
 import ContainedButton from "../../components/ui/ContainedButton";
+import { useMixpanel } from "../../Analytics";
 
 export default function CreateWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const setWalletList = useSetRecoilState(walletList);
@@ -43,7 +44,14 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
   const [mnemonicMatchComplete, setMnemonicMatchComplete] = useState(false);
   const [exportWallet, setExportWallet] = useState(false);
   const { colorMode } = useColorMode();
+  const mixpanel = useMixpanel();
 
+  useEffect(() => {
+    const runAsync = async () => {
+      await mixpanel.track("view_page", { "page": "Create Wallet" });
+    }
+    runAsync();
+  }, []);
   useEffect(() => {
     if (confirmMnemonics.length > 0) {
       const isMatching = confirmMnemonics.map((current, i) => {
@@ -394,6 +402,8 @@ export default function CreateWallet({ navigation, route }: { navigation: { navi
           walletInternal
         ]);
         setLoading(false);
+
+        mixpanel.track("core_action", { "page": "Create Wallet", "action": "Wallet Created", "wallet": _wallet.address });
         setTimeout(() => {
           if (exportWallet) {
             navigation.navigate('ExportWallet', { address: _wallet.address })
