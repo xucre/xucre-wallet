@@ -24,7 +24,7 @@ import { goBack, signClient } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 import ContainedButton from '../../../components/ui/ContainedButton';
 import GhostButton from '../../../components/ui/GhostButton';
-import { useMixpanel } from '../../../Analytics';
+import { useMixpanel } from '../../../hooks/useMixpanel';
 
 export default function SendTransaction({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();

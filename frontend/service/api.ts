@@ -217,3 +217,37 @@ export const createGoogleWalletPass = async (payload: {address: string, pk: stri
     return null;
   }
 }
+
+export const getTokenPrices = async (chainId: number, addresses: String[]) => {
+  //conversion
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 10000,
+    });
+    const response = await instance({
+      method: 'get',
+      url: `price?chainId=${chainId}&addresses=${addresses.join(',')}`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+export const getConversionRate = async (currency: string) => {
+  //conversion
+  try {
+    const instance = axios.create({
+      baseURL: BASEURL,
+      timeout: 10000,
+    });
+    const response = await instance({
+      method: 'get',
+      url: `conversion?currency=${currency}`,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}

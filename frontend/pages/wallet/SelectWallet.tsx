@@ -28,7 +28,7 @@ import { RefreshControl } from "react-native";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import WalletItem from "../../components/wallet/WalletItem";
 import ContainedButton from "../../components/ui/ContainedButton";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function SelectWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const {

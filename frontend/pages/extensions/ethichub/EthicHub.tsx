@@ -9,7 +9,7 @@ import { WalletInternal } from '../../../store/wallet';
 import { useIsFocused } from '@react-navigation/core';
 import { Token } from '../../../service/token';
 import { getActiveNetwork } from '../../../store/network';
-import { useMixpanel } from '../../../Analytics';
+import { useMixpanel } from '../../../hooks/useMixpanel';
 
 export default function EthicHub({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const mixpanel = useMixpanel();

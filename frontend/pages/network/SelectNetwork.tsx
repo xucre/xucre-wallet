@@ -32,7 +32,7 @@ import {
 } from "../../service/state";
 import { deleteNetwork, getNetworks, storeActiveNetwork } from "../../store/network";
 import { Network } from '../../service/network';
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function SelectNetwork({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [language,] = useRecoilState(stateLanguage);

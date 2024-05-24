@@ -34,14 +34,14 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import { activeNetwork, activeWallet, AppWallet, language as stateLanguage, walletList } from "../../service/state";
 import { WalletInternal } from "../../store/wallet";
 import { truncateString } from '../../service/utility';
-import SetPassword from "../../components/SetPassword";
+import SetPassword from "../../components/settings/SetPassword";
 import { Color } from "../../../GlobalStyles";
 import { googleLogoUrls } from "../../service/constants";
 import { SvgUri } from "react-native-svg";
 import { encryptPK, getKeyLocation, storeKeyLocation } from "../../store/setting";
 import walletTemplate from '../../assets/templates/exportWallet'
 import ContainedButton from "../../components/ui/ContainedButton";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 
 export default function ExportWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {

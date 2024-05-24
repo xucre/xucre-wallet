@@ -47,9 +47,9 @@ import { Color } from '../GlobalStyles';
 
 
 import translations from "./assets/translations";
-import Menu from './components/Menu';
-import Notifications from './components/Notifications';
-import SendNotificationToken from './components/SendNotificationToken';
+import Menu from './components/ui/Menu';
+import Notifications from './components/settings/Notifications';
+import SendNotificationToken from './components/settings/SendNotificationToken';
 //import Listener from './components/transaction/Listener';
 import CodeCountry from './components/utils/CodeCountry';
 import Loader from './components/utils/Loader';
@@ -101,6 +101,8 @@ import Ubeswap from './pages/extensions/ubeswap/Ubeswap';
 import EthicHub from './pages/extensions/ethichub/EthicHub';
 import ViewToken from './pages/token/ViewToken';
 //import TransactionFeed from './pages/wallet/TransactionFeed';
+//Import Mixpanel API
+import { MixpanelProvider } from './hooks/useMixpanel';
 
 const Stack = createNativeStackNavigator();
 
@@ -160,9 +162,6 @@ export const theme = extendTheme({
 
   },
 });
-
-//Import Mixpanel API
-import { MixpanelProvider } from './Analytics';
 
 export default function App(): JSX.Element {
   //const StackNavigator = createThemedComponent(Stack.Navigator);

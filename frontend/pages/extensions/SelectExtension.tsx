@@ -36,11 +36,11 @@ import { Network } from "../../service/network";
 import { extensionList } from '../../service/constants';
 import { RefreshControl } from "react-native";
 import ExtensionItem from "../../components/extensions/ExtensionItem";
-import MobileFooter from "../../components/Footer";
+import MobileFooter from "../../components/ui/Footer";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import ExtensionItemSmall from "../../components/extensions/ExtensionItemSmall";
 import ExtensionItemLarge from "../../components/extensions/ExtensionItemLarge";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function SelectExtension({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [language,] = useRecoilState(stateLanguage);

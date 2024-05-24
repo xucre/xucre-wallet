@@ -12,8 +12,8 @@ import {
     useColorMode,
     VStack,
 } from "native-base";
-import { Color } from '../../GlobalStyles';
-import { language as stateLanguage } from "../service/state";
+import { Color } from '../../../GlobalStyles';
+import { language as stateLanguage } from "../../service/state";
 import { useRecoilState } from "recoil";
 import {
     NativeSyntheticEvent,
@@ -25,7 +25,7 @@ import {
 import Contact from "react-native-contacts";
 import { Key, ReactNode, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import DashboardLayout from '../layouts/DashboardLayout';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 type ContactType = {
     givenName: any;

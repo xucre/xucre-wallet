@@ -6,7 +6,7 @@ export const CURRENCY_SYMBOLS = {
   'CLP': 'Ch$', 
   'COP': 'Col$', 
   'GTQ': 'Q', 
-  'MXN': 'Mex$', 
+  'MXN': '₱', 
   'PAB': 'B/', 
   'PEN': 'S/'
 }

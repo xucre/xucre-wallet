@@ -23,9 +23,10 @@ import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { Area, Chart, HorizontalAxis, Line, Tooltip } from 'react-native-responsive-linechart';
 import { useRecoilState } from "recoil";
+import currency from "currency.js";
 
 import translations from "../../assets/translations";
-import MobileFooter from "../../components/Footer";
+import MobileFooter from "../../components/ui/Footer";
 import SummaryItem from "../../components/token/SummaryItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletHistory } from "../../service/api";
@@ -39,11 +40,13 @@ import TransactionFeed from "../../components/transaction/TransactionFeed";
 import { useIsFocused } from "@react-navigation/native";
 import { getActiveNetwork } from "../../store/network";
 import { Color } from "../../../GlobalStyles";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
+import { useConversionRate } from "../../hooks/useConversionRate";
 dayjs.extend(customParseFormat);
 
 export default function WalletHistory({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
+  const { conversionRate } = useConversionRate();
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
@@ -63,8 +66,8 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   //const [holdings, setHoldings] = useState([] as ItemsWithOpenQuote[]);
   const [chartData, setChartData] = useState([] as ChartData[]);
   const [isZeroData, setIsZeroData] = useState(false);
-  const conversionRate = 1;
-  const currency = 'USD';
+  //const conversionRate = 1;
+  //const currency = 'USD';
 
   const getData = async () => {
     try {
@@ -175,6 +178,28 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
     }, 0);
     return result;
   }
+
+  const convertedValue = () => {
+    if (currentHoldings && currentHoldings.y) {
+      if (conversionRate && conversionRate.value) {
+        const _convertedValue = currentHoldings.y * conversionRate.value;
+        return currency(_convertedValue, { precision: 2, symbol: CURRENCY_SYMBOLS[conversionRate.currency as keyof typeof CURRENCY_SYMBOLS] }).format();
+      }
+      return currency(currentHoldings.y, { precision: 2 }).format();
+    }
+    return currency(0, { precision: 2 }).format();
+  }
+
+  const tooltipValue = (y: number) => {
+    if (y) {
+      if (conversionRate && conversionRate.value) {
+        const _convertedValue = y * conversionRate.value;
+        return currency(_convertedValue, { precision: 2, symbol: CURRENCY_SYMBOLS[conversionRate.currency as keyof typeof CURRENCY_SYMBOLS] }).format();
+      }
+      return currency(y, { precision: 2 }).format();
+    }
+    return currency(0, { precision: 2 }).format();
+  }
   return (
     <DashboardLayout title={_wallet.name}>
       <VStack
@@ -189,7 +214,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
               <VStack>
                 <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} paddingTop={3} >{translations[language as keyof typeof translations].WalletHistory.total_balance}</Text>
                 <HStack paddingBottom={0} space={1}>
-                  <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >{CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS]}{currentHoldings ? currentHoldings.y.toFixed(2) : '0.00'}</Text></Heading>
+                  <Heading borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} borderBottomWidth={2}><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} >{convertedValue()}</Text></Heading>
                 </HStack>
               </VStack>
 
@@ -227,7 +252,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
                 tooltipComponent={
                   <Tooltip theme={{
                     formatter: (value) => {
-                      return CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] + value.y
+                      return tooltipValue(value.y)
                     },
                     label: {
                       color: colorMode === 'dark' ? 'black' : 'white',

@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import translations from "../../../assets/translations";
 
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../../service/state";
-import { useMixpanel } from '../../../Analytics';
+import { useMixpanel } from '../../../hooks/useMixpanel';
 
 export default function Ubeswap({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [loading, setLoading] = useState(false);

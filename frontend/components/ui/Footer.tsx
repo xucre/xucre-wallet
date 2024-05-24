@@ -9,10 +9,10 @@ import {
 import React, { } from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../assets/translations";
-import { language as stateLanguage } from "../service/state";
+import translations from "../../assets/translations";
+import { language as stateLanguage } from "../../service/state";
 import { Linking, Platform } from "react-native";
-import { swapUrl } from "../service/api";
+import { swapUrl } from "../../service/api";
 
 
 type IconType = {

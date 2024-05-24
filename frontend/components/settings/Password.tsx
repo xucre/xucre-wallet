@@ -9,11 +9,11 @@ import {
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../assets/translations";
-import { language as stateLanguage } from "../service/state";
-import { getLastUnlock, validatePassword } from "../store/setting";
+import translations from "../../assets/translations";
+import { language as stateLanguage } from "../../service/state";
+import { getLastUnlock, validatePassword } from "../../store/setting";
 
-import ErrorToast from "./utils/ErrorToast";
+import ErrorToast from "../utils/ErrorToast";
 
 export default function PasswordPage({ navigation, route, validateAuth }: { navigation: { navigate: Function }, route: any, validateAuth: Function }) {
   const [password, setPassword] = useState('');

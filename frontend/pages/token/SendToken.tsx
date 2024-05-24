@@ -45,7 +45,7 @@ import { getTokenBalances, getTokenMetadata } from "../../service/api";
 import { AlchemyMetadata } from "../../types/token";
 import { isSpam } from "../../store/spam";
 import useTokens from "../../hooks/useTokens";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const toast = useToast();

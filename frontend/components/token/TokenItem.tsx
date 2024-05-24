@@ -9,7 +9,7 @@ import erc20Abi from '../../../contracts/erc20.abi.json';
 import translations from "../../assets/translations";
 import { activeNetwork, activeWallet } from "../../service/state";
 import { language as stateLanguage } from "../../service/state";
-import { SerializedToken, Token } from "../../service/token";
+import { SerializedToken, Token, TokenPrice } from '../../service/token';
 import { isSVGFormatImage, truncateString_old } from "../../service/utility";
 import { coinIconNames, tokenIconNames } from '../../store/network';
 import { SvgUri } from "react-native-svg";
@@ -18,9 +18,13 @@ import { chainIdToNameMap } from "../../service/constants";
 import { addToSpam, isSpam } from "../../store/spam";
 import { AlchemyMetadata } from "../../types/token";
 import { Platform } from "react-native";
+import { useConversionRate } from "../../hooks/useConversionRate";
+import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
+import currency from "currency.js";
 
-function TokenItemComponent({ navigation, token, refreshList, wallet }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet }) {
+function TokenItemComponent({ navigation, token, refreshList, wallet, price }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet, price: { [key: string]: TokenPrice } | null }) {
   const { colorMode } = useColorMode();
+  const { conversionRate } = useConversionRate();
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [language,] = useRecoilState(stateLanguage);
@@ -164,7 +168,20 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
   }
 
   const computedSymbol = alchemyMetadata?.symbol ? truncateString_old(alchemyMetadata.symbol, 8) : (token?.symbol || token?.name || 'N/A');
+  const convertedValue = () => {
+    const ethersValue = Number(ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata?.decimals || 18));
+    const tokenPrice = price ? price[token.address.toLowerCase()]?.price || 0 : 0;
+    const usdValue = ethersValue * tokenPrice;
+    if (conversionRate && conversionRate.value) {
+      const _convertedValue = usdValue * conversionRate.value;
+      return currency(_convertedValue, { precision: 2, symbol: CURRENCY_SYMBOLS[conversionRate.currency as keyof typeof CURRENCY_SYMBOLS] }).format();
+    }
 
+    return currency(usdValue, { precision: 2 }).format();
+  }
+  const convertedAmount = () => {
+    return token.amount ? ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata?.decimals || 18) : !rawAmount.isZero() ? ethers.utils.formatUnits(rawAmount, alchemyMetadata?.decimals || 18) : '0.00';
+  }
   if (amISpam) return <></>
 
   return (
@@ -180,10 +197,18 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
         </HStack>
       </Pressable>
       <HStack alignItems="center" space={{ base: 2 }}>
-        <Text
-          _light={{ color: 'coolGray.500' }}
-          _dark={{ color: 'coolGray.400' }}
-          fontWeight="normal">{token.amount ? ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata?.decimals || 18) : !rawAmount.isZero() ? ethers.utils.formatUnits(rawAmount, alchemyMetadata?.decimals || 18) : '0.00'}</Text>
+        <VStack>
+          <Text
+            _light={{ color: 'coolGray.500' }}
+            _dark={{ color: 'coolGray.400' }}
+            fontWeight="bold">{convertedAmount()}</Text>
+          <Text
+            _light={{ color: 'coolGray.500' }}
+            _dark={{ color: 'coolGray.400' }}
+            fontWeight="normal"
+            textAlign={'right'}
+          >{convertedValue()}</Text>
+        </VStack>
         <Tooltip label="More Options" openDelay={500}>
           <Menu w="190" trigger={triggerProps => {
             return <Pressable accessibilityLabel={translations[language as keyof typeof translations].TokenItem.menu_accessiblity_label} {...triggerProps}>
@@ -206,5 +231,6 @@ function TokenItemComponent({ navigation, token, refreshList, wallet }: { naviga
   )
 }
 
-const TokenItem = React.memo(TokenItemComponent);
+//const TokenItem = React.memo(TokenItemComponent);
+const TokenItem = TokenItemComponent;
 export default TokenItem;

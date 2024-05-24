@@ -22,3 +22,9 @@ export type SerializedToken = {
   readonly symbol?: string;
   readonly isNotSpammable?: boolean;
 }
+
+export type TokenPrice = {
+  readonly address: string;
+  readonly price: number;
+  readonly prettyPrice: string;
+}

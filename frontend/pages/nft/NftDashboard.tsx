@@ -13,7 +13,7 @@ import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
 import { Color } from "../../../GlobalStyles";
-import MobileFooter from "../../components/Footer";
+import MobileFooter from "../../components/ui/Footer";
 import NftItemLarge from "../../components/nft/NftItemLarge";
 import NftItemSmall from "../../components/nft/NftItemSmall";
 import NftListItem from "../../components/nft/NftListItem";
@@ -24,7 +24,7 @@ import { getActiveWallet } from "../../store/wallet";
 import { getActiveNetwork } from "../../store/network";
 import { NFT, NFTHolding } from "../../types/nft";
 import useNFTs from "../../hooks/useNFTs";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function NftDashboard({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();

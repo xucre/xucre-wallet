@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mixpanel } from 'mixpanel-react-native';
-import { env } from './service/constants';
+import { env } from '../service/constants';
 
 const MixpanelContext = React.createContext({} as Mixpanel);
 

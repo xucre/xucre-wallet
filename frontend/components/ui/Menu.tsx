@@ -21,19 +21,20 @@ import { AppState } from "react-native";
 import { useRecoilState } from "recoil";
 
 
-import { Color } from "../../GlobalStyles";
-import translations from "../assets/translations";
+import { Color } from "../../../GlobalStyles";
+import translations from "../../assets/translations";
 //import { navigate } from '../service/RootNavigation';
-import { constructDefaultNetworks } from "../service/network";
-import { activeNetwork, AppWallet, language, networkList, walletList, } from "../service/state";
-import { loadWalletFromPrivateKey } from "../service/wallet";
-import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../store/network";
-import { storeTheme } from '../store/setting';
-import { getWallets } from "../store/wallet";
+import { constructDefaultNetworks } from "../../service/network";
+import { activeNetwork, AppWallet, language, networkList, walletList, } from "../../service/state";
+import { loadWalletFromPrivateKey } from "../../service/wallet";
+import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../../store/network";
+import { storeTheme } from '../../store/setting';
+import { getWallets } from "../../store/wallet";
 
 
-import NetworkIcon from './utils/NetworkIcon';
-import PasswordPage, { needsAuth } from "./Password";
+import NetworkIcon from '../utils/NetworkIcon';
+import PasswordPage, { needsAuth } from "../settings/Password";
+import Currency from "../settings/Currency";
 
 export default function SideBar({ navigation, route, setScheme }: { navigation: { navigate: Function }, route: any, setScheme: Function }) {
   const appState = useRef(AppState.currentState);
@@ -278,12 +279,13 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
           <HStack justifyContent={'space-between'} pt={4} pb={0}>
             <Pressable onPress={() => { setDrawerStatus(true); navigate('ViewWallet'); }}>
               <Avatar source={
-                colorMode === 'dark' ? require('../assets/images/icon-green.png') : require('../assets/images/icon-green.png')
+                colorMode === 'dark' ? require('../../assets/images/icon-green.png') : require('../../assets/images/icon-green.png')
               } size="sm" bg={Color.transparent} m={1} ml={2} mb={1} mt={2}></Avatar>
             </Pressable>
 
             {/*<SelectLanguage />*/}
             {<NetworkIcon navigation={navigation} isInline={false} close={setDrawerStatus} />}
+            {<Currency />}
             {<ToggleDarkMode setScheme={setScheme} />}
             {/*<BackButton setDrawerStatus={setDrawerStatus}/>*/}
           </HStack>

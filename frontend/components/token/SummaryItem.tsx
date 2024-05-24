@@ -11,9 +11,13 @@ import { language as stateLanguage } from "../../service/state";
 
 import { Token } from '../../service/token';
 import { ItemsWithOpenQuote } from "../../types/history";
+import currency from "currency.js"
+import { useConversionRate } from "../../hooks/useConversionRate";
+import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
 
 export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
   const { colorMode } = useColorMode();
+  const { conversionRate } = useConversionRate();
   const [tokenImage, setTokenImage] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -73,6 +77,8 @@ export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
     )
   }
 
+  const convertedValue = conversionRate && conversionRate.value ? currency((token.mostRecentOpenQuote.quote * conversionRate.value) || 0, { fromCents: true, precision: 3, symbol: CURRENCY_SYMBOLS[conversionRate.currency as keyof typeof CURRENCY_SYMBOLS] }).format()
+    : currency(token.mostRecentOpenQuote.quote || 0, { fromCents: true, precision: 3 }).format();
   return (
     <HStack alignItems="center" justifyContent="space-between">
       <HStack alignItems="center" space={{ base: 3, md: 6 }}>
@@ -90,8 +96,13 @@ export default function SummaryItem({ token }: { token: ItemsWithOpenQuote }) {
         <Text
           _light={{ color: 'coolGray.500' }}
           _dark={{ color: 'coolGray.400' }}
+          bold
           fontWeight="normal">{token.mostRecentOpenQuote.quote || 0}</Text>
 
+        <Text
+          _light={{ color: 'coolGray.500' }}
+          _dark={{ color: 'coolGray.400' }}
+          fontWeight="normal">{convertedValue}</Text>
       </HStack>
     </HStack>
   )

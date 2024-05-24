@@ -23,7 +23,7 @@ import { Linking } from "react-native";
 import ContainedButton from "../../../components/ui/ContainedButton";
 import OutlinedButton from "../../../components/ui/OutlinedButton";
 import GhostButton from "../../../components/ui/GhostButton";
-import { useMixpanel } from "../../../Analytics";
+import { useMixpanel } from "../../../hooks/useMixpanel";
 
 export default function SignTransaction({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const { requestDetails } = route.params;

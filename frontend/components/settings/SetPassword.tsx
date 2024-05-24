@@ -13,12 +13,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../assets/translations";
-import { language as stateLanguage } from "../service/state";
-import { hasPassword, storePassword, validatePassword } from "../store/setting";
-import { Color } from "../../GlobalStyles";
+import translations from "../../assets/translations";
+import { language as stateLanguage } from "../../service/state";
+import { hasPassword, storePassword, validatePassword } from "../../store/setting";
+import { Color } from "../../../GlobalStyles";
 import { MaterialIcons } from '@expo/vector-icons';
-import ContainedButton from "./ui/ContainedButton";
+import ContainedButton from "../ui/ContainedButton";
 
 export default function SetPassword({ setIsExisting }: { setIsExisting: Function }) {
   const [existingPassword, setExistingPassword] = useState(false);

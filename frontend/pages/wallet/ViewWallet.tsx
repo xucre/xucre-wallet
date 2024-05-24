@@ -17,7 +17,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 
 
 import translations from "../../assets/translations";
-import MobileFooter from "../../components/Footer";
+import MobileFooter from "../../components/ui/Footer";
 import TokenItem from '../../components/token/TokenItem';
 import TotalBalance from "../../components/wallet/TotalBalance";
 import DashboardLayout from '../../layouts/DashboardLayout';
@@ -32,7 +32,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Linking } from "react-native";
 import SquareButton from "../../components/ui/SquareButton";
 import useTokens from "../../hooks/useTokens";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -47,7 +47,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [wallet, setWallet] = useState({} as Wallet);
   const network = useRecoilValue(activeNetwork);
   //const [tokens, setTokens] = useState([] as Token[]);
-  const { tokens, reset } = useTokens();
+  const { tokens, tokenPrices, reset } = useTokens();
   const [isComponentMounted, setIsComponentMounted] = useState(true);
 
   const tabList = translations[language as keyof typeof translations].ViewWallet.tab_list;
@@ -228,7 +228,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                     tintColor={colorMode === 'dark' ? Color.white : Color.darkgray_200}
                   />
                 } renderItem={
-                  ({ item, index }) => <TokenItem key={item.address + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} />
+                  ({ item, index }) => <TokenItem key={item.address + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} price={tokenPrices} />
                 }
                 />
               </Box>

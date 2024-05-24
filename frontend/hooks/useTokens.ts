@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Token } from '../service/token';
+import { Token, TokenPrice } from '../service/token';
 
 import ethTokens from '../../assets/json/eth_tokens.json'
 import polygonTokens from '../../assets/json/matic_tokens.json'
 import { BigNumber, getDefaultProvider, ethers } from 'ethers';
-import { getTokenBalances } from '../service/api';
+import { getTokenBalances, getTokenPrices } from '../service/api';
 import { chainIdToNameMap, xucreToken } from '../service/constants';
 import { getActiveNetwork } from '../store/network';
 import { isSpam } from '../store/spam';
@@ -15,6 +15,9 @@ import { useRecoilValue } from 'recoil';
 
 function useTokens(initialValue = [] as Token[]) {
   const [tokens, setTokens] = useState(initialValue);
+  const [tokenPrices, setTokenPrices] = useState(null as {
+    [key: string]: TokenPrice
+  } | null); 
   const wallet = useRecoilValue(activeWallet);
   const network = useRecoilValue(activeNetwork);
   
@@ -112,7 +115,6 @@ function useTokens(initialValue = [] as Token[]) {
     } catch (err) {
       //console.log(err);
     }
-
   }
   useEffect(() => {
     let isMounted = true;
@@ -125,8 +127,30 @@ function useTokens(initialValue = [] as Token[]) {
     return () => { isMounted = false;}
   }, [wallet, network]);
 
+  useEffect(() => {
+    let isMounted = true;
+    const runAsync = async () => {
+      const _network = await getActiveNetwork();
+      const _tokenPrices = await getTokenPrices(_network.chainId, tokens.map(token => token.address));
+      const _tokenPriceMap = _tokenPrices.reduce((acc: { [key: string]: TokenPrice }, _tokenPrice: any) => {
+        const tokenPrice = {
+          address: _tokenPrice.address,
+          price: _tokenPrice.items[0].price,
+          prettyPrice: _tokenPrice.items[0].prettyPrice
+        } as TokenPrice;
+        return {
+          ...acc,
+          [_tokenPrice.address.toLowerCase()]: tokenPrice
+        }
+      }, {});
+      if (isMounted) setTokenPrices(_tokenPriceMap);
+    }
+    if (tokens.length > 0) runAsync();
+    return () => { isMounted = false;}
+  }, [tokens]);
 
-  return { tokens, reset: syncTokens };
+
+  return { tokenPrices, tokens, reset: syncTokens };
 }
 
 export default useTokens;

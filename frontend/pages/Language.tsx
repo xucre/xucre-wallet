@@ -15,7 +15,7 @@ import { language as stateLanguage } from "../service/state";
 import { storeLanguage } from "../store/language";
 import { hasSignedPrivacyPolicy } from "../store/setting";
 import ContainedButton from "../components/ui/ContainedButton";
-import { useMixpanel } from "../Analytics";
+import { useMixpanel } from "../hooks/useMixpanel";
 
 export default function LanguagePage({ navigation }: { navigation: { navigate: Function } }) {
   const [languageVal, setLanguageVal] = useState('');

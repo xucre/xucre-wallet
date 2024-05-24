@@ -29,7 +29,7 @@ import {
 } from "../../service/wallet";
 import { storeWallet, WalletInternal } from '../../store/wallet';
 import ContainedButton from "../../components/ui/ContainedButton";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function CreateWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const setWalletList = useSetRecoilState(walletList);

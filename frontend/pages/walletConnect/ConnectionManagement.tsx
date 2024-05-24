@@ -29,7 +29,7 @@ import Request from "../../components/walletConnect/Request";
 import Connection from "../../components/walletConnect/Connection";
 import { RefreshControl } from "react-native";
 import ScannerButton from "../../components/walletConnect/ScannerButton";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 function TabItem({
   tabName,

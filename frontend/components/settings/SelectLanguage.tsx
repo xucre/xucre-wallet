@@ -8,9 +8,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
-import translations from "../assets/translations";
-import { language as stateLanguage } from "../service/state";
-import { getLanguage, storeLanguage } from "../store/language";
+import translations from "../../assets/translations";
+import { language as stateLanguage } from "../../service/state";
+import { getLanguage, storeLanguage } from "../../store/language";
 
 export default function SelectLanguage() {
   const [languageVal, setLanguageVal] = useState('');

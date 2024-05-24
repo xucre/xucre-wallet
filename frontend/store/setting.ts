@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import * as Keychain from 'react-native-keychain';
 import { FileSystemRequestDirectoryPermissionsResult } from "expo-file-system";
+import { ConversionRate } from "../types/conversionRate";
 
 export const storeTheme = async (mode: string | null | undefined) => {
   if (!mode) return;
@@ -17,6 +18,20 @@ export const getTheme = async () => {
   const theme = await EncryptedStorage.getItem('theme_mode')
   return theme;
 }
+
+export const storeConversionRate = async (rate: ConversionRate | null | undefined) => {
+  if (!rate) return;
+  await EncryptedStorage.setItem(
+    "conversion_rate",
+    JSON.stringify(rate)
+  );
+};
+
+export const getConversionRateStore = async () => {
+  const rate = await EncryptedStorage.getItem('conversion_rate')
+  return rate ? JSON.parse(rate) as ConversionRate : {currency: 'USD', rate: 1} as ConversionRate;
+}
+ 
  
 export const storeWCLegacyUrl = async (url: string) => {
   if (!url) return;

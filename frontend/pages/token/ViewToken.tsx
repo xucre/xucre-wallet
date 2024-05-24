@@ -27,7 +27,7 @@ import { Area, Chart, HorizontalAxis, Line, Tooltip } from 'react-native-respons
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
-import MobileFooter from "../../components/Footer";
+import MobileFooter from "../../components/ui/Footer";
 import SummaryItem from "../../components/token/SummaryItem";
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { getWalletHistory } from "../../service/api";
@@ -43,7 +43,7 @@ import { coinIconNames, getActiveNetwork, tokenIconNames } from "../../store/net
 import { Color } from "../../../GlobalStyles";
 import TokenTransactionFeed from "../../components/transaction/TokenTransactionFeed";
 import { SvgUri } from "react-native-svg";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 dayjs.extend(customParseFormat);
 
 export default function ViewToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {

@@ -19,7 +19,7 @@ import { Color, FontFamily, FontSize } from "../../GlobalStyles";
 import { language as stateLanguage } from "../service/state";
 import translations from "../assets/translations";
 import { storePrivacyPolicy } from "../store/setting";
-import { useMixpanel } from "../Analytics";
+import { useMixpanel } from "../hooks/useMixpanel";
 
 
 export default function Policies({ navigation, route }: { navigation: { navigate: Function }, route: any }) {

@@ -36,7 +36,7 @@ import { getIconImage } from "../../service/api";
 import { activeWallet, language as stateLanguage } from "../../service/state";
 import CopyButton from "../../components/wallet/CopyButton";
 import QRButton from "../../components/wallet/QRButton";
-import { useMixpanel } from "../../Analytics";
+import { useMixpanel } from "../../hooks/useMixpanel";
 
 export default function QRWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
