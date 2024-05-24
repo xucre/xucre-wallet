@@ -20,7 +20,6 @@ function useTokens(initialValue = [] as Token[]) {
   
   const syncTokens = async (save: boolean) => {
     try {
-
       const _network = await getActiveNetwork();
       const tokenMetadataMap = _network.chainId === 1 ? ethTokens : _network.chainId === 137 ? polygonTokens : {};
 
@@ -111,7 +110,7 @@ function useTokens(initialValue = [] as Token[]) {
         return finalTokens;
       }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
 
   }

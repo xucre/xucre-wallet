@@ -162,7 +162,6 @@ export const theme = extendTheme({
 });
 
 //Import Mixpanel API
-import { Mixpanel } from "mixpanel-react-native";
 import { MixpanelProvider } from './Analytics';
 
 export default function App(): JSX.Element {

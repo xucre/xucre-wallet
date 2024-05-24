@@ -127,9 +127,9 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   useEffect(() => {
     const runAsync = async () => {
       const _network = await getActiveNetwork();
-      storeTokenItems(_wallet.address, _network.chainId, tokens);
+      if (_network) storeTokenItems(_wallet.address, _network.chainId, tokens);
     }
-    if (tokens.length > 0) {
+    if (_wallet && tokens && tokens.length > 0) {
       runAsync();
     }
   }, [tokens])
