@@ -2,6 +2,7 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { Token } from "../service/token";
 import { CovalentTransactionV3, ParsedTransaction } from "../service/transaction";
+import { CovalentTokenHistoryItem } from '../types/token';
 
 export const storeFeedItems = async (walletAddress: string, chainId: number, list: CovalentTransactionV3[]) => {
   await EncryptedStorage.setItem(
@@ -31,4 +32,19 @@ export const getParsedTransaction = async (walletAddress: string,  chainId: numb
     return null;
   }
   return JSON.parse(list as string) as ParsedTransaction;
+};
+
+export const storeCovalentTokenHistoryItem = async (walletAddress: string,  chainId: number, transactions: CovalentTokenHistoryItem[]) => {
+  await EncryptedStorage.setItem(
+    `covalentTokenHistoryItem:${walletAddress}:${chainId}`,
+    JSON.stringify(transactions)
+  );
+}
+
+export const getCovalentTokenHistoryItem = async (walletAddress: string,  chainId: number) => {
+  const list = await EncryptedStorage.getItem(`covalentTokenHistoryItem:${walletAddress}:${chainId}`);
+  if (!list) {
+    return null;
+  }
+  return JSON.parse(list as string) as CovalentTokenHistoryItem[];
 };

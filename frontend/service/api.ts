@@ -231,7 +231,7 @@ export const getTokenPrices = async (chainId: number, addresses: String[]) => {
     });
     return response.data;
   } catch (error) {
-    return null;
+    return [];
   }
 }
 

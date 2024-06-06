@@ -214,7 +214,7 @@ export const AppWrapper = () => {
         }
 
       } catch (err) {
-        //('error creating sign client', err);
+        console.log('error creating sign client', err);
       }
     }
     runAsync();

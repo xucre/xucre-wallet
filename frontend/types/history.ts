@@ -75,3 +75,16 @@ export type ChartData = {
   x: number,
   y: number
 }
+
+export type TrendData = {
+  percent: string,
+  trend: string,
+  y: string,
+}
+
+export type HistoryStore = {
+  chartData: ChartData[], 
+  currentHoldings: ChartData, 
+  isZeroData : boolean, 
+  secondToLastHoldings: TrendData
+}

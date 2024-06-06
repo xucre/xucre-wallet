@@ -130,7 +130,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       if (_network) storeTokenItems(_wallet.address, _network.chainId, tokens);
     }
     if (_wallet && tokens && tokens.length > 0) {
-      runAsync();
+      //runAsync();
     }
   }, [tokens])
 

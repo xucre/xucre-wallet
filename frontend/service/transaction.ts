@@ -66,11 +66,11 @@ export type CovalentTransactionV3 = {
   },
   gas_spent: string,
   pretty_gas_quote: string,
-  explorers: {
+  explorers?: {
     label: string,
     url: string
   },
-  dex_details: {
+  dex_details?: {
     log_offset: number,
     protocol_name: string,
     protocol_address: string,
@@ -107,7 +107,7 @@ export type CovalentTransactionV3 = {
     sender: string,
     recipient: string,
   },
-  nft_sale_details: {
+  nft_sale_details?: {
     log_offset: number,
     topic0: string,
     protocol_contract_address: string,
@@ -139,7 +139,7 @@ export type CovalentTransactionV3 = {
     trade_group_type: string,
 
   },
-  log_events: {
+  log_events?: {
     block_signed_at: string,
     block_height: number,
     tx_offset: number,

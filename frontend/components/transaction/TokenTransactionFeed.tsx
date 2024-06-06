@@ -7,32 +7,28 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { SvgUri } from 'react-native-svg';
 
 import { activeNetwork, activeWallet, language as stateLanguage } from "../../service/state";
-import DashboardLayout from "../../layouts/DashboardLayout";
-import { getTokenTransferHistory, getWalletTransactions } from "../../service/api";
-import { CovalentTransaction, CovalentTransactionV3 } from "../../service/transaction";
+import { getTokenTransferHistory } from "../../service/api";
 import { chainIdToNameMap } from "../../service/constants";
 import { Pressable, RefreshControl } from "react-native";
-import CovalentItem from './CovalentItem';
 import { getActiveNetwork } from "../../store/network";
 import { useIsFocused } from "@react-navigation/native";
-import { ethers } from "ethers";
-import { compareAddresses } from "../../service/utility";
-import { CovalentTokenHistoryItem, CovalentTransferHistory } from "../../types/token";
+import { CovalentTokenHistoryItem } from "../../types/token";
 import { getTokenHistoryItems, storeTokenHistoryItems } from "../../store/token";
 import CovalentTransferItem from "./CovalentTransferItem";
+import useTokenHistory from "../../hooks/useTokenHistory";
 
 export default function TransactionFeed({ navigation, tokenAddress }: { navigation: { navigate: Function }, tokenAddress: string }) {
   const isFocused = useIsFocused();
   const [language,] = useRecoilState(stateLanguage);
-  const [refreshing, setRefreshing] = useState(false);
+  //const [refreshing, setRefreshing] = useState(false);
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
-  const [transactions, setTransactions] = useState([] as CovalentTokenHistoryItem[]);
+  const { transactions, refreshing, reset } = useTokenHistory(tokenAddress);
+  //const [transactions, setTransactions] = useState([] as CovalentTokenHistoryItem[]);
   //{translations[language].BasePage.title}
-  useEffect(() => {
+  /*useEffect(() => {
     let isMounted = true;
     if (_wallet) {
       if (isMounted) setRefreshing(true);
@@ -61,10 +57,10 @@ export default function TransactionFeed({ navigation, tokenAddress }: { navigati
     return () => {
       isMounted = false;
     }
-  }, [transactions])
+  }, [transactions])*/
 
   const syncTransactions = async () => {
-    setRefreshing(true);
+    /*setRefreshing(true);
     setTimeout(async () => {
       const _network = await getActiveNetwork();
       const _transactions = await getTokenTransferHistory(_wallet.address, tokenAddress, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
@@ -73,11 +69,11 @@ export default function TransactionFeed({ navigation, tokenAddress }: { navigati
         setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
       }
       setRefreshing(false);
-    }, 100)
-
+    }, 100)*/
+    await reset();
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     const runAsync = async () => {
       const _transactions = await getTokenHistoryItems(_wallet.address, tokenAddress, network.chainId);
       if (_transactions && _transactions.length > 0) {
@@ -89,7 +85,7 @@ export default function TransactionFeed({ navigation, tokenAddress }: { navigati
     if (_wallet.address) {
       runAsync();
     }
-  }, [])
+  }, [])*/
   return (
     <Box paddingY={4}>
       <FlatList data={transactions} refreshControl={
@@ -102,9 +98,8 @@ export default function TransactionFeed({ navigation, tokenAddress }: { navigati
       }
         keyExtractor={item => `${item.tx_hash}:${item}`}
       />
-      {transactions.length === 0 &&
+      {(!transactions || transactions.length === 0) &&
         <Pressable onPress={() => {
-          setRefreshing(true);
           setTimeout(() => {
             syncTransactions()
           }, 1000)

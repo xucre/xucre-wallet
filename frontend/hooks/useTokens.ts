@@ -10,8 +10,8 @@ import { getActiveNetwork } from '../store/network';
 import { isSpam } from '../store/spam';
 import { getActiveWallet, WalletInternal } from '../store/wallet';
 import { activeNetwork, activeWallet, AppWallet } from '../service/state';
-import { BIOMETRY_TYPE } from 'react-native-keychain';
 import { useRecoilValue } from 'recoil';
+import { getTokenItems, getTokenPriceMap, storeTokenItems, storeTokenPriceMap } from '../store/tokenItem';
 
 function useTokens(initialValue = [] as Token[]) {
   const [tokens, setTokens] = useState(initialValue);
@@ -116,9 +116,18 @@ function useTokens(initialValue = [] as Token[]) {
       //console.log(err);
     }
   }
+
   useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {
+      const _existingTokens = await getTokenItems(wallet.address, network.chainId)
+      if (_existingTokens && _existingTokens?.length > 0) {
+        if (isMounted) setTokens(_existingTokens as Token[]);
+      }
+      const _existingTokenPrices = await getTokenPriceMap(wallet.address, network.chainId)
+      if (_existingTokenPrices) {
+        if (isMounted) setTokenPrices(_existingTokenPrices as {[key: string]: TokenPrice});
+      }
       const _tokens = await syncTokens(false);
       if (isMounted) setTokens(_tokens as Token[]);
     }
@@ -131,6 +140,7 @@ function useTokens(initialValue = [] as Token[]) {
     let isMounted = true;
     const runAsync = async () => {
       const _network = await getActiveNetwork();
+      if (isMounted) await storeTokenItems(wallet.address, _network.chainId, tokens)
       const _tokenPrices = await getTokenPrices(_network.chainId, tokens.map(token => token.address));
       const _tokenPriceMap = _tokenPrices.reduce((acc: { [key: string]: TokenPrice }, _tokenPrice: any) => {
         const tokenPrice = {
@@ -144,6 +154,7 @@ function useTokens(initialValue = [] as Token[]) {
         }
       }, {});
       if (isMounted) setTokenPrices(_tokenPriceMap);
+      await storeTokenPriceMap(wallet.address, _network.chainId, _tokenPriceMap);
     }
     if (tokens.length > 0) runAsync();
     return () => { isMounted = false;}

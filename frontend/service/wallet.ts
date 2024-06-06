@@ -43,7 +43,8 @@ export function formatBalance(balance: ethers.BigNumberish) {
   return utils.formatEther(balance);
 }
 
-export function reduceBigNumbers(items: any[]) {;
+export function reduceBigNumbers(items: any[]) {
+  if (!items) return BigNumber.from(0);
   return items.reduce((prev: { add: (arg0: any) => any; }, next: any) => prev.add(next), BigNumber.from('0'));
 }
 

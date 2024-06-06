@@ -54,7 +54,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
       if (isMounted) setAlchemyMetadata(_metadata as AlchemyMetadata);
     }
     const runAsyncRawBalance = async () => {
-      if (!token.amount || token.amount.isZero()) {
+      if (!token.amount || (BigNumber.from(token.amount).isZero())) {
         const _rawBalance = await getRawBalance(false);
         if (isMounted) setRawAmount(_rawBalance);
       }

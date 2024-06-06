@@ -42,6 +42,7 @@ import { getActiveNetwork } from "../../store/network";
 import { Color } from "../../../GlobalStyles";
 import { useMixpanel } from "../../hooks/useMixpanel";
 import { useConversionRate } from "../../hooks/useConversionRate";
+import useWalletHistory from "../../hooks/useWalletHistory";
 dayjs.extend(customParseFormat);
 
 export default function WalletHistory({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -50,102 +51,20 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
-  const [refreshing, setRefreshing] = React.useState(false);
   const [chainName, setChainName] = useState('matic-mumbai');
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
   const mixpanel = useMixpanel();
-  //const [network,] = useRecoilState(activeNetwork);
-  const [currentHoldings, setCurrentHoldings] = useState({
-    meta: {
-      'date': '01/01/2024'
-    },
-    x: 0,
-    y: 0
-  } as ChartData);
-  //const [holdings, setHoldings] = useState([] as ItemsWithOpenQuote[]);
-  const [chartData, setChartData] = useState([] as ChartData[]);
-  const [isZeroData, setIsZeroData] = useState(false);
+
+  const { chartData, currentHoldings, secondToLastHoldings, refreshing, reset, isZeroData } = useWalletHistory();
   //const conversionRate = 1;
   //const currency = 'USD';
-
-  const getData = async () => {
-    try {
-      setRefreshing(true);
-      const _network = await getActiveNetwork();
-      const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
-      const historyResults = await getWalletHistory(wallet.address, chainName);
-      const { quotes: finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
-      //const finalQuotes = result.quotes;
-      if (finalQuotes.length > 0) {
-        const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
-          if (returnVal[d.x]) {
-            return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
-          }
-          return { ...returnVal, [d.x]: d };
-        }, {} as { [key: number]: ChartData });
-        const _quotes = Object.values(quoteMap);
-        setCurrentHoldings(_quotes[_quotes.length - 1]);
-        setIsZeroData(isReady);
-
-        if (_quotes.length > 7) {
-          setChartData(_quotes.reverse().splice(0, 7));
-        } else {
-          setChartData(_quotes.reverse());
-        }
-
-      }
-      setRefreshing(false);
-    } catch (err: any) {
-      //const err2 = err as Error;
-    }
-  }
 
   useEffect(() => {
     if (_wallet.name !== '') {
       setWallet(new WalletInternal(_wallet.wallet));
     }
   }, [_wallet]);
-
-  useEffect(() => {
-    let isMounted = true;
-    const runAsync = async () => {
-      try {
-        if (isMounted) setRefreshing(true);
-        const _network = await getActiveNetwork();
-        const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
-        const historyResults = await getWalletHistory(wallet.address, chainName);
-        const { quotes: finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
-        //const finalQuotes = result.quotes;
-        if (finalQuotes.length > 0) {
-          const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
-            if (returnVal[d.x]) {
-              return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
-            }
-            return { ...returnVal, [d.x]: d };
-          }, {} as { [key: number]: ChartData });
-          const _quotes = Object.values(quoteMap);
-          if (isMounted) setCurrentHoldings(_quotes[_quotes.length - 1]);
-          if (isMounted) setIsZeroData(isReady);
-
-          if (_quotes.length > 7) {
-            if (isMounted) setChartData(_quotes.reverse().splice(0, 7));
-          } else {
-            if (isMounted) setChartData(_quotes.reverse());
-          }
-
-        }
-        if (isMounted) setRefreshing(false);
-      } catch (err: any) {
-        //const err2 = err as Error;
-      }
-    }
-    if (wallet.address) {
-      //setRefreshing(true);
-      runAsync();
-    }
-    return () => { isMounted = false; }
-  }, [wallet])
 
   useEffect(() => {
     const runAsync = async () => {
@@ -158,7 +77,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
     //console.log('empty');
   }
   const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
+    //setRefreshing(true);
     //setHoldings([]);
     //setChartData([]);
     //getData();
@@ -200,6 +119,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
     }
     return currency(0, { precision: 2 }).format();
   }
+
   return (
     <DashboardLayout title={_wallet.name}>
       <VStack
@@ -227,7 +147,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
               yDomain={isZeroData ? { max: 20, min: -20 } : { max: getMaxValue(), min: 0 }}
               padding={{ bottom: 20, left: 15, right: 15, top: 50 }}
             >
-              <HorizontalAxis tickCount={7} tickValues={chartData.map((v) => v.x)} theme={{
+              <HorizontalAxis tickCount={7} tickValues={chartData.map((v) => v && v.x ? v.x : 0)} theme={{
                 labels: {
                   visible: true,
                   label: {
