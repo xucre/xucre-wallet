@@ -28,7 +28,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from "native-base";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
@@ -177,7 +177,9 @@ export default function App(): JSX.Element {
     <RecoilRoot>
       <NativeBaseProvider theme={theme} config={config}>
         <MixpanelProvider>
-          <AppWrapper />
+          <Suspense fallback={<Text>Loading...</Text>}>
+            <AppWrapper />
+          </Suspense>
         </MixpanelProvider>
       </NativeBaseProvider>
     </RecoilRoot>

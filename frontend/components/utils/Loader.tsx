@@ -49,25 +49,10 @@ export default function Loader() {
       }
     }
     const runAsyncLoadData = async () => {
-      const _language = await getLanguage();
       const _hasSigned = await hasSignedPrivacyPolicy();
-      const _activeNetwork = await getActiveNetwork();
-      const _wallet2 = await getActiveWallet();
       if (isMounted) {
         setFontsLoaded(true);
         setHasSigned(_hasSigned);
-        if (_language) {
-          setLanguageState(_language);
-        } else {
-          setLanguageState('en');
-          setLanguageDefault(true);
-        }
-        if (_activeNetwork) {
-          setActiveNetwork(_activeNetwork);
-        }
-        if (_wallet2) {
-          setActiveWallet(_wallet2[0]);
-        }
         setLoading(false);
       }
     }

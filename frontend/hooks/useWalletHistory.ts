@@ -6,36 +6,35 @@ import { useRecoilValue } from 'recoil';
 import { activeNetwork, activeWallet } from '../service/state';
 import { chainIdToNameMap } from '../service/constants';
 import { getTokenHistoryItems, storeTokenHistoryItems } from '../store/token';
-import { ChartData, HistoryStore, TrendData } from '../types/history';
+import { ChartData, HistoryStore, mergeChartData, TrendData } from '../types/history';
 import dayjs from 'dayjs';
 import { processCovalentJsonData } from '../service/utility';
 import { retrieveWalletHistory, storeWalletHistory } from '../store/history';
 
 function useWalletHistory() {
-  const [currentHoldings, setCurrentHoldings] = useState({
-    meta: {
-      'date': '01/01/2024'
-    },
-    x: 0,
-    y: 0
-  } as ChartData);
-  //const [holdings, setHoldings] = useState([] as ItemsWithOpenQuote[]);
-  const [chartData, setChartData] = useState([] as ChartData[]);
+  const [currentHoldingsTotal, setCurrentHoldings] = useState({} as {[key:number] : ChartData});
+  const currentHoldings = Object.values(currentHoldingsTotal).length > 0 ? Object.values(currentHoldingsTotal).reduce((finalVal, _currentHolding) => {
+    return _currentHolding ? { x: _currentHolding.x, y: _currentHolding.y+Number(finalVal.y || '0'), meta: { date: _currentHolding.meta.date } } : finalVal;
+  }, {} as ChartData) : {} as ChartData;
+
+  const [chartDataTotal, setChartData] = useState({} as {[key:number] : ChartData[]});
+  const chartData = Object.values(chartDataTotal).length > 0 ? mergeChartData(Object.values(chartDataTotal).flatMap((tList) => tList)) : [] as ChartData[];
+  
   const [isZeroData, setIsZeroData] = useState(false);
-  const [secondToLastHoldings, setSecondToLastHoldings] = useState({
-    percent: '0%',
-    trend: 'flat',
-    y: '0.00',
-  } as TrendData)
+  const [secondToLastHoldingsTotal, setSecondToLastHoldings] = useState({} as {[key:number] : TrendData});
+  const _secondToLastHoldings = Object.values(secondToLastHoldingsTotal).length > 0 ? Object.values(secondToLastHoldingsTotal).reduce((finalVal, _secondToLastHolding) => {
+    return _secondToLastHolding ? { y: (Number(_secondToLastHolding.y)+Number(finalVal.y || 0)).toString(), percent: _secondToLastHolding.percent, trend: _secondToLastHolding.trend, numerator: finalVal.numerator + _secondToLastHolding.numerator, denominator: finalVal.denominator + _secondToLastHolding.denominator } : finalVal;
+  }, {} as TrendData) : {} as TrendData;
+  const secondToLastHoldings = {..._secondToLastHoldings, percent: ((_secondToLastHoldings.numerator / _secondToLastHoldings.denominator) || 0).toFixed(0) + '%', trend : Number(_secondToLastHoldings.y) > currentHoldings.y ? 'up' : Number(_secondToLastHoldings.y) < currentHoldings.y ? 'down' : 'flat'} as TrendData;
   const [refreshing, setIsRefreshing] = useState(false);
 
   const wallet = useRecoilValue(activeWallet);
-  const network = useRecoilValue(activeNetwork);
-  const chainName = chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap] || 'eth-mainnet';
+  //const network = useRecoilValue(activeNetwork);
   
-  const sync = async (save: boolean) => {
+  const sync = async (save: boolean, chainId: number) => {
     if (save) setIsRefreshing(true);
     try {
+      const chainName = chainIdToNameMap[chainId as keyof typeof chainIdToNameMap] || 'eth-mainnet';
       const historyResults = await getWalletHistory(wallet.address, chainName);
       const { openQuotes: _finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
       if (_finalQuotes && _finalQuotes.quotes.length > 0) {
@@ -53,30 +52,24 @@ function useWalletHistory() {
           }
           return returnVal;
         }, {} as { [key: string]: ChartData });
-        /*const quoteMap = finalQuotes.sort((a, b) => a.x - b.x).reduce((returnVal, d) => {
-          if (returnVal[d.x]) {
-            return { ...returnVal, [d.x]: { ...returnVal[d.x], y: returnVal[d.x].y + d.y } }
-          }
-          return { ...returnVal, [d.x]: d };
-        }, {} as { [key: number]: ChartData });*/
         
         const _quotes = Object.values(quoteMap);
-        //console.log(quoteMap);
         const _chartData = _quotes.length > 7 ? _quotes.reverse().splice(0, 7) : _quotes.reverse();
         const lastQuote = {..._chartData[_chartData.length - 1]};
         const secondToLastQuote = _chartData[_chartData.length - 2];
-        const percent = (((secondToLastQuote.y - lastQuote.y) / _chartData[0].y) || 0).toFixed(0) + '%';
+        const numerator = secondToLastQuote.y - lastQuote.y;
+        const denominator = _chartData[0].y;
+        const percent = ((numerator / denominator) || 0).toFixed(0) + '%';
         const trend = secondToLastQuote.y > lastQuote.y ? 'up' : secondToLastQuote.y < lastQuote.y ? 'down' : 'flat';
-        const y = (secondToLastQuote.y - lastQuote.y).toFixed(2);
+        const y = (secondToLastQuote.y - lastQuote.y).toFixed(2) || '';
         if (save) {
-          setCurrentHoldings(lastQuote);
-          setSecondToLastHoldings({ percent, trend, y: y || '' });
+          setCurrentHoldings(previousValue => { return { ...previousValue, [chainId]: lastQuote } });
+          setSecondToLastHoldings(previousValue => { return { ...previousValue, [chainId]: { percent, trend, y, numerator, denominator } } });
           setIsRefreshing(false);
-          setChartData(_chartData);
+          setChartData(previousValue => { return { ...previousValue, [chainId]: _chartData } });
           setIsZeroData(isReady)
         }
-        
-
+      
         return {
           currentHoldings: lastQuote, 
           secondToLastHoldings: { percent, trend, y: y } as TrendData, 
@@ -84,14 +77,20 @@ function useWalletHistory() {
           chartData: _chartData
         } as HistoryStore
       }
+      if (save) setIsRefreshing(false);
+      return {} as HistoryStore;
     } catch (err: any) {
       return {} as HistoryStore
     }
-    if (save) setIsRefreshing(false);
+    
   }
 
   const reset = () => {
-    sync(true);
+    //sync(true);
+    Object.keys(chainIdToNameMap).forEach(async (chainId) => {
+      if (chainId === '0') return;
+      sync(true, Number(chainId));
+    });
   }
 
   const isValid = () => {
@@ -100,39 +99,42 @@ function useWalletHistory() {
 
   useEffect(() => {
     let isMounted = true;
-    const getData = async () => {
+    const getData = async (chainId:number) => {
       try {
-        const _existingItems = await retrieveWalletHistory(wallet.address, network.chainId)
+        const _existingItems = await retrieveWalletHistory(wallet.address, chainId)
         if (_existingItems && !_existingItems.isZeroData && _existingItems.chartData && _existingItems.chartData.length > 0) {
           if (isMounted) {
-            setCurrentHoldings(_existingItems.currentHoldings);
-            setSecondToLastHoldings(_existingItems.secondToLastHoldings);
-            setChartData(_existingItems.chartData || []);
-            setIsZeroData(_existingItems.isZeroData);
+            setCurrentHoldings(previousValue => { return { ...previousValue, [chainId]: _existingItems.currentHoldings } });
+            setSecondToLastHoldings(previousValue => { return { ...previousValue, [chainId]: _existingItems.secondToLastHoldings } });
             setIsRefreshing(false);
+            setChartData(previousValue => { return { ...previousValue, [chainId]: _existingItems.chartData } });
+            setIsZeroData(previousValue => previousValue || _existingItems.isZeroData)
           }
         }
       } catch (err) {
         // first time error
       }
-      
+      const _data = await sync(false, chainId);
 
-      const _data = await sync(false);
       if (isMounted && _data) {
-        setCurrentHoldings(_data.currentHoldings);
-        setSecondToLastHoldings(_data.secondToLastHoldings);
-        setChartData(_data.chartData);
-        setIsZeroData(_data.isZeroData);
+        setCurrentHoldings(previousValue => { return { ...previousValue, [chainId]: _data.currentHoldings } });
+        setSecondToLastHoldings(previousValue => { return { ...previousValue, [chainId]: _data.secondToLastHoldings } });
+        setIsRefreshing(false);
+        setChartData(previousValue => { return { ...previousValue, [chainId]: _data.chartData } });
+        setIsZeroData(previousValue => previousValue || _data.isZeroData)
       }
-      if (_data) storeWalletHistory(wallet.address, network.chainId, _data);
+      if (_data) storeWalletHistory(wallet.address, chainId, _data);
     }
-    if (wallet.address && network) {
-      getData();
+    if (wallet.address) {
+      Object.keys(chainIdToNameMap).forEach((chainId) => {
+        if (chainId === '0') return;
+        getData(Number(chainId))
+      });
     }
     return () => { isMounted = false }
-  }, [wallet, chainName, network])
+  }, [wallet])
 
-  useEffect(() => {
+  /*useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {
       if (isMounted && isValid()) storeWalletHistory(wallet.address, network.chainId, {chartData, currentHoldings, isZeroData, secondToLastHoldings} as HistoryStore);
@@ -143,10 +145,10 @@ function useWalletHistory() {
     return () => {
       isMounted = false;
     }
-  }, [currentHoldings, chartData, isZeroData, secondToLastHoldings])
+  }, [currentHoldings, chartData, isZeroData, secondToLastHoldings])*/
 
 
-  return { currentHoldings, chartData, isZeroData, secondToLastHoldings, refreshing, reset };
+  return { currentHoldings, chartData, isZeroData, secondToLastHoldings, chartDataTotal, currentHoldingsTotal, refreshing, reset };
 }
 
 export default useWalletHistory;

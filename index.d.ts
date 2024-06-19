@@ -29,6 +29,7 @@ declare module '@env' {
   export const REACT_APP_BLOCKSPAN_API_URL: string;
   export const REACT_APP_API_URL: string;
   export const REACT_APP_MIXPANEL_PROJECT_ID: string;
+  export const BITCOIN_RPC_URL: string;
 }
 
 declare module '*.png';

@@ -13,7 +13,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { useRecoilState, useRecoilValue } from "recoil";
-//import { TokenBalancesListView } from "@covalenthq/goldrush-kit";
 
 
 import translations from "../../assets/translations";
@@ -33,6 +32,8 @@ import { Linking } from "react-native";
 import SquareButton from "../../components/ui/SquareButton";
 import useTokens from "../../hooks/useTokens";
 import { useMixpanel } from "../../hooks/useMixpanel";
+import NetworkFilter from "../../components/utils/NetworkFilter";
+import NetworkIcon from "../../components/utils/NetworkIcon";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -41,14 +42,20 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [currentTab, setCurrentTab] = useState(translations[language as keyof typeof translations].ViewWallet.tab_list[0]);
+  //const [currentTab, setCurrentTab] = useState(translations[language as keyof typeof translations].ViewWallet.tab_list[0]);
   const [_walletList,] = useRecoilState(walletList);
   const [_wallet,] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
-  const network = useRecoilValue(activeNetwork);
+  const [networkId, setNetworkId] = useState(0);
+  //const network = useRecoilValue(activeNetwork);
   //const [tokens, setTokens] = useState([] as Token[]);
-  const { tokens, tokenPrices, reset } = useTokens();
-  const [isComponentMounted, setIsComponentMounted] = useState(true);
+  const { tokens: _tokens, tokenPrices, reset } = useTokens();
+
+  const tokens = _tokens.filter((t) => {
+    if (networkId === 0) return true;
+    return t.chainId === networkId;
+  });
+  //const [isComponentMounted, setIsComponentMounted] = useState(true);
 
   const tabList = translations[language as keyof typeof translations].ViewWallet.tab_list;
   //Buttons
@@ -65,15 +72,16 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   useEffect(() => {
     if (_wallet.name === '' && _walletList.length === 0) {
       navigation.navigate('SelectWallet');
-    } else if (network && network.rpcUrl.length) {
-      const _provider = getDefaultProvider(network.rpcUrl);
+    } else {
       if (_wallet.name === '') {
-        setWallet(new WalletInternal(_walletList[0].wallet).connect(_provider));
+        setWallet(new WalletInternal(_walletList[0].wallet));
       } else {
-        setWallet(new WalletInternal(_wallet.wallet).connect(_provider));
+        setWallet(new WalletInternal(_wallet.wallet));
       }
     }
   }, [_wallet, _walletList]);
+
+  //useEffect(() => {console.log('tokens',tokens)},[tokens]);
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -124,7 +132,11 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('ConnectionManagement');
   }
 
-  useEffect(() => {
+  const filterNetwork = () => {
+
+    //setNetworkId
+  }
+  /*useEffect(() => {
     const runAsync = async () => {
       const _network = await getActiveNetwork();
       if (_network) storeTokenItems(_wallet.address, _network.chainId, tokens);
@@ -132,7 +144,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     if (_wallet && tokens && tokens.length > 0) {
       //runAsync();
     }
-  }, [tokens])
+  }, [tokens])*/
 
   useEffect(() => {
     const runAsync = async () => {
@@ -174,7 +186,8 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
   return (
     <DashboardLayout title={_wallet.name}>
-      {network && network.rpcUrl === '' &&
+      {false &&
+        //network && network.rpcUrl === '' &&
         <Center
           _light={{ backgroundColor: 'white' }}
           _dark={{ backgroundColor: 'black' }}
@@ -193,7 +206,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           </Center>
         </Center>
       }
-      {network && network.rpcUrl !== '' &&
+      {
         <Box
           _light={{ backgroundColor: 'white' }}
           _dark={{ backgroundColor: 'black' }}
@@ -218,9 +231,13 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
             }
 
           </HStack>
-          <VStack space="5" px={2} mb={10}>
-            {/*currentTab == translations[language as keyof typeof translations].ViewWallet.tab_list[0] && wallet.address !== '' &&*/
-              <Box m={6} height={'2/3'}>
+          <VStack space="5" px={2} mb={0}>
+            {tokens && tokens.length > 0 &&
+              <Box m={6} height={'2/3'} mt={4}>
+                <HStack display={'flex'} justifyContent={'flex-end'} px={1} mb={1} mt={0} maxH={10}>
+                  <NetworkIcon chainId={networkId} updateChain={setNetworkId} />
+                  {/*<NetworkFilter chainId={networkId} updateChain={setNetworkId} />*/}
+                </HStack>
                 <FlatList data={tokens} refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
@@ -228,7 +245,10 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                     tintColor={colorMode === 'dark' ? Color.white : Color.darkgray_200}
                   />
                 } renderItem={
-                  ({ item, index }) => <TokenItem key={item.address + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} price={tokenPrices} />
+                  ({ item, index }) => {
+                    if (!item) return null;
+                    return <TokenItem key={item.address + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} price={tokenPrices} />
+                  }
                 }
                 />
               </Box>

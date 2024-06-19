@@ -26,7 +26,7 @@ import translations from "../../assets/translations";
 //import { navigate } from '../service/RootNavigation';
 import { constructDefaultNetworks } from "../../service/network";
 import { activeNetwork, AppWallet, language, networkList, walletList, } from "../../service/state";
-import { loadWalletFromPrivateKey } from "../../service/wallet";
+import { ethereumToBitcoinWallet, loadWalletFromPrivateKey } from "../../service/wallet";
 import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../../store/network";
 import { storeTheme } from '../../store/setting';
 import { getWallets } from "../../store/wallet";
@@ -45,59 +45,13 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
     colorMode,
   } = useColorMode();
 
-  const [, setWalletState] = useRecoilState(walletList);
-  const [, setNetworkList] = useRecoilState(networkList);
-  const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
+  //const [, setWalletState] = useRecoilState(walletList);
+  //const [, setNetworkList] = useRecoilState(networkList);
+  //const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
   useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {
-      const _networks = await getNetworks();
-
-      const defaultNetworks = constructDefaultNetworks();
-      //await storeNetworks([])
-      if (!Array.isArray(_networks) || _networks.length === 0) {
-        if (isMounted) setNetworkList(defaultNetworks);
-        if (isMounted) await storeNetworks(defaultNetworks);
-        if (!_activeNetwork) {
-          if (isMounted) setActiveNetwork(defaultNetworks[0]);
-          if (isMounted) await storeActiveNetwork(defaultNetworks[0]);
-        }
-      } else {
-        const mergedNetworkList = defaultNetworks.reduce((finalV, nwrk) => {
-          const found = finalV.find((n) => n.chainId === nwrk.chainId);
-          if (!found) {
-            return [...finalV, nwrk];
-          } else {
-            return finalV;
-          }
-        }, _networks)
-
-        if (isMounted) setNetworkList(mergedNetworkList);
-        if (isMounted) await storeNetworks(mergedNetworkList);
-      }
-      if (!_activeNetwork) {
-        const currentNetwork = await getActiveNetwork();
-        if (isMounted) setActiveNetwork(currentNetwork);
-      }
-
-      const _wallets = await getWallets();
-      if (Array.isArray(_wallets) && _wallets.length > 0) {
-        const loadedWallets = _wallets.map((val) => {
-          const wallet = loadWalletFromPrivateKey(val.wallet);
-          if (wallet) {
-            return { address: wallet.address, name: val.name, wallet: wallet.privateKey };
-          }
-        });
-        if (loadedWallets) {
-          if (isMounted) setWalletState(loadedWallets as AppWallet[]);
-        }
-      } else {
-        //navigate('NewWallet')
-      }
-
       await validateAuth();
-
-
     }
 
     runAsync();
@@ -284,7 +238,7 @@ export default function SideBar({ navigation, route, setScheme }: { navigation: 
             </Pressable>
 
             {/*<SelectLanguage />*/}
-            {<NetworkIcon navigation={navigation} isInline={false} close={setDrawerStatus} />}
+            {/*<NetworkIcon navigation={navigation} isInline={false} close={setDrawerStatus} />*/}
             {<Currency />}
             {<ToggleDarkMode setScheme={setScheme} />}
             {/*<BackButton setDrawerStatus={setDrawerStatus}/>*/}

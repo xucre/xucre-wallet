@@ -1,35 +1,46 @@
 import { useEffect, useState } from 'react';
-import { Token, TokenPrice } from '../service/token';
+import { Token, TokenMap, TokenPrice } from '../service/token';
 
-import ethTokens from '../../assets/json/eth_tokens.json'
-import polygonTokens from '../../assets/json/matic_tokens.json'
+import _ethTokens from '../../assets/json/eth_tokens.json'
+import _polygonTokens from '../../assets/json/matic_tokens.json'
 import { BigNumber, getDefaultProvider, ethers } from 'ethers';
 import { getTokenBalances, getTokenPrices } from '../service/api';
 import { chainIdToNameMap, xucreToken } from '../service/constants';
 import { getActiveNetwork } from '../store/network';
 import { isSpam } from '../store/spam';
 import { getActiveWallet, WalletInternal } from '../store/wallet';
-import { activeNetwork, activeWallet, AppWallet } from '../service/state';
-import { useRecoilValue } from 'recoil';
+import { activeNetwork, activeWallet, AppWallet, tokenPricesTotal, tokenTotal } from '../service/state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { getTokenItems, getTokenPriceMap, storeTokenItems, storeTokenPriceMap } from '../store/tokenItem';
+import { chainIdToNetworkMap, constructDefaultNetworks } from '../service/network';
 
 function useTokens(initialValue = [] as Token[]) {
-  const [tokens, setTokens] = useState(initialValue);
-  const [tokenPrices, setTokenPrices] = useState(null as {
-    [key: string]: TokenPrice
-  } | null); 
+  const [tokensLoading, setTokensLoading] = useState(false);
+  //const [fulltokens, setTokens] = useState({} as {[key:number] : Token[]});
+  const [fulltokens, setTokens] = useRecoilState(tokenTotal);
+  const tokens = Object.values(fulltokens).length > 0 ? Object.values(fulltokens).flatMap((tList) => tList) : [] as Token[];
+  // const [tokenPrices, setTokenPrices] = useState(null as {
+  //   [key: string]: TokenPrice
+  // } | null); 
+
+  // const [tokenPrices, setTokenPrices] = useState({} as { [key:number] : {
+  //   [key: string]: TokenPrice
+  // }});
+  const [tokenPrices, setTokenPrices] = useRecoilState(tokenPricesTotal)
+
   const wallet = useRecoilValue(activeWallet);
-  const network = useRecoilValue(activeNetwork);
+  //const network = useRecoilValue(activeNetwork);
   
-  const syncTokens = async (save: boolean) => {
+  const syncTokens = async (save: boolean, chainId: number) => {
     try {
-      const _network = await getActiveNetwork();
-      const tokenMetadataMap = _network.chainId === 1 ? ethTokens : _network.chainId === 137 ? polygonTokens : {};
+      const _networkMap = chainIdToNetworkMap();
+      const _network = _networkMap[chainId];
+      const tokenMetadataMap = chainId === 1 ? _ethTokens : chainId === 137 ? _polygonTokens : {};
 
       const _provider = getDefaultProvider(_network.rpcUrl);
       const _wallet = (await getActiveWallet())[0] as AppWallet;
       const wallet = new WalletInternal(_wallet.wallet).connect(_provider);
-      const tokenResponse = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]));
+      const tokenResponse = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]));
 
       const walletBalance = await wallet.connect(_provider).getBalance();
       if (tokenResponse === null) {
@@ -42,7 +53,7 @@ function useTokens(initialValue = [] as Token[]) {
           type: 'coin',
           isNotSpammable: true
         };
-        if (save) setTokens([coinToken]);
+        if (save) setTokens(prevState => {return{...prevState,  [chainId] : [coinToken]}});
         return [coinToken];
       }
       const _tokens_original = tokenResponse.tokenBalances;
@@ -61,10 +72,10 @@ function useTokens(initialValue = [] as Token[]) {
       };
       if (!_tokens) {
         if (_network.chainId === xucreToken.chainId) {
-          if (save) setTokens([xucreToken, coinToken]);
+          if (save) setTokens(prevState => {return{...prevState,  [chainId] : [xucreToken, coinToken]}});
           return [xucreToken, coinToken];
         }
-        if (save) setTokens([coinToken]);
+        if (save) setTokens(prevState => {return{...prevState,  [chainId] : [coinToken]}});
         return [coinToken];        
       } else {
         const _tokenList = await _tokens.reduce(async (_tList: Token[], token: { contractAddress: string; tokenBalance: any; }) => {
@@ -109,7 +120,7 @@ function useTokens(initialValue = [] as Token[]) {
             return 1;
           }
         });
-        if (save) setTokens(finalTokens);
+        if (save) setTokens(prevState => {return{...prevState,  [chainId] : finalTokens}});
         return finalTokens;
       }
     } catch (err) {
@@ -119,49 +130,83 @@ function useTokens(initialValue = [] as Token[]) {
 
   useEffect(() => {
     let isMounted = true;
-    const runAsync = async () => {
-      const _existingTokens = await getTokenItems(wallet.address, network.chainId)
-      if (_existingTokens && _existingTokens?.length > 0) {
-        if (isMounted) setTokens(_existingTokens as Token[]);
-      }
-      const _existingTokenPrices = await getTokenPriceMap(wallet.address, network.chainId)
-      if (_existingTokenPrices) {
-        if (isMounted) setTokenPrices(_existingTokenPrices as {[key: string]: TokenPrice});
-      }
-      const _tokens = await syncTokens(false);
-      if (isMounted) setTokens(_tokens as Token[]);
+    const runAsync = async () => {  
+      if (isMounted) setTokensLoading(true);
+      let _tokenList = {} as {[key:number] : Token[]};
+      Promise.allSettled(Object.keys(chainIdToNameMap).map(async (chainId) => {
+        if (chainId === '0') return;
+        const _tokens = await syncTokens(false, Number(chainId));
+        return _tokens;
+        //_tokenList = {..._tokenList, [chainId]: _tokens};
+        //if (isMounted) setTokens(prevState => {return{...prevState,  [chainId] : _tokens}});
+      })).then((tokens) => {
+        tokens.forEach((token, index) => {
+          if (token.status === 'fulfilled' && token.value && token.value.length > 0) {
+            _tokenList = {..._tokenList, [token.value[0].chainId]: token.value};
+          }
+        });
+        //console.log(_tokenList)
+        if (isMounted) setTokens(_tokenList);
+        if (isMounted) setTokensLoading(false);
+      });
+      
     }
     
     runAsync();
     return () => { isMounted = false;}
-  }, [wallet, network]);
+  }, [wallet]);
 
   useEffect(() => {
     let isMounted = true;
-    const runAsync = async () => {
-      const _network = await getActiveNetwork();
-      if (isMounted) await storeTokenItems(wallet.address, _network.chainId, tokens)
-      const _tokenPrices = await getTokenPrices(_network.chainId, tokens.map(token => token.address));
-      const _tokenPriceMap = _tokenPrices.reduce((acc: { [key: string]: TokenPrice }, _tokenPrice: any) => {
-        const tokenPrice = {
-          address: _tokenPrice.address,
-          price: _tokenPrice.items[0].price,
-          prettyPrice: _tokenPrice.items[0].prettyPrice
-        } as TokenPrice;
-        return {
-          ...acc,
-          [_tokenPrice.address.toLowerCase()]: tokenPrice
-        }
-      }, {});
-      if (isMounted) setTokenPrices(_tokenPriceMap);
-      await storeTokenPriceMap(wallet.address, _network.chainId, _tokenPriceMap);
+    const runAsync2 = async () => {
+      Promise.allSettled(Object.keys(chainIdToNameMap).map(async (chainId) => {
+        if (chainId === '0') return null;
+        if (isMounted) await storeTokenItems(wallet.address, Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)));
+        const _tokenPrices = await getTokenPrices(Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)).map(token => token.address));
+        const _tokenPriceMap = _tokenPrices.reduce((acc: { [key: string]: TokenPrice }, _tokenPrice: any) => {
+          const tokenPrice = {
+            address: _tokenPrice.address,
+            chainId: chainId,
+            price: _tokenPrice.items[0].price,
+            prettyPrice: _tokenPrice.items[0].prettyPrice
+          } as TokenPrice;
+          return {
+            ...acc,
+            [`${_tokenPrice.address.toLowerCase()}:${chainId}`]: tokenPrice
+          } as TokenMap
+        }, {} as TokenMap);
+        //if (isMounted) setTokenPrices(previousValue => {return{...previousValue,  [Number(chainId)] : _tokenPriceMap}});
+        if (isMounted) await storeTokenPriceMap(wallet.address, Number(chainId), _tokenPriceMap);
+        return _tokenPriceMap;
+      })).then((tokenPrices_) => {
+        let _priceListTotal = {} as { [key:number] : TokenMap};
+        tokenPrices_.forEach((tokenPrice, index) => {
+          if (tokenPrice.status === 'fulfilled' && tokenPrice.value && Object.keys(tokenPrice.value).length > 0) {
+            const _priceList = tokenPrice.value as TokenMap
+            _priceListTotal = {..._priceListTotal, [Number(Object.values(_priceList)[0].chainId)]: _priceList};
+          }
+        })
+        if (isMounted) setTokenPrices(_priceListTotal);
+      });
+      
     }
-    if (tokens.length > 0) runAsync();
+    if (tokens.length > 0 && !tokensLoading) {
+      runAsync2();
+    }
+    
     return () => { isMounted = false;}
-  }, [tokens]);
+  }, [fulltokens]);
+
+  const reset = async (save: boolean) => {
+    Object.keys(chainIdToNameMap).forEach(async (chainId) => {
+      syncTokens(save, Number(chainId));
+    });
+  }
+
+  //useEffect(() => {console.log(`token prices updated `, tokenPrices)}, [tokenPrices]);
 
 
-  return { tokenPrices, tokens, reset: syncTokens };
+  return { tokenPrices, tokens, reset };
 }
 
 export default useTokens;

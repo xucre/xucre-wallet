@@ -28,7 +28,8 @@ import {
   REACT_APP_XUCRE_ADDRESS,
   REACT_APP_XUCRE_WALLET_SCHEME,
   REACT_APP_XUCRE_WALLET_SCHEME_IOS,
-  REACT_APP_MIXPANEL_PROJECT_ID
+  REACT_APP_MIXPANEL_PROJECT_ID,
+  BITCOIN_RPC_URL
 } from '@env';
 import { LogMap } from './transaction';
 import { Extension } from '../types/extensions';
@@ -63,7 +64,8 @@ export const env = {
   REACT_APP_XUCRE_ADDRESS: process.env.REACT_APP_XUCRE_ADDRESS || REACT_APP_XUCRE_ADDRESS,
   REACT_APP_XUCRE_WALLET_SCHEME: process.env.REACT_APP_XUCRE_WALLET_SCHEME || REACT_APP_XUCRE_WALLET_SCHEME,
   REACT_APP_XUCRE_WALLET_SCHEME_IOS: process.env.REACT_APP_XUCRE_WALLET_SCHEME_IOS || REACT_APP_XUCRE_WALLET_SCHEME_IOS,
-  REACT_APP_MIXPANEL_PROJECT_ID: process.env.REACT_APP_MIXPANEL_PROJECT_ID || REACT_APP_MIXPANEL_PROJECT_ID
+  REACT_APP_MIXPANEL_PROJECT_ID: process.env.REACT_APP_MIXPANEL_PROJECT_ID || REACT_APP_MIXPANEL_PROJECT_ID,
+  BITCOIN_RPC_URL: process.env.BITCOIN_RPC_URL || BITCOIN_RPC_URL
 }
 
 export const routes = {
@@ -81,12 +83,14 @@ export const basicSvg = {
 
 export const levels = ['bronze', 'silver', 'gold'];
 
-export const chainNames = ['matic-mumbai', 'matic-mainnet', 'eth-mainnet', 'celo-mainnet'];
+export const chainNames = ['matic-mumbai', 'matic-mainnet', 'eth-mainnet', 'celo-mainnet', 'btc-mainnet'];
 export const chainIdToNameMap = {
+  0: 'all',
   1: 'eth-mainnet',
   137:'matic-mainnet', 
-  80001: 'matic-mumbai', 
+  //80001: 'matic-mumbai', 
   42220: 'celo-mainnet',
+  //20090103: 'btc-mainnet',
 };
 
 export const xucreToken = {chainId: 137, address: '0x924442A46EAC25646b520Da8D78218Ae8FF437C2', name: 'Xucre',type: 'token', isNotSpammable: true}

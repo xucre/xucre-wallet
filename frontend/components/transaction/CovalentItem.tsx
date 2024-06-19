@@ -23,6 +23,7 @@ dayjs.extend(relativeTime);
 function CovalentItemComponent({ navigation, transaction }: { navigation: { navigate: Function }, transaction: CovalentTransactionV3 }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const wallet = useRecoilValue(activeWallet);
   const network = useRecoilValue(activeNetwork);
   const [transactionDetails, setTransactionDetails] = useState({} as ParsedTransaction)
@@ -36,18 +37,22 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
   useEffect(() => {
     let isMounted = true;
     const runAsyncParse = async () => {
-      if (transaction && wallet.wallet.length > 0 && network.chainId) {
+      if (transaction && wallet.wallet.length > 0 && hasLoadedOnce === false) {
         if (isMounted) setLoading(true);
         const _transactionDetails = await parseDetails();
         if (isMounted) setTransactionDetails(_transactionDetails);
         if (isMounted) setLoading(false);
+        if (isMounted) setHasLoadedOnce(true);
       }
     }
 
-    runAsyncParse();
+    if (!transactionDetails.transactionId || (transactionDetails.transactionId && transactionDetails.transactionId !== transaction.tx_hash)) {
+      runAsyncParse();
+    }
+    //runAsyncParse();
 
     return () => { isMounted = false }
-  }, [transaction, wallet, network])
+  }, [transaction, wallet])
 
   const parseDetails = async () => {
     try {
@@ -124,6 +129,7 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
 
   }
 
+  //return <><Text>{transaction.tx_hash}</Text></>
   if (!transactionDetails.action) {
     return <></>
   }

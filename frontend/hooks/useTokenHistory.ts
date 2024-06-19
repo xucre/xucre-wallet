@@ -7,16 +7,16 @@ import { activeNetwork, activeWallet } from '../service/state';
 import { chainIdToNameMap } from '../service/constants';
 import { getTokenHistoryItems, storeTokenHistoryItems } from '../store/token';
 
-function useTokenHistory(tokenAddress = "" as string) {
+function useTokenHistory(tokenAddress = "" as string, chainId = 1 as number) {
   const [transactions, setTransactions] = useState([] as CovalentTokenHistoryItem[]);
   const [transactionsRefreshing, setTransactionsRefreshing] = useState(false);
   
   const wallet = useRecoilValue(activeWallet);
-  const network = useRecoilValue(activeNetwork);
+  //const network = useRecoilValue(activeNetwork);
   
   const sync = async (save: boolean) => {
     if (save) setTransactionsRefreshing(true);
-    const _transactions = await getTokenTransferHistory(wallet.address, tokenAddress, chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap]);
+    const _transactions = await getTokenTransferHistory(wallet.address, tokenAddress, chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]);
     if (save) {
       setTransactions(_transactions);
       setTransactionsRefreshing(false);
@@ -30,7 +30,7 @@ function useTokenHistory(tokenAddress = "" as string) {
   useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {
-      const _existingItems = await getTokenHistoryItems(wallet.address, tokenAddress, network.chainId)
+      const _existingItems = await getTokenHistoryItems(wallet.address, tokenAddress, chainId)
       if (_existingItems && _existingItems?.length > 0) {
         if (isMounted) {
           setTransactions(_existingItems as CovalentTokenHistoryItem[]);
@@ -53,7 +53,7 @@ function useTokenHistory(tokenAddress = "" as string) {
   useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {
-      if (isMounted) storeTokenHistoryItems(wallet.address, tokenAddress, network.chainId, transactions);
+      if (isMounted) storeTokenHistoryItems(wallet.address, tokenAddress, chainId, transactions);
     }
     if (transactions && transactions.length > 0) {
       runAsync();

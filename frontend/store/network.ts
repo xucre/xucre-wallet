@@ -94,9 +94,15 @@ export const storeActiveNetwork = async (network: Network) => {
 export const getActiveNetwork = async () => {
   const network = await EncryptedStorage.getItem('active_network');
   if (!network) {
-    return undefined;
+    return {
+      blockExplorer: 'https://etherscan.io',
+      chainId: 1,
+      name: 'Ethereum Mainnet',
+      rpcUrl: 'wss://eth-mainnet.g.alchemy.com/v2/JqOD3cdBDl50H65bk315fAE614CDHa9u',
+      symbol: 'ETH',
+    } as Network;
   }
-  return JSON.parse(network as string);
+  return JSON.parse(network as string) as Network;
 }
 
 export const getNetworks = async () => {

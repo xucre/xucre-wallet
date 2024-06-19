@@ -200,10 +200,10 @@ const UNKNOWN_TRANSACTION = {
 // Function to parse a list of transactions
 export async function parseTransaction(wallet: Wallet, transaction: CovalentTransactionV3, _network: Network): Promise<ParsedTransaction> {
   const existingTransaction = await getParsedTransaction(wallet.address, _network.chainId, transaction.tx_hash);
+  
   if (existingTransaction && existingTransaction.transactionId.length > 0) {
     return existingTransaction;
   }
-
   const provider = getDefaultProvider(_network.rpcUrl);
 
   const receipt = await provider.getTransactionReceipt(transaction.tx_hash);

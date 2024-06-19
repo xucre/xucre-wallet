@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 
 export type OpenQuotes = {
   direction: string;
@@ -80,6 +81,8 @@ export type TrendData = {
   percent: string,
   trend: string,
   y: string,
+  numerator: number,
+  denominator: number
 }
 
 export type HistoryStore = {
@@ -87,4 +90,16 @@ export type HistoryStore = {
   currentHoldings: ChartData, 
   isZeroData : boolean, 
   secondToLastHoldings: TrendData
+}
+
+export const mergeChartData = (data : ChartData[]) => {
+  const chartDataMap = data.reduce((returnVal, d) => {
+    if (returnVal[d.meta.date]) {
+      return { ...returnVal, [d.meta.date]: { ...returnVal[d.meta.date], y: returnVal[d.meta.date].y + d.y,  } }
+    }
+    const _d = dayjs(d.meta.date, 'MM-DD-YYYY');
+    return { ...returnVal, [d.meta.date]: { x: _d.unix(), y: d.y, meta: {date: _d.format('MM-DD-YYYY')} } };
+
+  }, {} as {[key: string]: ChartData});
+  return Object.values(chartDataMap).sort((a, b) => a.x < b.x ? 1 : -1);
 }

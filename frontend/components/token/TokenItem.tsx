@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { BigNumber, BigNumberish, ethers, getDefaultProvider, Wallet } from "ethers";
-import { Avatar, HStack, Icon, IconButton, Menu, Pressable, Skeleton, Text, Tooltip, useColorMode, VStack, } from "native-base";
+import { Avatar, Badge, HStack, Icon, IconButton, Menu, Pressable, Skeleton, Text, Tooltip, useColorMode, VStack, } from "native-base";
 import React, { createRef, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -21,14 +21,16 @@ import { Platform } from "react-native";
 import { useConversionRate } from "../../hooks/useConversionRate";
 import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
 import currency from "currency.js";
+import { retrieveTokenMetadata, retrieveTokenSpamState, storeTokenMetadata, storeTokenSpamState } from "../../store/tokenItem";
 
-function TokenItemComponent({ navigation, token, refreshList, wallet, price }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet, price: { [key: string]: TokenPrice } | null }) {
+function TokenItemComponent({ navigation, token, refreshList, wallet, price }: { navigation: { navigate: Function }, token: Token, refreshList: Function, wallet: Wallet, price: { [key: number]: { [key: string]: TokenPrice } } | null }) {
   const { colorMode } = useColorMode();
   const { conversionRate } = useConversionRate();
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [language,] = useRecoilState(stateLanguage);
   const [avatar, setAvatar] = useState('');
+  const [networkAvatar, setNetworkAvatar] = useState('');
   const [rawAmount, setRawAmount] = useState(BigNumber.from(0));
   const [alchemyMetadata, setAlchemyMetadata] = useState({} as AlchemyMetadata);
   const [loading, setLoading] = useState(true);
@@ -44,6 +46,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
       } else {
         //setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/placeholdericon.png');
       }
+      setNetworkAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
 
       if (Platform.OS === 'ios') {
         if (isMounted) setLoading(false);
@@ -53,57 +56,43 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
       const _metadata = await getMetadata(false);
       if (isMounted) setAlchemyMetadata(_metadata as AlchemyMetadata);
     }
-    const runAsyncRawBalance = async () => {
-      if (!token.amount || (BigNumber.from(token.amount).isZero())) {
-        const _rawBalance = await getRawBalance(false);
-        if (isMounted) setRawAmount(_rawBalance);
-      }
-
-    }
     const runAsyncRawSpam = async () => {
       const _spam = await _isSpam(false);
       if (isMounted) setAmISpam(_spam);
     }
     runAsyncAvatar();
     runAsyncMetadata();
-    runAsyncRawBalance();
     runAsyncRawSpam();
 
     return () => { isMounted = false };
   }, [token])
 
-  const getRawBalance = async (save: boolean) => {
-    try {
-      if (token.type === 'token') {
-        const erc20 = new ethers.Contract(ethers.utils.getAddress(token.address), erc20Abi, wallet);
-        const walletBalance = await erc20.balanceOf(ethers.utils.getAddress(wallet.address));
-        if (save) setRawAmount(walletBalance);
-        return walletBalance;
-      } else if (token.type === 'coin') {
-        const _provider = getDefaultProvider(network.rpcUrl);
-        const walletBalance = await wallet.connect(_provider).getBalance();
-        if (save) setRawAmount(walletBalance);
-        return walletBalance;
-      }
-    } catch (err) {
-    }
-
-
-  }
-
   const getMetadata = async (save: boolean) => {
+    const existingResult = await retrieveTokenMetadata(token.address, token.chainId);
+    if (existingResult && existingResult.name) {
+      if (save) setAlchemyMetadata(existingResult as AlchemyMetadata);
+      return existingResult;
+    }
     const result = await getTokenMetadata(token.address, chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap]);
     if (save) setAlchemyMetadata(result as AlchemyMetadata);
+    await storeTokenMetadata(token.address, token.chainId, result as AlchemyMetadata)
     return result;
   }
 
   const _isSpam = async (save: boolean) => {
+    //return false;
     if (token.type === 'coin') {
       if (save) setAmISpam(false);
       return false;
     }
+    const existingResult = await retrieveTokenSpamState(token.address, token.chainId);
+    if (existingResult) {
+      if (save) setAmISpam(existingResult);
+      return existingResult;
+    }
     const result = await isSpam(token.address, token.chainId);
     if (save) setAmISpam(result);
+    await storeTokenSpamState(token.address, token.chainId, result)
     return result;
   }
 
@@ -139,6 +128,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
               <Text>{iname}</Text>
             </Avatar>
           }
+          {networkAvatar !== _img && <Avatar source={{ uri: networkAvatar }} size={4} mb={-4} ml={-4} zIndex={10000} alignContent={'end'} />}
         </>
 
 
@@ -170,7 +160,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
   const computedSymbol = alchemyMetadata?.symbol ? truncateString_old(alchemyMetadata.symbol, 8) : (token?.symbol || token?.name || 'N/A');
   const convertedValue = () => {
     const ethersValue = Number(ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata?.decimals || 18));
-    const tokenPrice = price ? price[token.address.toLowerCase()]?.price || 0 : 0;
+    const tokenPrice = price && price[token.chainId] ? price[token.chainId][`${token.address.toLowerCase()}:${token.chainId}`]?.price || 0 : 0;
     const usdValue = ethersValue * tokenPrice;
     if (conversionRate && conversionRate.value) {
       const _convertedValue = usdValue * conversionRate.value;

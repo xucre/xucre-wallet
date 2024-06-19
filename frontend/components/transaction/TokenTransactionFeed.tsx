@@ -18,77 +18,25 @@ import { CovalentTokenHistoryItem } from "../../types/token";
 import { getTokenHistoryItems, storeTokenHistoryItems } from "../../store/token";
 import CovalentTransferItem from "./CovalentTransferItem";
 import useTokenHistory from "../../hooks/useTokenHistory";
+import usePagination from "../../hooks/usePagination";
 
-export default function TransactionFeed({ navigation, tokenAddress }: { navigation: { navigate: Function }, tokenAddress: string }) {
+export default function TransactionFeed({ navigation, tokenAddress, chainId }: { navigation: { navigate: Function }, tokenAddress: string, chainId: number }) {
   const isFocused = useIsFocused();
   const [language,] = useRecoilState(stateLanguage);
   //const [refreshing, setRefreshing] = useState(false);
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
-  const { transactions, refreshing, reset } = useTokenHistory(tokenAddress);
-  //const [transactions, setTransactions] = useState([] as CovalentTokenHistoryItem[]);
-  //{translations[language].BasePage.title}
-  /*useEffect(() => {
-    let isMounted = true;
-    if (_wallet) {
-      if (isMounted) setRefreshing(true);
-      setTimeout(async () => {
-        const _network = await getActiveNetwork();
-        const _transactions = await getTokenTransferHistory(_wallet.address, tokenAddress, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
-
-        if (_transactions && _transactions.items) {
-          if (isMounted) setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
-        }
-        if (isMounted) setRefreshing(false);
-      }, 100)
-    }
-    return () => { isMounted = false }
-  }, [_wallet])
-
-  useEffect(() => {
-    let isMounted = true;
-    const runAsync = async () => {
-      const _network = await getActiveNetwork();
-      if (isMounted) storeTokenHistoryItems(_wallet.address, tokenAddress, _network.chainId, transactions);
-    }
-    if (transactions.length > 0) {
-      runAsync();
-    }
-    return () => {
-      isMounted = false;
-    }
-  }, [transactions])*/
+  const { transactions, refreshing, reset } = useTokenHistory(tokenAddress, chainId);
 
   const syncTransactions = async () => {
-    /*setRefreshing(true);
-    setTimeout(async () => {
-      const _network = await getActiveNetwork();
-      const _transactions = await getTokenTransferHistory(_wallet.address, tokenAddress, chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap]);
-
-      if (_transactions && _transactions.items) {
-        setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
-      }
-      setRefreshing(false);
-    }, 100)*/
     await reset();
   }
 
-  /*useEffect(() => {
-    const runAsync = async () => {
-      const _transactions = await getTokenHistoryItems(_wallet.address, tokenAddress, network.chainId);
-      if (_transactions && _transactions.length > 0) {
-        setTransactions(_transactions);
-      }
-      syncTransactions();
+  const { paginatedData, loadMore } = usePagination(transactions, { initialPageSize: 10, append: true });
 
-    }
-    if (_wallet.address) {
-      runAsync();
-    }
-  }, [])*/
   return (
     <Box paddingY={4}>
-      <FlatList data={transactions} refreshControl={
+      <FlatList data={paginatedData} refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={syncTransactions}
@@ -97,6 +45,8 @@ export default function TransactionFeed({ navigation, tokenAddress }: { navigati
         ({ item, index }) => <CovalentTransferItem key={item.tx_hash} transaction={item} navigation={navigation} />
       }
         keyExtractor={item => `${item.tx_hash}:${item}`}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
       />
       {(!transactions || transactions.length === 0) &&
         <Pressable onPress={() => {

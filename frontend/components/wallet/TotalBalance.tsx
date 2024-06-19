@@ -43,19 +43,15 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
   const [wallet, setWallet] = useState({} as Wallet);
-  const [provider, setProvider] = useState({} as ethers.providers.BaseProvider);
-  const [network,] = useRecoilState(activeNetwork);
-  const [networks, setAllNetworks] = useRecoilState(networkList);
-  const chainName = chainIdToNameMap[network.chainId as keyof typeof chainIdToNameMap] || 1;
   const { currentHoldings, secondToLastHoldings, reset } = useWalletHistory();
 
   const emptyFunction = () => { };
   const emptyNavigation = { navigate: emptyFunction };
   useEffect(() => {
-    if (_wallet.name !== '' && network) {
+    if (_wallet.name !== '') {
       setWallet(new WalletInternal(_wallet.wallet));
     }
-  }, [_wallet, network]);
+  }, [_wallet]);
 
   const formatCurrency = (amount: string) => {
     return Number.parseFloat(amount).toFixed(2);
@@ -97,7 +93,7 @@ export default function TotalBalance({ navigate }: { navigate: Function }) {
 
             <HStack paddingBottom={0} space={1} alignItems={'center'}>
               <Heading ><Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? "darkText" : "lightText"} >{convertedValue()}</Text></Heading>
-              <NetworkIcon navigation={emptyNavigation} isInline={true} close={emptyFunction} />
+              {/*<NetworkIcon navigation={emptyNavigation} isInline={true} close={emptyFunction} />*/}
               {/*<Text color={colorMode === 'dark' ? "darkText" : "lightText"} fontWeight={'bold'}>{chainName}</Text>*/}
 
             </HStack>

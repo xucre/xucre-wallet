@@ -44,12 +44,13 @@ import { Color } from "../../../GlobalStyles";
 import TokenTransactionFeed from "../../components/transaction/TokenTransactionFeed";
 import { SvgUri } from "react-native-svg";
 import { useMixpanel } from "../../hooks/useMixpanel";
+import { SerializedToken } from "../../service/token";
 dayjs.extend(customParseFormat);
 
 export default function ViewToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const mixpanel = useMixpanel();
-  const token = route.params?.token;
+  const token = route.params?.token as SerializedToken;
   const [avatar, setAvatar] = useState('');
   const isFocused = useIsFocused();
   const [showUsd, setShowUsd] = useState(true);
@@ -98,8 +99,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
     const runAsync = async () => {
       try {
         if (isMounted) setRefreshing(true);
-        const _network = await getActiveNetwork();
-        const chainName = chainIdToNameMap[_network.chainId as keyof typeof chainIdToNameMap];
+        const chainName = chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap];
         const historyResults = await getWalletHistory(wallet.address, chainName);
 
         const { quotes: finalQuotes, isReady, isTokenValue } = processCovalentJsonData(historyResults, token.address);
@@ -236,7 +236,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
                   <HStack paddingBottom={0} space={1} justifyContent={'flex-end'} alignItems={'flex-end'} >
                     <Heading textAlign={'right'} borderBottomColor={colorMode === 'dark' ? 'primary' : 'purple.500'} alignContent={'flex-end'} justifyContent={'flex-end'} borderBottomWidth={2}>
                       <Text fontSize={'3xl'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} textAlign={'right'} alignContent={'flex-end'}>
-                        {showUsd && !isChartDataRaw ? CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] + (currentHoldings ? currentHoldings.y.toFixed(2) : '0.00') : truncateString_old(ethers.utils.formatUnits(token.amount, token.decimals), 11, false)}
+                        {showUsd && !isChartDataRaw ? CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] + (currentHoldings ? currentHoldings.y.toFixed(2) : '0.00') : truncateString_old(ethers.utils.formatUnits(token.amount as string, token.decimals), 11, false)}
                       </Text>
                     </Heading>
                   </HStack>
@@ -319,11 +319,11 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
           </Box>
         }
         {token.address && ethers.utils.getAddress(token.address) !== ethers.constants.AddressZero &&
-          <TokenTransactionFeed navigation={navigation} tokenAddress={token.address} />
+          <TokenTransactionFeed navigation={navigation} tokenAddress={token.address} chainId={token.chainId} />
         }
 
         {token.address && ethers.utils.getAddress(token.address) === ethers.constants.AddressZero &&
-          <TransactionFeed navigation={navigation} tokenAddress={null} updateDefault={empty} />
+          <TransactionFeed navigation={navigation} tokenAddress={null} updateDefault={empty} chainId={token.chainId} />
         }
       </Box>
     </DashboardLayout>

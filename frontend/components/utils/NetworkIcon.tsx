@@ -1,68 +1,97 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import {
-  AlertDialog,
-  ArrowBackIcon,
   Avatar,
   Box,
   Button,
-  Center,
-  Divider,
-  Drawer,
-  Hidden,
+  HamburgerIcon,
   HStack,
   Icon,
   IconButton,
   Image,
   Menu,
-  MoonIcon,
   Pressable,
-  SunIcon,
-  Text,
-  Tooltip,
-  useColorMode,
-  useColorModeValue,
-  VStack,
+  ScrollView, Text, Tooltip, useColorMode,
 } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+//import FilterListIcon from '@mui/icons-material/FilterList';
+import { activeNetwork, language as stateLanguage } from "../../service/state";
+import { chainIdToNetworkMap, Network } from "../../service/network";
+import NetworkGroup from "../ui/NetworkGroup";
 
-import translations from "../../assets/translations";
-import { Network } from "../../service/network";
-import { activeNetwork, activeWallet, selectedNetwork, language as stateLanguage, } from "../../service/state";
-
-
-export default function NetworkIcon({ navigation, close, isInline }: { navigation: { navigate: Function }, close: Function, isInline: boolean }) {
+export default function NetworkIcon({ chainId, updateChain }: { chainId: number, updateChain: Function }) {
   const [language,] = useRecoilState(stateLanguage);
-  const [network, setSelectedNetwork] = useRecoilState(selectedNetwork);
   const { colorMode } = useColorMode();
-  const [avatar, setAvatar] = useState('');
-  const [_activeNetwork, setActiveNetwork] = useRecoilState(activeNetwork);
-  //const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/'+ _activeNetwork.symbol.toLowerCase() +'.png';
-  const isDark = colorMode === 'dark';
+  const chainIdMap = chainIdToNetworkMap();
+  const _activeNetwork = chainId === 0 ? {} as Network : chainIdMap[chainId];
+  const avatar = chainId === 0 ? '' : 'https://xucre-public.s3.sa-east-1.amazonaws.com/' + _activeNetwork.symbol.toLowerCase() + '.png';
+  const [network, setNetwork] = useRecoilState(activeNetwork);
   //{translations[language].BasePage.title}
-  useEffect(() => {
-    if (_activeNetwork.symbol && _activeNetwork.symbol !== '') {
-      setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + _activeNetwork.symbol.toLowerCase() + '.png');
-      setSelectedNetwork(_activeNetwork as Network)
+
+  const setChain = (_chainId: number) => {
+    console.log('setchain', _chainId, network.chainId);
+    const chain = chainIdMap[_chainId];
+    if ((network && network.chainId === _chainId)) {
+      updateChain(_chainId);
+      return;
     }
-  }, [_activeNetwork, network])
 
+    setNetwork(chain);
+    updateChain(_chainId);
+  }
   return (
-    <>
-      {avatar !== '' && !isInline &&
-        <Button variant={'unstyled'} onPress={() => { navigation.navigate('SelectNetwork'); close(false); }}>
-          <Avatar bg={isDark ? 'coolGray.800' : 'coolGray.300'} size="sm" source={{
-            uri: avatar
-          }} />
-        </Button>
+    <Menu trigger={triggerProps => {
+      return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+        {chainId !== 0 ?
+          <HStack alignItems={'center'} space={2}>
+            <Image
+              source={{ uri: avatar }}
+              size={10}
+              resizeMode="contain"
+              alt={_activeNetwork.name}
+            />
+            <Icon
+              as={MaterialIcons}
+              name="filter-list"
+              size="6"
+              color="coolGray.500"
+            />
+          </HStack> :
+          <NetworkGroup />
+        }
+      </Pressable>;
+    }} placement="bottom right" _presenceTransition={{
+      initial: { translateX: 50, opacity: 0, scale: 0 },
+      animate: {
+        opacity: 1, scale: 1, transition: {
+          type: "spring",
+          bounciness: 5,
+          speed: 2,
+          delay: 0,
+          duration: 2,
+          useNativeDriver: true,
+        }
+      },
+      exit: {
+        opacity: 0, scale: 0, translateX: 50, transition: {
+          type: "spring",
+          bounciness: 5,
+          speed: 1,
+          delay: 0,
+          duration: 2,
+          useNativeDriver: true,
+        }
       }
-
-      {avatar !== '' && isInline &&
-        <Avatar size="sm" mt={-2} source={{
-          uri: avatar
-        }} />
+    }}>
+      <Menu.Item key={0} onPress={() => setChain(0)}>All</Menu.Item>
+      {
+        Object.keys(chainIdMap).map((chainId) => {
+          return <Menu.Item textAlign={'right'} key={chainId} onPress={() => setChain(Number(chainId))} >
+            {chainIdMap[Number(chainId)].name}
+          </Menu.Item>
+        })
       }
-    </>
+    </Menu>
 
   );
 }
