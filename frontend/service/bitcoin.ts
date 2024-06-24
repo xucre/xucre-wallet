@@ -1,6 +1,8 @@
 import axios from "axios";
 
 import { env } from './constants';
+import { AppWallet } from "./state";
+import { BigNumber } from "ethers";
 
 const BASEURL = env.BITCOIN_RPC_URL;
 
@@ -19,3 +21,5 @@ export const getBitcoinBalance = async (wallet: string) => {
     return null;
   }
 }
+
+export const sendBitcoin = async (wallet: AppWallet, to: string, amount: BigNumber) => {}

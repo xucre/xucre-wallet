@@ -103,6 +103,7 @@ import ViewToken from './pages/token/ViewToken';
 //import TransactionFeed from './pages/wallet/TransactionFeed';
 //Import Mixpanel API
 import { MixpanelProvider } from './hooks/useMixpanel';
+import UnlimitWidget from './pages/extensions/unlimit/UnlimitWidget';
 
 const Stack = createNativeStackNavigator();
 
@@ -291,9 +292,7 @@ export const AppWrapper = () => {
       name === 'SendTransaction' ||
       name === 'SignEth' ||
       name === 'SignTyped' ||
-      name === 'PrivacyPolicy' ||
-      name === 'BuyToken' ||
-      name === 'SwapToken'
+      name === 'PrivacyPolicy'
     ) {
       return true;
     }
@@ -393,7 +392,7 @@ export const AppWrapper = () => {
           }} ></Stack.Screen>
           <Stack.Screen name="BuyToken" component={BuyToken} options={{
             headerTitleAlign: 'center',
-            title: translations[language as keyof typeof translations].SwapToken.title,
+            title: ''//translations[language as keyof typeof translations].SwapToken.title,
           }} ></Stack.Screen>
           <Stack.Screen name="SupportPage" component={SupportPage} options={{
             headerTitleAlign: 'center',
@@ -463,6 +462,10 @@ export const AppWrapper = () => {
           }} ></Stack.Screen>
 
           <Stack.Screen name="Ramp" component={RampWidget} options={{
+            headerTitleAlign: 'center',
+            title: ''//translations[language as keyof typeof translations].ProfileList.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="Unlimit" component={UnlimitWidget} options={{
             headerTitleAlign: 'center',
             title: ''//translations[language as keyof typeof translations].ProfileList.title,
           }} ></Stack.Screen>

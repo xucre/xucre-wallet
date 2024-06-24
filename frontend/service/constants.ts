@@ -384,14 +384,14 @@ export const extensionList = (language: string) => {
       featuredImage: 'https://xucre-public.s3.sa-east-1.amazonaws.com/logo-long.png',
       color: '#D4E815'
     },
-    /*{
+    {
       title: translations[languageKey].SelectExtension.ramp_title,
       description: translations[languageKey].SelectExtension.ramp_description,
-      page: 'Ramp',
-      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/ramp.png',
+      page: 'Unlimit',
+      logo: 'https://xucre-public.s3.sa-east-1.amazonaws.com/unlimit.png',
       featuredImage: '',
-      color: '#D4E815'
-    },*/
+      color: '#756AF3'
+    },
     {
       title: 'Ubeswap',
       description: translations[languageKey].SelectExtension.ubeswap_description,
