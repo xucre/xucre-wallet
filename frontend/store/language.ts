@@ -9,6 +9,8 @@ export const storeLanguage = async (language: string) => {
 };
 
 export const getLanguage = async () => {
-  return await EncryptedStorage.getItem('language')
+  const language = await EncryptedStorage.getItem('language')
+  if (language) return language;
+  return 'es';
 }
 

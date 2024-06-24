@@ -43,6 +43,7 @@ import { Color } from "../../../GlobalStyles";
 import { useMixpanel } from "../../hooks/useMixpanel";
 import { useConversionRate } from "../../hooks/useConversionRate";
 import useWalletHistory from "../../hooks/useWalletHistory";
+import NetworkIcon from "../../components/utils/NetworkIcon";
 dayjs.extend(customParseFormat);
 
 export default function WalletHistory({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -51,14 +52,15 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
-  const [chainName, setChainName] = useState('matic-mumbai');
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
+  const [network, setActiveNetwork] = useRecoilState(activeNetwork);
   const [wallet, setWallet] = useState({} as Wallet);
+  const [chainId, setChainId] = useState(0);
   const mixpanel = useMixpanel();
 
-  const { chartData, currentHoldings, secondToLastHoldings, refreshing, reset, isZeroData } = useWalletHistory();
-  //const conversionRate = 1;
-  //const currency = 'USD';
+  const { chartData: _chartData, currentHoldings: _currentHoldings, refreshing, reset, isZeroData, chartDataTotal, currentHoldingsTotal } = useWalletHistory();
+  const chartData = chainId !== 0 ? chartDataTotal[chainId] : _chartData;
+  const currentHoldings = chainId !== 0 ? currentHoldingsTotal[chainId] : _currentHoldings;
 
   useEffect(() => {
     if (_wallet.name !== '') {
@@ -75,6 +77,11 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
 
   const empty = () => {
     //console.log('empty');
+  }
+
+  const updateChain = (_chainId: number) => {
+    console.log('update chain wallet history', _chainId);
+    setChainId(_chainId)
   }
   const onRefresh = React.useCallback(async () => {
     //setRefreshing(true);
@@ -125,12 +132,12 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
       <VStack
         _light={{ backgroundColor: 'white' }}
         _dark={{ backgroundColor: 'black' }}
-        height={'full'}
+
         safeAreaBottom
       >
-        {chartData.length > 0 &&
+        {chartData && chartData.length > 0 &&
           <Box padding={0} borderRadius={10} marginX={2} >
-            <HStack space={2} justifyContent={'space-between'}>
+            <HStack space={2} justifyContent={'space-between'} alignItems={'center'}>
               <VStack>
                 <Text fontSize={'md'} fontWeight={'bold'} color={colorMode === 'dark' ? 'coolGray.100' : 'dark.300'} paddingTop={3} >{translations[language as keyof typeof translations].WalletHistory.total_balance}</Text>
                 <HStack paddingBottom={0} space={1}>
@@ -138,6 +145,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
                 </HStack>
               </VStack>
 
+              <NetworkIcon chainId={chainId || 0} updateChain={updateChain} />
             </HStack>
 
             <Chart
@@ -212,7 +220,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
           </Box>
         }
         {
-          <TransactionFeed navigation={navigation} tokenAddress={null} updateDefault={empty} />
+          <TransactionFeed navigation={navigation} tokenAddress={null} updateDefault={updateChain} chainId={chainId} />
         }
         {/*<MobileFooter navigation={navigation}></MobileFooter>*/}
       </VStack>

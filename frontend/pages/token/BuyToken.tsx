@@ -9,7 +9,7 @@ import { useRecoilState } from 'recoil';
 
 
 import { activeNetwork, activeWallet, networkList, language as stateLanguage, tokenList, transactionList, walletList } from "../../service/state";
-import { swapUrl } from '../../service/api';
+import { rampUrl } from '../../service/api';
 
 export default function BuyToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
@@ -18,7 +18,7 @@ export default function BuyToken({ navigation, route }: { navigation: { navigate
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet,] = useRecoilState(activeWallet);
 
-  const url = swapUrl(colorMode as string);
+  const url = rampUrl(colorMode as string);
   return (
     <>
       <WebView

@@ -12,7 +12,9 @@ import { useRecoilState } from "recoil";
 
 import { language as stateLanguage } from "../../service/state";
 import translations from "../../assets/translations";
-import QRCode from "react-qr-code";
+// import QRCode from "react-qr-code";
+import QRCode from 'react-native-qrcode-svg';
+import base64Logo from '../../assets/images/icon-green.png'
 
 export default function QRButton({ address }: { address: string }) {
   const [language,] = useRecoilState(stateLanguage);
@@ -36,9 +38,13 @@ export default function QRButton({ address }: { address: string }) {
               <Text marginY={8}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>
               <QRCode
                 size={350}
-                style={{ height: "auto", marginLeft: 'auto', marginRight: 'auto', maxWidth: "100%", width: "100%" }}
                 value={address}
-                viewBox={`0 0 200 200`}
+                //viewBox={`0 0 200 200`}
+                //logo={{ uri: base64Logo }}
+                logo={base64Logo}
+                logoSize={85}
+                logoBackgroundColor={'white'}
+                logoMargin={2}
               />
               <Text marginY={4}></Text>
             </Center>

@@ -77,10 +77,14 @@ export const deleteToken = async (token: Token) => {
 
 
 export const storeTokens = async (tokens: Token) => {
-  await EncryptedStorage.setItem(
-    "token_list",
-    JSON.stringify(tokens)
-  );
+  try {
+    await EncryptedStorage.setItem(
+      "token_list",
+      JSON.stringify(tokens)
+    );
+  } catch (err) {
+  }
+  
 };
 
 export const storeActiveToken = async (token: Token) => {
