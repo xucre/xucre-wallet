@@ -10,9 +10,6 @@ import React, { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
 import { NFT } from '../../types/nft';
 
-//import SvgUri from 'react-native-svg-uri';
-
-
 type CarousalType = {
   readonly imageUri: ImageSourcePropType;
   readonly name: string;

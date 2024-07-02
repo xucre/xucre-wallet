@@ -5,7 +5,7 @@ import _ethTokens from '../../assets/json/eth_tokens.json'
 import _polygonTokens from '../../assets/json/matic_tokens.json'
 import { BigNumber, getDefaultProvider, ethers } from 'ethers';
 import { getTokenBalances, getTokenPrices } from '../service/api';
-import { chainIdToNameMap, xucreToken } from '../service/constants';
+import { chainIdToNameMap, xucreToken, testWallet } from '../service/constants';
 import { getActiveNetwork } from '../store/network';
 import { isSpam } from '../store/spam';
 import { getActiveWallet, WalletInternal } from '../store/wallet';
@@ -40,7 +40,9 @@ function useTokens(initialValue = [] as Token[]) {
       const _provider = getDefaultProvider(_network.rpcUrl);
       const _wallet = (await getActiveWallet())[0] as AppWallet;
       const wallet = new WalletInternal(_wallet.wallet).connect(_provider);
-      const tokenResponse = (await getTokenBalances(_wallet.address.toLowerCase(), chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]));
+      //const walletAddress = __DEV__ ? testWallet : wallet.address;
+      const walletAddress = wallet.address;
+      const tokenResponse = (await getTokenBalances(walletAddress.toLowerCase(), chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]));
 
       const walletBalance = await wallet.connect(_provider).getBalance();
       if (tokenResponse === null) {
@@ -131,25 +133,26 @@ function useTokens(initialValue = [] as Token[]) {
   useEffect(() => {
     let isMounted = true;
     const runAsync = async () => {  
-      if (isMounted) setTokensLoading(true);
-      let _tokenList = {} as {[key:number] : Token[]};
-      Promise.allSettled(Object.keys(chainIdToNameMap).map(async (chainId) => {
-        if (chainId === '0') return;
-        const _tokens = await syncTokens(false, Number(chainId));
-        return _tokens;
-        //_tokenList = {..._tokenList, [chainId]: _tokens};
-        //if (isMounted) setTokens(prevState => {return{...prevState,  [chainId] : _tokens}});
-      })).then((tokens) => {
-        tokens.forEach((token, index) => {
-          if (token.status === 'fulfilled' && token.value && token.value.length > 0) {
-            _tokenList = {..._tokenList, [token.value[0].chainId]: token.value};
-          }
+      try{
+        if (isMounted) setTokensLoading(true);
+        let _tokenList = {} as {[key:number] : Token[]};
+        Promise.allSettled(Object.keys(chainIdToNameMap).map(async (chainId) => {
+          if (chainId === '0') return;
+          const _tokens = await syncTokens(false, Number(chainId));
+          return _tokens;
+          //_tokenList = {..._tokenList, [chainId]: _tokens};
+          //if (isMounted) setTokens(prevState => {return{...prevState,  [chainId] : _tokens}});
+        })).then((tokens) => {
+          tokens.forEach((token, index) => {
+            if (token.status === 'fulfilled' && token.value && token.value.length > 0) {
+              _tokenList = {..._tokenList, [token.value[0].chainId]: token.value};
+            }
+          });
+          //console.log(_tokenList)
+          if (isMounted) setTokens(_tokenList);
+          if (isMounted) setTokensLoading(false);
         });
-        //console.log(_tokenList)
-        if (isMounted) setTokens(_tokenList);
-        if (isMounted) setTokensLoading(false);
-      });
-      
+      } catch (err) {}
     }
     
     runAsync();
@@ -159,36 +162,39 @@ function useTokens(initialValue = [] as Token[]) {
   useEffect(() => {
     let isMounted = true;
     const runAsync2 = async () => {
-      Promise.allSettled(Object.keys(chainIdToNameMap).map(async (chainId) => {
-        if (chainId === '0') return null;
-        if (isMounted) await storeTokenItems(wallet.address, Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)));
-        const _tokenPrices = await getTokenPrices(Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)).map(token => token.address));
-        const _tokenPriceMap = _tokenPrices.reduce((acc: { [key: string]: TokenPrice }, _tokenPrice: any) => {
-          const tokenPrice = {
-            address: _tokenPrice.address,
-            chainId: chainId,
-            price: _tokenPrice.items[0].price,
-            prettyPrice: _tokenPrice.items[0].prettyPrice
-          } as TokenPrice;
-          return {
-            ...acc,
-            [`${_tokenPrice.address.toLowerCase()}:${chainId}`]: tokenPrice
-          } as TokenMap
-        }, {} as TokenMap);
-        //if (isMounted) setTokenPrices(previousValue => {return{...previousValue,  [Number(chainId)] : _tokenPriceMap}});
-        if (isMounted) await storeTokenPriceMap(wallet.address, Number(chainId), _tokenPriceMap);
-        return _tokenPriceMap;
-      })).then((tokenPrices_) => {
-        let _priceListTotal = {} as { [key:number] : TokenMap};
-        tokenPrices_.forEach((tokenPrice, index) => {
-          if (tokenPrice.status === 'fulfilled' && tokenPrice.value && Object.keys(tokenPrice.value).length > 0) {
-            const _priceList = tokenPrice.value as TokenMap
-            _priceListTotal = {..._priceListTotal, [Number(Object.values(_priceList)[0].chainId)]: _priceList};
-          }
-        })
-        if (isMounted) setTokenPrices(_priceListTotal);
-      });
-      
+      try {
+        //const walletAddress = __DEV__ ? testWallet : wallet.address;
+        const walletAddress = wallet.address;
+        Promise.allSettled(Object.keys(chainIdToNameMap).map(async (chainId) => {
+          if (chainId === '0') return null;
+          if (isMounted) await storeTokenItems(walletAddress, Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)));
+          const _tokenPrices = await getTokenPrices(Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)).map(token => token.address));
+          const _tokenPriceMap = _tokenPrices.reduce((acc: { [key: string]: TokenPrice }, _tokenPrice: any) => {
+            const tokenPrice = {
+              address: _tokenPrice.address,
+              chainId: chainId,
+              price: _tokenPrice.items[0].price,
+              prettyPrice: _tokenPrice.items[0].prettyPrice
+            } as TokenPrice;
+            return {
+              ...acc,
+              [`${_tokenPrice.address.toLowerCase()}:${chainId}`]: tokenPrice
+            } as TokenMap
+          }, {} as TokenMap);
+          //if (isMounted) setTokenPrices(previousValue => {return{...previousValue,  [Number(chainId)] : _tokenPriceMap}});
+          if (isMounted) await storeTokenPriceMap(walletAddress, Number(chainId), _tokenPriceMap);
+          return _tokenPriceMap;
+        })).then((tokenPrices_) => {
+          let _priceListTotal = {} as { [key:number] : TokenMap};
+          tokenPrices_.forEach((tokenPrice, index) => {
+            if (tokenPrice.status === 'fulfilled' && tokenPrice.value && Object.keys(tokenPrice.value).length > 0) {
+              const _priceList = tokenPrice.value as TokenMap
+              _priceListTotal = {..._priceListTotal, [Number(Object.values(_priceList)[0].chainId)]: _priceList};
+            }
+          })
+          if (isMounted) setTokenPrices(_priceListTotal);
+        });
+      } catch (err) {}
     }
     if (tokens.length > 0 && !tokensLoading) {
       runAsync2();

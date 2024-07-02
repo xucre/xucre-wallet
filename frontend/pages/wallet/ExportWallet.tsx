@@ -37,7 +37,6 @@ import { truncateString } from '../../service/utility';
 import SetPassword from "../../components/settings/SetPassword";
 import { Color } from "../../../GlobalStyles";
 import { googleLogoUrls } from "../../service/constants";
-import { SvgUri } from "react-native-svg";
 import { encryptPK, getKeyLocation, storeKeyLocation } from "../../store/setting";
 import walletTemplate from '../../assets/templates/exportWallet'
 import ContainedButton from "../../components/ui/ContainedButton";

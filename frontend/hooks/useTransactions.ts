@@ -6,7 +6,7 @@ import { CovalentTokenHistoryItem } from '../types/token';
 import { CovalentTransactionV3 } from '../service/transaction';
 import { useRecoilValue } from 'recoil';
 import { activeNetwork, activeWallet } from '../service/state';
-import { chainIdToNameMap } from '../service/constants';
+import { chainIdToNameMap, testWallet } from '../service/constants';
 import { getFeedItems, storeFeedItems } from '../store/transactionFeedItem';
 
 function useTransactions() {
@@ -21,7 +21,9 @@ function useTransactions() {
   
   const sync = async (save: boolean, chainId: number) => {
     if (save) setTransactionsRefreshing(true);
-    const _transactions = await getWalletTransactions(wallet.address, chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]);
+    //const walletAddress = __DEV__ ? testWallet : wallet.address;
+    const walletAddress = wallet.address;
+    const _transactions = await getWalletTransactions(walletAddress, chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]);
     if (save && _transactions && _transactions.covalent && _transactions.covalent.items) {
       setTransactions(previousValue => { return { ...previousValue, [chainId]: _transactions.covalent.items as CovalentTransactionV3[] } });
       setTransactionsRefreshing(false);
@@ -39,7 +41,9 @@ function useTransactions() {
   useEffect(() => {
     let isMounted = true;
     const runAsync = async (chainId: number) => {
-      const _existingItems = await getFeedItems(wallet.address, chainId);
+      //const walletAddress = __DEV__ ? testWallet : wallet.address;
+      const walletAddress = wallet.address;
+      const _existingItems = await getFeedItems(walletAddress, chainId);
       if (_existingItems && _existingItems?.length > 0) {
         if (isMounted) {
           setTransactions(previousValue => { return { ...previousValue, [chainId]: _existingItems } });
@@ -50,7 +54,7 @@ function useTransactions() {
       if (isMounted && _transactions) {
         setTransactions(previousValue => { return { ...previousValue, [chainId]: _transactions } });
         setTransactionsRefreshing(false);
-        storeFeedItems(wallet.address, chainId, transactions);
+        storeFeedItems(walletAddress, chainId, transactions);
       }
     }
     Object.keys(chainIdToNameMap).forEach(async (chainId) => {

@@ -60,7 +60,7 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         navigation.navigate('ViewWallet');
         break;
       case swapButton:
-        navigation.navigate('BuyToken');
+        navigation.navigate('SwapToken');
         //openSwap();
         break;
       case historyButton:

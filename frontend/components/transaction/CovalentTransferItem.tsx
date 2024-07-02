@@ -38,6 +38,7 @@ function CovalentTransferItemComponent({ navigation, transaction }: { navigation
       width={size}
       height={size}
       uri={data}
+      onError={() => { }}
     />
   }
 
@@ -45,23 +46,32 @@ function CovalentTransferItemComponent({ navigation, transaction }: { navigation
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
     //const isSvg = isSVGFormatImage(transaction.dex_details?.token_1_logo_url || transaction.gas_metadata?.logo_url);
     const isSvg = isSVGFormatImage(transaction.gas_metadata?.logo_url);
-    return (
-      <>
-        {isSvg &&
-          <Avatar bg={iconBackground(colorMode)} mr="1" size={10}>
-            <CustomIcon data={transaction.gas_metadata?.logo_url} size={24} />
-          </Avatar>
-        }
-        {!isSvg &&
-          <Avatar bg={iconBackground(colorMode)} mr="1" source={{
-            uri: transaction.gas_metadata?.logo_url || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
-          }} size={10}>
-            {iname}
-          </Avatar>
-        }
+    try {
+      return (
+        <>
+          {isSvg &&
+            <Avatar bg={iconBackground(colorMode)} mr="1" size={10}>
+              <CustomIcon data={transaction.gas_metadata?.logo_url} size={24} />
+            </Avatar>
+          }
+          {!isSvg &&
+            <Avatar bg={iconBackground(colorMode)} mr="1" source={{
+              uri: transaction.gas_metadata?.logo_url || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+            }} size={10}>
+              {iname}
+            </Avatar>
+          }
 
-      </>
-    )
+        </>
+      )
+    } catch (err) {
+      return <Avatar style={{ "display": loading ? 'none' : 'flex' }} bg="transparent" mr="1" source={{
+        uri: 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+      }} size={10}>
+        <Text>{iname}</Text>
+      </Avatar>
+    }
+
   }
 
   const getItemStatus = () => {

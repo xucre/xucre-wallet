@@ -142,12 +142,18 @@ export const processCovalentJsonData = (jsonData: { error: any; data: { items: a
             existingEntry.quoteRate = holding.quote_rate || 1;
             existingEntry.isTokenValue = holding.open.quote === null;
           } else {
-            output.openQuotesByDay.push({
+            const quoteObject = {
               date: date.format('MM/DD/YYYY'), 
               totalQuote: holding.open.quote || Number(ethers.utils.formatUnits(holding.open.balance, decimals)),
               quoteRate: holding.quote_rate || 1,
               isTokenValue: holding.open.quote === null,
-            });
+            };
+            if (quoteObject.totalQuote < 0) {
+              output.openQuotesByDay.push({...quoteObject, totalQuote: 0});
+            } else {              
+              output.openQuotesByDay.push(quoteObject);
+            }
+            
           }
 
           if (!mostRecentOpenQuote || mostRecentOpenQuote.timestamp as number < parseFloat(holding.timestamp)) {

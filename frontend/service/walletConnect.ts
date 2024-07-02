@@ -54,38 +54,8 @@ async function onDisplayNotification(id: string, translation_setting: string) {
   await notifee.displayNotification(notificationPayload);
 }
 
-const approveAutomatically = async (request: Web3WalletTypes.SessionProposal) => {
-  const walletList = await getWallets();
-  const accountList = walletList.map((wallet) => {
-    return [`eip155:1:${wallet.address}`, `eip155:137:${wallet.address}`];
-  })
-  const chainList = ['eip155:1', 'eip155:137'];
-
-  const eventList = ['eth_sendTransaction', 'personal_sign', 'eth_sign'];
-
-  const methodList = [EIP155_SIGNING_METHODS.ETH_SEND_RAW_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3, EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4, EIP155_SIGNING_METHODS.PERSONAL_SIGN, EIP155_SIGNING_METHODS.ETH_SIGN]
-
-  const payload = buildApprovedNamespaces({
-    proposal: request['params'],
-    supportedNamespaces: {
-      eip155: {
-        chains: chainList || ['eip155:1', 'eip155:137'],
-        accounts: accountList.flat(),
-        events: eventList,
-        methods: methodList,
-      },
-    },
-  });
-
-  const { topic, acknowledged } = await signClient.approveSession({
-    id: request['params']['id'],
-    namespaces: payload
-  });
-
-
-}
-
 const sessionProposal = (event: Web3WalletTypes.SessionProposal) => {
+  console.log('sessionProposal', event);
   if (AppState.currentState === 'active') {
     navigate('ConnectionRequest', {
       requestDetails: event
@@ -150,7 +120,10 @@ const sessionRequest = (event: Web3WalletTypes.SessionRequest) => {
 
 const sessionDelete = (event: Web3WalletTypes.SessionDelete) => {
   // React to session delete event
-  signClient.core.pairing.disconnect({ topic: event.topic });
+  console.log('sessionDelete', event);
+  try {
+    //signClient.core.pairing.disconnect({ topic: event.topic });
+  } catch (err) {}  
 }
 
 const proposalExpire = (event: Web3WalletTypes.ProposalExpire) => {
@@ -161,7 +134,7 @@ const proposalExpire = (event: Web3WalletTypes.ProposalExpire) => {
 }
 
 export async function createSignClient() {
-  
+  console.log(`createSignClient hasloaded - ${hasLoaded}`);
   if (hasLoaded) return signClient;
   const scheme = Platform.OS === 'android' ? env.REACT_APP_XUCRE_WALLET_SCHEME : env.REACT_APP_XUCRE_WALLET_SCHEME_IOS;
   

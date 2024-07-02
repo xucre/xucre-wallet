@@ -1,6 +1,6 @@
 
 import { ethers, getDefaultProvider, providers, Wallet } from 'ethers';
-import { ScrollView, Text, useColorMode } from 'native-base';
+import { Button, ScrollView, Text, useColorMode } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import React, { useEffect, useRef, useState } from 'react';
 //import { renderToString } from 'react-dom/server';
@@ -17,6 +17,8 @@ import { useIsFocused } from '@react-navigation/core';
 import { Token } from '../../service/token';
 import { getActiveNetwork } from '../../store/network';
 import { useMixpanel } from '../../hooks/useMixpanel';
+import { swapUrl } from '../../service/api';
+import DappHeader from '../../components/dapp/DappHeader';
 
 export default function SwapToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -40,23 +42,20 @@ export default function SwapToken({ navigation, route }: { navigation: { navigat
   }, [isFocused])
   //const url = 'https://app.uniswap.org/#/swap';
   let webViewRef: any = useRef(null);
-  const onRefresh = () => {
-    if (webViewRef.current) {
-
-      webViewRef.current.clearCache(true)
-      webViewRef.current.reload();
-    }
-  }
-  const url = 'https://swap.xucre.net/swap?wallet=xucre';
+  //const url = 'https://swap.xucre.net/swap?wallet=xucre';
+  const url = swapUrl(colorMode as string);
   return (
-    <WebView
-      height={'100%'}
-      source={{ uri: url }}
-      ref={(ref) => {
-        if (ref) {
-          webViewRef.current = ref
-        }
-      }}
-    />
+    <>
+      <DappHeader navigation={navigation} webViewRef={webViewRef} page={'SwapToken'} />
+      <WebView
+        height={'100%'}
+        source={{ uri: url }}
+        ref={(ref) => {
+          if (ref) {
+            webViewRef.current = ref
+          }
+        }}
+      />
+    </>
   )
 }

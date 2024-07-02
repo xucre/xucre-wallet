@@ -8,7 +8,6 @@ import {
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
-//import SvgUri from 'react-native-svg-uri';
 
 import ArbLogo from '../../assets/images/arb_logo.png';
 import EthLogo from '../../assets/images/eth_logo.png';

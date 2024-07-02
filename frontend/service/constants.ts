@@ -364,6 +364,8 @@ export const googleLogoUrls = {
   'es': 'https://xucre-public.s3.sa-east-1.amazonaws.com/es_add_to_google_wallet-button.svg',
 }
 
+export const testWallet = '0x30955BaBD69eAc1179e292DC0F0A447F0e1b9c0c';
+
 export const extensionList = (language: string) => {
   const languageKey = language as keyof typeof translations;
   return [

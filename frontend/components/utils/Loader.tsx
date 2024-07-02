@@ -145,6 +145,7 @@ export default function Loader() {
   }
 
   const defaultRouting = async () => {
+    console.log('defaultRouting firing');
     const _hasSigned = await hasSignedPrivacyPolicy();
     if (navigationRef.current?.getCurrentRoute()?.name === 'Home') {
       if (languageDefault) {
@@ -168,9 +169,9 @@ export default function Loader() {
 
   useEffect(() => {
     if (!loading) {
-      setTimeout(() => {
-        handleLoad();
-      }, 1000)
+      // setTimeout(() => {
+      handleLoad();
+      // }, 1000)
     }
   }, [loading])
 

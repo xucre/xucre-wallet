@@ -4,7 +4,7 @@ import { getTokenTransferHistory, getWalletHistory } from '../service/api';
 import { CovalentTokenHistoryItem } from '../types/token';
 import { useRecoilValue } from 'recoil';
 import { activeNetwork, activeWallet } from '../service/state';
-import { chainIdToNameMap } from '../service/constants';
+import { chainIdToNameMap, testWallet } from '../service/constants';
 import { getTokenHistoryItems, storeTokenHistoryItems } from '../store/token';
 import { ChartData, HistoryStore, mergeChartData, TrendData } from '../types/history';
 import dayjs from 'dayjs';
@@ -34,8 +34,10 @@ function useWalletHistory() {
   const sync = async (save: boolean, chainId: number) => {
     if (save) setIsRefreshing(true);
     try {
+      //const walletAddress = __DEV__ ? testWallet : wallet.address;
+      const walletAddress = wallet.address;
       const chainName = chainIdToNameMap[chainId as keyof typeof chainIdToNameMap] || 'eth-mainnet';
-      const historyResults = await getWalletHistory(wallet.address, chainName);
+      const historyResults = await getWalletHistory(walletAddress, chainName);
       const { openQuotes: _finalQuotes, isReady } = processCovalentJsonData(historyResults, null);
       if (_finalQuotes && _finalQuotes.quotes.length > 0) {
         const finalQuotes = _finalQuotes.quotes;
@@ -54,7 +56,7 @@ function useWalletHistory() {
         }, {} as { [key: string]: ChartData });
         
         const _quotes = Object.values(quoteMap);
-        const _chartData = _quotes.length > 7 ? _quotes.reverse().splice(0, 7) : _quotes.reverse();
+        const _chartData = _quotes.length > 7 ? _quotes.splice(0, 7) : _quotes;
         const lastQuote = {..._chartData[_chartData.length - 1]};
         const secondToLastQuote = _chartData[_chartData.length - 2];
         const numerator = secondToLastQuote.y - lastQuote.y;
@@ -99,9 +101,11 @@ function useWalletHistory() {
 
   useEffect(() => {
     let isMounted = true;
+    //const walletAddress = __DEV__ ? testWallet : wallet.address;
+    const walletAddress = wallet.address;
     const getData = async (chainId:number) => {
       try {
-        const _existingItems = await retrieveWalletHistory(wallet.address, chainId)
+        const _existingItems = await retrieveWalletHistory(walletAddress, chainId)
         if (_existingItems && !_existingItems.isZeroData && _existingItems.chartData && _existingItems.chartData.length > 0) {
           if (isMounted) {
             setCurrentHoldings(previousValue => { return { ...previousValue, [chainId]: _existingItems.currentHoldings } });
@@ -123,9 +127,9 @@ function useWalletHistory() {
         setChartData(previousValue => { return { ...previousValue, [chainId]: _data.chartData } });
         setIsZeroData(previousValue => previousValue || _data.isZeroData)
       }
-      if (_data) storeWalletHistory(wallet.address, chainId, _data);
+      if (_data) storeWalletHistory(walletAddress, chainId, _data);
     }
-    if (wallet.address) {
+    if (walletAddress) {
       Object.keys(chainIdToNameMap).forEach((chainId) => {
         if (chainId === '0') return;
         getData(Number(chainId))
@@ -133,20 +137,6 @@ function useWalletHistory() {
     }
     return () => { isMounted = false }
   }, [wallet])
-
-  /*useEffect(() => {
-    let isMounted = true;
-    const runAsync = async () => {
-      if (isMounted && isValid()) storeWalletHistory(wallet.address, network.chainId, {chartData, currentHoldings, isZeroData, secondToLastHoldings} as HistoryStore);
-    }
-    if (chartData && chartData.length > 0) {
-      runAsync();
-    }
-    return () => {
-      isMounted = false;
-    }
-  }, [currentHoldings, chartData, isZeroData, secondToLastHoldings])*/
-
 
   return { currentHoldings, chartData, isZeroData, secondToLastHoldings, chartDataTotal, currentHoldingsTotal, refreshing, reset };
 }

@@ -3,9 +3,11 @@ import axios from "axios";
 import { env } from './constants';
 
 const BASEURL = env.REACT_APP_API_URL;
-export const swapUrl = (color: string) => `https://swap.xucre.net/swap?wallet=xucre&color=${color}`;
+//const url = 'https://nasty-bears-grab.loca.lt/swap?wallet=xucre&color=';
+const url = 'https://swap.xucre.net/swap?wallet=xucre&color=';
+export const swapUrl = (color: string) => `${url}${color}`;
 
-export const rampUrl = (color: string) => `https://swap.xucre.net/ramp?wallet=xucre&color=${color}`;
+export const rampUrl = (color: string) => `${url}${color}`;
 export const getNftJson = async (type: string) => {
   try {
     const instance = axios.create({

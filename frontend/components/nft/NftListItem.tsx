@@ -11,7 +11,6 @@ import {
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
-//import SvgUri from 'react-native-svg-uri';
 
 import { getMetadata } from "../../service/blockdaemon";
 import { truncateString_old } from '../../service/utility';

@@ -7,7 +7,6 @@ import {
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { ImageSourcePropType, Linking } from 'react-native';
-//import SvgUri from 'react-native-svg-uri';
 
 
 type CarousalType = {
