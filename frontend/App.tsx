@@ -27,6 +27,7 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  useToast,
 } from "native-base";
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
@@ -190,6 +191,7 @@ export default function App(): JSX.Element {
 
 export const AppWrapper = () => {
   const mixpanel = useMixpanel();
+  const toast = useToast();
   const [fontsLoaded] = useFonts({
     'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
   });
@@ -281,7 +283,7 @@ export const AppWrapper = () => {
           }
         } catch (e) {
           //console.log(e);
-          throw e;
+          toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
         }
       }
 
