@@ -86,7 +86,7 @@ import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import ProfileList from './pages/social/ProfileList';
 import { navigate, navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
-import { createSignClient, signClient } from './service/walletConnect';
+import { createSignClient, signClient, mixpanel } from './service/walletConnect';
 import whatsapp from './service/whatsapp';
 import { getNotification, getTheme, storeTheme } from './store/setting';
 
@@ -102,7 +102,7 @@ import EthicHub from './pages/extensions/ethichub/EthicHub';
 import ViewToken from './pages/token/ViewToken';
 //import TransactionFeed from './pages/wallet/TransactionFeed';
 //Import Mixpanel API
-import { MixpanelProvider } from './hooks/useMixpanel';
+import { MixpanelProvider, useMixpanel } from './hooks/useMixpanel';
 import UnlimitWidget from './pages/extensions/unlimit/UnlimitWidget';
 
 const Stack = createNativeStackNavigator();
@@ -189,6 +189,7 @@ export default function App(): JSX.Element {
 }
 
 export const AppWrapper = () => {
+  const mixpanel = useMixpanel();
   const [fontsLoaded] = useFonts({
     'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
   });
@@ -213,7 +214,7 @@ export const AppWrapper = () => {
       try {
         //('isdev', __DEV__)
         if (!signClient) {
-          await createSignClient();
+          await createSignClient(mixpanel);
         }
 
       } catch (err) {
@@ -282,6 +283,21 @@ export const AppWrapper = () => {
       isMounted = false;
     }
   }, []);
+
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      // Get the deep link used to open the app
+      const initialUrl = await Linking.getInitialURL();
+
+      mixpanel.track('Initial Url', {
+        initialUrl
+      });
+    };
+
+    if (mixpanel) {
+      getUrlAsync();
+    }
+  }, [mixpanel])
 
   const hideHeader = (name: string) => {
     if (
