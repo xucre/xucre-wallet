@@ -25,42 +25,43 @@ export let signClient:Client;
 let hasLoaded = false;
 
 async function onDisplayNotification(id: string, translation_setting: string) {
-  const _language = await getLanguage();
+  try {
+    const _language = await getLanguage();
 
-  // Create a channel (required for Android)
-  const channelId = await notifee.createChannel({
-    id: 'default',
-    name: 'Default Channel',
-  });
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
 
-  // Display a notification
-  const notificationPayload = {
-    android: {
-      channelId,
-      largeIcon: require('../assets/images/icon.png'),
-      pressAction: {
-        id: id,
-        launchActivity: 'default',
-        launchActivityFlags: [AndroidLaunchActivityFlag.SINGLE_TOP], 
+    // Display a notification
+    const notificationPayload = {
+      android: {
+        channelId,
+        largeIcon: require('../assets/images/icon.png'),
+        pressAction: {
+          id: id,
+          launchActivity: 'default',
+          launchActivityFlags: [AndroidLaunchActivityFlag.SINGLE_TOP], 
+        },
+        // TODO - Asset Hosting for icon
+        //smallIcon: 'notification_icon', 
       },
-      // TODO - Asset Hosting for icon
-      //smallIcon: 'notification_icon', 
-    },
-    body: translations[_language as keyof typeof translations].WalletConnect[translation_setting][1],
+      body: translations[_language as keyof typeof translations].WalletConnect[translation_setting][1],
+      
+      title: translations[_language as keyof typeof translations].WalletConnect[translation_setting][0],
+    };
     
-    title: translations[_language as keyof typeof translations].WalletConnect[translation_setting][0],
-  };
-  
-  await notifee.displayNotification(notificationPayload);
+    await notifee.displayNotification(notificationPayload);
+  } catch (err) {}
 }
 
 const sessionProposal = (event: Web3WalletTypes.SessionProposal) => {
-  console.log('sessionProposal', event);
-  if (AppState.currentState === 'active') {
-    navigate('ConnectionRequest', {
-      requestDetails: event
-    })
-  } else {
+  //console.log('sessionProposal', event);
+  navigate('ConnectionRequest', {
+    requestDetails: event
+  })
+  if (AppState.currentState !== 'active') {
     addNotification(String(event.id), event);
     onDisplayNotification(String(event.id), 'session_proposal');
   }
@@ -78,6 +79,11 @@ const sessionRequest = (event: Web3WalletTypes.SessionRequest) => {
       navigate('SignTyped', {
         requestDetails: event
       })
+    } else if (AppState.currentState === 'background') {
+      onDisplayNotification(String(event.id), 'session_request_sign_tx');
+      navigate('SignTyped', {
+        requestDetails: event
+      })
     } else {
       onDisplayNotification(String(event.id), 'session_request_sign_tx');
     }
@@ -86,6 +92,11 @@ const sessionRequest = (event: Web3WalletTypes.SessionRequest) => {
     event.params.request.method === EIP155_SIGNING_METHODS.PERSONAL_SIGN
   ) {
     if (AppState.currentState === 'active') {
+      navigate('SignEth', {
+        requestDetails: event
+      })
+    } else if (AppState.currentState === 'background') {
+      onDisplayNotification(String(event.id), 'session_request_sign_tx');
       navigate('SignEth', {
         requestDetails: event
       })
@@ -99,6 +110,11 @@ const sessionRequest = (event: Web3WalletTypes.SessionRequest) => {
       navigate('SignTransaction', {
         requestDetails: event
       })
+    } else if (AppState.currentState === 'background') {
+      onDisplayNotification(String(event.id), 'session_request_sign_tx');
+      navigate('SignTransaction', {
+        requestDetails: event
+      })
     } else {
       onDisplayNotification(String(event.id), 'session_request_sign_tx');
     }
@@ -107,6 +123,11 @@ const sessionRequest = (event: Web3WalletTypes.SessionRequest) => {
     event.params.request.method === EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION
   ) {
     if (AppState.currentState === 'active') {
+      navigate('SendTransaction', {
+        requestDetails: event
+      })
+    } else if (AppState.currentState === 'background') {
+      onDisplayNotification(String(event.id), 'session_request_sign_tx');
       navigate('SendTransaction', {
         requestDetails: event
       })
