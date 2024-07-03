@@ -266,27 +266,30 @@ export const AppWrapper = () => {
       //     req
       //   });
       // }
-      toast.show({ description: `Request ${JSON.stringify(req)}` });
       const parsedUrl = parseUrl(req.url);
+      console.log(parsedUrl);
       if (parsedUrl.resource === 'ViewWallet') {
         navigate('SelectWallet', {});
       } else {
-        try {
-          if (signClient) {
-            toast.show({ description: `ParsedUrl ${JSON.stringify(parsedUrl)}` });
-            if (parsedUrl.query.requestId) {
-              //  do nothing
-            } else if (parsedUrl.query.uri) {
-              await signClient.pair({ uri: parsedUrl.query.uri })
-            } else if (parsedUrl.protocol === 'wc') {
-              await signClient.pair({ uri: req.url })
-            }
-
-          }
-        } catch (e) {
-          //console.log(e);
-          toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+        //try {
+        //if (signClient) {
+        if (parsedUrl.query.requestId) {
+          //  do nothing
+        } else if (parsedUrl.query.uri) {
+          signClient.pair({ uri: parsedUrl.query.uri }).catch((e) => {
+            toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+          })
+        } else if (parsedUrl.protocol === 'wc') {
+          signClient.pair({ uri: req.url }).catch((e) => {
+            toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+          })
         }
+
+        //}
+        //} catch (e) {
+        //console.log(e);
+        //toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+        //}
       }
 
     })
