@@ -12,6 +12,7 @@ import { navigate } from './RootNavigation';
 import { env } from './constants';
 import { getWallets } from '../store/wallet';
 import { buildApprovedNamespaces } from '@walletconnect/utils';
+import { Mixpanel } from 'mixpanel-react-native';
 const core = Platform.OS === 'android' ? new Core({
   projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
   relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
@@ -22,6 +23,8 @@ const core = Platform.OS === 'android' ? new Core({
 
 // eslint-disable-next-line functional/no-let
 export let signClient:Client;
+// eslint-disable-next-line functional/no-let
+export let mixpanel: Mixpanel;
 let hasLoaded = false;
 
 async function onDisplayNotification(id: string, translation_setting: string) {
@@ -58,6 +61,13 @@ async function onDisplayNotification(id: string, translation_setting: string) {
 
 const sessionProposal = (event: Web3WalletTypes.SessionProposal) => {
   //console.log('sessionProposal', event);
+  if (mixpanel) {
+    mixpanel.track('Session Proposal', {
+      id: event.id,
+      details: event.params,
+      context: event.verifyContext
+    });
+  }
   navigate('ConnectionRequest', {
     requestDetails: event
   })
@@ -154,8 +164,9 @@ const proposalExpire = (event: Web3WalletTypes.ProposalExpire) => {
   } 
 }
 
-export async function createSignClient() {
+export async function createSignClient(_mixpanel: Mixpanel) {
   console.log(`createSignClient hasloaded - ${hasLoaded}`);
+  mixpanel = _mixpanel;
   if (hasLoaded) return signClient;
   const scheme = Platform.OS === 'android' ? env.REACT_APP_XUCRE_WALLET_SCHEME : env.REACT_APP_XUCRE_WALLET_SCHEME_IOS;
   
