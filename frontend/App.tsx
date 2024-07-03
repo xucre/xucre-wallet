@@ -257,6 +257,9 @@ export const AppWrapper = () => {
     });
 
     Linking.addEventListener('url', async (req) => {
+      mixpanel.track('Deep Link Triggered', {
+        req
+      });
       const parsedUrl = parseUrl(req.url);
       if (parsedUrl.resource === 'ViewWallet') {
         navigate('SelectWallet', {});
