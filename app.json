@@ -2,7 +2,7 @@
   "expo": {
     "name": "Xucre Wallet",
     "slug": "xucre-mobile",
-    "scheme": "xucre",
+    "scheme": ["xucre", "wc"],
     "version": "1.0.20",
     "orientation": "portrait",
     "icon": "./assets/image/icon.png",

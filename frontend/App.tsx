@@ -251,15 +251,19 @@ export const AppWrapper = () => {
     runAsync();
     //Linking.resolveScheme({ scheme: 'com.xucre.expo.client' })
     const prefix = Linking.createURL('/');
+    //const wcprefix = Linking.createURL('/', { scheme: 'wc' });
+
 
     setLinking({
-      prefixes: [prefix],
+      prefixes: [prefix, 'wc'],
     });
 
     Linking.addEventListener('url', async (req) => {
-      mixpanel.track('Deep Link Triggered', {
-        req
-      });
+      // if (mixpanel) {
+      //   mixpanel.track('Deep Link Triggered', {
+      //     req
+      //   });
+      // }
       const parsedUrl = parseUrl(req.url);
       if (parsedUrl.resource === 'ViewWallet') {
         navigate('SelectWallet', {});
@@ -277,6 +281,7 @@ export const AppWrapper = () => {
           }
         } catch (e) {
           //console.log(e);
+          throw e;
         }
       }
 
@@ -291,10 +296,11 @@ export const AppWrapper = () => {
     const getUrlAsync = async () => {
       // Get the deep link used to open the app
       const initialUrl = await Linking.getInitialURL();
-
-      mixpanel.track('Initial Url', {
-        initialUrl
-      });
+      if (mixpanel.track) {
+        mixpanel.track('Initial Url', {
+          initialUrl
+        });
+      }
     };
 
     if (mixpanel) {
