@@ -273,6 +273,7 @@ export const AppWrapper = () => {
       } else {
         try {
           if (signClient) {
+            toast.show({ description: `ParsedUrl ${JSON.stringify(parsedUrl)}` });
             if (parsedUrl.query.requestId) {
               //  do nothing
             } else if (parsedUrl.query.uri) {
