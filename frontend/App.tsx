@@ -266,6 +266,7 @@ export const AppWrapper = () => {
       //     req
       //   });
       // }
+      toast.show({ description: `Request ${JSON.stringify(req)}` });
       const parsedUrl = parseUrl(req.url);
       if (parsedUrl.resource === 'ViewWallet') {
         navigate('SelectWallet', {});
