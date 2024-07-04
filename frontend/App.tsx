@@ -274,13 +274,17 @@ export const AppWrapper = () => {
         //try {
         //if (signClient) {
         if (parsedUrl.query.requestId) {
-          //  do nothing
+          toast.show({ description: `Invalid Pair Request ${parsedUrl.query}` });
         } else if (parsedUrl.query.uri) {
-          signClient.pair({ uri: parsedUrl.query.uri }).catch((e) => {
+          signClient.pair({ uri: parsedUrl.query.uri }).then(() => {
+            toast.show({ description: `Paired with wallet` });
+          }).catch((e) => {
             toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
           })
         } else if (parsedUrl.protocol === 'wc') {
-          signClient.pair({ uri: req.url }).catch((e) => {
+          signClient.pair({ uri: req.url }).then(() => {
+            toast.show({ description: `Paired with wallet` });
+          }).catch((e) => {
             toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
           })
         }
