@@ -266,8 +266,10 @@ export const AppWrapper = () => {
       //     req
       //   });
       // }
+      if (!signClient || signClient.name.length === 0) {
+        await createSignClient(mixpanel);
+      }
       const parsedUrl = parseUrl(req.url);
-      console.log(parsedUrl);
       if (parsedUrl.resource === 'ViewWallet') {
         navigate('SelectWallet', {});
       } else {

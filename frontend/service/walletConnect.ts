@@ -13,6 +13,7 @@ import { env } from './constants';
 import { getWallets } from '../store/wallet';
 import { buildApprovedNamespaces } from '@walletconnect/utils';
 import { Mixpanel } from 'mixpanel-react-native';
+import { Toast } from 'native-base';
 const core = Platform.OS === 'android' ? new Core({
   projectId: env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
   relayUrl: env.REACT_APP_WALLET_CONNECT_RELAY_URL,
@@ -167,7 +168,7 @@ const proposalExpire = (event: Web3WalletTypes.ProposalExpire) => {
 export async function createSignClient(_mixpanel: Mixpanel) {
   console.log(`createSignClient hasloaded - ${hasLoaded}`);
   mixpanel = _mixpanel;
-  if (hasLoaded) return signClient;
+  if (hasLoaded && signClient) return signClient;
   const scheme = Platform.OS === 'android' ? env.REACT_APP_XUCRE_WALLET_SCHEME : env.REACT_APP_XUCRE_WALLET_SCHEME_IOS;
   
   const initConfig = Platform.OS === 'ios' && !__DEV__ ? 
@@ -197,6 +198,7 @@ export async function createSignClient(_mixpanel: Mixpanel) {
   } as Web3WalletTypes.Options;
   
   signClient = await Web3Wallet.init(initConfig);
+  Toast.show({ title: 'Client Initialized'})
   //console.log(signClient)
   //signClient = await SignClient.init(initConfig)
   if (signClient) {
