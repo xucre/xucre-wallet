@@ -1,3 +1,5 @@
+
+import '@walletconnect/react-native-compat';
 import notifee, { AndroidLaunchActivityFlag } from '@notifee/react-native';
 import { Core } from '@walletconnect/core'
 import Client, { Web3Wallet, IWeb3Wallet, Web3WalletTypes } from '@walletconnect/web3wallet'
@@ -198,7 +200,7 @@ export async function createSignClient(_mixpanel: Mixpanel) {
   } as Web3WalletTypes.Options;
   
   signClient = await Web3Wallet.init(initConfig);
-  Toast.show({ title: 'Client Initialized'})
+  Toast.show({ title: 'Client Initialized', description: `${signClient.name}`})
   //console.log(signClient)
   //signClient = await SignClient.init(initConfig)
   if (signClient) {
