@@ -200,7 +200,7 @@ export async function createSignClient(_mixpanel: Mixpanel) {
   } as Web3WalletTypes.Options;
   
   signClient = await Web3Wallet.init(initConfig);
-  //Toast.show({ title: 'Client Initialized', description: `${signClient.name}`})
+  Toast.show({ title: 'Client Initialized', description: `${signClient.name}`})
   //console.log(signClient)
   //signClient = await SignClient.init(initConfig)
   if (signClient) {
