@@ -22,7 +22,7 @@
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/netinfo": "9.3.10",
     "@react-navigation/native": "^6.1.9",
-    "@react-navigation/native-stack": "^6.9.16",
+    "@react-navigation/native-stack": "^6.9.26",
     "@testing-library/react-native": "^12.4.4",
     "@types/jest": "^29.5.12",
     "@walletconnect/core": "^2.12.1",
