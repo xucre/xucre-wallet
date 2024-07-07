@@ -261,43 +261,33 @@ export const AppWrapper = () => {
     });
 
     Linking.addEventListener('url', async (req) => {
-      // if (mixpanel) {
-      //   mixpanel.track('Deep Link Triggered', {
-      //     req
-      //   });
-      // }
-      if (!signClient || signClient.name.length === 0) {
-        await createSignClient(mixpanel);
-      }
-      const parsedUrl = parseUrl(req.url);
-      if (parsedUrl.resource === 'ViewWallet') {
-        navigate('SelectWallet', {});
-      } else {
-        //try {
-        //if (signClient) {
-        if (parsedUrl.query.requestId) {
-          toast.show({ description: `Invalid Pair Request ${parsedUrl.query}` });
-        } else if (parsedUrl.query.uri) {
-          signClient.pair({ uri: parsedUrl.query.uri }).then(() => {
-            toast.show({ description: `Paired with wallet` });
-          }).catch((e) => {
-            toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
-          })
-        } else if (parsedUrl.protocol === 'wc') {
-          signClient.pair({ uri: req.url }).then(() => {
-            toast.show({ description: `Paired with wallet` });
-          }).catch((e) => {
-            toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
-          })
+      try {
+        if (!signClient || signClient.name.length === 0) {
+          await createSignClient(mixpanel);
         }
-
-        //}
-        //} catch (e) {
-        //console.log(e);
-        //toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
-        //}
+        const parsedUrl = parseUrl(req.url);
+        if (parsedUrl.resource === 'ViewWallet') {
+          navigate('SelectWallet', {});
+        } else {
+          if (parsedUrl.query.requestId) {
+            toast.show({ description: `Invalid Pair Request ${parsedUrl.query}` });
+          } else if (parsedUrl.query.uri) {
+            signClient.pair({ uri: parsedUrl.query.uri }).then(() => {
+              toast.show({ description: `Paired with wallet` });
+            }).catch((e) => {
+              toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+            })
+          } else if (parsedUrl.protocol === 'wc') {
+            signClient.pair({ uri: req.url }).then(() => {
+              toast.show({ description: `Paired with wallet` });
+            }).catch((e) => {
+              toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+            })
+          }
+        }
+      } catch (e) {
+        toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
       }
-
     })
 
     return () => {

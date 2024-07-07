@@ -145,7 +145,6 @@ export default function Loader() {
   }
 
   const defaultRouting = async () => {
-    console.log('defaultRouting firing');
     const _hasSigned = await hasSignedPrivacyPolicy();
     if (navigationRef.current?.getCurrentRoute()?.name === 'Home') {
       if (languageDefault) {

@@ -63,7 +63,6 @@ async function onDisplayNotification(id: string, translation_setting: string) {
 }
 
 const sessionProposal = (event: Web3WalletTypes.SessionProposal) => {
-  console.log('sessionProposal', event);
   // if (mixpanel && mixpanel.track) {
   //   mixpanel.track('Session Proposal', {
   //     id: event.id,

@@ -29,7 +29,6 @@ export default function NetworkIcon({ chainId, updateChain }: { chainId: number,
   //{translations[language].BasePage.title}
 
   const setChain = (_chainId: number) => {
-    console.log('setchain', _chainId, network.chainId);
     const chain = chainIdMap[_chainId];
     if ((network && network.chainId === _chainId)) {
       updateChain(_chainId);
