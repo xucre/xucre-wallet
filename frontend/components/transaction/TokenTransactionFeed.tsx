@@ -26,7 +26,7 @@ export default function TransactionFeed({ navigation, tokenAddress, chainId }: {
   //const [refreshing, setRefreshing] = useState(false);
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
-  const { transactions, refreshing, reset } = useTokenHistory(tokenAddress, chainId);
+  const { transactions, refreshing, reset } = useTokenHistory(tokenAddress, chainId || 0);
 
   const syncTransactions = async () => {
     await reset();

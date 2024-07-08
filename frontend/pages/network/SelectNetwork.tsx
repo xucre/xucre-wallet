@@ -99,7 +99,7 @@ export default function SelectNetwork({ navigation, route }: { navigation: { nav
     }
 
 
-    const isActiveNetwork = _activeNetwork.chainId === metadata.chainId;
+    const isActiveNetwork = _activeNetwork && metadata && _activeNetwork.chainId === metadata.chainId;
 
     const avatar = 'https://xucre-public.s3.sa-east-1.amazonaws.com/' + metadata.symbol.toLowerCase() + '.png' || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png';
 

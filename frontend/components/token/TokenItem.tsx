@@ -39,14 +39,16 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
   useEffect(() => {
     let isMounted = true;
     const runAsyncAvatar = async () => {
-      if (token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
+      if (token && token.chainId && token.type === 'coin' && coinIconNames[token.chainId as keyof typeof coinIconNames]) {
         setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
-      } else if (token.chainId && token.type === 'token' && tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames]) {
+      } else if (token && token.chainId && token.type === 'token' && tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames]) {
         setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + tokenIconNames[(token.chainId + '-' + token.address.toLowerCase()) as keyof typeof tokenIconNames].toLowerCase() + '.png');
       } else {
         //setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/placeholdericon.png');
       }
-      setNetworkAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
+      if (token) {
+        setNetworkAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
+      }
 
       if (Platform.OS === 'ios') {
         if (isMounted) setLoading(false);
@@ -81,6 +83,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
 
   const _isSpam = async (save: boolean) => {
     //return false;
+    if (!token.chainId) return false;
     if (token.type === 'coin') {
       if (save) setAmISpam(false);
       return false;
@@ -160,7 +163,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
   const computedSymbol = alchemyMetadata?.symbol ? truncateString_old(alchemyMetadata.symbol, 8) : (token?.symbol || token?.name || 'N/A');
   const convertedValue = () => {
     const ethersValue = Number(ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata?.decimals || 18));
-    const tokenPrice = price && price[token.chainId] ? price[token.chainId][`${token.address.toLowerCase()}:${token.chainId}`]?.price || 0 : 0;
+    const tokenPrice = price && token.chainId && price[token.chainId] ? price[token.chainId][`${token.address.toLowerCase()}:${token.chainId}`]?.price || 0 : 0;
     const usdValue = ethersValue * tokenPrice;
     if (conversionRate && conversionRate.value) {
       const _convertedValue = usdValue * conversionRate.value;
@@ -178,7 +181,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
     <HStack alignItems="center" justifyContent="space-between" py={2}>
       <Pressable onPress={() => { viewToken() }}>
         <HStack alignItems="center" space={{ base: 3, md: 6 }}>
-          <TokenIcon iname={token.type == 'coin' ? coinIconNames[token.chainId as keyof typeof coinIconNames] : truncateString_old(token.address, 3) as string} />
+          <TokenIcon iname={token.type == 'coin' && token.chainId ? coinIconNames[token.chainId as keyof typeof coinIconNames] : truncateString_old(token.address, 3) as string} />
           <VStack>
             <Text fontSize="md" bold>
               {computedSymbol}

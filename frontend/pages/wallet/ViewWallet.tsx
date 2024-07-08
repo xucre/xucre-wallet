@@ -70,12 +70,12 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   const buttonRamp = translations[language as keyof typeof translations].Buttons_Header.ramp;
 
   useEffect(() => {
-    if (_wallet.name === '' && _walletList.length === 0) {
+    if (_wallet && _walletList && _wallet.name === '' && _walletList.length === 0) {
       navigation.navigate('SelectWallet');
     } else {
-      if (_wallet.name === '') {
+      if (_wallet && _wallet.name === '') {
         setWallet(new WalletInternal(_walletList[0].wallet));
-      } else {
+      } else if (_wallet) {
         setWallet(new WalletInternal(_wallet.wallet));
       }
     }

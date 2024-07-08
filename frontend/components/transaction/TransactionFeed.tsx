@@ -27,7 +27,7 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
     await reset();
   }
 
-  const transactions = chainId !== 0 ? transactionsTotal[chainId] : _transactions;
+  const transactions = !chainId && chainId !== 0 ? transactionsTotal[chainId] : _transactions;
   const filteredTransactions = !transactions ? [] : transactions.filter((transaction) =>
     (tokenAddress &&
       (compareAddresses(transaction.to_address, tokenAddress) || compareAddresses(transaction.from_address, tokenAddress))

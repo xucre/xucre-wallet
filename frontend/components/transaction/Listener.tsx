@@ -45,66 +45,6 @@ export default function Listener() {
     title: translations[language as keyof typeof translations].Listener.failure_message,
     variant: "solid",
   };
-  /*useEffect(() => {
-    const runAsync = async () => {
-      if (_transactions.length > 0) {
-        await Promise.all(_transactions.map(async (transaction) => {
-
-          const result = await transaction.wait();
-          if (result.status === 1) {
-            const toastItem = { ...successToast, description: transaction.hash, id: transaction.hash };
-            toast.show({
-              render: ({
-                id
-              }) => {
-                return <ToastAlert {...toastItem} />;
-              }
-            });
-            const _transaction = {
-              blockNumber: result.blockNumber,
-              chainId: transaction.chainId,
-              data: transaction.data,
-              from: transaction.from,
-              hash: transaction.hash,
-              nonce: transaction.noonce,
-              status: 'success',
-              submitDate: transaction.submitDate,
-              to: transaction.to,
-              value: transaction.value,
-            } as Transaction;
-
-            await updateTransaction(_transaction);
-            return _transaction;
-          } else if (result.status === 0) {
-            const toastItem = { ...failureToast, description: transaction.hash, id: transaction.hash };
-            toast.show({
-              render: ({
-                id
-              }) => {
-                return <ToastAlert {...toastItem} />;
-              }
-            });
-            const _transaction = {
-              chainId: transaction.chainId,
-              data: transaction.data,
-              from: transaction.from,
-              hash: transaction.hash,
-              nonce: transaction.noonce,
-              status: 'failure',
-              submitDate: transaction.submitDate,
-              to: transaction.to,
-              value: transaction.value,
-            } as Transaction;
-            await updateTransaction(_transaction);
-            return _transaction;
-          }
-        }));
-        setTransactionList([]);
-      }
-    }
-    //runAsync();
-  }, [_transactions]);*/
-
   useEffect(() => {
     let isMounted = true;
     if (isMounted) setTransactions(transactions);

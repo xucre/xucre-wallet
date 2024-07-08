@@ -26,6 +26,7 @@ export default function NetworkFilter({ chainId, updateChain }: { chainId: numbe
   //{translations[language].BasePage.title}
 
   const setChain = (chainId: number) => {
+    if (!chainId) return;
     const chain = chainIdMap[chainId];
     if (network.chainId === chainId) {
       return;

@@ -39,7 +39,7 @@ export const constructDefaultNetworks = () => {
       name: 'Celo',
       rpcUrl: 'https://celo-mainnet.infura.io/v3/e595b78c8e394eb99874eeb62d7e5080',
       symbol: 'CELO',
-    } as Network,
+    } as Network
     // {
     //   blockExplorer: 'https://bitcoinexplorer.org/',
     //   chainId: 20090103,
