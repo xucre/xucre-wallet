@@ -58,13 +58,16 @@ function usePagination<T>(data: T[], options: PaginationOptions<T> = {}): UsePag
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
-    const newPageData = sortedData.slice(start, end);
+    if (sortedData && sortedData.slice) {
+      const newPageData = sortedData.slice(start, end);
 
-    if (append) {
-      return [...loadedData, ...newPageData.filter(item => !loadedData.find((i) => { return i[options.uniqueKey as keyof T] === item[options.uniqueKey as keyof T] }))];
-    } else {
-      return newPageData;
+      if (append) {
+        return [...loadedData, ...newPageData.filter(item => !loadedData.find((i) => { return i[options.uniqueKey as keyof T] === item[options.uniqueKey as keyof T] }))];
+      } else {
+        return newPageData;
+      }
     }
+    return []
   }, [sortedData, currentPage, pageSize, append, loadedData]);
 
   const totalPages = Math.ceil(data.length / pageSize);
@@ -83,7 +86,7 @@ function usePagination<T>(data: T[], options: PaginationOptions<T> = {}): UsePag
 
   const loadMore = useCallback(() => {
     const nextPage = currentPage + 1;
-    if (nextPage <= totalPages) {
+    if (nextPage <= totalPages && sortedData.slice) {
       const start = (nextPage - 1) * pageSize;
       const end = start + pageSize;
       const newPageData = sortedData.slice(start, end);

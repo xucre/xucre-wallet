@@ -38,9 +38,8 @@ function useTokenHistory(tokenAddress = "" as string, chainId = 1 as number) {
         }
       }
       const _transactions = await sync(false);
-
       if (isMounted) {
-        setTransactions(_transactions as CovalentTokenHistoryItem[]);
+        setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
         setTransactionsRefreshing(false);
       }
     }

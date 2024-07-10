@@ -1,6 +1,6 @@
 import { parseUri } from '@walletconnect/utils'
 import { BarCodeScanner, PermissionStatus } from 'expo-barcode-scanner';
-import { Box, Center, Text } from 'native-base';
+import { Box, Center, Text, useToast } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import { useRecoilState } from 'recoil';
@@ -12,6 +12,7 @@ import { createSignClient, signClient } from '../service/walletConnect';
 export default function QRReader({ navigation }: { navigation: { navigate: Function } }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
+  const { show } = useToast();
   const [language,] = useRecoilState(stateLanguage);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function QRReader({ navigation }: { navigation: { navigate: Funct
       }
 
     } catch (e) {
-      //
+      show({ title: translations[language as keyof typeof translations].QRReader.error, description: JSON.stringify(e), duration: 9000 })
     }
   };
 
@@ -47,9 +48,11 @@ export default function QRReader({ navigation }: { navigation: { navigate: Funct
 
   return (
     <View style={styles.container}>
+      <Center><Text colorScheme={'primary'}>QR</Text></Center>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
+
       />
       {scanned && <Button title={translations[language as keyof typeof translations].QRReader.rescan} onPress={() => setScanned(false)} />}
     </View>

@@ -33,7 +33,7 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
       (compareAddresses(transaction.to_address, tokenAddress) || compareAddresses(transaction.from_address, tokenAddress))
     ) || !tokenAddress);
   const { paginatedData, loadMore } = usePagination(filteredTransactions, { initialPageSize: 10, append: true, uniqueKey: 'tx_hash' });
-
+  //console.log(paginatedData);
   return (
     <Box paddingY={4} h={'1/2'}>
       <FlatList data={paginatedData} refreshControl={
@@ -47,7 +47,7 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
         keyExtractor={item => item.tx_hash}
         onEndReached={loadMore}
       />
-      {(!filteredTransactions || filteredTransactions.length === 0) &&
+      {(!filteredTransactions || filteredTransactions.length === 0) || (!paginatedData || paginatedData.length === 0) &&
         <Pressable onPress={() => {
           setTimeout(() => {
             syncTransactions()

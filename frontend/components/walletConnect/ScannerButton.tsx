@@ -17,6 +17,7 @@ import { navigate } from '../../service/RootNavigation';
 
 export default function ScannerButton({ navigation }: { navigation: { navigate: Function } }) {
   //{translations[language].BasePage.title}
+  return <></>
   return (
     <>
       <IconButton onPress={() => { navigation.navigate('QRReader') }} colorScheme={'tertiary'} key={'scannerButton'} variant={'ghost'} _icon={{

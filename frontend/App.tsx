@@ -220,7 +220,7 @@ export const AppWrapper = () => {
         }
 
       } catch (err) {
-        console.log('error creating sign client', err);
+        toast.show({ description: `Error creating sign client ${JSON.stringify(err)}` });
       }
     }
     runAsync();

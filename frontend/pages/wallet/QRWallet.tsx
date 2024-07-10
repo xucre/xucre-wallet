@@ -253,6 +253,10 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
                 marginTop: 10,
                 width: '90%',
               }}
+                onPress={() => {
+                  const walletA = _wallet.address
+                  openPage('CodeCountry', item, walletA, local)
+                }}
               >
                 <View style={{ alignItems: 'center', flexDirection: 'row' }} key={item.recordID}>
 
