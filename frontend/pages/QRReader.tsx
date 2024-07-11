@@ -7,11 +7,12 @@ import { useRecoilState } from 'recoil';
 
 import translations from "../assets/translations";
 import { language as stateLanguage } from "../service/state";
-import { createSignClient, signClient } from '../service/walletConnect';
+import { useSignClient } from '../hooks/useSignClient';
 
 export default function QRReader({ navigation }: { navigation: { navigate: Function } }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
+  const signClient = useSignClient();
   const { show } = useToast();
   const [language,] = useRecoilState(stateLanguage);
 

@@ -20,16 +20,18 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { goBack, signClient } from "../../../service/walletConnect";
+import { goBack } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 import ContainedButton from '../../../components/ui/ContainedButton';
 import GhostButton from '../../../components/ui/GhostButton';
 import { useMixpanel } from '../../../hooks/useMixpanel';
+import { useSignClient } from '../../../hooks/useSignClient';
 
 export default function SendTransaction({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
   const { requestDetails } = route.params;
   const mixpanel = useMixpanel();
+  const signClient = useSignClient();
   const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');

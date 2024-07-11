@@ -16,14 +16,16 @@ import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { goBack, signClient } from "../../../service/walletConnect";
+import { goBack } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 import ContainedButton from "../../../components/ui/ContainedButton";
 import GhostButton from "../../../components/ui/GhostButton";
+import { useSignClient } from "../../../hooks/useSignClient";
 
 export default function EthSign({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { requestDetails } = route.params;
   const [request, setRequest] = useState({} as any);
+  const signClient = useSignClient();
   const [method, setMethod] = useState('');
   const [value, setValue] = useState({} as any);
   const [walletAddress, setWalletAddress] = useState('');

@@ -20,13 +20,14 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { language as stateLanguage } from "../../../service/state";
 import { truncateStringStart, truncateStringStart_old } from "../../../service/utility";
-import { signClient } from "../../../service/walletConnect";
+import { useSignClient } from "../../../hooks/useSignClient";
 
 export default function Connections({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const [request, setRequest] = useState({} as any);
   const [pairings, setPairings] = useState([] as any[]);
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
+  const signClient = useSignClient();
   //{translations[language].ConnectionRequest.}
   useEffect(() => {
     let isMounted = true;

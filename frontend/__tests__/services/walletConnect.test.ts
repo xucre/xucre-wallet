@@ -1,5 +1,5 @@
 import { Mixpanel } from 'mixpanel-react-native';
-import { createSignClient, parseRequestParams, goBack, signClient, mixpanel } from '../../service/walletConnect';
+import { createSignClient, parseRequestParams, goBack } from '../../service/walletConnect';
 
 describe('walletConnect', () => {
   describe('createSignClient', () => {
@@ -8,11 +8,10 @@ describe('walletConnect', () => {
       const _mixpanel = {} as Mixpanel;
 
       // Call the function
-      await createSignClient(_mixpanel);
+      const signClient = await createSignClient();
 
       // Assert that the signClient is created with the provided mixpanel instance
       expect(signClient).toBeDefined();
-      expect(mixpanel).toBe(_mixpanel);
     });
   });
 

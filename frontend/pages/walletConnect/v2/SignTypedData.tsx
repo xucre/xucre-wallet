@@ -16,10 +16,11 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { goBack, signClient } from "../../../service/walletConnect";
+import { goBack } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 import ContainedButton from "../../../components/ui/ContainedButton";
 import GhostButton from "../../../components/ui/GhostButton";
+import { useSignClient } from "../../../hooks/useSignClient";
 
 export default function SignTypedData({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { requestDetails } = route.params;
@@ -31,6 +32,7 @@ export default function SignTypedData({ navigation, route }: { navigation: { nav
   const [walletState,] = useRecoilState(walletList);
   const [selectedWallets, setSelectedWallets] = useState([]);
   const [page, setPage] = useState(0);
+  const signClient = useSignClient();
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
   useEffect(() => {

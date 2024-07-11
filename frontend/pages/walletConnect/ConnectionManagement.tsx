@@ -23,13 +23,13 @@ import { Color } from "../../../GlobalStyles";
 import translations from "../../assets/translations";
 import GuestLayout from "../../layouts/GuestLayout";
 import { language as stateLanguage } from "../../service/state";
-import { signClient } from "../../service/walletConnect";
 import { getAllNotifications } from "../../store/setting";
 import Request from "../../components/walletConnect/Request";
 import Connection from "../../components/walletConnect/Connection";
 import { RefreshControl } from "react-native";
 import ScannerButton from "../../components/walletConnect/ScannerButton";
 import { useMixpanel } from "../../hooks/useMixpanel";
+import { useSignClient } from "../../hooks/useSignClient";
 
 function TabItem({
   tabName,
@@ -80,6 +80,7 @@ export default function ConnectionManagement({ navigation, route }: { navigation
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
   const mixpanel = useMixpanel();
+  const signClient = useSignClient();
   const [pairings, setPairings] = useState([] as any[]);
   const [requests, setRequests] = useState([] as any[]);
   const [paringMap, setParingMap] = useState({} as any);

@@ -17,18 +17,20 @@ import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { approveEIP155Request, rejectEIP155Request } from "../../../service/eip1155Utils";
 import { language as stateLanguage, walletList } from "../../../service/state";
-import { goBack, signClient } from "../../../service/walletConnect";
+import { goBack } from "../../../service/walletConnect";
 import { deleteNotification } from "../../../store/setting";
 import { Linking } from "react-native";
 import ContainedButton from "../../../components/ui/ContainedButton";
 import OutlinedButton from "../../../components/ui/OutlinedButton";
 import GhostButton from "../../../components/ui/GhostButton";
 import { useMixpanel } from "../../../hooks/useMixpanel";
+import { useSignClient } from "../../../hooks/useSignClient";
 
 export default function SignTransaction({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const { requestDetails } = route.params;
   const { colorMode } = useColorMode();
   const mixpanel = useMixpanel();
+  const signClient = useSignClient();
   const [request, setRequest] = useState({} as any);
   const [to, setTo] = useState('');
   const [data, setData] = useState('');

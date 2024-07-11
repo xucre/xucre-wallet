@@ -13,23 +13,16 @@ import { activeNetwork, activeWallet, AppWallet, tokenPricesTotal, tokenTotal } 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getTokenItems, getTokenPriceMap, storeTokenItems, storeTokenPriceMap } from '../store/tokenItem';
 import { chainIdToNetworkMap, constructDefaultNetworks } from '../service/network';
+import { useToast } from 'native-base';
 
 function useTokens(initialValue = [] as Token[]) {
   const [tokensLoading, setTokensLoading] = useState(false);
-  //const [fulltokens, setTokens] = useState({} as {[key:number] : Token[]});
   const [fulltokens, setTokens] = useRecoilState(tokenTotal);
   const tokens = Object.values(fulltokens).length > 0 ? Object.values(fulltokens).flatMap((tList) => tList) : [] as Token[];
-  // const [tokenPrices, setTokenPrices] = useState(null as {
-  //   [key: string]: TokenPrice
-  // } | null); 
-
-  // const [tokenPrices, setTokenPrices] = useState({} as { [key:number] : {
-  //   [key: string]: TokenPrice
-  // }});
-  const [tokenPrices, setTokenPrices] = useRecoilState(tokenPricesTotal)
+  const [tokenPrices, setTokenPrices] = useRecoilState(tokenPricesTotal);
+  const toast = useToast();
 
   const wallet = useRecoilValue(activeWallet);
-  //const network = useRecoilValue(activeNetwork);
   
   const syncTokens = async (save: boolean, chainId: number) => {
     try {
@@ -194,9 +187,11 @@ function useTokens(initialValue = [] as Token[]) {
           })
           if (isMounted) setTokenPrices(_priceListTotal);
         });
-      } catch (err) {}
+      } catch (err) {
+        toast.show({title: 'Error', description: `Error fetching token prices ${JSON.stringify(err)}`, duration: 10000})
+      }
     }
-    if (tokens.length > 0 && !tokensLoading) {
+    if (tokens.length > 0 ) {
       runAsync2();
     }
     

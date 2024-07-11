@@ -20,7 +20,7 @@ import translations from "../../../assets/translations";
 import GuestLayout from "../../../layouts/GuestLayout";
 import { AppWallet, language as stateLanguage, walletList } from "../../../service/state";
 import { truncateString, truncateString_old } from "../../../service/utility";
-import { goBack, parseRequestParams, signClient } from "../../../service/walletConnect";
+import { goBack, parseRequestParams } from "../../../service/walletConnect";
 import { buildApprovedNamespaces } from '@walletconnect/utils'
 import { BackHandler, Linking } from "react-native";
 import { EIP155_SIGNING_METHODS } from "../../../data/EIP1155Data";
@@ -29,10 +29,12 @@ import ContainedButton from "../../../components/ui/ContainedButton";
 import OutlinedButton from "../../../components/ui/OutlinedButton";
 import GhostButton from "../../../components/ui/GhostButton";
 import { useMixpanel } from "../../../hooks/useMixpanel";
+import { useSignClient } from "../../../hooks/useSignClient";
 
 export default function ConnectionRequest({ navigation, route }: { navigation: { navigate: Function, goBack: Function }, route: any }) {
   const toast = useToast();
   const mixpanel = useMixpanel();
+  const signClient = useSignClient();
   const { requestDetails } = route.params;
   const [request, setRequest] = useState({} as any);
   const [walletState,] = useRecoilState(walletList);

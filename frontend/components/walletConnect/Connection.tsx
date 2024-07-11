@@ -20,13 +20,14 @@ import translations from "../../assets/translations";
 import GuestLayout from "../../layouts/GuestLayout";
 import { language as stateLanguage } from "../../service/state";
 import { truncateStringStart_old } from "../../service/utility";
-import { signClient } from "../../service/walletConnect";
+import { useSignClient } from "../../hooks/useSignClient";
 
 export default function Connection({ metadata, getPairs }: { metadata: any, getPairs: Function }) {
   //const address = metadata.wallet.address;
 
   const [language,] = useRecoilState(stateLanguage);
   const { colorMode } = useColorMode();
+  const signClient = useSignClient();
 
   const removePair = async () => {
     await signClient.core.pairing.disconnect({ topic: metadata.topic });

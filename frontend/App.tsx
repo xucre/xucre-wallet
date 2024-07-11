@@ -87,7 +87,7 @@ import SignTypedData from './pages/walletConnect/v2/SignTypedData';
 import ProfileList from './pages/social/ProfileList';
 import { navigate, navigationRef } from './service/RootNavigation';
 import { language as stateLanguage } from "./service/state";
-import { createSignClient, signClient, mixpanel } from './service/walletConnect';
+import { createSignClient } from './service/walletConnect';
 import whatsapp from './service/whatsapp';
 import { getNotification, getTheme, storeTheme } from './store/setting';
 
@@ -105,6 +105,7 @@ import ViewToken from './pages/token/ViewToken';
 //Import Mixpanel API
 import { MixpanelProvider, useMixpanel } from './hooks/useMixpanel';
 import UnlimitWidget from './pages/extensions/unlimit/UnlimitWidget';
+import { SignClientProvider, useSignClient } from './hooks/useSignClient';
 
 const Stack = createNativeStackNavigator();
 
@@ -179,9 +180,11 @@ export default function App(): JSX.Element {
     <RecoilRoot>
       <NativeBaseProvider theme={theme} config={config}>
         <MixpanelProvider>
-          <Suspense fallback={<Text>Loading...</Text>}>
-            <AppWrapper />
-          </Suspense>
+          <SignClientProvider>
+            <Suspense fallback={<Text>Loading...</Text>}>
+              <AppWrapper />
+            </Suspense>
+          </SignClientProvider>
         </MixpanelProvider>
       </NativeBaseProvider>
     </RecoilRoot>
@@ -195,6 +198,7 @@ export const AppWrapper = () => {
   const [fontsLoaded] = useFonts({
     'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
   });
+  const signClient = useSignClient();
   const [scheme, setScheme] = useState('');
   const [routeState, setRouteState] = useState('');
   const [language,] = useRecoilState(stateLanguage);
@@ -210,20 +214,6 @@ export const AppWrapper = () => {
           break;
       }
     });
-  }, []);
-  useEffect(() => {
-    const runAsync = async () => {
-      try {
-        //('isdev', __DEV__)
-        if (!signClient) {
-          await createSignClient(mixpanel);
-        }
-
-      } catch (err) {
-        toast.show({ description: `Error creating sign client ${JSON.stringify(err)}` });
-      }
-    }
-    runAsync();
   }, []);
 
   useEffect(() => {
@@ -262,9 +252,6 @@ export const AppWrapper = () => {
 
     Linking.addEventListener('url', async (req) => {
       try {
-        if (!signClient || signClient.name.length === 0) {
-          await createSignClient(mixpanel);
-        }
         const parsedUrl = parseUrl(req.url);
         if (parsedUrl.resource === 'ViewWallet') {
           navigate('SelectWallet', {});
