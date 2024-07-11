@@ -14,8 +14,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { getTokenItems, getTokenPriceMap, storeTokenItems, storeTokenPriceMap } from '../store/tokenItem';
 import { chainIdToNetworkMap, constructDefaultNetworks } from '../service/network';
 import { useToast } from 'native-base';
+import translations from '../assets/translations';
+import { language } from '../service/state';
 
 function useTokens(initialValue = [] as Token[]) {
+  const [_language,] = useRecoilState(language);
   const [tokensLoading, setTokensLoading] = useState(false);
   const [fulltokens, setTokens] = useRecoilState(tokenTotal);
   const tokens = Object.values(fulltokens).length > 0 ? Object.values(fulltokens).flatMap((tList) => tList) : [] as Token[];
@@ -145,7 +148,9 @@ function useTokens(initialValue = [] as Token[]) {
           if (isMounted) setTokens(_tokenList);
           if (isMounted) setTokensLoading(false);
         });
-      } catch (err) {}
+      } catch (err) {
+        toast.show({title: `${translations[_language as keyof typeof translations].ui.error}`, description: `${translations[_language as keyof typeof translations].Toast.token_balances_error}  ${JSON.stringify(err)}`, duration: 10000})
+      }
     }
     
     runAsync();
@@ -188,7 +193,7 @@ function useTokens(initialValue = [] as Token[]) {
           if (isMounted) setTokenPrices(_priceListTotal);
         });
       } catch (err) {
-        toast.show({title: 'Error', description: `Error fetching token prices ${JSON.stringify(err)}`, duration: 10000})
+        toast.show({title: `${translations[_language as keyof typeof translations].ui.error}`, description: `${translations[_language as keyof typeof translations].Toast.token_prices_error}  ${JSON.stringify(err)}`, duration: 10000})
       }
     }
     if (tokens.length > 0 ) {

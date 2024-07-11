@@ -257,23 +257,23 @@ export const AppWrapper = () => {
           navigate('SelectWallet', {});
         } else {
           if (parsedUrl.query.requestId) {
-            toast.show({ description: `Invalid Pair Request ${parsedUrl.query}` });
+            toast.show({ description: `${translations[language as keyof typeof translations].Toast.invalid_pair} ${parsedUrl.query}` });
           } else if (parsedUrl.query.uri) {
             signClient.pair({ uri: parsedUrl.query.uri }).then(() => {
-              toast.show({ description: `Paired with wallet` });
+              toast.show({ description: `${translations[language as keyof typeof translations].Toast.success_pair}` });
             }).catch((e) => {
-              toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+              toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
             })
           } else if (parsedUrl.protocol === 'wc') {
             signClient.pair({ uri: req.url }).then(() => {
-              toast.show({ description: `Paired with wallet` });
+              toast.show({ description: `${translations[language as keyof typeof translations].Toast.success_pair}` });
             }).catch((e) => {
-              toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+              toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
             })
           }
         }
       } catch (e) {
-        toast.show({ description: `Error pairing with wallet ${JSON.stringify(e)}` });
+        toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
       }
     })
 

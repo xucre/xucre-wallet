@@ -45,6 +45,7 @@ export interface TranslationType {
   SignTyped: any,
   SupportPage: any,
   SwapToken: any,
+  Toast: any,
   TokenItem: any,
   TransactionFeed: any,
   ViewNetwork: any,

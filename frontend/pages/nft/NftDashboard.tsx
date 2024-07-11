@@ -113,43 +113,42 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
       height={'100%'}
       safeAreaBottom
     >
-
-      {wallet.name.length > 0 && wallet.address !== '' &&
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-        >
-          <Text
-            _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.100' }}
-            fontSize="md"
-            fontWeight="medium"
-            m={2}
-          >{translations[language as keyof typeof translations].NftDashboard.trending}</Text>
-
-          <FlatList data={trending} horizontal={true} renderItem={
-            ({ item: nft, index: i }) => <NftItemLarge key={nft.key + i} item={nft} />
-          }
-            keyExtractor={item => item.key}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
           />
+        }
+      >
+        <Text
+          _light={{ color: 'coolGray.800' }}
+          _dark={{ color: 'coolGray.100' }}
+          fontSize="md"
+          fontWeight="medium"
+          m={2}
+        >{translations[language as keyof typeof translations].NftDashboard.trending}</Text>
 
-          <Text
-            _light={{ color: 'coolGray.800' }}
-            _dark={{ color: 'coolGray.100' }}
-            fontSize="md"
-            fontWeight="medium"
-            m={2}
-          >{translations[language as keyof typeof translations].NftDashboard.collections}</Text>
-          <FlatList data={collections} horizontal={true} renderItem={
-            ({ item: nft, index: i }) => <NftItemSmall key={nft.key + i} item={nft} />
-          }
-            keyExtractor={item => item.key}
-          />
+        <FlatList data={trending} horizontal={true} renderItem={
+          ({ item: nft, index: i }) => <NftItemLarge key={nft.key + i} item={nft} />
+        }
+          keyExtractor={item => item.key}
+        />
 
+        <Text
+          _light={{ color: 'coolGray.800' }}
+          _dark={{ color: 'coolGray.100' }}
+          fontSize="md"
+          fontWeight="medium"
+          m={2}
+        >{translations[language as keyof typeof translations].NftDashboard.collections}</Text>
+        <FlatList data={collections} horizontal={true} renderItem={
+          ({ item: nft, index: i }) => <NftItemSmall key={nft.key + i} item={nft} />
+        }
+          keyExtractor={item => item.key}
+        />
+
+        {wallet.name.length === 0 || wallet.address === '' &&
           <Text
             _light={{ color: 'coolGray.800' }}
             _dark={{ color: 'coolGray.100' }}
@@ -159,17 +158,21 @@ export default function NftDashboard({ navigation, route }: { navigation: { navi
             m={2}
             mt={0}
           >{translations[language as keyof typeof translations].NftDashboard.your_list}</Text>
+        }
 
-          {holdings.length > 0 ?
-            <FlatList data={holdings} mb={20} mx={3} renderItem={
-              ({ item: nft, index: i }) => <NftListItem key={nft.contract_address + nft.id + i} token={nft.id} contract={nft.contract_address} chain={chain} />
-            }
-              keyExtractor={item => item.contract_address + item.id}
-            /> : <Text fontWeight="medium" textAlign={'center'}>{translations[language as keyof typeof translations].NftDashboard.no_holdings}</Text>
+        {wallet.name.length > 0 && wallet.address !== '' &&
+          <Text fontWeight="medium" textAlign={'center'}>{translations[language as keyof typeof translations].NftDashboard.no_holdings}</Text>
+        }
+
+        {holdings.length > 0 ?
+          <FlatList data={holdings} mb={20} mx={3} renderItem={
+            ({ item: nft, index: i }) => <NftListItem key={nft.contract_address + nft.id + i} token={nft.id} contract={nft.contract_address} chain={chain} />
           }
+            keyExtractor={item => item.contract_address + item.id}
+          /> : <Text fontWeight="medium" textAlign={'center'}>{translations[language as keyof typeof translations].NftDashboard.no_holdings}</Text>
+        }
 
-        </ScrollView>
-      }
+      </ScrollView>
 
       <MobileFooter navigation={navigation}></MobileFooter>
     </Box>

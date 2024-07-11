@@ -284,6 +284,14 @@ const values : TranslationType = {
   SwapToken: {
     title: "Billetera"
   },
+  Toast: {
+    sign_client_error: "Error al crear cliente de signos",
+    token_prices_error: "Error al obtener los precios de los tokens",
+    token_balances_error: "Error al recuperar saldos de tokens",
+    invalid_pair: "Solicitud de par no válida",
+    success_pair: "Emparejado con billetera",
+    error_pair: "Error al emparejar con la billetera",
+  },
   TokenItem: {
     blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
@@ -336,6 +344,7 @@ const values : TranslationType = {
     confirm: "Confirmar",
     featured: 'Presentado',
     all: 'Todo',
+    error: 'Error'
   },
   totalBalance:{
     title: "Balance total"

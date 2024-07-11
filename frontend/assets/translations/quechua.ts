@@ -284,6 +284,14 @@ const values : TranslationType = {
   SwapToken: {
     title: 'Chuspa'
   },
+  Toast: {
+    sign_client_error: "Signo cliente paqarichiypi pantasqa",
+    token_prices_error: "Tokenpa chaninkunata apamuspa pantasqa",
+    token_balances_error: "Token balancekunata apamuspa pantasqa",
+    invalid_pair: "Mana allin Pares Mañakuy",
+    success_pair: "Billeterawan tupachisqa",
+    error_pair: "Pantasqa billeterawan tupachiy",
+  },
   TokenItem: {
     blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
@@ -336,6 +344,7 @@ const values : TranslationType = {
     confirm: "Yuyachiy",
     featured: 'Riqsisqa',
     all: 'Llapan',
+    error: 'Pantay'
   },
   totalBalance:{
     title: "Allin pachapi"

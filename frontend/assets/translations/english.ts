@@ -288,6 +288,14 @@ const values : TranslationType = {
   SwapToken: {
     title: "Swap"
   },
+  Toast: {
+    sign_client_error: "Error creating sign client",
+    token_prices_error: "Error fetching token prices",
+    token_balances_error: "Error fetching token balances",
+    invalid_pair: "Invalid Pair Request",
+    success_pair: "Paired with wallet",
+    error_pair: "Error pairing with wallet",
+  },
   TokenItem: {
     blacklist_button: 'Mark as Spam',
     delete_button: 'Delete Token',
@@ -340,6 +348,7 @@ const values : TranslationType = {
     confirm: "Confirm",
     featured: 'Featured',
     all: 'All',
+    error: 'Error'
   },
   totalBalance:{
     title: "Total Balance"
