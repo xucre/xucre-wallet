@@ -51,7 +51,8 @@ const values : TranslationType  = {
     tab_list: [
       'Connections',
       'Requests'
-    ]
+    ],
+    no_items: "Mana imapas tarisqachu"
   },
   CreateNetwork: {
     button_save: "Malhuiaa",
@@ -321,7 +322,8 @@ const values : TranslationType  = {
       "tlapeepeehuiliz-tli"
     ],
     title: "Talhcuiloolaamapetlaacaltoon-tli",
-    transactions_placeholder: "Ahaquiaa necocteentiaa tlapeepeehuiliz-tli"
+    transactions_placeholder: "Ahaquiaa necocteentiaa tlapeepeehuiliz-tli",
+    no_tokens: "Tu billetera está vacía. Agregue tokens para comenzar."
   },
   WalletConnect : {
     session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
@@ -344,7 +346,8 @@ const values : TranslationType  = {
     confirm: "Confirmar",
     featured: 'Presentado',
     all: 'Todo',
-    error: 'Error'
+    error: 'Error',
+    no_items: "Mana imapas tarisqachu"
   },
   totalBalance:{
     title: "Tlalpochcalli"

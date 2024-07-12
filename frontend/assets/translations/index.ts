@@ -57,7 +57,8 @@ export interface TranslationType {
     no_network_error: string,
     tab_list: string[],
     title: string,
-    transactions_placeholder: string
+    transactions_placeholder: string,
+    no_tokens: string
   },
   WalletConnect: any,
   WalletHistory: any,

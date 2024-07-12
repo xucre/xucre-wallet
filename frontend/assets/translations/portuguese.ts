@@ -51,7 +51,8 @@ const values : TranslationType  = {
     tab_list: [
       'Connections',
       'Requests'
-    ]
+    ],
+    no_items: "Nenhum item encontrado"
   },
   CreateNetwork: {
     button_save: 'Salvar',
@@ -322,6 +323,7 @@ const values : TranslationType  = {
     ],
     title: "Carteira",
     transactions_placeholder: 'Inserir histÃ³rico de transaÃ§Ãµes',
+    no_tokens: "Sua carteira está vazia. Adicione tokens para começar."
   },
   WalletConnect : {
     session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
@@ -344,7 +346,8 @@ const values : TranslationType  = {
     confirm: "Confirmar",
     featured: 'Apresentou',
     all: 'Todos',
-    error: 'Erro'
+    error: 'Erro',
+    no_items: "Nenhum item encontrado"
   },
   totalBalance:{
     title: "Balanço total"

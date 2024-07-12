@@ -232,7 +232,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
 
           </HStack>
           <VStack space="5" px={2} mb={0}>
-            {tokens && tokens.length > 0 &&
+            {tokens &&
               <Box m={6} height={'2/3'} mt={4}>
                 <HStack display={'flex'} justifyContent={'flex-end'} px={1} mb={1} mt={0} maxH={10}>
                   <NetworkIcon chainId={networkId} updateChain={setNetworkId} />
@@ -250,6 +250,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                     return <TokenItem key={item.address + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} price={tokenPrices} />
                   }
                 }
+                  ListEmptyComponent={<Text>{translations[language as keyof typeof translations].ViewWallet.no_tokens}</Text>}
                 />
               </Box>
             }

@@ -51,7 +51,8 @@ const values : TranslationType = {
     tab_list: [
       'Connections',
       'Requests'
-    ]
+    ],
+    no_items: "Mana imapas tarisqachu"
   },
   CreateNetwork: {
     button_save: 'Waqaychay',
@@ -322,6 +323,7 @@ const values : TranslationType = {
     ],
     title: 'Belletera',
     transactions_placeholder: 'Ruranamanta willayta churay',
+    no_tokens: "Billeteraykiqa ch’usaqmi kashan. Qallarinapaq tokenkunata yapay."
   },
   WalletConnect : {
     session_proposal: ['Session Proposal', 'A dapp wants to connect your wallet'],
@@ -344,7 +346,8 @@ const values : TranslationType = {
     confirm: "Yuyachiy",
     featured: 'Riqsisqa',
     all: 'Llapan',
-    error: 'Pantay'
+    error: 'Pantay',
+    no_items: "Mana imapas tarisqachu"
   },
   totalBalance:{
     title: "Allin pachapi"

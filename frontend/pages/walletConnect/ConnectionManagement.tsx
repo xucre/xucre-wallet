@@ -166,6 +166,7 @@ export default function ConnectionManagement({ navigation, route }: { navigation
             ({ item, index }) => <Connection metadata={item} key={'Pair' + index} getPairs={onRefresh} />
           }
             keyExtractor={item => item.topic}
+            ListEmptyComponent={<Text textAlign={'center'}>{translations[language as keyof typeof translations].ConnectManagement.no_items}</Text>}
           />
         }
 
@@ -183,11 +184,12 @@ export default function ConnectionManagement({ navigation, route }: { navigation
             }
           }
             keyExtractor={item => item.id}
+            ListEmptyComponent={<Text textAlign={'center'}>{translations[language as keyof typeof translations].ConnectManagement.no_items}</Text>}
           />
         }
 
       </VStack>
-      <Fab renderInPortal={false} shadow={2} size={'xs'} placement={'bottom-right'} icon={<ScannerButton navigation={navigation} />} />
+      {/*<Fab renderInPortal={false} shadow={2} size={'xs'} placement={'bottom-right'} icon={<ScannerButton navigation={navigation} />} />*/}
     </Box>
   );
 }

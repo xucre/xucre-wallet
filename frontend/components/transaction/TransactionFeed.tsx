@@ -46,6 +46,7 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
       }
         keyExtractor={item => item.tx_hash}
         onEndReached={loadMore}
+        ListEmptyComponent={<Text textAlign={'center'}>{translations[language as keyof typeof translations].ui.no_items}</Text>}
       />
       {(!filteredTransactions || filteredTransactions.length === 0) || (!paginatedData || paginatedData.length === 0) &&
         <Pressable onPress={() => {
