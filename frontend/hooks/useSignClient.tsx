@@ -22,6 +22,8 @@ export const SignClientProvider = ({ children }: { children: any }) => {
       try {
         const _signClient = await createSignClient();
         setSignClient(_signClient);
+        toast.show({ title: 'Client Initialized', description: `${_signClient.name}`, duration: 2000 })
+        //console.log('sign client loaded', _signClient);
       } catch (err) {
         toast.show({ description: `${translations[_language as keyof typeof translations].Toast.sign_client_error} ${JSON.stringify(err)}` });
       }

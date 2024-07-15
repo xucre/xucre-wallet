@@ -184,7 +184,6 @@ export async function createSignClient() {
   } as Web3WalletTypes.Options;
   
   const signClient = await Web3Wallet.init(initConfig);
-  Toast.show({ title: 'Client Initialized', description: `${signClient.name}`})
   //console.log(signClient)
   //signClient = await SignClient.init(initConfig)
   if (signClient) {
@@ -213,19 +212,23 @@ export function parseRequestParams(params: {optionalNamespaces: {eip155: {"chain
 }
 
 export async function goBack (request: any, navigation: {navigate: Function}) {
-  if (
-    request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net'
-  ) {
-    navigation.navigate('SwapToken');
-  } else if (
-    
-    request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org'
-  ) {
-    navigation.navigate('Ubeswap');
-  } else if (
-    request['verifyContext']['verified']['origin'] === 'https://ethix.ethichub.com'
-  ) {
-    navigation.navigate('EthicHub');
+  if (request && request['verifyContext'] && request['verifyContext']['verified'] && request['verifyContext']['verified']['origin']) {
+    if (
+      request['verifyContext']['verified']['origin'] === 'https://swap.xucre.net'
+    ) {
+      navigation.navigate('SwapToken');
+    } else if (
+      
+      request['verifyContext']['verified']['origin'] === 'https://app.ubeswap.org'
+    ) {
+      navigation.navigate('Ubeswap');
+    } else if (
+      request['verifyContext']['verified']['origin'] === 'https://ethix.ethichub.com'
+    ) {
+      navigation.navigate('EthicHub');
+    } else {
+      navigation.navigate('ViewWallet');
+    }
   } else {
     navigation.navigate('ViewWallet');
   }

@@ -107,6 +107,8 @@ import { MixpanelProvider, useMixpanel } from './hooks/useMixpanel';
 import UnlimitWidget from './pages/extensions/unlimit/UnlimitWidget';
 import { SignClientProvider, useSignClient } from './hooks/useSignClient';
 
+import { env } from './service/constants';
+
 const Stack = createNativeStackNavigator();
 
 // Define the config
@@ -241,41 +243,6 @@ export const AppWrapper = () => {
     }
 
     runAsync();
-    //Linking.resolveScheme({ scheme: 'com.xucre.expo.client' })
-    const prefix = Linking.createURL('/');
-    //const wcprefix = Linking.createURL('/', { scheme: 'wc' });
-
-
-    setLinking({
-      prefixes: [prefix, 'wc'],
-    });
-
-    Linking.addEventListener('url', async (req) => {
-      try {
-        const parsedUrl = parseUrl(req.url);
-        if (parsedUrl.resource === 'ViewWallet') {
-          navigate('SelectWallet', {});
-        } else {
-          if (parsedUrl.query.requestId) {
-            toast.show({ description: `${translations[language as keyof typeof translations].Toast.invalid_pair} ${parsedUrl.query}` });
-          } else if (parsedUrl.query.uri) {
-            signClient.pair({ uri: parsedUrl.query.uri }).then(() => {
-              toast.show({ description: `${translations[language as keyof typeof translations].Toast.success_pair}` });
-            }).catch((e) => {
-              toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
-            })
-          } else if (parsedUrl.protocol === 'wc') {
-            signClient.pair({ uri: req.url }).then(() => {
-              toast.show({ description: `${translations[language as keyof typeof translations].Toast.success_pair}` });
-            }).catch((e) => {
-              toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
-            })
-          }
-        }
-      } catch (e) {
-        toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
-      }
-    })
 
     return () => {
       isMounted = false;
@@ -313,6 +280,44 @@ export const AppWrapper = () => {
     }
     return false;
   }
+
+  useEffect(() => {
+    if (signClient.name) {
+      const prefix = Linking.createURL('/');
+
+      setLinking({
+        prefixes: [prefix, 'wc'],
+      });
+
+      Linking.addEventListener('url', async (req) => {
+        try {
+          const _signClient = signClient;
+          const parsedUrl = parseUrl(req.url);
+          if (parsedUrl.resource === 'ViewWallet') {
+            navigate('SelectWallet', {});
+          } else {
+            if (parsedUrl.query.requestId) {
+              toast.show({ description: `${translations[language as keyof typeof translations].Toast.invalid_pair} ${parsedUrl.query}` });
+            } else if (parsedUrl.query.uri) {
+              _signClient.pair({ uri: parsedUrl.query.uri }).then(() => {
+                toast.show({ description: `${translations[language as keyof typeof translations].Toast.success_pair}` });
+              }).catch((e) => {
+                toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
+              })
+            } else if (parsedUrl.protocol === 'wc') {
+              _signClient.pair({ uri: req.url }).then(() => {
+                toast.show({ description: `${translations[language as keyof typeof translations].Toast.success_pair}` });
+              }).catch((e) => {
+                toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
+              })
+            }
+          }
+        } catch (e) {
+          toast.show({ description: `${translations[language as keyof typeof translations].Toast.error_pair} ${JSON.stringify(e)}` });
+        }
+      })
+    }
+  }, [signClient])
 
   return (
     <SafeAreaProvider>
