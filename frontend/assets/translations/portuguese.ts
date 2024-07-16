@@ -347,7 +347,8 @@ const values : TranslationType  = {
     featured: 'Apresentou',
     all: 'Todos',
     error: 'Erro',
-    no_items: "Nenhum item encontrado"
+    no_items: "Nenhum item encontrado",
+    address_not_found: "Endereço não encontrado",
   },
   totalBalance:{
     title: "Balanço total"

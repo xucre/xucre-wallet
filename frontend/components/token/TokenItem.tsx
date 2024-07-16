@@ -148,7 +148,9 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
   }
 
   const sendToken = () => {
-    navigation.navigate('SendToken', { token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata?.decimals || 18 } as SerializedToken })
+    navigation.navigate('SendToken', {
+      token: { ...token, amount: token.amount?.toString() || rawAmount.toString(), decimals: alchemyMetadata?.decimals || 18 } as SerializedToken
+    })
   }
 
   const viewToken = () => {

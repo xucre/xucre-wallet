@@ -46,11 +46,14 @@ import { AlchemyMetadata } from "../../types/token";
 import { isSpam } from "../../store/spam";
 import useTokens from "../../hooks/useTokens";
 import { useMixpanel } from "../../hooks/useMixpanel";
+import TokenIcon from "../../components/token/TokenIcon";
+import { navigate } from "../../service/RootNavigation";
 
 export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const toast = useToast();
   const [language] = useRecoilState(stateLanguage);
   const token = route.params?.token;
+  const to = route.params?.requestDetails?.address;
   const mixpanel = useMixpanel();
   const [selectedToken, setSelectedToken] = useState({} as Token);
   const { tokens } = useTokens();
@@ -76,6 +79,12 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   useEffect(() => {
     mixpanel.track("view_page", { "page": "Send Token" });
   }, [])
+
+  useEffect(() => {
+    if (to && to.length > 0) {
+      setAddress(to);
+    }
+  }, [to])
 
   useEffect(() => {
     if (token) {
@@ -363,6 +372,7 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
                         key={_token.address}
                         label={_token.name}
                         value={_token.address}
+                        leftIcon={<TokenIcon token={_token} />}
                       />
                     );
                   })}

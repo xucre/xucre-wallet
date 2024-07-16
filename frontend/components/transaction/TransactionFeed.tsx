@@ -15,6 +15,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { compareAddresses } from "../../service/utility";
 import useTransactions from "../../hooks/useTransactions";
 import usePagination from "../../hooks/usePagination";
+import translations from "../../assets/translations";
 
 export default function TransactionFeed({ navigation, tokenAddress, updateDefault, chainId }: { navigation: { navigate: Function }, tokenAddress: string | null, updateDefault: Function | null, chainId: number }) {
   const isFocused = useIsFocused();

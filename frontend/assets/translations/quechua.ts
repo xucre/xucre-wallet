@@ -347,7 +347,8 @@ const values : TranslationType = {
     featured: 'Riqsisqa',
     all: 'Llapan',
     error: 'Pantay',
-    no_items: "Mana imapas tarisqachu"
+    no_items: "Mana imapas tarisqachu",
+    address_not_found: "Dirección mana tarisqachu",
   },
   totalBalance:{
     title: "Allin pachapi"

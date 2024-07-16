@@ -15,6 +15,7 @@ import translations from "../../assets/translations";
 // import QRCode from "react-qr-code";
 import QRCode from 'react-native-qrcode-svg';
 import base64Logo from '../../assets/images/icon-green.png'
+import { env } from "../../service/constants";
 
 export default function QRButton({ address }: { address: string }) {
   const [language,] = useRecoilState(stateLanguage);
@@ -40,7 +41,7 @@ export default function QRButton({ address }: { address: string }) {
                   <Text marginY={8}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>
                   <QRCode
                     size={350}
-                    value={address}
+                    value={`${env.REACT_APP_XUCRE_WALLET_SCHEME}/SendToken?address=${address}`}
                     //viewBox={`0 0 200 200`}
                     //logo={{ uri: base64Logo }}
                     logo={base64Logo}
@@ -63,6 +64,10 @@ export default function QRButton({ address }: { address: string }) {
             </AlertDialog.Content>
           </AlertDialog>
         </>
+      }
+
+      {!address &&
+        <Text>{translations[language as keyof typeof translations].ui.address_not_found}</Text>
       }
 
     </>

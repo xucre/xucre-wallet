@@ -19,6 +19,7 @@ import { getTokenHistoryItems, storeTokenHistoryItems } from "../../store/token"
 import CovalentTransferItem from "./CovalentTransferItem";
 import useTokenHistory from "../../hooks/useTokenHistory";
 import usePagination from "../../hooks/usePagination";
+import translations from "../../assets/translations";
 
 export default function TransactionFeed({ navigation, tokenAddress, chainId }: { navigation: { navigate: Function }, tokenAddress: string, chainId: number }) {
   const isFocused = useIsFocused();

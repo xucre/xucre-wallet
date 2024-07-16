@@ -295,6 +295,8 @@ export const AppWrapper = () => {
           const parsedUrl = parseUrl(req.url);
           if (parsedUrl.resource === 'ViewWallet') {
             navigate('SelectWallet', {});
+          } else if (parsedUrl.resource === 'SendToken') {
+            navigate('SendToken', { requestDetails: { address: parsedUrl.query.address } });
           } else {
             if (parsedUrl.query.requestId) {
               toast.show({ description: `${translations[language as keyof typeof translations].Toast.invalid_pair} ${parsedUrl.query}` });
