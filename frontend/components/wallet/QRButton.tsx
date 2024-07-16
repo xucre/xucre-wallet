@@ -24,6 +24,7 @@ export default function QRButton({ address }: { address: string }) {
   const cancelRef = React.useRef(null);
   //{translations[language].BasePage.title}
 
+  const url = `https://swap.xucre.net/send?address=${address}`;
   return (
     <>
       {address &&
@@ -41,7 +42,7 @@ export default function QRButton({ address }: { address: string }) {
                   <Text marginY={8}>{translations[language as keyof typeof translations]?.QRWallet.instructions}</Text>
                   <QRCode
                     size={350}
-                    value={`${env.REACT_APP_XUCRE_WALLET_SCHEME}/SendToken?address=${address}`}
+                    value={url}
                     //viewBox={`0 0 200 200`}
                     //logo={{ uri: base64Logo }}
                     logo={base64Logo}
