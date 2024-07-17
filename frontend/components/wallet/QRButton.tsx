@@ -24,10 +24,10 @@ export default function QRButton({ address }: { address: string }) {
   const cancelRef = React.useRef(null);
   //{translations[language].BasePage.title}
 
-  const url = `https://swap.xucre.net/send?address=${address}`;
+  const url = address && address.length > 0 ? `https://swap.xucre.net/send?address=${address}` : '';
   return (
     <>
-      {address &&
+      {address && url.length > 0 &&
         <>
           <IconButton onPress={() => setIsOpen(!isOpen)} colorScheme={'dark'} key={'copyButton'} variant={'ghost'} _icon={{
             as: MaterialIcons,
