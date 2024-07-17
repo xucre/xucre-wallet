@@ -294,6 +294,7 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
 
                 </Box>}
                 keyExtractor={item => item.recordID}
+                ListEmptyComponent={<Text textAlign={'center'} p={'10'}>{translations[language as keyof typeof translations].ui.no_items}</Text>}
               />
             </View>
           </Box>

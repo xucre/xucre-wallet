@@ -250,7 +250,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
                     return <TokenItem key={item.address + index} token={item} navigation={navigation} refreshList={onRefresh} wallet={wallet} price={tokenPrices} />
                   }
                 }
-                  ListEmptyComponent={<Text>{translations[language as keyof typeof translations].ViewWallet.no_tokens}</Text>}
+                  ListEmptyComponent={<Text textAlign={'center'} p={'10'}>{translations[language as keyof typeof translations].ViewWallet.no_tokens}</Text>}
                 />
               </Box>
             }

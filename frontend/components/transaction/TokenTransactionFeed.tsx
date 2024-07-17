@@ -48,7 +48,7 @@ export default function TransactionFeed({ navigation, tokenAddress, chainId }: {
         keyExtractor={item => `${item.tx_hash}:${item}`}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
-        ListEmptyComponent={<Text textAlign={'center'}>{translations[language as keyof typeof translations].ui.no_items}</Text>}
+        ListEmptyComponent={<Text textAlign={'center'} p={'10'}>{translations[language as keyof typeof translations].ui.no_items}</Text>}
       />
       {(!transactions || transactions.length === 0) &&
         <Pressable onPress={() => {

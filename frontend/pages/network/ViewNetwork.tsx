@@ -63,11 +63,13 @@ export default function ViewNetwork({ navigation, route }: { navigation: { navig
   }
 
   useEffect(() => {
-    setName(network.name);
-    setChainId(String(network.chainId));
-    setRpcUrl(network.rpcUrl);
-    setSymbol(network.symbol);
-    setExplorer(network.blockExplorer as string);
+    if (network) {
+      setName(network.name);
+      setChainId(String(network.chainId));
+      setRpcUrl(network.rpcUrl);
+      setSymbol(network.symbol);
+      setExplorer(network.blockExplorer as string);
+    }
   }, [network]);
 
   const _setActiveNetwork = async () => {
