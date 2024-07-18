@@ -8,15 +8,10 @@ import { useRecoilState } from 'recoil';
 
 import GuestLayout from '../layouts/GuestLayout';
 import { activeWallet } from '../service/state';
-import { language as stateLanguage } from "../service/state";
-import { getLanguage, storeLanguage } from "../store/language";
-import { hasSignedPrivacyPolicy } from '../store/setting';
 
 export default function LandingPage() {
   const [_wallet,] = useRecoilState(activeWallet);
   const toWalletSelect = () => {
-
-
   }
 
   return (

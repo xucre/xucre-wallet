@@ -9,7 +9,6 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 import translations from "../../assets/translations";
-import { getLanguage, storeLanguage } from "../../store/language";
 import { useConversionRate } from "../../hooks/useConversionRate";
 import { CURRENCY_SYMBOLS } from "../../data/CurrencyData";
 import { v4 } from 'uuid';

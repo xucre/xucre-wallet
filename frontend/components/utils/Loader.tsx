@@ -146,8 +146,9 @@ export default function Loader() {
 
   const defaultRouting = async () => {
     const _hasSigned = await hasSignedPrivacyPolicy();
+    const _language = await getLanguage();
     if (navigationRef.current?.getCurrentRoute()?.name === 'Home') {
-      if (languageDefault) {
+      if (!_language) {
         navigate('Language', {});
       } else if (!_hasSigned) {
         navigate('PrivacyPolicy', {});

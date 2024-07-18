@@ -11,6 +11,6 @@ export const storeLanguage = async (language: string) => {
 export const getLanguage = async () => {
   const language = await EncryptedStorage.getItem('language')
   if (language) return language;
-  return 'es';
+  return null;
 }
 

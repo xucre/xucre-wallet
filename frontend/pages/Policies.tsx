@@ -83,6 +83,7 @@ export default function Policies({ navigation, route }: { navigation: { navigate
                     isDisabled={accept}
                     colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
                     onPress={acceptPolicy}
+                    aria-label="Accept User Policy"
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
                         {translations[language as keyof typeof translations].termsConditions.button_Accept}
@@ -95,6 +96,7 @@ export default function Policies({ navigation, route }: { navigation: { navigate
                     width={"3/4"}
                     colorScheme={colorMode === "dark" ? "primary" : "tertiary"}
                     onPress={declinePolicy}
+                    aria-label="Decline User Policy"
                 >
                     <Text color={colorMode === "dark" ? Color.black : Color.white}>
                         {translations[language as keyof typeof translations].SupportPage.button_cancel}

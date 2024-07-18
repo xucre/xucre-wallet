@@ -25,21 +25,13 @@ const DappHeaderComponent = ({ page, navigation, webViewRef }: { webViewRef: any
 
   return (
     <HStack justifyContent={'space-around'} alignItems="center" px={0} py={2} bg={colorMode === 'dark' ? 'trueGray.900' : 'trueGray.100'}>
-      <IconButton
-        _icon={{
-          as: MaterialIcons,
-          name: "refresh"
-        }}
-        onPress={() => { }}
-        variant={'unstyled'}
-        colorScheme={'text'}
-        size="md" />
+      <></>
       <Button.Group isAttached colorScheme={'trueGray'} mx={{
         base: "auto",
         md: 0
       }} size="sm" mb={2}>
-        <Button variant={page === 'SwapToken' ? 'solid' : 'outline'} onPress={() => openNetwork('SwapToken')}>{pages[0]}</Button>
-        <Button variant={page === 'BuyToken' ? 'solid' : 'outline'} onPress={() => openNetwork('BuyToken')}>{pages[1]}</Button>
+        <Button variant={page === 'SwapToken' ? 'solid' : 'outline'} onPress={() => openNetwork('SwapToken')} aria-label="Swap Token">{pages[0]}</Button>
+        <Button variant={page === 'BuyToken' ? 'solid' : 'outline'} onPress={() => openNetwork('BuyToken')} aria-label="Buy Token">{pages[1]}</Button>
       </Button.Group>
       <IconButton
         _icon={{
@@ -49,7 +41,8 @@ const DappHeaderComponent = ({ page, navigation, webViewRef }: { webViewRef: any
         onPress={() => onRefresh()}
         variant={'ghost'}
         colorScheme={'text'}
-        size="md" />
+        size="md"
+        aria-label="Refresh Page" />
     </HStack>
 
   )

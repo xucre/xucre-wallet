@@ -292,7 +292,7 @@ export const ToggleDarkMode = ({ setScheme }: { setScheme: Function }) => {
   }, [colorMode]);
 
   return (
-    <Pressable onPress={() => colorMode === "light" ? setColorMode("dark") : setColorMode("light")} m={2} mt={3}>
+    <Pressable onPress={() => colorMode === "light" ? setColorMode("dark") : setColorMode("light")} aria-label="color-scheme-button" m={2} mt={3}>
       {useColorModeValue(<MoonIcon size={6} />, <SunIcon size={6} />)}
     </Pressable>
   )

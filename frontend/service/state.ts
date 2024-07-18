@@ -50,7 +50,9 @@ export const language = atom({
   effects: [
     ({ setSelf }) => {
       getLanguage().then((value) => {
-      setSelf(value);
+        if (value) {
+          setSelf(value);
+        }
     })}
   ]
 });
