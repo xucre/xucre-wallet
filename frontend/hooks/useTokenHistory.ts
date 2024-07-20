@@ -41,6 +41,7 @@ function useTokenHistory(tokenAddress = "" as string, chainId = 1 as number) {
       if (isMounted) {
         setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
         setTransactionsRefreshing(false);
+        storeTokenHistoryItems(wallet.address, tokenAddress, chainId, _transactions.items as CovalentTokenHistoryItem[]);
       }
     }
     runAsync();
@@ -49,18 +50,18 @@ function useTokenHistory(tokenAddress = "" as string, chainId = 1 as number) {
     };
   }, [])
 
-  useEffect(() => {
-    let isMounted = true;
-    const runAsync = async () => {
-      if (isMounted) storeTokenHistoryItems(wallet.address, tokenAddress, chainId, transactions);
-    }
-    if (transactions && transactions.length > 0) {
-      runAsync();
-    }
-    return () => {
-      isMounted = false;
-    }
-  }, [transactions])
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   const runAsync = async () => {
+  //     if (isMounted) storeTokenHistoryItems(wallet.address, tokenAddress, chainId, transactions);
+  //   }
+  //   if (transactions && transactions.length > 0) {
+  //     //runAsync();
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   }
+  // }, [transactions])
 
 
   return { transactions, refreshing: transactionsRefreshing, reset };

@@ -94,6 +94,9 @@ export type HistoryStore = {
 
 export const mergeChartData = (data : ChartData[]) => {
   const chartDataMap = data.reduce((returnVal, d) => {
+    if (!d || !d.meta) {
+      return returnVal;
+    }
     if (returnVal[d.meta.date]) {
       return { ...returnVal, [d.meta.date]: { ...returnVal[d.meta.date], y: returnVal[d.meta.date].y + d.y,  } }
     }
