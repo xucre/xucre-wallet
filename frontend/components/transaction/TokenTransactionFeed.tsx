@@ -33,11 +33,12 @@ export default function TransactionFeed({ navigation, tokenAddress, chainId }: {
     await reset();
   }
 
-  const { paginatedData, loadMore } = usePagination(transactions, { initialPageSize: 10, append: true });
+  //const { paginatedData, loadMore } = usePagination(transactions, { initialPageSize: 10, append: true });
 
   return (
     <Box paddingY={4}>
-      <FlatList data={paginatedData} refreshControl={
+      {/*<Text>TokenTransactionFeed</Text>*/}
+      <FlatList data={transactions} refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={syncTransactions}
@@ -46,7 +47,7 @@ export default function TransactionFeed({ navigation, tokenAddress, chainId }: {
         ({ item, index }) => <CovalentTransferItem key={item.tx_hash} transaction={item} navigation={navigation} />
       }
         keyExtractor={item => `${item.tx_hash}:${item}`}
-        onEndReached={loadMore}
+        //onEndReached={loadMore}
         onEndReachedThreshold={0.5}
         ListEmptyComponent={<Text textAlign={'center'} p={'10'}>{translations[language as keyof typeof translations].ui.no_items}</Text>}
       />

@@ -20,49 +20,17 @@ import { storeParsedTransaction } from "../../store/transactionFeedItem";
 
 dayjs.extend(relativeTime);
 
-function CovalentItemComponent({ navigation, transaction }: { navigation: { navigate: Function }, transaction: CovalentTransactionV3 }) {
+function CovalentItemComponent({ navigation, transaction }: { navigation: { navigate: Function }, transaction: ParsedTransaction }) {
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const wallet = useRecoilValue(activeWallet);
   const network = useRecoilValue(activeNetwork);
-  const [transactionDetails, setTransactionDetails] = useState({} as ParsedTransaction)
 
   const openTransaction = () => {
-    const blockUrl = network?.blockExplorer?.endsWith('/') ? network.blockExplorer + 'tx/' + transaction.tx_hash : network.blockExplorer + '/tx/' + transaction.tx_hash;
+    const blockUrl = network?.blockExplorer?.endsWith('/') ? network.blockExplorer + 'tx/' + transaction.covalentData.tx_hash : network.blockExplorer + '/tx/' + transaction.covalentData.tx_hash;
 
     Linking.openURL(blockUrl);
-  }
-
-  useEffect(() => {
-    let isMounted = true;
-    const runAsyncParse = async () => {
-      if (transaction && wallet.wallet.length > 0 && hasLoadedOnce === false) {
-        if (isMounted) setLoading(true);
-        const _transactionDetails = await parseDetails();
-        if (isMounted) setTransactionDetails(_transactionDetails);
-        if (isMounted) setLoading(false);
-        if (isMounted) setHasLoadedOnce(true);
-      }
-    }
-
-    if (!transactionDetails.transactionId || (transactionDetails.transactionId && transactionDetails.transactionId !== transaction.tx_hash)) {
-      runAsyncParse();
-    }
-    //runAsyncParse();
-
-    return () => { isMounted = false }
-  }, [transaction, wallet])
-
-  const parseDetails = async () => {
-    try {
-      const result: ParsedTransaction = await parseTransaction(new WalletInternal(wallet.wallet), transaction, network);
-      //await storeParsedTransaction(wallet.address, network.chainId, { ...result });
-      return { ...result };
-    } catch (err) {
-      return {} as ParsedTransaction;
-    }
-
   }
 
   const CustomIcon = ({ data, size }: { data: any, size: number }): JSX.Element => {
@@ -76,18 +44,18 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
     //const isSvg = isSVGFormatImage(transaction.dex_details?.token_1_logo_url || transaction.gas_metadata?.logo_url);
-    const isSvg = isSVGFormatImage(transaction.gas_metadata?.logo_url);
+    const isSvg = isSVGFormatImage(transaction.covalentData.gas_metadata?.logo_url);
     try {
       return (
         <>
           {isSvg &&
             <Avatar bg={iconBackground(colorMode)} mr="1" size={10}>
-              <CustomIcon data={transaction.gas_metadata?.logo_url} size={24} />
+              <CustomIcon data={transaction.covalentData.gas_metadata?.logo_url} size={24} />
             </Avatar>
           }
           {!isSvg &&
             <Avatar bg={iconBackground(colorMode)} mr="1" source={{
-              uri: transaction.gas_metadata?.logo_url || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
+              uri: transaction.covalentData.gas_metadata?.logo_url || 'https://xucre-public.s3.sa-east-1.amazonaws.com/xucre.png'
             }} size={10}>
               {iname}
             </Avatar>
@@ -106,24 +74,24 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
   }
 
   const getItemStatus = () => {
-    if (transactionDetails.spam) {
+    if (transaction.spam) {
       return 'Spam'
     }
 
-    return transaction.successful ? 'Completed' : 'Failure';
+    return transaction.covalentData.successful ? 'Completed' : 'Failure';
   }
 
   const getItemAmount = () => {
-    return transaction.dex_details ?
-      ethers.utils.formatEther(transaction.dex_details.token_1_amount) + ' ' + transaction.dex_details.token_1_ticker :
-      ethers.utils.formatEther(transaction.value) + ' ' + transaction.gas_metadata.contract_ticker_symbol
+    return transaction.covalentData.dex_details ?
+      ethers.utils.formatEther(transaction.covalentData.dex_details.token_1_amount) + ' ' + transaction.covalentData.dex_details.token_1_ticker :
+      ethers.utils.formatEther(transaction.covalentData.value) + ' ' + transaction.covalentData.gas_metadata.contract_ticker_symbol
   }
 
   const ItemAction = () => {
     return (
       <Badge variant={'solid'} colorScheme={getItemActionScheme()} alignSelf={'auto'}>
         <Text fontSize="sm" bold>
-          {transactionDetails.action as string}
+          {transaction.action as string}
         </Text>
       </Badge>
     )
@@ -131,7 +99,7 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
 
   const getItemActionScheme = () => {
     try {
-      return actionToScheme[transactionDetails.action as keyof typeof actionToScheme];
+      return actionToScheme[transaction.action as keyof typeof actionToScheme];
     } catch (err) {
       return actionToScheme.Unknown;
     }
@@ -139,7 +107,7 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
   }
 
   //return <><Text>{transaction.tx_hash}</Text></>
-  if (!transactionDetails.action) {
+  if (!transaction.action) {
     return <></>
   }
 
@@ -154,15 +122,15 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
           <HStack alignItems="center" justifyContent="space-between" rounded={10} py={2} px={1} backgroundColor={isPressed ? colorMode === 'dark' ? 'dark.300' : 'light.300' : 'transparent'}>
 
             <HStack alignItems={'center'} space={{ base: 6 }}>
-              <TokenIcon iname={transaction.gas_metadata?.contract_ticker_symbol} />
+              <TokenIcon iname={transaction.covalentData.gas_metadata?.contract_ticker_symbol} />
 
               <VStack space={{ base: 0 }} justifyContent={'space-around'} alignItems={'flex-start'}>
                 <ItemAction />
                 <Text fontSize="sm">
-                  {transaction.block_signed_at &&
-                    <>{dayjs(transaction.block_signed_at as string).fromNow()}</>}
-                  {!transaction.block_signed_at &&
-                    <>{truncateString(transaction.tx_hash as string, 7)}</>}
+                  {transaction.covalentData.block_signed_at &&
+                    <>{dayjs(transaction.covalentData.block_signed_at as string).fromNow()}</>}
+                  {!transaction.covalentData.block_signed_at &&
+                    <>{truncateString(transaction.covalentData.tx_hash as string, 7)}</>}
                 </Text>
               </VStack>
             </HStack>
@@ -173,7 +141,7 @@ function CovalentItemComponent({ navigation, transaction }: { navigation: { navi
               {loading && <Spinner size="sm" />}
               {!loading &&
                 <Text
-                  color={(!transaction.successful) || transactionDetails.spam ? 'error.500' : 'success.500'}
+                  color={(!transaction.covalentData.successful) || transaction.spam ? 'error.500' : 'success.500'}
                   rounded={'md'}
                   fontWeight="normal">{getItemStatus()}</Text>
               }

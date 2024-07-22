@@ -23,43 +23,70 @@ export default function TransactionFeed({ navigation, tokenAddress, updateDefaul
   //const [refreshing, setRefreshing] = useState(false);
   const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
-  const { transactions: _transactions, transactionsTotal, refreshing, reset } = useTransactions();
+  const { transactions: _transactions, transactionsTotal, parsedTransactions: _parsedTransactions, parsedTransactionsTotal, refreshing, reset } = useTransactions();
   const syncTransactions = async () => {
     await reset();
   }
 
-  const transactions = !chainId && chainId !== 0 ? transactionsTotal[chainId] : _transactions;
-  const filteredTransactions = !transactions ? [] : transactions.filter((transaction) =>
-    (tokenAddress &&
-      (compareAddresses(transaction.to_address, tokenAddress) || compareAddresses(transaction.from_address, tokenAddress))
-    ) || !tokenAddress);
-  const { paginatedData, loadMore } = usePagination(filteredTransactions, { initialPageSize: 10, append: true, uniqueKey: 'tx_hash' });
-  //console.log(paginatedData);
+  // const transactions = useMemo(() => {
+  //   return !chainId && chainId !== 0 ? transactionsTotal[chainId] : _transactions;
+  // }, [chainId, _transactions, transactionsTotal]);
+
+  // const filteredTransactions = useMemo(() => {
+  //   return !transactions ? [] : transactions.filter((transaction) =>
+  //     (tokenAddress &&
+  //       (compareAddresses(transaction.to_address, tokenAddress) || compareAddresses(transaction.from_address, tokenAddress))
+  //     ) || !tokenAddress);
+  // }, [transactions, tokenAddress]);
+
+  // const sortedTransactions = useMemo(() => {
+  //   return [...filteredTransactions].sort((a, b) => {
+  //     if (a.block_height < b.block_height) return 1;
+  //     if (a.block_height > b.block_height) return -1;
+  //     return 0;
+  //   });
+  // }, [filteredTransactions]);
+
+  const parsedTransactions = useMemo(() => {
+    return chainId && chainId !== 0 ? parsedTransactionsTotal[chainId] : _parsedTransactions;
+  }, [chainId, _parsedTransactions, parsedTransactionsTotal]);
+
+  const filteredParsedTransactions = useMemo(() => {
+    return !parsedTransactions ? [] : parsedTransactions.filter((transaction) =>
+      transaction.covalentData && (
+        (tokenAddress &&
+          (compareAddresses(transaction.covalentData.to_address, tokenAddress) || compareAddresses(transaction.covalentData.from_address, tokenAddress))
+        ) || !tokenAddress));
+  }, [parsedTransactions, tokenAddress]);
+
+  const sortedParsedTransactions = useMemo(() => {
+    try {
+      if (!filteredParsedTransactions || filteredParsedTransactions.length === 0) return [];
+      return [...filteredParsedTransactions].sort((a, b) => {
+        if (a.covalentData.block_height < b.covalentData.block_height) return 1;
+        if (a.covalentData.block_height > b.covalentData.block_height) return -1;
+        return 0;
+      });
+    } catch (e) {
+      return [];
+    }
+
+  }, [filteredParsedTransactions]);
+
   return (
     <Box paddingY={4} h={'1/2'}>
-      <FlatList data={paginatedData} refreshControl={
+      <FlatList data={sortedParsedTransactions} refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={syncTransactions}
         />
       } renderItem={
-        ({ item, index }) => <CovalentItem key={item.tx_hash} transaction={item} navigation={navigation} />
+        ({ item, index }) => <CovalentItem key={item.covalentData.tx_hash} transaction={item} navigation={navigation} />
       }
-        keyExtractor={item => item.tx_hash}
-        onEndReached={loadMore}
+        keyExtractor={item => item.covalentData.tx_hash}
+        //onEndReached={loadMore}
         ListEmptyComponent={<Text textAlign={'center'}>{translations[language as keyof typeof translations].ui.no_items}</Text>}
       />
-      {(!filteredTransactions || filteredTransactions.length === 0) || (!paginatedData || paginatedData.length === 0) &&
-        <Pressable onPress={() => {
-          setTimeout(() => {
-            syncTransactions()
-          }, 1000)
-        }}>
-          <HStack justifyContent={'center'} alignItems={'center'}>
-            <Text>No transactions on this network</Text>
-          </HStack>
-        </Pressable>
-      }
     </Box>
   );
 }

@@ -165,6 +165,7 @@ export type ParsedTransaction = {
   valueRaw: BigNumber;
   contractAddress: string;
   spam: boolean;
+  covalentData: CovalentTransactionV3;
 }
 
 export type LogMap = {
@@ -194,13 +195,13 @@ const UNKNOWN_TRANSACTION = {
   amount: '0.0',
   valueRaw: BigNumber.from(0),
   contractAddress: '',
-  spam: false
+  spam: false,
+  covalentData: {} as CovalentTransactionV3
 } as ParsedTransaction;
 
 // Function to parse a list of transactions
 export async function parseTransaction(wallet: Wallet, transaction: CovalentTransactionV3, _network: Network): Promise<ParsedTransaction> {
   const existingTransaction = await getParsedTransaction(wallet.address, _network.chainId, transaction.tx_hash);
-  
   if (existingTransaction && existingTransaction.transactionId.length > 0) {
     return existingTransaction;
   }
@@ -219,7 +220,8 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       action: utils.getAddress(toAddress) === utils.getAddress(wallet.address) ? 'Recieve' : 'Send',
       amount: utils.formatEther(BigNumber.from(transaction.value)),
       valueRaw: BigNumber.from(transaction.value),
-      spam: false
+      spam: false,
+      covalentData: transaction
     } as ParsedTransaction;
     await storeParsedTransaction(wallet.address, _network.chainId, { ...walletTransaction });
     return walletTransaction;
@@ -243,7 +245,8 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       contractAddress: transaction.to_address,
       amount: utils.formatEther(BigNumber.from(transaction.value)), 
       valueRaw: BigNumber.from(transaction.value),
-      spam: isSpam === true
+      spam: isSpam === true,
+      covalentData: transaction
     };
 
     await storeParsedTransaction(wallet.address, _network.chainId, { ...unknownTransaction });
@@ -257,7 +260,8 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       contractAddress: transaction.to_address,
       amount: utils.formatEther(BigNumber.from(transaction.value)), 
       valueRaw: BigNumber.from(transaction.value),
-      spam: false
+      spam: false,
+      covalentData: transaction
     };
     await storeParsedTransaction(wallet.address, _network.chainId, { ...unknownTransaction });
     return unknownTransaction;

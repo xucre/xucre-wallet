@@ -80,7 +80,7 @@ export default function WalletHistory({ navigation, route }: { navigation: { nav
   }
 
   const updateChain = (_chainId: number) => {
-    if (!_chainId) return;
+    //if (!_chainId) return;
     setChainId(_chainId)
   }
   const onRefresh = React.useCallback(async () => {

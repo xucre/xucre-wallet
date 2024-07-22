@@ -18,7 +18,7 @@ function useTokenHistory(tokenAddress = "" as string, chainId = 1 as number) {
     if (save) setTransactionsRefreshing(true);
     const _transactions = await getTokenTransferHistory(wallet.address, tokenAddress, chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]);
     if (save) {
-      setTransactions(_transactions);
+      setTransactions(_transactions.items as CovalentTokenHistoryItem[]);
       setTransactionsRefreshing(false);
     }
     return _transactions;
@@ -34,7 +34,7 @@ function useTokenHistory(tokenAddress = "" as string, chainId = 1 as number) {
       if (_existingItems && _existingItems?.length > 0) {
         if (isMounted) {
           setTransactions(_existingItems as CovalentTokenHistoryItem[]);
-          setTransactionsRefreshing(false);
+          //setTransactionsRefreshing(false);
         }
       }
       const _transactions = await sync(false);

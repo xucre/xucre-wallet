@@ -29,9 +29,9 @@ function TokenIconComponent({ token }: { token: Token }) {
       } else {
         //setAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/placeholdericon.png');
       }
-      /*if (token) {
+      if (token) {
         setNetworkAvatar('https://xucre-public.s3.sa-east-1.amazonaws.com/' + coinIconNames[token.chainId as keyof typeof coinIconNames].toLowerCase() + '.png');
-      }*/
+      }
 
       if (Platform.OS === 'ios') {
         if (isMounted) setLoading(false);
@@ -54,7 +54,7 @@ function TokenIconComponent({ token }: { token: Token }) {
   const TokenIconInner = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
     //const _img = alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
-    const _img = avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
+    const _img = avatar.length > 0 ? avatar : 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
     try {
       const isSvg = isSVGFormatImage(_img);
       return (
@@ -74,7 +74,7 @@ function TokenIconComponent({ token }: { token: Token }) {
               <Text>{iname}</Text>
             </Avatar>
           }
-          {networkAvatar !== _img && <Avatar source={{ uri: networkAvatar }} size={4} mb={-4} ml={-4} zIndex={10000} alignContent={'end'} />}
+          {networkAvatar !== _img && networkAvatar.length > 0 && <Avatar source={{ uri: networkAvatar }} size={4} mb={-4} ml={-4} zIndex={10000} alignContent={'end'} />}
         </>
 
 

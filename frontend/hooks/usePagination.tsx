@@ -44,7 +44,6 @@ function usePagination<T>(data: T[], options: PaginationOptions<T> = {}): UsePag
 
   const sortedData = useMemo(() => {
     if (!sortKey) return data;
-
     return [...data].sort((a, b) => {
       const aValue = a[sortKey];
       const bValue = b[sortKey];
@@ -56,12 +55,12 @@ function usePagination<T>(data: T[], options: PaginationOptions<T> = {}): UsePag
   }, [data, sortKey, sortOrder]);
 
   const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
+    const start = (initialPage - 1) * pageSize;
     const end = start + pageSize;
     if (sortedData && sortedData.slice) {
       const newPageData = sortedData.slice(start, end);
-
       if (append) {
+        //return [...loadedData, ...newPageData];
         return [...loadedData, ...newPageData.filter(item => !loadedData.find((i) => { return i[options.uniqueKey as keyof T] === item[options.uniqueKey as keyof T] }))];
       } else {
         return newPageData;
@@ -73,6 +72,7 @@ function usePagination<T>(data: T[], options: PaginationOptions<T> = {}): UsePag
   const totalPages = Math.ceil(data.length / pageSize);
 
   const setPage = (page: number) => {
+    console.log('setCurrentPage', Math.max(1, Math.min(page, totalPages)))
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
   };
 
@@ -84,7 +84,8 @@ function usePagination<T>(data: T[], options: PaginationOptions<T> = {}): UsePag
     setPage(currentPage - 1);
   };
 
-  const loadMore = useCallback(() => {
+  const loadMore = () => {
+    console.log('loading more');
     const nextPage = currentPage + 1;
     if (nextPage <= totalPages && sortedData.slice) {
       const start = (nextPage - 1) * pageSize;
@@ -94,7 +95,7 @@ function usePagination<T>(data: T[], options: PaginationOptions<T> = {}): UsePag
       setLoadedData(prevData => [...prevData, ...newPageData.filter(item => !prevData.includes(item))]);
       setCurrentPage(nextPage);
     }
-  }, [currentPage, totalPages, pageSize, sortedData]);
+  };
 
   return {
     currentPage,

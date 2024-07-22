@@ -155,24 +155,10 @@ export default function DashboardLayout({
           }}
         >
 
-          <Hidden till="md">
-            <ScrollView
-              flex={1}
-              p={{ md: 8 }}
-              contentContainerStyle={{ alignItems: 'center', flexGrow: 1 }}
-              showsVerticalScrollIndicator={false}
-            >
-              <MainContent
-                {...props}
-                displayScreenTitle={displayScreenTitle}
-                maxWidth={maxWidth}
-              />
-            </ScrollView>
-          </Hidden>
 
-          <Hidden from="md">
-            <MainContent {...props} displayScreenTitle={displayScreenTitle} />
-          </Hidden>
+
+          <MainContent {...props} displayScreenTitle={displayScreenTitle} />
+
         </Box>
       </VStack>
     </>

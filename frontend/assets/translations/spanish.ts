@@ -347,7 +347,7 @@ const values : TranslationType = {
     featured: 'Presentado',
     all: 'Todo',
     error: 'Error',
-    no_items: "Mana imapas tarisqachu",
+    no_items: "No se encontraron artículos",
     address_not_found: "Dirección no encontrada",
   },
   totalBalance:{
