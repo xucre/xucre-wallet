@@ -12,6 +12,8 @@ export type Token = {
   readonly logo?: string;
   readonly symbol?: string;
   readonly isNotSpammable?: boolean;
+  readonly quote_rate?: number;
+  readonly decimals?: number;
 }
 
 export type SerializedToken = {
@@ -21,6 +23,7 @@ export type SerializedToken = {
   readonly name: string;
   readonly type: string;
   readonly logo?: string;
+  readonly quote_rate?: number;
   readonly decimals?: number;
   readonly symbol?: string;
   readonly isNotSpammable?: boolean;

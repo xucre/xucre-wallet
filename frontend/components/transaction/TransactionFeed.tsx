@@ -16,55 +16,44 @@ import { compareAddresses } from "../../service/utility";
 import useTransactions from "../../hooks/useTransactions";
 import usePagination from "../../hooks/usePagination";
 import translations from "../../assets/translations";
+import dayjs from "dayjs";
 
 export default function TransactionFeed({ navigation, tokenAddress, updateDefault, chainId }: { navigation: { navigate: Function }, tokenAddress: string | null, updateDefault: Function | null, chainId: number }) {
   const isFocused = useIsFocused();
   const [language,] = useRecoilState(stateLanguage);
-  //const [refreshing, setRefreshing] = useState(false);
-  const [network,] = useRecoilState(activeNetwork);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
-  const { transactions: _transactions, transactionsTotal, parsedTransactions: _parsedTransactions, parsedTransactionsTotal, refreshing, reset } = useTransactions();
+  const { /*transactions: _transactions, transactionsTotal,*/ parsedTransactions: _parsedTransactions, parsedTransactionsTotal, refreshing, reset } = useTransactions();
   const syncTransactions = async () => {
     await reset();
   }
-
-  // const transactions = useMemo(() => {
-  //   return !chainId && chainId !== 0 ? transactionsTotal[chainId] : _transactions;
-  // }, [chainId, _transactions, transactionsTotal]);
-
-  // const filteredTransactions = useMemo(() => {
-  //   return !transactions ? [] : transactions.filter((transaction) =>
-  //     (tokenAddress &&
-  //       (compareAddresses(transaction.to_address, tokenAddress) || compareAddresses(transaction.from_address, tokenAddress))
-  //     ) || !tokenAddress);
-  // }, [transactions, tokenAddress]);
-
-  // const sortedTransactions = useMemo(() => {
-  //   return [...filteredTransactions].sort((a, b) => {
-  //     if (a.block_height < b.block_height) return 1;
-  //     if (a.block_height > b.block_height) return -1;
-  //     return 0;
-  //   });
-  // }, [filteredTransactions]);
 
   const parsedTransactions = useMemo(() => {
     return chainId && chainId !== 0 ? parsedTransactionsTotal[chainId] : _parsedTransactions;
   }, [chainId, _parsedTransactions, parsedTransactionsTotal]);
 
   const filteredParsedTransactions = useMemo(() => {
-    return !parsedTransactions ? [] : parsedTransactions.filter((transaction) =>
+    return parsedTransactions.filter((transaction) => {
+      //if (!transaction.covalentData) console.log(transaction);
+      return transaction.covalentData
+    });
+    /*return !parsedTransactions ? [] : parsedTransactions.filter((transaction) =>
       transaction.covalentData && (
         (tokenAddress &&
           (compareAddresses(transaction.covalentData.to_address, tokenAddress) || compareAddresses(transaction.covalentData.from_address, tokenAddress))
-        ) || !tokenAddress));
+        ) || !tokenAddress));*/
   }, [parsedTransactions, tokenAddress]);
 
   const sortedParsedTransactions = useMemo(() => {
     try {
       if (!filteredParsedTransactions || filteredParsedTransactions.length === 0) return [];
       return [...filteredParsedTransactions].sort((a, b) => {
-        if (a.covalentData.block_height < b.covalentData.block_height) return 1;
-        if (a.covalentData.block_height > b.covalentData.block_height) return -1;
+        //if (a.action !== 'Unknown' && a.covalentData.gas_metadata.contract_ticker_symbol !== 'MATIC') console.log(a);
+        const aBlock = dayjs(a.covalentData.block_signed_at);
+        const bBlock = dayjs(b.covalentData.block_signed_at);
+        if (aBlock.isBefore(bBlock)) {
+          return 1;
+        }
+        if (aBlock.isAfter(bBlock)) return -1;
         return 0;
       });
     } catch (e) {

@@ -200,12 +200,12 @@ const UNKNOWN_TRANSACTION = {
 } as ParsedTransaction;
 
 // Function to parse a list of transactions
-export async function parseTransaction(wallet: Wallet, transaction: CovalentTransactionV3, _network: Network): Promise<ParsedTransaction> {
-  const existingTransaction = await getParsedTransaction(wallet.address, _network.chainId, transaction.tx_hash);
+export async function parseTransaction(wallet: Wallet, transaction: CovalentTransactionV3, chainId:number, provider: ethers.providers.BaseProvider): Promise<ParsedTransaction> {
+  const existingTransaction = await getParsedTransaction(wallet.address, chainId, transaction.tx_hash);
   if (existingTransaction && existingTransaction.transactionId.length > 0) {
+    //console.log('existing transaction');
     return existingTransaction;
   }
-  const provider = getDefaultProvider(_network.rpcUrl);
 
   const receipt = await provider.getTransactionReceipt(transaction.tx_hash);
   const toAddress = receipt.to;
@@ -223,7 +223,7 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       spam: false,
       covalentData: transaction
     } as ParsedTransaction;
-    await storeParsedTransaction(wallet.address, _network.chainId, { ...walletTransaction });
+    await storeParsedTransaction(wallet.address, chainId, { ...walletTransaction });
     return walletTransaction;
   }
 
@@ -237,7 +237,7 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
     }
   }, {} as ParsedTransaction)
   if (!matchedLog) {
-    const isSpam = await getIsSpam(transaction.to_address, _network.chainId);
+    const isSpam = await getIsSpam(transaction.to_address, chainId);
 
     const unknownTransaction = {
       ...UNKNOWN_TRANSACTION, 
@@ -249,7 +249,7 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       covalentData: transaction
     };
 
-    await storeParsedTransaction(wallet.address, _network.chainId, { ...unknownTransaction });
+    await storeParsedTransaction(wallet.address, chainId, { ...unknownTransaction });
     return unknownTransaction;
   }
   const parsedLog : ParsedTransaction | null = parseLog(wallet, transaction, matchedLog, addressType);
@@ -263,11 +263,11 @@ export async function parseTransaction(wallet: Wallet, transaction: CovalentTran
       spam: false,
       covalentData: transaction
     };
-    await storeParsedTransaction(wallet.address, _network.chainId, { ...unknownTransaction });
+    await storeParsedTransaction(wallet.address, chainId, { ...unknownTransaction });
     return unknownTransaction;
   }
 
-  await storeParsedTransaction(wallet.address, _network.chainId, { ...parsedLog });
+  await storeParsedTransaction(wallet.address, chainId, { ...parsedLog });
   return parsedLog;
 }
 

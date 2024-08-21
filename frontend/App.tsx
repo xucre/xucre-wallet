@@ -108,6 +108,7 @@ import UnlimitWidget from './pages/extensions/unlimit/UnlimitWidget';
 import { SignClientProvider, useSignClient } from './hooks/useSignClient';
 
 import { env } from './service/constants';
+import BuyTokenBTC from './pages/token/BuyTokenBTC';
 
 const Stack = createNativeStackNavigator();
 
@@ -414,6 +415,11 @@ export const AppWrapper = () => {
             title: ''//translations[language as keyof typeof translations]?.SwapToken?.title,
           }} ></Stack.Screen>
           <Stack.Screen name="BuyToken" component={BuyToken} options={{
+            headerTitleAlign: 'center',
+            animation: 'none',
+            title: ''//translations[language as keyof typeof translations].SwapToken.title,
+          }} ></Stack.Screen>
+          <Stack.Screen name="BuyTokenBTC" component={BuyTokenBTC} options={{
             headerTitleAlign: 'center',
             animation: 'none',
             title: ''//translations[language as keyof typeof translations].SwapToken.title,

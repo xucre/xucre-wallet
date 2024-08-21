@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { BigNumber, getDefaultProvider, ethers } from 'ethers';
-import { getNftJson, getTokenBalances, getTokenTransferHistory, getWalletTransactions } from '../service/api';
+import { getWalletTransactions } from '../service/api';
 import { CovalentTokenHistoryItem } from '../types/token';
 import { CovalentTransactionV3, ParsedTransaction, parseTransaction } from '../service/transaction';
 import { useRecoilValue } from 'recoil';
@@ -21,7 +21,8 @@ function useTransactions() {
     if (finalVal.find((f) => f.transactionId === currentVal.transactionId)) return finalVal;
     return [...finalVal, currentVal];
   }, [] as ParsedTransaction[]) as ParsedTransaction[] : [] as ParsedTransaction[];
-}, [transactionsTotal]);
+}, [parsedTransactionsTotal]);
+
   const transactions = useMemo(() => {
       return Object.values(transactionsTotal).length > 0 ? Object.values(transactionsTotal).flatMap((tList) => tList).reduce((finalVal, currentVal) => {
       if (finalVal.find((f) => f.tx_hash === currentVal.tx_hash)) return finalVal;
@@ -73,11 +74,11 @@ function useTransactions() {
   const parseTransactions = async (transactions: CovalentTransactionV3[], chainId: number) => {
     if (transactions && transactions.length > 0) {
       const networks = chainIdToNetworkMap();
-      const network = networks[chainId];
+      const provider = getDefaultProvider(networks[chainId].rpcUrl);
       const _wallet = new WalletInternal(wallet.wallet);
       const _parsedTransactions = await Promise.all(transactions.map(async (transaction) => {   
         try {
-          const result: ParsedTransaction = await parseTransaction(_wallet, transaction, network);
+          const result: ParsedTransaction = await parseTransaction(_wallet, transaction, chainId, provider);
           return { ...result, covalentData: transaction };
         } catch (err) {
           return {} as ParsedTransaction;
@@ -94,11 +95,10 @@ function useTransactions() {
       //const walletAddress = __DEV__ ? testWallet : wallet.address;
       const walletAddress = wallet.address;
       const _existingItems = await getFeedItems(walletAddress, chainId);
-      if (_existingItems && _existingItems?.length > 0) {
-        if (isMounted) {
-          setTransactions(previousValue => { return { ...previousValue, [chainId]: _existingItems } });
-          setTransactionsRefreshing(false);
-        }
+      if (_existingItems && _existingItems?.length > 0 && isMounted) {
+        //console.log(`existing items ${chainId} ${_existingItems.length}`);
+        setTransactions(previousValue => { return { ...previousValue, [chainId]: _existingItems } });
+        setTransactionsRefreshing(false);        
       }
       const _transactions = await sync(false, chainId);
       if (isMounted && _transactions) {
@@ -120,8 +120,6 @@ function useTransactions() {
       isMounted = false;
     };
   }, [])
-
-
 
   return { transactions, transactionsTotal, parsedTransactions, parsedTransactionsTotal, refreshing: transactionsRefreshing, reset };
 }

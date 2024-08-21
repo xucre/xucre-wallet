@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Token, TokenMap, TokenPrice } from '../service/token';
+import { Token, TokenMap, TokenPrice, SerializedToken } from '../service/token';
 
 import _ethTokens from '../../assets/json/eth_tokens.json'
 import _polygonTokens from '../../assets/json/matic_tokens.json'
@@ -16,6 +16,8 @@ import { chainIdToNetworkMap, constructDefaultNetworks } from '../service/networ
 import { useToast } from 'native-base';
 import translations from '../assets/translations';
 import { language } from '../service/state';
+import { ethereumToBitcoinWallet } from '../service/bitcoin';
+import bitcore from 'bitcore-lib';
 
 function useTokens(initialValue = [] as Token[]) {
   const [_language,] = useRecoilState(language);
@@ -122,8 +124,35 @@ function useTokens(initialValue = [] as Token[]) {
         return finalTokens;
       }
     } catch (err) {
-      //console.log(err);
     }
+  }
+
+  const syncBitcoinBalance = async (save: boolean, chainId: number) => {
+    try {
+
+      const _wallet = (await getActiveWallet())[0] as AppWallet;
+      const btcPk = ethereumToBitcoinWallet(_wallet);
+      const walletAddress = btcPk.toAddress();
+
+      const _tokenList = await getTokenBalances(walletAddress.toString(), chainIdToNameMap[chainId as keyof typeof chainIdToNameMap]);
+
+      const tokenList = _tokenList.tokenBalances as Token[];
+      
+      const finalTokens = tokenList.sort((a, b) => {
+        if (a.amount && b.amount) {
+          return (BigNumber.from(a.amount).gt(b.amount)) ? -1 : 1
+        } else if (a) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      if (save) setTokens(prevState => {return{...prevState,  [20090103] : finalTokens}});
+      return finalTokens;
+    } catch (err) {
+      console.log(err);
+    }
+  
   }
 
   useEffect(() => {
@@ -134,6 +163,10 @@ function useTokens(initialValue = [] as Token[]) {
         let _tokenList = {} as {[key:number] : Token[]};
         Promise.allSettled(Object.keys(chainIdToNameMap).map(async (chainId) => {
           if (chainId === '0') return;
+          if (chainId === '20090103') {
+            //return;
+            return await syncBitcoinBalance(false, 20090103);
+          }
           const _tokens = await syncTokens(false, Number(chainId));
           return _tokens;
           //_tokenList = {..._tokenList, [chainId]: _tokens};
@@ -144,7 +177,6 @@ function useTokens(initialValue = [] as Token[]) {
               _tokenList = {..._tokenList, [token.value[0].chainId]: token.value};
             }
           });
-          //console.log(_tokenList)
           if (isMounted) setTokens(_tokenList);
           if (isMounted) setTokensLoading(false);
         });
@@ -167,6 +199,7 @@ function useTokens(initialValue = [] as Token[]) {
           if (chainId === '0') return null;
           if (isMounted) await storeTokenItems(walletAddress, Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)));
           const _tokenPrices = await getTokenPrices(Number(chainId), tokens.filter(token => token && token.chainId === Number(chainId)).map(token => token.address));
+          
           const _tokenPriceMap = _tokenPrices.reduce((acc: { [key: string]: TokenPrice }, _tokenPrice: any) => {
             const tokenPrice = {
               address: _tokenPrice.address,
@@ -174,9 +207,11 @@ function useTokens(initialValue = [] as Token[]) {
               price: _tokenPrice.items[0].price,
               prettyPrice: _tokenPrice.items[0].prettyPrice
             } as TokenPrice;
+            const priceId = `${_tokenPrice.address.toLowerCase()}:${chainId}`;
+            //if (chainId === '20090103') console.log(priceId);
             return {
               ...acc,
-              [`${_tokenPrice.address.toLowerCase()}:${chainId}`]: tokenPrice
+              [priceId]: tokenPrice
             } as TokenMap
           }, {} as TokenMap);
           //if (isMounted) setTokenPrices(previousValue => {return{...previousValue,  [Number(chainId)] : _tokenPriceMap}});
@@ -190,6 +225,7 @@ function useTokens(initialValue = [] as Token[]) {
               _priceListTotal = {..._priceListTotal, [Number(Object.values(_priceList)[0].chainId)]: _priceList};
             }
           })
+          
           if (isMounted) setTokenPrices(_priceListTotal);
         });
       } catch (err) {
@@ -205,12 +241,14 @@ function useTokens(initialValue = [] as Token[]) {
 
   const reset = async (save: boolean) => {
     Object.keys(chainIdToNameMap).forEach(async (chainId) => {
+      if (chainId === '0') return null;
+      if (chainId === '20090103') {
+        syncBitcoinBalance(save, 20090103);
+        return;
+      }
       syncTokens(save, Number(chainId));
     });
   }
-
-  //useEffect(() => {console.log(`token prices updated `, tokenPrices)}, [tokenPrices]);
-
 
   return { tokenPrices, tokens, reset };
 }

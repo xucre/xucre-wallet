@@ -4,7 +4,7 @@ import { Pressable } from "react-native";
 import { Extension } from "../../types/extensions";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-const pages = ["Swap", "Ramp"];
+const pages = ["Swap", "Ramp", "Ramp BTC"];
 const DappHeaderComponent = ({ page, navigation, webViewRef }: { webViewRef: any, page: String, navigation: { navigate: Function } }) => {
   const { colorMode } = useColorMode();
 
@@ -32,6 +32,7 @@ const DappHeaderComponent = ({ page, navigation, webViewRef }: { webViewRef: any
       }} size="sm" mb={2}>
         <Button variant={page === 'SwapToken' ? 'solid' : 'outline'} onPress={() => openNetwork('SwapToken')} aria-label="Swap Token">{pages[0]}</Button>
         <Button variant={page === 'BuyToken' ? 'solid' : 'outline'} onPress={() => openNetwork('BuyToken')} aria-label="Buy Token">{pages[1]}</Button>
+        {/*<Button variant={page === 'BuyTokenBTC' ? 'solid' : 'outline'} onPress={() => openNetwork('BuyTokenBTC')} aria-label="Buy Token Bitcoin">{pages[2]}</Button>*/}
       </Button.Group>
       <IconButton
         _icon={{

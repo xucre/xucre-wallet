@@ -48,6 +48,8 @@ import useTokens from "../../hooks/useTokens";
 import { useMixpanel } from "../../hooks/useMixpanel";
 import TokenIcon from "../../components/token/TokenIcon";
 import { navigate } from "../../service/RootNavigation";
+import { constructBitcoinTransaction, ethereumToBitcoinWallet, getRawTransaction, getUTXOs, sendBitcoin, validateAddress } from "../../service/bitcoin";
+import bitcore from 'bitcore-lib';
 
 export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const toast = useToast();
@@ -63,11 +65,11 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   const [loading, setLoading] = useState(false);
   const [loadingStage, setLoadingStage] = useState('');
   const [alchemyMetadata, setAlchemyMetadata] = useState({} as AlchemyMetadata);
-  const [amount, setAmount] = useState("0");
+  const [amount, setAmount] = useState("0.000000000000001");
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [gasBalance, setGasBalance] = useState(BigNumber.from(0))
   const [notEnough, setNotEnough] = useState(false);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState("mj7YLLcsxHmrcR5dASUxhi2RUYVriax38u");
   const [type, setType] = useState("token");
   const [checkValues, setcheckValues] = useState(false);
   const [error, setError] = useState('');
@@ -103,8 +105,20 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
       const result = await getTokenMetadata(selectedToken.address, chainIdToNameMap[selectedToken.chainId as keyof typeof chainIdToNameMap]);
       if (isMounted) setAlchemyMetadata(result as AlchemyMetadata);
     }
+
+    const runAsyncBTC = async () => {
+      if (isMounted) setGasBalance(selectedToken.amount || BigNumber.from(0));
+      if (isMounted) setBalance(selectedToken.amount || BigNumber.from(0));
+      if (isMounted) setAlchemyMetadata({
+        logo: selectedToken.logo,
+        symbol: selectedToken.symbol,
+        decimals: selectedToken.decimals,
+        name: selectedToken.name
+      } as AlchemyMetadata);
+    }
     if (selectedToken.address && wallet && wallet.address) {
-      runAsync();
+      if (selectedToken.chainId !== 20090103) runAsync();
+      if (selectedToken.chainId === 20090103) runAsyncBTC();
     }
     return () => { isMounted = false }
   }, [selectedToken, wallet])
@@ -289,9 +303,86 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
         setLoadingStage('')
       }
     };
+    const runAsyncBTC = async () => {
+      try {
+        if (address.length > 0 && validateAddress(address) !== null) {
+          setLoadingStage('send')
+          if (selectedToken.type === "token" && wallet.address) {
+            setLoading(false);
+            setError('Xucre does not currently support Runes')
+            setLoadingStage('')
+          } else if (selectedToken.type === "coin" && wallet.address) {
+            const bitcoinWallet = ethereumToBitcoinWallet(_wallet);
+            const walletAddress = bitcoinWallet.toAddress().toString();
+            //const walletAddress = 'bc1q5g8qcrgsgpglgu56a95dyv6vksapsjpr5e8ncy';
+            const _utxos = await getUTXOs(walletAddress);
+            let index = -1;
+            Promise.allSettled(_utxos.map(async (utxo: any) => {
+              //console.log(utxo.txid);
+              const _utxoTransactions = await getRawTransaction(utxo.tx_hash);
+              //console.log('raw utxo transactions', _utxoTransactions);
+              const _utxoTransaction = _utxoTransactions.outputs.find((tx: any) => tx.addresses.includes(walletAddress));
+
+              //console.log('raw utxo transaction', _utxoTransaction);
+              index++;
+              return {
+                txid: utxo.tx_hash,
+                outputIndex: index,
+                address: walletAddress,
+                satoshis: utxo.value,
+                //script: utxo.script,
+                script: _utxoTransaction.script,
+              };
+            })).then(async (result) => {
+              const utxos = result.map((res: any) => res.value);
+
+              const transaction = await constructBitcoinTransaction(bitcoinWallet, address, ethers.utils.parseEther(amount), utxos);
+              //console.log(transaction);
+              console.log('fee', transaction?.getFee());
+              if (transaction) {
+                //console.log(transaction.outputs);
+                console.log(transaction.serialize());
+                const sendResult = await sendBitcoin(transaction.serialize());
+                //console.log(submittedTransactions);
+                //Whatsapp Integration
+                if (sendResult) {
+                  if (checkValues) {
+                    //openPage('SendNotificationToken', amount, address, selectedToken.name, 'send')
+                  }
+                  navigation.navigate("ViewWallet");
+                } else {
+                  setLoading(false);
+                  setError('Error sending transaction')
+                  setLoadingStage('')
+                }
+
+              }
+              setLoading(false);
+              setError('');
+              setLoadingStage('');
+            });
+
+          } else {
+            setLoading(false);
+            setError('invalid token')
+            setLoadingStage('')
+          }
+        } else {
+          setLoading(false);
+          setError('Invalid address');
+          setLoadingStage('')
+        }
+      } catch (err) {
+        console.log('catch in SendToken', err);
+        setLoading(false);
+        setError('Error Processing');
+        setLoadingStage('')
+      }
+    };
     setLoading(true);
     setTimeout(() => {
-      runAsync();
+      if (selectedToken.chainId !== 20090103) runAsync();
+      if (selectedToken.chainId === 20090103) runAsyncBTC();
     }, 100);
   };
 

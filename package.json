@@ -36,6 +36,7 @@
     "base-64": "^1.0.0",
     "big-integer": "^1.6.51",
     "bitcoinjs-lib": "^6.0.1",
+    "bitcore-lib": "^10.1.0",
     "buffer": "^6.0.3",
     "cryptr": "^6.3.0",
     "currency.js": "^2.0.4",
@@ -94,6 +95,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.24.1",
     "@expo/cli": "^0.10.15",
+    "@types/bitcore-lib": "^0.15.6",
     "@types/react": "~18.2.14",
     "@types/uuid": "^9.0.6",
     "@types/wif": "^2.0.5",

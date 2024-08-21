@@ -33,13 +33,14 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
   const supportButton = translations[language as keyof typeof translations].Buttons_Footer.support;
   const profileButton = translations[language as keyof typeof translations].Buttons_Footer.profile;
   const feedButton = translations[language as keyof typeof translations].Buttons_Footer?.feed || 'Feed';
-
+  const connectButton = translations[language as keyof typeof translations].Buttons_Header.connect;
+  const appButton = translations[language as keyof typeof translations].Buttons_Header?.app || 'Apps';
 
   const footerIcons: readonly IconType[] = [
     { highlight: false, name: 'home', text: homeButton },
     { disabled: false, highlight: false, name: 'image-search', text: nftButton },
     { highlight: true, name: 'swap-vertical-circle', text: swapButton },
-    { highlight: false, name: 'live-help', text: supportButton },
+    { highlight: false, name: 'apps', text: appButton },
     { disabled: false, highlight: false, name: 'history', text: historyButton },
   ];
 
@@ -77,6 +78,12 @@ export default function MobileFooter({ navigation }: { navigation: { navigate: F
         break;
       case nftButton:
         navigation.navigate('NFT');
+        break;
+      case connectButton:
+        navigation.navigate('ConnectionManagement');
+        break;
+      case appButton:
+        navigation.navigate('Extensions');
         break;
     }
   }

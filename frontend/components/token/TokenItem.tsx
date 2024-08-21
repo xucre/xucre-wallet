@@ -63,8 +63,22 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
       if (isMounted) setAmISpam(_spam);
     }
     runAsyncAvatar();
-    runAsyncMetadata();
-    runAsyncRawSpam();
+
+    if (token.chainId === 20090103) {
+      //if (isMounted && token.isNotSpammable !== undefined) setAmISpam(!token.isNotSpammable);
+      if (isMounted) {
+        setAmISpam(false)
+        setAlchemyMetadata({
+          name: token.name,
+          symbol: token.symbol,
+          decimals: token.decimals,
+          logo: token.logo || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png',
+        } as AlchemyMetadata);
+      }
+    } else {
+      runAsyncMetadata();
+      runAsyncRawSpam();
+    }
 
     return () => { isMounted = false };
   }, [token])
@@ -111,7 +125,7 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
     //const _img = alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
-    const _img = alchemyMetadata?.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
+    const _img = token.type === 'coin' ? avatar : alchemyMetadata?.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
     try {
       const isSvg = isSVGFormatImage(_img);
       return (
@@ -166,9 +180,10 @@ function TokenItemComponent({ navigation, token, refreshList, wallet, price }: {
   const convertedValue = () => {
     const ethersValue = Number(ethers.utils.formatUnits(token.amount as BigNumberish || rawAmount, alchemyMetadata?.decimals || 18));
     const tokenPrice = price && token.chainId && price[token.chainId] ? price[token.chainId][`${token.address.toLowerCase()}:${token.chainId}`]?.price || 0 : 0;
-    const usdValue = ethersValue * tokenPrice;
+    const usdValue = token.chainId === 20090103 ? ethersValue * tokenPrice : ethersValue * tokenPrice;
     if (conversionRate && conversionRate.value) {
       const _convertedValue = usdValue * conversionRate.value;
+      if (_convertedValue < 0.001 && _convertedValue > 0) return `> ${CURRENCY_SYMBOLS[conversionRate.currency as keyof typeof CURRENCY_SYMBOLS]}0.01`;
       return currency(_convertedValue, { precision: 2, symbol: CURRENCY_SYMBOLS[conversionRate.currency as keyof typeof CURRENCY_SYMBOLS] }).format();
     }
 

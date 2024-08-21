@@ -10,7 +10,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 
 import { activeNetwork, activeWallet } from "../../service/state";
 import { isSVGFormatImage, truncateString } from "../../service/utility";
-import { CovalentTransactionV3, ParsedTransaction, parseTransaction } from "../../service/transaction";
 import { SvgUri } from "react-native-svg";
 import { iconBackground } from "../../assets/styles/themeContext";
 import { WalletInternal } from "../../store/wallet";

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { env } from './constants';
+import { Toast } from "native-base";
 
 const BASEURL = env.REACT_APP_API_URL;
 //const url = 'https://nasty-bears-grab.loca.lt/swap?wallet=xucre&color=';
@@ -94,18 +95,18 @@ export const getTokenBalances = async (wallet: string, chainName: any) => {
   try {
     const instance = axios.create({
       baseURL: BASEURL,
-      timeout: 1000,
+      timeout: 100000,
+      headers: {'Content-Type': 'application/json'}
     });
-    const response = await instance({
-      method: 'get',
+    const response = await instance.get(`tokens`,{
       params: {
         chainName,
         wallet,
       },
-      url: `tokens`,
-    });
+    });    
     return response.data;
   } catch (error) {
+    console.log(chainName, error);
     return null;
   }
 }
@@ -228,12 +229,16 @@ export const getTokenPrices = async (chainId: number, addresses: String[]) => {
       baseURL: BASEURL,
       timeout: 10000,
     });
+    //if (chainId === 20090103) console.log(addresses.join(','));
     const response = await instance({
       method: 'get',
       url: `price?chainId=${chainId}&addresses=${addresses.join(',')}`,
     });
+    //if (chainId === 20090103) console.log(JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
+    console.log(error);
+    Toast.show({title: 'Failed to fetch token prices', description: `${chainId}`});
     return [];
   }
 }

@@ -51,17 +51,6 @@ export default function TransactionFeed({ navigation, tokenAddress, chainId }: {
         onEndReachedThreshold={0.5}
         ListEmptyComponent={<Text textAlign={'center'} p={'10'}>{translations[language as keyof typeof translations].ui.no_items}</Text>}
       />
-      {(!transactions || transactions.length === 0) &&
-        <Pressable onPress={() => {
-          setTimeout(() => {
-            syncTransactions()
-          }, 1000)
-        }}>
-          <HStack justifyContent={'center'} alignItems={'center'}>
-            <Text>No transactions on this network</Text>
-          </HStack>
-        </Pressable>
-      }
     </Box>
   );
 }

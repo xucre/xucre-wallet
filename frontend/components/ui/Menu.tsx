@@ -26,7 +26,7 @@ import translations from "../../assets/translations";
 //import { navigate } from '../service/RootNavigation';
 import { constructDefaultNetworks } from "../../service/network";
 import { activeNetwork, AppWallet, language, networkList, walletList, } from "../../service/state";
-import { ethereumToBitcoinWallet, loadWalletFromPrivateKey } from "../../service/wallet";
+import { loadWalletFromPrivateKey } from "../../service/wallet";
 import { getActiveNetwork, getNetworks, storeActiveNetwork, storeNetworks, } from "../../store/network";
 import { storeTheme } from '../../store/setting';
 import { getWallets } from "../../store/wallet";

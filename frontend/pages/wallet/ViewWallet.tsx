@@ -165,13 +165,18 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
       text: buttonReceive,
     },
     {
+      action: buyTokens,
+      icon: "payments",
+      text: buttonBuy,
+    },
+    /*{
       action: openExtensions,
       icon: "apps",
       text: 'Apps'//buttonBuy,
       // action: openProfile,
       // icon: "person",
       // text: buttonProfile
-    },
+    },*/
     {
       action: connectWallet,
       icon: "qr-code-2",

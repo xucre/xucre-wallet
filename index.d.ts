@@ -34,3 +34,5 @@ declare module '@env' {
 
 declare module '*.png';
 declare module '*.svg';
+
+declare module 'bitcoin-core';
