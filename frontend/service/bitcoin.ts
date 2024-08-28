@@ -9,8 +9,9 @@ import bitcore, { Networks, Transaction, Address } from 'bitcore-lib'
 const BASEURL = env.REACT_APP_API_URL;
 //const BASEURL = 'https://blockstream.info/testnet/api';
 // const NETWORK_URL = 'https://nd-442-129-584.p2pify.com/df9cfd721af6d69db80b6607856b2b86';
-const NETWORK_URL = 'https://bitcoin-testnet.drpc.org';
-const NETWORK = 'testnet';
+//const NETWORK_URL = 'https://bitcoin-testnet.drpc.org';
+//const NETWORK = 'testnet';
+const NETWORK = 'mainnet';
 
 export const getBitcoinBalance = async (wallet: string) => {
   try {
@@ -43,6 +44,18 @@ export const getUTXOs = async (wallet: string) => {
 export const getRawTransaction = async (txid: string) => {
   try {
     const url = `${BASEURL}bitcoin/tx/?tx=${txid}&network=${NETWORK}`;
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching raw transaction:', JSON.stringify(error));
+    return [];
+  }
+
+}
+
+export const getFees = async () => {
+  try {
+    const url = `${BASEURL}bitcoin/fees?network=${NETWORK}`;
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
@@ -86,7 +99,7 @@ export const validateAddress = async (address: string) => {
   return new bitcore.Address(address);
 }
 
-export const constructBitcoinTransaction = async (wallet: bitcore.PrivateKey, to: string, amount: BigNumber, utxos: Transaction.UnspentOutput[]) => {
+export const constructBitcoinTransaction = async (wallet: bitcore.PrivateKey, to: string, amount: BigNumber, utxos: Transaction.UnspentOutput[], feePerByte: number) => {
   //const btcWallet = ethereumToBitcoinWallet(wallet);
   try {
     //console.log('Sending bitcoin:', wallet.toAddress().toString(), to, amount.toNumber(), utxos);
@@ -100,7 +113,7 @@ export const constructBitcoinTransaction = async (wallet: bitcore.PrivateKey, to
     .from(utxos)          // Feed information about what unspent outputs one can use
     .to(to, amount.toNumber())  // Add an output with the given amount of satoshis
     //.to(wallet.toAddress().toString(), totalUtxos - amount.toNumber())      // Sets up a change address where the rest of the funds will go
-    //.feePerKb(50000)       // Sets the fee per kilobyte
+    .feePerKb(feePerByte*1000)       // Sets the fee per kilobyte
     .change(wallet.toAddress().toString())
     //.fee(250)      // Sets up a change address where the rest of the funds will go
     .sign(wallet)     // Signs all the inputs it can
@@ -127,5 +140,5 @@ export function ethereumToBitcoinWallet(wallet: AppWallet) {
   const pkTestnet = new bitcore.PrivateKey(ethPrivateKeyWithoutPrefix, Networks.testnet);
   
   //console.log(pk.toAddress().toString() , pkTestnet.toAddress().toString());
-  return pkTestnet;
+  return pk;
 }

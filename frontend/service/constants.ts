@@ -90,7 +90,7 @@ export const chainIdToNameMap = {
   137:'matic-mainnet', 
   //80001: 'matic-mumbai', 
   42220: 'celo-mainnet',
-  //20090103: 'btc-mainnet',
+  20090103: 'btc-mainnet',
   //20090103: 'btc-testnet',
 };
 

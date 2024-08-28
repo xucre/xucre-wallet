@@ -48,7 +48,7 @@ import useTokens from "../../hooks/useTokens";
 import { useMixpanel } from "../../hooks/useMixpanel";
 import TokenIcon from "../../components/token/TokenIcon";
 import { navigate } from "../../service/RootNavigation";
-import { constructBitcoinTransaction, ethereumToBitcoinWallet, getRawTransaction, getUTXOs, sendBitcoin, validateAddress } from "../../service/bitcoin";
+import { constructBitcoinTransaction, ethereumToBitcoinWallet, getFees, getRawTransaction, getUTXOs, sendBitcoin, validateAddress } from "../../service/bitcoin";
 import bitcore from 'bitcore-lib';
 
 export default function SendToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -65,11 +65,11 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
   const [loading, setLoading] = useState(false);
   const [loadingStage, setLoadingStage] = useState('');
   const [alchemyMetadata, setAlchemyMetadata] = useState({} as AlchemyMetadata);
-  const [amount, setAmount] = useState("0.000000000000001");
+  const [amount, setAmount] = useState("0");
   const [balance, setBalance] = useState(BigNumber.from(0))
   const [gasBalance, setGasBalance] = useState(BigNumber.from(0))
   const [notEnough, setNotEnough] = useState(false);
-  const [address, setAddress] = useState("mj7YLLcsxHmrcR5dASUxhi2RUYVriax38u");
+  const [address, setAddress] = useState("");
   const [type, setType] = useState("token");
   const [checkValues, setcheckValues] = useState(false);
   const [error, setError] = useState('');
@@ -336,12 +336,12 @@ export default function SendToken({ navigation, route }: { navigation: { navigat
             })).then(async (result) => {
               const utxos = result.map((res: any) => res.value);
 
-              const transaction = await constructBitcoinTransaction(bitcoinWallet, address, ethers.utils.parseEther(amount), utxos);
-              //console.log(transaction);
-              console.log('fee', transaction?.getFee());
+              const feePerByteData = await getFees();
+              //console.log(feePerByteData.halfHourFee)
+              const transaction = await constructBitcoinTransaction(bitcoinWallet, address, ethers.utils.parseEther(amount), utxos, feePerByteData.halfHourFee as number);
               if (transaction) {
                 //console.log(transaction.outputs);
-                console.log(transaction.serialize());
+                //console.log(transaction.serialize());
                 const sendResult = await sendBitcoin(transaction.serialize());
                 //console.log(submittedTransactions);
                 //Whatsapp Integration
