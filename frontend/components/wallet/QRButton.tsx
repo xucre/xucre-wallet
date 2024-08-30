@@ -3,6 +3,8 @@ import {
   Button,
   Center,
   IconButton,
+  Menu,
+  Pressable,
   ScrollView,
   Text,
 } from "native-base";
@@ -16,23 +18,37 @@ import translations from "../../assets/translations";
 import QRCode from 'react-native-qrcode-svg';
 import base64Logo from '../../assets/images/icon-green.png'
 import { env } from "../../service/constants";
+import { Chain } from "../../types/token";
 
-export default function QRButton({ address }: { address: string }) {
+export default function QRButton({ address, btcAddress }: { address: string, btcAddress: string }) {
   const [language,] = useRecoilState(stateLanguage);
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
+  const [selectedChain, setSelectedChain] = React.useState<Chain>(Chain.ETHEREUM);
   //{translations[language].BasePage.title}
+  const handleSelect = (chain: Chain) => {
+    setSelectedChain(chain);
+    setIsOpen(!isOpen);
+  }
 
-  const url = address && address.length > 0 ? `https://swap.xucre.net/send?address=${address}` : '';
+  const ethUrl = address && address.length > 0 ? `${Chain.ETHEREUM}:${address}` : '';
+  const btcUrl = btcAddress && btcAddress.length > 0 ? `${Chain.BITCOIN}:${btcAddress}` : '';
+  const url = selectedChain === Chain.ETHEREUM ? ethUrl : btcUrl;
   return (
     <>
-      {address && url.length > 0 &&
+      {address && address.length > 0 &&
         <>
-          <IconButton onPress={() => setIsOpen(!isOpen)} colorScheme={'dark'} key={'copyButton'} variant={'ghost'} _icon={{
-            as: MaterialIcons,
-            name: "qr-code"
-          }} />
+
+          <Menu w="190" trigger={triggerProps => {
+            return <IconButton {...triggerProps} colorScheme={'dark'} key={'copyButton'} variant={'ghost'} _icon={{
+              as: MaterialIcons,
+              name: "qr-code"
+            }} />
+          }}>
+            <Menu.Item onPress={() => handleSelect(Chain.ETHEREUM)}>{Chain.ETHEREUM}</Menu.Item>
+            <Menu.Item onPress={() => handleSelect(Chain.BITCOIN)}>{Chain.BITCOIN}</Menu.Item>
+          </Menu>
           <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose} size={'full'}>
             <AlertDialog.Content>
               {/*<AlertDialog.CloseButton />
@@ -74,9 +90,3 @@ export default function QRButton({ address }: { address: string }) {
     </>
   );
 }
-
-/*
-
-
-
-      */

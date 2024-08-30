@@ -63,3 +63,8 @@ export type CovalentTransferHistory = {
   lastModified: Number,
   tokenAddress: string,
 }
+
+export enum Chain {
+  BITCOIN = 'bitcoin',
+  ETHEREUM = 'ethereum'
+}

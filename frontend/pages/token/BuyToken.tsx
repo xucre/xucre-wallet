@@ -19,7 +19,7 @@ export default function BuyToken({ navigation, route }: { navigation: { navigate
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet,] = useRecoilState(activeWallet);
   let webViewRef: any = useRef(null);
-  const url = rampUrl(colorMode as string);
+  const url = `${rampUrl(colorMode as string)}&address=${_wallet.address}`;
   return (
     <>
       <DappHeader navigation={navigation} webViewRef={webViewRef} page={'BuyToken'} />

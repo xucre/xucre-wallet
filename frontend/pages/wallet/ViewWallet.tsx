@@ -34,6 +34,8 @@ import useTokens from "../../hooks/useTokens";
 import { useMixpanel } from "../../hooks/useMixpanel";
 import NetworkFilter from "../../components/utils/NetworkFilter";
 import NetworkIcon from "../../components/utils/NetworkIcon";
+import { Chain } from "../../types/token";
+import SquareBuyButton from "../../components/ui/SquareBuyButton";
 
 export default function ViewWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
   const { colorMode } = useColorMode();
@@ -124,8 +126,13 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
     navigation.navigate('Extensions');
   }
 
-  const buyTokens = async () => {
-    navigation.navigate('BuyToken');
+  const buyTokens = async (chain: Chain) => {
+    if (chain === Chain.ETHEREUM) {
+      navigation.navigate('BuyTokenBTC');
+    } else {
+      navigation.navigate('BuyToken');
+    }
+
   }
 
   const connectWallet = () => {
@@ -224,6 +231,16 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
           <HStack space="2" alignItems="center" justifyContent={'space-around'} marginTop={0} marginLeft={2} marginRight={2}>
             {
               middleButtons.map((btn, i) => {
+                if (btn.text === buttonBuy) {
+                  return (
+                    <SquareBuyButton
+                      key={'middleButtons' + i}
+                      icon={btn.icon}
+                      buttonText={btn.text}
+                      onPress={btn.action}
+                    />
+                  )
+                }
                 return (
                   <SquareButton
                     key={'middleButtons' + i}

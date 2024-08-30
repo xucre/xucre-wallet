@@ -45,6 +45,7 @@ import TokenTransactionFeed from "../../components/transaction/TokenTransactionF
 import { SvgUri } from "react-native-svg";
 import { useMixpanel } from "../../hooks/useMixpanel";
 import { SerializedToken } from "../../service/token";
+import { useConversionRate } from "../../hooks/useConversionRate";
 dayjs.extend(customParseFormat);
 
 export default function ViewToken({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
@@ -53,6 +54,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
   const token = route.params?.token as SerializedToken;
   const [avatar, setAvatar] = useState('');
   const isFocused = useIsFocused();
+  const { conversionRate: _conversionRate } = useConversionRate();
   const [showUsd, setShowUsd] = useState(true);
   const [loading, setLoading] = useState(false);
   const [language,] = useRecoilState(stateLanguage);
@@ -72,7 +74,8 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
   const [chartData, setChartData] = useState([] as ChartData[]);
   const [isZeroData, setIsZeroData] = useState(false);
   const [isChartDataRaw, setIsChartDataRaw] = useState(false);
-  const conversionRate = 1;
+  const conversionRate = _conversionRate.value || 1;
+  //const currency = _conversionRate.currency || 'USD';
   const currency = 'USD';
   useEffect(() => {
     const runAsync = async () => {
@@ -101,7 +104,16 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
         if (isMounted) setRefreshing(true);
         const chainName = chainIdToNameMap[token.chainId as keyof typeof chainIdToNameMap];
         const historyResults = await getWalletHistory(wallet.address, chainName);
-
+        if (!historyResults) {
+          console.log('no history results');
+          const placeholder = { meta: { 'date': dayjs().format('MM/DD/YYYY') }, x: 0, y: 0 };
+          const placeholderList = [0, 1, 2, 3, 4, 5, 6].map((i) => { return { ...placeholder, x: placeholder.x + 1 + i, meta: { 'date': dayjs(placeholder.meta.date).add(i, 'day').format('MM/DD/YYYY') } }; });
+          if (isMounted) setRefreshing(false);
+          if (isMounted) setIsZeroData(true);
+          if (isMounted) setCurrentHoldings(placeholder);
+          if (isMounted) setChartData(placeholderList);
+          return;
+        }
         const { quotes: finalQuotes, isReady, isTokenValue } = processCovalentJsonData(historyResults, token.address);
         if (finalQuotes.length > 0) {
           if (isMounted) setIsChartDataRaw(isTokenValue as boolean)
@@ -125,7 +137,7 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
         }
         if (isMounted) setRefreshing(false);
       } catch (err: any) {
-        //console.log(err);
+        console.log('useEffect error');
         //const err2 = err as Error;
       }
     }
@@ -147,7 +159,10 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
   const TokenIcon = ({ iname }: { iname: string }) => {
     const icon_color = colorMode === 'dark' ? 'white' : 'black';
     //const _img = alchemyMetadata.logo || token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
-    const _img = token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
+    const test = token.chainId as keyof typeof coinIconNames;
+    //if (test === 20090103)
+    const _img = test === 20090103 ? avatar : token.logo || avatar || 'https://xucre-public.s3.sa-east-1.amazonaws.com/icon-gray.png';
+    //console.log(token.logo, avatar)
     try {
       const isSvg = isSVGFormatImage(_img);
       return (
@@ -318,11 +333,11 @@ export default function ViewToken({ navigation, route }: { navigation: { navigat
             }
           </Box>
         }
-        {token.address && ethers.utils.getAddress(token.address) !== ethers.constants.AddressZero &&
+        {token.address && ethers.utils.getAddress(token.address) !== ethers.constants.AddressZero && false &&
           <TokenTransactionFeed navigation={navigation} tokenAddress={token.address} chainId={token.chainId} />
         }
 
-        {token.address && ethers.utils.getAddress(token.address) === ethers.constants.AddressZero &&
+        {token.address && ethers.utils.getAddress(token.address) === ethers.constants.AddressZero && false &&
           <TransactionFeed navigation={navigation} tokenAddress={null} updateDefault={empty} chainId={token.chainId} />
         }
       </Box>

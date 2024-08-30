@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-/* eslint-disable react-native/split-platform-components */
-/* eslint-disable react-native/no-inline-styles */
+
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
@@ -25,7 +22,6 @@ import React, { useEffect, useState } from "react";
 import { PermissionsAndroid, TouchableOpacity, View, Platform, NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
 import { Contact, getAll } from 'react-native-contacts';
 import Geolocation from 'react-native-geolocation-service';
-import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
 
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
@@ -37,6 +33,7 @@ import { activeWallet, language as stateLanguage } from "../../service/state";
 import CopyButton from "../../components/wallet/CopyButton";
 import QRButton from "../../components/wallet/QRButton";
 import { useMixpanel } from "../../hooks/useMixpanel";
+import { ethereumToBitcoinWallet } from "../../service/bitcoin";
 
 export default function QRWallet({ navigation, route }: { navigation: { navigate: Function }, route: any }) {
 
@@ -47,6 +44,7 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
   const { colorMode } = useColorMode();
   const [language,] = useRecoilState(stateLanguage);
   const [_wallet, setActiveWallet] = useRecoilState(activeWallet);
+  const btcWallet = _wallet.address ? ethereumToBitcoinWallet(_wallet) : null;
   const initialFocusRef = React.useRef(null);
   const mixpanel = useMixpanel();
   const [contactList, setContactList] = useState([] as Contact[]);
@@ -227,8 +225,8 @@ export default function QRWallet({ navigation, route }: { navigation: { navigate
             <HStack justifyContent={'space-between'} marginX={5}>
               <Text variant={'lg'} mt={5} mb={2} bold fontSize={20}>{_wallet.name}</Text>
               <Button.Group>
-                <QRButton address={_wallet.address} />
-                <CopyButton address={_wallet.address} />
+                <QRButton address={_wallet.address} btcAddress={btcWallet ? btcWallet.toAddress().toString() : ''} />
+                <CopyButton address={_wallet.address} btcAddress={btcWallet ? btcWallet.toAddress().toString() : ''} />
               </Button.Group>
             </HStack>
 
