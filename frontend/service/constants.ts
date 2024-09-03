@@ -90,8 +90,8 @@ export const chainIdToNameMap = {
   137:'matic-mainnet', 
   //80001: 'matic-mumbai', 
   42220: 'celo-mainnet',
-  20090103: 'btc-mainnet',
-  //20090103: 'btc-testnet',
+  //20090103: 'btc-mainnet',
+  20090103: 'btc-testnet',
 };
 
 export const xucreToken = {chainId: 137, address: '0x924442A46EAC25646b520Da8D78218Ae8FF437C2', name: 'Xucre',type: 'token', isNotSpammable: true}

@@ -10,8 +10,8 @@ const BASEURL = env.REACT_APP_API_URL;
 //const BASEURL = 'https://blockstream.info/testnet/api';
 // const NETWORK_URL = 'https://nd-442-129-584.p2pify.com/df9cfd721af6d69db80b6607856b2b86';
 //const NETWORK_URL = 'https://bitcoin-testnet.drpc.org';
-//const NETWORK = 'testnet';
-const NETWORK = 'mainnet';
+const NETWORK = 'testnet';
+//const NETWORK = 'mainnet';
 
 export const getBitcoinBalance = async (wallet: string) => {
   try {
@@ -140,5 +140,5 @@ export function ethereumToBitcoinWallet(wallet: AppWallet) {
   const pkTestnet = new bitcore.PrivateKey(ethPrivateKeyWithoutPrefix, Networks.testnet);
   
   //console.log(pk.toAddress().toString() , pkTestnet.toAddress().toString());
-  return pk;
+  return pkTestnet;
 }

@@ -127,7 +127,7 @@ export default function ViewWallet({ navigation, route }: { navigation: { naviga
   }
 
   const buyTokens = async (chain: Chain) => {
-    if (chain === Chain.ETHEREUM) {
+    if (chain === Chain.BITCOIN) {
       navigation.navigate('BuyTokenBTC');
     } else {
       navigation.navigate('BuyToken');
