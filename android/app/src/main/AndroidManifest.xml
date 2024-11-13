@@ -8,6 +8,7 @@
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" tools:node="remove" />
   <queries>
     <intent>
       <action android:name="android.intent.action.VIEW"/>
